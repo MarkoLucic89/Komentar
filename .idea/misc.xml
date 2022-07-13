@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Users/User/AndroidStudioProjects/Komentar/app/src/main/res/drawable-v24/background_like.xml" value="0.238" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/Komentar/app/src/main/res/drawable/background_button_dislike.xml" value="0.238" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/Komentar/app/src/main/res/drawable/background_gradient.xml" value="0.242" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/Komentar/app/src/main/res/drawable/background_like.xml" value="0.238" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/Komentar/app/src/main/res/drawable/background_search.xml" value="0.223" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/Komentar/app/src/main/res/drawable/background_tag.xml" value="0.238" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/Komentar/app/src/main/res/drawable/button_like.xml" value="0.238" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/Komentar/app/src/main/res/drawable/ic_dislike.xml" value="0.238" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/Komentar/app/src/main/res/drawable/ic_like.xml" value="0.238" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/Komentar/app/src/main/res/drawable/ic_new.xml" value="0.2455" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/Komentar/app/src/main/res/drawable/indicator_drawer.xml" value="0.1385" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/Komentar/app/src/main/res/drawable/tab_layout_indicator.xml" value="0.1385" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/Komentar/app/src/main/res/layout/activity_category.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/Komentar/app/src/main/res/layout/activity_comments.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/Komentar/app/src/main/res/layout/activity_currency_list.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/Komentar/app/src/main/res/layout/activity_horoscope.xml" value="0.36102564102564105" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/Komentar/app/src/main/res/layout/activity_news_details.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/Komentar/app/src/main/res/layout/activity_news_list.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/Komentar/app/src/main/res/layout/activity_post_comment.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/Komentar/app/src/main/res/layout/activity_splash_screen.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/Komentar/app/src/main/res/layout/activity_tag.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/Komentar/app/src/main/res/layout/activity_weather.xml" value="0.36102564102564105" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/Komentar/app/src/main/res/layout/fragment_category.xml" value="0.36685773840541946" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/Komentar/app/src/main/res/layout/fragment_drawer.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/Komentar/app/src/main/res/layout/fragment_home.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/Komentar/app/src/main/res/layout/fragment_home_pager.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/Komentar/app/src/main/res/layout/fragment_latest_news.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/Komentar/app/src/main/res/layout/fragment_search.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/Komentar/app/src/main/res/layout/fragment_video.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/Komentar/app/src/main/res/layout/proba.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/Komentar/app/src/main/res/layout/rv_item_category_big.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/Komentar/app/src/main/res/layout/rv_item_category_small.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/Komentar/app/src/main/res/layout/rv_item_comment.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/Komentar/app/src/main/res/layout/rv_item_details_comments.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/Komentar/app/src/main/res/layout/rv_item_details_header.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/Komentar/app/src/main/res/layout/rv_item_details_related_news.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/Komentar/app/src/main/res/layout/rv_item_details_tags.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/Komentar/app/src/main/res/layout/rv_item_details_web_view.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/Komentar/app/src/main/res/layout/rv_item_drawer_category.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/Komentar/app/src/main/res/layout/rv_item_drawer_menu_category.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/Komentar/app/src/main/res/layout/rv_item_drawer_menu_subcategory.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/Komentar/app/src/main/res/layout/rv_item_drawer_other.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/Komentar/app/src/main/res/layout/rv_item_drawer_subcategory.xml" value="0.36102564102564105" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/Komentar/app/src/main/res/layout/rv_item_home_category_box.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/Komentar/app/src/main/res/layout/rv_item_home_slider.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/Komentar/app/src/main/res/layout/rv_item_home_tabs.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/Komentar/app/src/main/res/layout/rv_item_home_tabs_news.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/Komentar/app/src/main/res/layout/rv_item_home_video.xml" value="0.36102564102564105" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/Komentar/app/src/main/res/layout/rv_item_loading.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/Komentar/app/src/main/res/layout/rv_item_subcomment.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/Komentar/app/src/main/res/layout/rv_item_tag.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/Komentar/app/src/main/res/layout/rv_item_videos.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/Komentar/app/src/main/res/layout/vp_item_home_slider.xml" value="0.36102564102564105" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/Komentar/app/src/main/res/menu/menu_items_list.xml" value="0.36666666666666664" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>

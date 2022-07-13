@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.fragment.HomeFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/blue_dark">
+
+
+            <ImageView
+                android:layout_width="120dp"
+                android:layout_height="45dp"
+                android:layout_marginStart="10dp"
+                android:src="@drawable/logo_app" />
+
+            <ImageView
+                android:id="@+id/imageViewDrawerMenu"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="end"
+                android:padding="10dp"
+                android:src="@drawable/ic_drawer" />
+
+        </FrameLayout>
+
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabLayout"
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            android:backgroundTint="@color/blue_light"
+            app:tabMode="scrollable"
+            app:tabSelectedTextColor="@color/white"
+            app:tabTextColor="@color/grey_light">
+
+        </com.google.android.material.tabs.TabLayout>
+
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/viewPager"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@color/white" />
+
+    </LinearLayout>
+
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/drawerMenu"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="end">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewDrawer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </com.google.android.material.navigation.NavigationView>
+
+
+</androidx.drawerlayout.widget.DrawerLayout>

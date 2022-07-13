@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="1dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="8dp">
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="140dp"
+            android:layout_height="104dp"
+            android:scaleType="centerCrop"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textViewTitle"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginBottom="8dp"
+            android:maxLines="4"
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@id/layoutCategoryTime"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/imageView"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <LinearLayout
+            android:id="@+id/layoutCategoryTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginBottom="4dp"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="@id/imageView"
+            app:layout_constraintStart_toEndOf="@id/imageView">
+
+
+            <TextView
+                android:id="@+id/textViewCategory"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="category"
+                android:textAllCaps="true"
+                android:textColor="@color/blue_text"
+                android:textSize="11sp" />
+
+            <TextView
+                android:id="@+id/viewLine"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:text="|"
+                android:textColor="@color/grey_light" />
+
+            <TextView
+                android:id="@+id/textViewTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:text="00:00"
+                android:textColor="@color/grey_light"
+                android:textSize="11sp"
+                app:layout_constraintBottom_toBottomOf="@id/imageView"
+                app:layout_constraintStart_toEndOf="@id/viewLine"
+                app:layout_constraintTop_toTopOf="@id/textViewCategory" />
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</androidx.cardview.widget.CardView>

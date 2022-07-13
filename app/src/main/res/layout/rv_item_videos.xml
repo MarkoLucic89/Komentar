@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="8dp">
+
+    <ImageView
+        android:id="@+id/imageViewPicture"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textViewTitle"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="8dp"
+        android:gravity="center_vertical"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:translationZ="90dp"
+        app:layout_constraintBottom_toTopOf="@id/viewLine"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/imageViewPlay" />
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/background_gradient"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/imageViewPlay" />
+
+    <ImageView
+        android:id="@+id/imageViewPlay"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_baseline_play_circle_24"
+        app:tint="@color/white_transparent" />
+
+    <TextView
+        android:id="@+id/textViewCategory"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:textAllCaps="true"
+        android:textColor="@color/blue_text"
+        android:textSize="11sp"
+        android:textStyle="bold"
+        android:translationZ="90dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <View
+        android:id="@+id/viewLine"
+        android:layout_width="1dp"
+        android:layout_height="11sp"
+        android:layout_marginStart="4dp"
+        android:background="@color/grey_light"
+        android:translationZ="90dp"
+        app:layout_constraintBottom_toBottomOf="@id/textViewCategory"
+        app:layout_constraintStart_toEndOf="@id/textViewCategory"
+        app:layout_constraintTop_toTopOf="@id/textViewCategory" />
+
+    <TextView
+        android:id="@+id/textViewTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:textColor="@color/grey_light"
+        android:textSize="11sp"
+        android:textStyle="bold"
+        android:translationZ="90dp"
+        app:layout_constraintBottom_toBottomOf="@id/textViewCategory"
+        app:layout_constraintStart_toEndOf="@id/viewLine"
+        app:layout_constraintTop_toTopOf="@id/textViewCategory" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

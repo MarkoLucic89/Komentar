@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">Komentar</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="menu_home">Naslovna</string>
+    <string name="menu_latest">Najnovije</string>
+    <string name="menu_video">Video</string>
+    <string name="menu_search">Pretraga</string>
+    <string name="text_name">Ime</string>
+    <string name="text_email">Email</string>
+    <string name="text_comment">Komentar</string>
+    <string name="button_post_comment">Ostavi komentar</string>
+    <string name="hint_search">Pretraži...</string>
+    <string name="button_reply">Odgovori</string>
+    <string name="header_comments">Komentari (0)</string>
+    <string name="button_all_comments">SVI KOMENTARI</string>
+    <string name="text_author">Autor:</string>
+    <string name="text_source">Izvor:</string>
+    <string name="text_related_news">Povezane vesti</string>
+    <string name="text_tags">Tagovi</string>
+    <string name="menu_most_read">Najčitanije</string>
+    <string name="menu_most_commented">Komentari</string>
+    <string name="text_loading_news">Učitavanje vesti</string>
+    <string name="text_list_is_empty">Lista komentara je prazna.</string>
+    <string name="text_comments">Komentari:</string>
+</resources>

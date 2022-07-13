@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="3">
+
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/textViewLatest"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:padding="8dp"
+                android:text="@string/menu_latest"
+                android:textAllCaps="true"
+                android:textColor="@color/grey_light"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <View
+                android:id="@+id/viewIndicatorLatest"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_gravity="bottom"
+                android:background="@color/red" />
+
+        </FrameLayout>
+
+
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/textViewMostRead"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:padding="8dp"
+                android:text="@string/menu_most_read"
+                android:textAllCaps="true"
+                android:textColor="@color/grey_light"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <View
+                android:id="@+id/viewIndicatorMostRead"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_gravity="bottom"
+                android:background="@color/red" />
+
+        </FrameLayout>
+
+
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/textViewMostCommented"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:padding="8dp"
+                android:text="@string/menu_most_commented"
+                android:textAllCaps="true"
+                android:textColor="@color/grey_light"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <View
+                android:id="@+id/viewIndicatorMostComment"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_gravity="bottom"
+                android:background="@color/red" />
+
+        </FrameLayout>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/grey_light" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>
