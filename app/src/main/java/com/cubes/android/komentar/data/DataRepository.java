@@ -148,8 +148,7 @@ public class DataRepository {
 
                 if (response.body() != null
                         && response.isSuccessful()
-                        && response.body().data != null
-                        && !response.body().data.news.isEmpty()) {
+                        && response.body().data != null) {
 
                     searchResponseListener.onResponse(response.body());
 

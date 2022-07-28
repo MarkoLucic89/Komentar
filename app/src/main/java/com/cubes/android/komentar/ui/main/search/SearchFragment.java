@@ -7,9 +7,11 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.cubes.android.komentar.data.DataRepository;
 import com.cubes.android.komentar.data.model.News;
@@ -20,12 +22,12 @@ import com.cubes.android.komentar.ui.main.latest.LoadNextPageListener;
 import java.util.ArrayList;
 
 
-public class SearchFragment extends Fragment{
+public class SearchFragment extends Fragment implements LoadNextPageListener {
 
     private static final String TAG = "SearchFragment";
     private FragmentSearchBinding binding;
     private SearchAdapter adapter;
-    private ArrayList<News> filteredList;
+    private String searchTerm;
 
     private int page;
 
@@ -44,8 +46,6 @@ public class SearchFragment extends Fragment{
 
         binding = FragmentSearchBinding.inflate(inflater, container, false);
 
-        filteredList = new ArrayList<>();
-
         return binding.getRoot();
     }
 
@@ -53,7 +53,7 @@ public class SearchFragment extends Fragment{
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        adapter = new SearchAdapter();
+        adapter = new SearchAdapter(this);
 
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.recyclerView.setAdapter(adapter);
@@ -64,17 +64,22 @@ public class SearchFragment extends Fragment{
 
     private void searchListByTerm() {
 
-        filteredList.clear();
-
-        String searchTerm = binding.editTextSearch.getText().toString().trim();
-
-        if (searchTerm.equals("")) {
-            adapter.updateList(filteredList);
-            return;
-        }
+        page = 0;
 
         binding.imageViewRefresh.setVisibility(View.GONE);
         binding.progressBar.setVisibility(View.VISIBLE);
+
+        searchTerm = binding.editTextSearch.getText().toString().trim();
+
+        if (searchTerm.equals("")) {
+
+            adapter.updateList(null);
+
+            binding.progressBar.setVisibility(View.GONE);
+            return;
+        }
+
+
 
         DataRepository.getInstance().searchNews(searchTerm, page, new DataRepository.SearchResponseListener() {
             @Override
@@ -82,10 +87,7 @@ public class SearchFragment extends Fragment{
 
                 binding.progressBar.setVisibility(View.GONE);
 
-                filteredList = response.data.news;
-
-                updateAdapterList(searchTerm, page, response);
-
+                adapter.updateList(response);
 
             }
 
@@ -100,36 +102,6 @@ public class SearchFragment extends Fragment{
 
     }
 
-    private void updateAdapterList(String searchTerm, int page, NewsResponseModel response) {
-
-        adapter.updateList(response, new LoadNextPageListener() {
-            @Override
-            public void loadNextPage() {
-
-                DataRepository.getInstance().searchNews(searchTerm, SearchFragment.this.page, new DataRepository.SearchResponseListener() {
-                    @Override
-                    public void onResponse(NewsResponseModel response) {
-
-                        binding.progressBar.setVisibility(View.GONE);
-
-                        filteredList = response.data.news;
-
-                        updateAdapterList(searchTerm, page, response);
-
-
-                    }
-
-                    @Override
-                    public void onFailure(Throwable t) {
-
-                        binding.progressBar.setVisibility(View.GONE);
-                        binding.imageViewRefresh.setVisibility(View.VISIBLE);
-
-                    }
-                });
-            }
-        });
-    }
 
     @Override
     public void onResume() {
@@ -141,4 +113,29 @@ public class SearchFragment extends Fragment{
 
     }
 
+    @Override
+    public void loadNextPage() {
+        Log.d(TAG, "loadNextPage: " + page);
+        DataRepository.getInstance().searchNews(searchTerm, (page + 1), new DataRepository.SearchResponseListener() {
+            @Override
+            public void onResponse(NewsResponseModel response) {
+
+                page++;
+
+                binding.progressBar.setVisibility(View.GONE);
+
+                adapter.loadNextPage(response);
+
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+
+                binding.progressBar.setVisibility(View.GONE);
+                binding.imageViewRefresh.setVisibility(View.VISIBLE);
+
+            }
+        });
+
+    }
 }
