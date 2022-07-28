@@ -3,11 +3,11 @@ package com.cubes.android.komentar.ui.tools;
 import android.content.Intent;
 import android.view.View;
 
-import com.cubes.android.komentar.ui.activity.CategoryActivity;
-import com.cubes.android.komentar.ui.activity.CommentsActivity;
-import com.cubes.android.komentar.ui.activity.NewsDetailsActivity;
-import com.cubes.android.komentar.ui.activity.PostCommentActivity;
-import com.cubes.android.komentar.ui.activity.TagActivity;
+import com.cubes.android.komentar.ui.category.CategoryActivity;
+import com.cubes.android.komentar.ui.comments.CommentsActivity;
+import com.cubes.android.komentar.ui.detail.NewsDetailsActivity;
+import com.cubes.android.komentar.ui.post_comment.PostCommentActivity;
+import com.cubes.android.komentar.ui.tag.TagActivity;
 
 public class MyMethodsClass {
 

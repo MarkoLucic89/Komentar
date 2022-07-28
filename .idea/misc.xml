@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="../../../../layout/custom_preview.xml" value="0.12848974100235452" />
         <entry key="..\:/Users/User/AndroidStudioProjects/Komentar/app/src/main/res/drawable-v24/background_like.xml" value="0.238" />
         <entry key="..\:/Users/User/AndroidStudioProjects/Komentar/app/src/main/res/drawable/background_button_dislike.xml" value="0.238" />
         <entry key="..\:/Users/User/AndroidStudioProjects/Komentar/app/src/main/res/drawable/background_gradient.xml" value="0.242" />
@@ -57,6 +58,9 @@
         <entry key="..\:/Users/User/AndroidStudioProjects/Komentar/app/src/main/res/layout/rv_item_videos.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/User/AndroidStudioProjects/Komentar/app/src/main/res/layout/vp_item_home_slider.xml" value="0.36102564102564105" />
         <entry key="..\:/Users/User/AndroidStudioProjects/Komentar/app/src/main/res/menu/menu_items_list.xml" value="0.36666666666666664" />
+        <entry key="app/src/main/res/layout/fragment_video.xml" value="0.3703125" />
+        <entry key="app/src/main/res/layout/rv_item_loading_videos.xml" value="0.21875" />
+        <entry key="app/src/main/res/layout/rv_item_videos.xml" value="0.3703125" />
       </map>
     </option>
   </component>

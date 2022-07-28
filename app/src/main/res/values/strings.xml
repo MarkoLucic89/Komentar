@@ -22,4 +22,6 @@
     <string name="text_loading_news">Učitavanje vesti</string>
     <string name="text_list_is_empty">Lista komentara je prazna.</string>
     <string name="text_comments">Komentari:</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

@@ -12,34 +12,34 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Komentar">
         <activity
-            android:name=".ui.activity.PostCommentActivity"
+            android:name=".ui.post_comment.PostCommentActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.activity.WeatherActivity"
+            android:name=".ui.weather.WeatherActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.activity.CurrencyListActivity"
+            android:name=".ui.currencylist.CurrencyListActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.activity.HoroscopeActivity"
+            android:name=".ui.horoscope.HoroscopeActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.activity.CommentsActivity"
+            android:name=".ui.comments.CommentsActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.activity.TagActivity"
+            android:name=".ui.tag.TagActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.activity.NewsDetailsActivity"
+            android:name=".ui.detail.NewsDetailsActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.activity.CategoryActivity"
+            android:name=".ui.category.CategoryActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.activity.NewsListActivity"
+            android:name=".ui.main.NewsListActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.activity.SplashScreenActivity"
+            android:name=".ui.spashscreen.SplashScreenActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
