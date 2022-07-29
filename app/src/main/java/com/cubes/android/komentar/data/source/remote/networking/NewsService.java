@@ -83,6 +83,12 @@ public interface NewsService {
             @Query("tag") int tag
     );
 
+    @GET("api/tag")
+    Call<TagResponseModel> getTag(
+            @Query("tag") int tag,
+            @Query("page") int page
+    );
+
     @GET("api/comments")
     Call<CommentsResponseModel> getComments(
             @Query("id") int id

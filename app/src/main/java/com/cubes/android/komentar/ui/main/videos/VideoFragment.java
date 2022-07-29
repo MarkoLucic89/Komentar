@@ -24,7 +24,7 @@ import java.util.ArrayList;
 public class VideoFragment extends Fragment implements LoadNextPageListener {
 
     private FragmentVideoBinding binding;
-    private int page;
+    private int page = 1;
     private VideosAdapter adapter;
 
     public VideoFragment() {
@@ -49,9 +49,19 @@ public class VideoFragment extends Fragment implements LoadNextPageListener {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        initRecyclerView();
+
         sendVideosRequest();
 
-        binding.imageViewRefresh.setOnClickListener(view1 -> sendVideosRequest());
+//        binding.imageViewRefresh.setOnClickListener(view1 -> sendVideosRequest());
+
+        binding.imageViewRefresh.setOnClickListener(view1 -> {
+            if (page == 1) {
+                sendVideosRequest();
+            } else {
+                loadNextPage();
+            }
+        });
 
     }
 
@@ -60,19 +70,26 @@ public class VideoFragment extends Fragment implements LoadNextPageListener {
         binding.imageViewRefresh.setVisibility(View.GONE);
         binding.progressBar.setVisibility(View.VISIBLE);
 
+        if (binding.recyclerView.getVisibility() == View.GONE) {
+            binding.recyclerView.setVisibility(View.VISIBLE);
+        }
+
         DataRepository.getInstance().getVideosFromApi(page, new DataRepository.VideosResponseListener() {
             @Override
             public void onVideosResponse( NewsResponseModel response) {
 
                 binding.progressBar.setVisibility(View.GONE);
 
-                ArrayList<News> videos = response.data.news;
+                page++;
 
-                initRecyclerView(videos);
+                adapter.updateList(response);
+
             }
 
             @Override
             public void onVideosFailure(Throwable t) {
+
+                binding.recyclerView.setVisibility(View.GONE);
                 binding.progressBar.setVisibility(View.GONE);
                 binding.imageViewRefresh.setVisibility(View.VISIBLE);
             }
@@ -81,9 +98,8 @@ public class VideoFragment extends Fragment implements LoadNextPageListener {
 
     }
 
-    private void initRecyclerView(ArrayList<News> videos) {
-        adapter = new VideosAdapter(videos, this);
-
+    private void initRecyclerView() {
+        adapter = new VideosAdapter( this);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.recyclerView.setAdapter(adapter);
     }
@@ -107,6 +123,10 @@ public class VideoFragment extends Fragment implements LoadNextPageListener {
             @Override
             public void onVideosResponse( NewsResponseModel response) {
 
+                if (binding.recyclerView.getVisibility() == View.GONE) {
+                    binding.recyclerView.setVisibility(View.VISIBLE);
+                }
+
                 binding.progressBar.setVisibility(View.GONE);
 
                 page++;
@@ -116,6 +136,8 @@ public class VideoFragment extends Fragment implements LoadNextPageListener {
 
             @Override
             public void onVideosFailure(Throwable t) {
+
+                binding.recyclerView.setVisibility(View.GONE);
                 binding.progressBar.setVisibility(View.GONE);
                 binding.imageViewRefresh.setVisibility(View.VISIBLE);
             }

@@ -11,6 +11,7 @@ import com.cubes.android.komentar.data.model.News;
 import com.cubes.android.komentar.data.source.remote.networking.response.news_response.NewsResponseModel;
 import com.cubes.android.komentar.databinding.RvItemLoadingVideosBinding;
 import com.cubes.android.komentar.ui.main.latest.LoadNextPageListener;
+import com.cubes.android.komentar.ui.main.search.rv_model_search.RvItemModelSearchLoading;
 import com.cubes.android.komentar.ui.main.videos.rv_model_videos.ItemModelVideo;
 import com.cubes.android.komentar.ui.main.videos.rv_model_videos.RvItemModelVideoLoading;
 import com.cubes.android.komentar.ui.main.videos.rv_model_videos.RvItemModelVideos;
@@ -21,14 +22,13 @@ import java.util.ArrayList;
 
 public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.VideosViewHolder> {
 
-    private ArrayList<ItemModelVideo> itemModels;
+    private ArrayList<ItemModelVideo> itemModels = new ArrayList<>();
     private boolean isOnHomePage;
     private LoadNextPageListener listener;
 
-    public VideosAdapter(ArrayList<News> newsList, LoadNextPageListener listener) {
+    public VideosAdapter(LoadNextPageListener listener) {
         this.isOnHomePage = false;
         this.listener = listener;
-        initList(newsList);
     }
 
     public VideosAdapter(ArrayList<News> newsList, boolean isOnHomePage) {
@@ -43,9 +43,21 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.VideosView
             itemModels.add(new RvItemModelVideos(news));
         }
 
-        itemModels.add(new RvItemModelVideoLoading(listener));
+        notifyDataSetChanged();
+    }
+
+    public void updateList(NewsResponseModel responseModel) {
+
+        for (News news : responseModel.data.news) {
+            itemModels.add(new RvItemModelVideos(news));
+        }
+
+        if (responseModel.data.pagination.has_more_pages) {
+            itemModels.add(new RvItemModelVideoLoading(listener));
+        }
 
         notifyDataSetChanged();
+
     }
 
     @NonNull
@@ -58,13 +70,13 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.VideosView
 
         if (viewType == 0) {
             binding = RvItemVideosBinding.inflate(
-                    LayoutInflater.from(parent.getContext()),
+                    inflater,
                     parent,
                     false
             );
         } else {
             binding = RvItemLoadingVideosBinding.inflate(
-                    LayoutInflater.from(parent.getContext()),
+                    inflater,
                     parent,
                     false
             );
@@ -102,11 +114,13 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.VideosView
             itemModels.add(new RvItemModelVideos(news));
         }
 
-        if (response.data.pagination.has_more_pages) {
+//        if (response.data.pagination.has_more_pages) {
+//            itemModels.add(new RvItemModelVideoLoading(listener));
+//        }
+
+        if (response.data.news.size() == 20) {
             itemModels.add(new RvItemModelVideoLoading(listener));
         }
-
-
         notifyItemRangeChanged(lastIndex, itemModels.size());
 //        notifyItemRangeInserted(lastIndex, newsList.size());
 

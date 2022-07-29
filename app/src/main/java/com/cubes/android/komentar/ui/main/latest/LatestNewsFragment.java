@@ -24,7 +24,7 @@ public class LatestNewsFragment extends Fragment implements LoadNextPageListener
 
     private CategoryAdapter categoryAdapter;
 
-    private int page = 0;
+    private int page = 1;
 
 
     public LatestNewsFragment() {
@@ -48,9 +48,20 @@ public class LatestNewsFragment extends Fragment implements LoadNextPageListener
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        initRecyclerView();
+
         sendLatestRequest();
 
-        binding.imageViewRefresh.setOnClickListener(view1 -> sendLatestRequest());
+//        binding.imageViewRefresh.setOnClickListener(view1 -> sendLatestRequest());
+
+        binding.imageViewRefresh.setOnClickListener(view1 -> {
+            if (page == 1) {
+                sendLatestRequest();
+            } else {
+                loadNextPage();
+            }
+
+        });
 
     }
 
@@ -63,15 +74,26 @@ public class LatestNewsFragment extends Fragment implements LoadNextPageListener
             @Override
             public void onResponse(NewsResponseModel response) {
 
+
+                if (binding.recyclerView.getVisibility() == View.GONE) {
+                    binding.recyclerView.setVisibility(View.VISIBLE);
+                }
+
+                if (binding.imageViewRefresh.getVisibility() == View.VISIBLE) {
+                    binding.imageViewRefresh.setVisibility(View.GONE);
+                }
+
+                page++;
+
                 binding.progressBar.setVisibility(View.GONE);
 
-                ArrayList<News> latest = response.data.news;
-
-                initRecyclerView(latest);
+                categoryAdapter.updateList(response);
             }
 
             @Override
             public void onFailure(Throwable t) {
+
+                binding.recyclerView.setVisibility(View.GONE);
                 binding.imageViewRefresh.setVisibility(View.VISIBLE);
                 binding.progressBar.setVisibility(View.GONE);
             }
@@ -90,9 +112,9 @@ public class LatestNewsFragment extends Fragment implements LoadNextPageListener
     }
 
 
-    private void initRecyclerView(ArrayList<News> latest) {
+    private void initRecyclerView() {
 
-        categoryAdapter = new CategoryAdapter(latest, this);
+        categoryAdapter = new CategoryAdapter(this);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.recyclerView.setAdapter(categoryAdapter);
     }
@@ -101,9 +123,19 @@ public class LatestNewsFragment extends Fragment implements LoadNextPageListener
     public void loadNextPage() {
 
 
-        DataRepository.getInstance().getLatest((page + 1), new DataRepository.LatestResponseListener() {
+        DataRepository.getInstance().getLatest(page, new DataRepository.LatestResponseListener() {
             @Override
             public void onResponse(NewsResponseModel response) {
+
+
+                if (binding.recyclerView.getVisibility() == View.GONE) {
+                    binding.recyclerView.setVisibility(View.VISIBLE);
+                }
+
+                if (binding.imageViewRefresh.getVisibility() == View.VISIBLE) {
+                    binding.imageViewRefresh.setVisibility(View.GONE);
+                }
+
 
                 binding.progressBar.setVisibility(View.GONE);
 
@@ -114,6 +146,8 @@ public class LatestNewsFragment extends Fragment implements LoadNextPageListener
 
             @Override
             public void onFailure(Throwable t) {
+
+                binding.recyclerView.setVisibility(View.GONE);
                 binding.imageViewRefresh.setVisibility(View.VISIBLE);
                 binding.progressBar.setVisibility(View.GONE);
             }

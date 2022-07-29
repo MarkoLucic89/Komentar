@@ -32,7 +32,7 @@ public class NewsFragment extends Fragment implements LoadNextPageListener {
 
     private CategoryAdapter categoryAdapter;
 
-    private int page = 0;
+    private int page = 1;
 
 
     public NewsFragment() {
@@ -56,9 +56,17 @@ public class NewsFragment extends Fragment implements LoadNextPageListener {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        initRecyclerView();
         categoryRequest();
 
-        binding.imageViewRefresh.setOnClickListener(view1 -> categoryRequest());
+        binding.imageViewRefresh.setOnClickListener(view1 -> {
+            if (page == 1) {
+                categoryRequest();
+            } else {
+                loadNextPage();
+            }
+
+        });
 
     }
 
@@ -81,24 +89,38 @@ public class NewsFragment extends Fragment implements LoadNextPageListener {
         DataRepository.getInstance().getNewsForCategory(mCategoryId, page, new DataRepository.CategoryResponseListener() {
             @Override
             public void onResponse(CategoryResponseModel response) {
+
                 binding.progressBar.setVisibility(View.GONE);
 
-                ArrayList<News> news = response.data.news;
-                initRecyclerView(news);
+                page++;
+
+                if (binding.recyclerView.getVisibility() == View.GONE) {
+                    binding.recyclerView.setVisibility(View.VISIBLE);
+                }
+
+                if (binding.imageViewRefresh.getVisibility() == View.VISIBLE) {
+                    binding.imageViewRefresh.setVisibility(View.GONE);
+                }
+
+                categoryAdapter.updateList(response);
+
             }
 
             @Override
             public void onFailure(Throwable t) {
+
+                binding.recyclerView.setVisibility(View.GONE);
                 binding.progressBar.setVisibility(View.GONE);
                 binding.imageViewRefresh.setVisibility(View.VISIBLE);
+
             }
         });
 
     }
 
-    private void initRecyclerView(ArrayList<News> videos) {
+    private void initRecyclerView() {
 
-        categoryAdapter = new CategoryAdapter(videos, this);
+        categoryAdapter = new CategoryAdapter(this);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.recyclerView.setAdapter(categoryAdapter);
     }
@@ -107,9 +129,18 @@ public class NewsFragment extends Fragment implements LoadNextPageListener {
     public void loadNextPage() {
 
 
-        DataRepository.getInstance().getNewsForCategory(mCategoryId, (page + 1), new DataRepository.CategoryResponseListener() {
+        DataRepository.getInstance().getNewsForCategory(mCategoryId, page, new DataRepository.CategoryResponseListener() {
             @Override
             public void onResponse(CategoryResponseModel response) {
+
+
+                if (binding.recyclerView.getVisibility() == View.GONE) {
+                    binding.recyclerView.setVisibility(View.VISIBLE);
+                }
+
+                if (binding.imageViewRefresh.getVisibility() == View.VISIBLE) {
+                    binding.imageViewRefresh.setVisibility(View.GONE);
+                }
 
                 binding.progressBar.setVisibility(View.GONE);
 
@@ -121,6 +152,10 @@ public class NewsFragment extends Fragment implements LoadNextPageListener {
 
             @Override
             public void onFailure(Throwable t) {
+
+                binding.recyclerView.setVisibility(View.GONE);
+                binding.progressBar.setVisibility(View.GONE);
+                binding.imageViewRefresh.setVisibility(View.VISIBLE);
 
             }
         });

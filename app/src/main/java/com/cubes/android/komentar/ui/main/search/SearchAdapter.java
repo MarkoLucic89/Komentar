@@ -10,6 +10,7 @@ import androidx.viewbinding.ViewBinding;
 import com.cubes.android.komentar.data.DataRepository;
 import com.cubes.android.komentar.data.model.News;
 import com.cubes.android.komentar.data.source.remote.networking.response.news_response.NewsResponseModel;
+import com.cubes.android.komentar.data.source.remote.networking.response.tag_response.TagResponseModel;
 import com.cubes.android.komentar.databinding.RvItemLoadingBinding;
 import com.cubes.android.komentar.ui.main.latest.LoadNextPageListener;
 import com.cubes.android.komentar.ui.main.search.rv_model_search.ItemModelSearch;
@@ -52,7 +53,11 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
             itemModels.add(new RvItemModelSearch(news, true));
         }
 
-        if (responseModel.data.pagination.has_more_pages) {
+//        if (responseModel.data.pagination.has_more_pages) {
+//            itemModels.add(new RvItemModelSearchLoading(listener));
+//        }
+
+        if (responseModel.data.news.size() == 20) {
             itemModels.add(new RvItemModelSearchLoading(listener));
         }
 
@@ -60,9 +65,29 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
 
     }
 
-    public void clearList() {
+    public void updateList(TagResponseModel responseModel) {
+
         itemModels.clear();
+
+        if (responseModel == null) {
+            notifyDataSetChanged();
+            return;
+        }
+
+        for (News news : responseModel.data.news) {
+            itemModels.add(new RvItemModelSearch(news, true));
+        }
+
+//        if (responseModel.data.pagination.has_more_pages) {
+//            itemModels.add(new RvItemModelSearchLoading(listener));
+//        }
+
+        if (responseModel.data.news.size() == 20) {
+            itemModels.add(new RvItemModelSearchLoading(listener));
+        }
+
         notifyDataSetChanged();
+
     }
 
     @NonNull
@@ -114,14 +139,48 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
             itemModels.add(new RvItemModelSearch(news));
         }
 
-        if (response.data.pagination.has_more_pages) {
+//        if (response.data.pagination.has_more_pages) {
+//            itemModels.add(new RvItemModelSearchLoading(listener));
+//        }
+
+        if (response.data.news.size() == 20) {
             itemModels.add(new RvItemModelSearchLoading(listener));
         }
 
-//        notifyItemRangeChanged(lastIndex, itemModels.size());
+        notifyItemRangeChanged(lastIndex, itemModels.size());
 //        notifyItemRangeInserted(lastIndex, newsList.size());
 
 
+//        notifyDataSetChanged();
+    }
+
+    public void loadNextPage(TagResponseModel response) {
+
+        int lastIndex = itemModels.size() - 1;
+
+        itemModels.remove(lastIndex);
+
+        for (News news : response.data.news) {
+            itemModels.add(new RvItemModelSearch(news));
+        }
+
+//        if (response.data.pagination.has_more_pages) {
+//            itemModels.add(new RvItemModelSearchLoading(listener));
+//        }
+
+        if (response.data.news.size() == 20) {
+            itemModels.add(new RvItemModelSearchLoading(listener));
+        }
+
+        notifyItemRangeChanged(lastIndex, itemModels.size());
+//        notifyItemRangeInserted(lastIndex, newsList.size());
+
+
+//        notifyDataSetChanged();
+    }
+
+    public void clearList() {
+        itemModels.clear();
         notifyDataSetChanged();
     }
 

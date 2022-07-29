@@ -29,7 +29,7 @@ public class SearchFragment extends Fragment implements LoadNextPageListener {
     private SearchAdapter adapter;
     private String searchTerm;
 
-    private int page;
+    private int page = 1;
 
     public SearchFragment() {
         // Required empty public constructor
@@ -64,7 +64,7 @@ public class SearchFragment extends Fragment implements LoadNextPageListener {
 
     private void searchListByTerm() {
 
-        page = 0;
+        page = 1;
 
         binding.imageViewRefresh.setVisibility(View.GONE);
         binding.progressBar.setVisibility(View.VISIBLE);
@@ -73,7 +73,7 @@ public class SearchFragment extends Fragment implements LoadNextPageListener {
 
         if (searchTerm.equals("")) {
 
-            adapter.updateList(null);
+            adapter.clearList();
 
             binding.progressBar.setVisibility(View.GONE);
             return;
@@ -85,7 +85,14 @@ public class SearchFragment extends Fragment implements LoadNextPageListener {
             @Override
             public void onResponse(NewsResponseModel response) {
 
+
+                if (binding.recyclerView.getVisibility() == View.GONE) {
+                    binding.recyclerView.setVisibility(View.VISIBLE);
+                }
+
                 binding.progressBar.setVisibility(View.GONE);
+
+                page++;
 
                 adapter.updateList(response);
 
@@ -94,6 +101,7 @@ public class SearchFragment extends Fragment implements LoadNextPageListener {
             @Override
             public void onFailure(Throwable t) {
 
+                binding.recyclerView.setVisibility(View.GONE);
                 binding.progressBar.setVisibility(View.GONE);
                 binding.imageViewRefresh.setVisibility(View.VISIBLE);
 
@@ -115,10 +123,16 @@ public class SearchFragment extends Fragment implements LoadNextPageListener {
 
     @Override
     public void loadNextPage() {
+
         Log.d(TAG, "loadNextPage: " + page);
-        DataRepository.getInstance().searchNews(searchTerm, (page + 1), new DataRepository.SearchResponseListener() {
+
+        DataRepository.getInstance().searchNews(searchTerm, page, new DataRepository.SearchResponseListener() {
             @Override
             public void onResponse(NewsResponseModel response) {
+
+                if (binding.recyclerView.getVisibility() == View.GONE) {
+                    binding.recyclerView.setVisibility(View.VISIBLE);
+                }
 
                 page++;
 
@@ -131,6 +145,7 @@ public class SearchFragment extends Fragment implements LoadNextPageListener {
             @Override
             public void onFailure(Throwable t) {
 
+                binding.recyclerView.setVisibility(View.GONE);
                 binding.progressBar.setVisibility(View.GONE);
                 binding.imageViewRefresh.setVisibility(View.VISIBLE);
 

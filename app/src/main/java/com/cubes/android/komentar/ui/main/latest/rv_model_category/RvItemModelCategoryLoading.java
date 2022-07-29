@@ -5,11 +5,9 @@ import com.cubes.android.komentar.ui.main.latest.CategoryAdapter;
 
 public class RvItemModelCategoryLoading implements ItemModelCategory {
 
-    private CategoryAdapter adapter;
     private LoadNextPageListener listener;
 
-    public RvItemModelCategoryLoading(CategoryAdapter adapter, LoadNextPageListener listener) {
-        this.adapter = adapter;
+    public RvItemModelCategoryLoading(LoadNextPageListener listener) {
         this.listener = listener;
     }
 

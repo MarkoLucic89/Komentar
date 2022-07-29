@@ -235,9 +235,9 @@ public class DataRepository {
         void onFailure(Throwable t);
     }
 
-    public void sendTagRequest(int tagId, TagResponseListener listener) {
+    public void sendTagRequest(int tagId, int page, TagResponseListener listener) {
 
-        api.getNewsService().getTag(tagId).enqueue(new Callback<TagResponseModel>() {
+        api.getNewsService().getTag(tagId, page).enqueue(new Callback<TagResponseModel>() {
             @Override
             public void onResponse(Call<TagResponseModel> call, Response<TagResponseModel> response) {
 

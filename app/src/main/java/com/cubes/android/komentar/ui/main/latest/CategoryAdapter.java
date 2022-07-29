@@ -22,14 +22,13 @@ import java.util.ArrayList;
 
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder> {
 
-    private ArrayList<ItemModelCategory> itemModels;
+    private ArrayList<ItemModelCategory> itemModels = new ArrayList<>();
     private boolean isSize5;
     private LoadNextPageListener listener;
 
-    public CategoryAdapter(ArrayList<News> newsList, LoadNextPageListener listener) {
+    public CategoryAdapter(LoadNextPageListener listener) {
         isSize5 = false;
         this.listener = listener;
-        initList(newsList);
     }
 
     public CategoryAdapter(ArrayList<News> newsList, boolean isSize5) {
@@ -38,8 +37,6 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
     }
 
     private void initList(ArrayList<News> newsList) {
-
-        itemModels = new ArrayList<>();
 
         if (newsList.isEmpty()) {
             return;
@@ -59,7 +56,54 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
             itemModels.add(new RvItemModelCategorySmall(newsList.get(i), isSize5));
         }
 
-        itemModels.add(new RvItemModelCategoryLoading(this, listener));
+    }
+
+    public void updateList(CategoryResponseModel responseModel) {
+
+        ArrayList<News> newsList = responseModel.data.news;
+
+        itemModels.add(new RvItemModelCategoryBig(newsList.get(0), isSize5));
+
+        if (newsList.size() <= 1) {
+            return;
+        }
+
+        for (int i = 1; i < newsList.size(); i++) {
+            itemModels.add(new RvItemModelCategorySmall(newsList.get(i), isSize5));
+        }
+
+        //DOK SE NE RESI API
+
+//        if (responseModel.data.pagination.has_more_pages) {
+//            itemModels.add(new RvItemModelCategoryLoading(listener));
+//        }
+
+        if (newsList.size() == 20) {
+            itemModels.add(new RvItemModelCategoryLoading(listener));
+        }
+
+        notifyDataSetChanged();
+    }
+
+    public void updateList(NewsResponseModel responseModel) {
+
+        ArrayList<News> newsList = responseModel.data.news;
+
+        itemModels.add(new RvItemModelCategoryBig(newsList.get(0), isSize5));
+
+        if (newsList.size() <= 1) {
+            return;
+        }
+
+        for (int i = 1; i < newsList.size(); i++) {
+            itemModels.add(new RvItemModelCategorySmall(newsList.get(i), isSize5));
+        }
+
+        if (responseModel.data.pagination.has_more_pages) {
+            itemModels.add(new RvItemModelCategoryLoading(listener));
+        }
+
+        notifyDataSetChanged();
 
     }
 
@@ -100,26 +144,6 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         return itemModels.get(position).getType();
     }
 
-    public void loadNextPage(ArrayList<News> newsList) {
-
-        int lastIndex = itemModels.size() - 1;
-
-        itemModels.remove(lastIndex);
-
-        for (News news: newsList) {
-            itemModels.add(new RvItemModelCategorySmall(news, isSize5));
-        }
-
-        if (newsList.size() == 20) {
-            itemModels.add(new RvItemModelCategoryLoading(this, listener));
-        }
-
-        notifyItemRangeChanged(lastIndex, itemModels.size());
-//        notifyItemRangeInserted(lastIndex, newsList.size());
-
-
-//        notifyDataSetChanged();
-    }
 
     public void loadNextPage(NewsResponseModel response) {
 
@@ -131,15 +155,19 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
             itemModels.add(new RvItemModelCategorySmall(news, isSize5));
         }
 
-        if (response.data.pagination.has_more_pages) {
-            itemModels.add(new RvItemModelCategoryLoading(this, listener));
+//        if (response.data.pagination.has_more_pages) {
+//            itemModels.add(new RvItemModelCategoryLoading(listener));
+//        }
+
+        if (response.data.news.size() == 20) {
+            itemModels.add(new RvItemModelCategoryLoading( listener));
         }
 
-        notifyItemRangeChanged(lastIndex, itemModels.size());
+//        notifyItemRangeChanged(lastIndex, itemModels.size());
 //        notifyItemRangeInserted(lastIndex, newsList.size());
 
 
-//        notifyDataSetChanged();
+        notifyDataSetChanged();
     }
 
     public void loadNextPage(CategoryResponseModel response) {
@@ -152,16 +180,23 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
             itemModels.add(new RvItemModelCategorySmall(news, isSize5));
         }
 
-        if (!response.data.pagination.has_more_pages) {
-            itemModels.add(new RvItemModelCategoryLoading(this, listener));
+
+//        if (!response.data.pagination.has_more_pages) {
+//            itemModels.add(new RvItemModelCategoryLoading( listener));
+//        }
+
+        if (response.data.news.size() == 20) {
+            itemModels.add(new RvItemModelCategoryLoading( listener));
         }
 
-        notifyItemRangeChanged(lastIndex, itemModels.size());
+//        notifyItemRangeChanged(lastIndex, itemModels.size());
 //        notifyItemRangeInserted(lastIndex, newsList.size());
 
 
-//        notifyDataSetChanged();
+        notifyDataSetChanged();
     }
+
+
 
     public class CategoryViewHolder extends RecyclerView.ViewHolder {
 
