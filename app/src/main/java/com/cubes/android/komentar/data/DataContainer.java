@@ -9,6 +9,4 @@ public class DataContainer {
 
     public static final String BASE_URL = "https://komentar.rs/wp-json";
 
-    public static ArrayList<Category> categories;
-
 }

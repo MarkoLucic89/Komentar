@@ -84,7 +84,7 @@ public class HomeFragment extends Fragment implements OnCategoryClickListener {
 
     private void initDrawerRecyclerView(ArrayList<Category> categories) {
 
-//        DrawerAdapter adapter = new DrawerAdapter(this.getActivity(), this);
+//        DrawerAdapter adapter = new DrawerAdapter(this.getActivity(), this, categories);
 
         DrawerMenuAdapter adapter = new DrawerMenuAdapter(this.getActivity(), this, categories);
         binding.recyclerViewDrawer.setLayoutManager(new LinearLayoutManager(getActivity()));

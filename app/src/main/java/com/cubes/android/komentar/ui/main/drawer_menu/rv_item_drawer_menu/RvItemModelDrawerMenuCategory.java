@@ -14,15 +14,21 @@ import com.cubes.android.komentar.ui.main.listeners.OnCategoryClickListener;
 import com.cubes.android.komentar.ui.main.drawer_menu.DrawerMenuAdapter;
 import com.cubes.android.komentar.ui.main.drawer_menu.SubcategoryAdapter;
 
+import java.util.ArrayList;
+
 
 public class RvItemModelDrawerMenuCategory implements ItemModelDrawerMenu {
 
     public Category category;
     private OnCategoryClickListener listener;
 
-    public RvItemModelDrawerMenuCategory(Category category, OnCategoryClickListener listener) {
+    private ArrayList<Category> categories;
+
+
+    public RvItemModelDrawerMenuCategory(Category category, OnCategoryClickListener listener, ArrayList<Category> categories) {
         this.category = category;
         this.listener = listener;
+        this.categories = categories;
     }
 
     @Override
@@ -58,7 +64,7 @@ public class RvItemModelDrawerMenuCategory implements ItemModelDrawerMenu {
 
             binding.getRoot().setOnClickListener(view -> {
 
-                int categoryIndex = DataContainer.categories.indexOf(category) + 2;
+                int categoryIndex = categories.indexOf(category) + 2;
 
                 //listener
                 listener.onCategoryClicked(categoryIndex);

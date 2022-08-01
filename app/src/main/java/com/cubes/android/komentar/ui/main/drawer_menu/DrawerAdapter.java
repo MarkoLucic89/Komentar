@@ -32,14 +32,14 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.DrawerView
     private ArrayList<ItemModelDrawer> list;
     private OnCategoryClickListener listener;
 
-    public DrawerAdapter(Activity activity, OnCategoryClickListener listener) {
+    public DrawerAdapter(Activity activity, OnCategoryClickListener listener, ArrayList<Category> categories) {
         this.list = new ArrayList<>();
         this.listener = listener;
 
         list.add(new RvItemModelDrawerHome(listener));
 
-        for (Category category : DataContainer.categories) {
-            list.add(new RvItemModelDrawerCategory(category, this, listener));
+        for (Category category : categories) {
+            list.add(new RvItemModelDrawerCategory(category, this, listener, categories));
         }
 
         list.add(new RvItemModelDrawerOther("Vremenska prognoza", true));

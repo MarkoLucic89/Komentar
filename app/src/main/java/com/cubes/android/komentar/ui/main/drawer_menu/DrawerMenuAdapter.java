@@ -28,11 +28,11 @@ public class DrawerMenuAdapter extends RecyclerView.Adapter<DrawerMenuAdapter.Dr
         list = new ArrayList<>();
 
         //HOME
-        list.add(new RvItemModelDrawerMenuCategory(null, listener));
+        list.add(new RvItemModelDrawerMenuCategory(null, listener, categories));
 
         //CATEGORIES
         for (Category category : categories) {
-            list.add(new RvItemModelDrawerMenuCategory(category, listener));
+            list.add(new RvItemModelDrawerMenuCategory(category, listener, categories));
         }
 
         //WEATHER

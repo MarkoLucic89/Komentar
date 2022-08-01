@@ -20,12 +20,15 @@ public class RvItemModelDrawerCategory implements ItemModelDrawer {
     public boolean isOpen = false;
     private OnCategoryClickListener listener;
 
+    private ArrayList<Category> categories;
+
     public ArrayList<RvItemModelDrawerSubcategory> subcategoryItems;
 
-    public RvItemModelDrawerCategory(Category category, DrawerAdapter adapter, OnCategoryClickListener listener) {
+    public RvItemModelDrawerCategory(Category category, DrawerAdapter adapter, OnCategoryClickListener listener, ArrayList<Category> categories) {
         this.category = category;
         this.adapter = adapter;
         this.listener = listener;
+        this.categories = categories;
 
         subcategoryItems = new ArrayList<>();
 
@@ -66,7 +69,7 @@ public class RvItemModelDrawerCategory implements ItemModelDrawer {
 
             if (category.subcategories.isEmpty()) {
 
-                int categoryIndex = DataContainer.categories.indexOf(category) + 2;
+                int categoryIndex = categories.indexOf(category) + 2;
 
                 //listener
                 listener.onCategoryClicked(categoryIndex);
