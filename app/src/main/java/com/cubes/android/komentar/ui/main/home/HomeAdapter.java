@@ -8,8 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewbinding.ViewBinding;
 
 import com.cubes.android.komentar.data.model.News;
-import com.cubes.android.komentar.data.source.remote.networking.response.home_response.CategoryBoxResponseModel;
-import com.cubes.android.komentar.data.source.remote.networking.response.home_response.HomePageResponseModel;
+import com.cubes.android.komentar.data.source.remote.networking.response.HomePageResponseModel;
 import com.cubes.android.komentar.ui.main.home.rv_item_home.ItemModelHome;
 import com.cubes.android.komentar.ui.main.home.rv_item_home.RvItemModelCategoryBox;
 import com.cubes.android.komentar.ui.main.home.rv_item_home.RvItemModelHomeSlider;
@@ -24,13 +23,11 @@ import com.cubes.android.komentar.databinding.RvItemHomeVideoBinding;
 
 import java.util.ArrayList;
 
-import retrofit2.Response;
-
 public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder> {
 
     private ArrayList<ItemModelHome> list;
 
-    public HomeAdapter(HomePageResponseModel response) {
+    public HomeAdapter(HomePageResponseModel.HomePageDataResponseModel response) {
 
         list = new ArrayList<>();
 
@@ -38,12 +35,12 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
         addSlider("SLIDER", response);
 
         //TOP NEWS
-        for (News news : response.data.top) {
+        for (News news : response.top) {
             list.add(new RvItemModelHomeSmallNews(news));
         }
 
         //TABS
-        list.add(new RvItemModelTabs(response.data, this, list.size()));
+        list.add(new RvItemModelTabs(response, this, list.size()));
 
         //SPORT CATEGORY BOX
         addCategoryBox("SPORT", response);
@@ -52,8 +49,8 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
         addSlider("EDITORS CHOICE", response);
 
         //VIDEO
-        if (!response.data.videos.isEmpty()) {
-            list.add(new RvItemModelHomeVideo(response.data.videos));
+        if (!response.videos.isEmpty()) {
+            list.add(new RvItemModelHomeVideo(response.videos));
         }
 
         //SHOWBIZ
@@ -95,16 +92,16 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
 
     }
 
-    private void addSlider(String title, HomePageResponseModel response) {
+    private void addSlider(String title, HomePageResponseModel.HomePageDataResponseModel response) {
 
-        if (response == null || response.data == null) {
+        if (response == null || response == null) {
             return;
         }
 
         if (title.equalsIgnoreCase("SLIDER")) {
 
-            if (response.data.slider != null && !response.data.slider.isEmpty()) {
-                list.add(new RvItemModelHomeSlider(response.data.slider));
+            if (response.slider != null && !response.slider.isEmpty()) {
+                list.add(new RvItemModelHomeSlider(response.slider));
             }
 
         } else if (title.equalsIgnoreCase("EDITORS CHOICE")) {
@@ -112,8 +109,8 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
 
 //            list.add(new RvItemModelHomeSlider(response.body().data.slider, true));   //BRISI OVO!!!
 
-            if (response.data.editors_choice != null && !response.data.editors_choice.isEmpty()) {
-                list.add(new RvItemModelHomeSlider(response.data.editors_choice, true));
+            if (response.editors_choice != null && !response.editors_choice.isEmpty()) {
+                list.add(new RvItemModelHomeSlider(response.editors_choice, true));
             }
 
         } else {
@@ -122,9 +119,9 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
 
     }
 
-    private void addCategoryBox(String title, HomePageResponseModel response) {
+    private void addCategoryBox(String title, HomePageResponseModel.HomePageDataResponseModel response) {
 
-        CategoryBoxResponseModel categoryBoxResponseModel = getCategoryForTitle(title, response);
+        HomePageResponseModel.CategoryBoxResponseModel categoryBoxResponseModel = getCategoryForTitle(title, response);
 
         if (categoryBoxResponseModel != null && !categoryBoxResponseModel.news.isEmpty()) {
             list.add(new RvItemModelCategoryBox(categoryBoxResponseModel));
@@ -132,9 +129,9 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
 
     }
 
-    private CategoryBoxResponseModel getCategoryForTitle(String title, HomePageResponseModel response) {
+    private HomePageResponseModel.CategoryBoxResponseModel getCategoryForTitle(String title, HomePageResponseModel.HomePageDataResponseModel response) {
 
-        for (CategoryBoxResponseModel categoryBox : response.data.category) {
+        for (HomePageResponseModel.CategoryBoxResponseModel categoryBox : response.category) {
             if (categoryBox.title.equalsIgnoreCase(title)) {
                 return categoryBox;
             }

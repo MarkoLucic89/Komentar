@@ -1,12 +1,10 @@
-package com.cubes.android.komentar.data.source.remote.networking.response.category_response;
+package com.cubes.android.komentar.data.source.remote.networking.response;
 
 import com.cubes.android.komentar.data.model.News;
 
 import java.util.ArrayList;
 
-public class CategoryResponseModel {
-    public int status;
-    public String message;
+public class CategoryResponseModel extends BaseResponseModel {
     public CategoryDataResponseModel data;
 
     public class CategoryDataResponseModel {

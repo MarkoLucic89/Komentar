@@ -8,8 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.cubes.android.komentar.data.DataRepository;
-import com.cubes.android.komentar.data.source.remote.networking.response.news_details_response.NewsDetailsDataResponseModel;
-import com.cubes.android.komentar.data.source.remote.networking.response.news_details_response.NewsDetailsResponseModel;
+import com.cubes.android.komentar.data.source.remote.networking.response.NewsDetailsResponseModel;
 import com.cubes.android.komentar.databinding.ActivityNewsDetailsBinding;
 import com.cubes.android.komentar.ui.tools.MyMethodsClass;
 
@@ -18,7 +17,7 @@ public class NewsDetailsActivity extends AppCompatActivity {
 
     private ActivityNewsDetailsBinding binding;
     private int newsId;
-    private NewsDetailsDataResponseModel data;
+    private NewsDetailsResponseModel.NewsDetailsDataResponseModel data;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,11 +56,11 @@ public class NewsDetailsActivity extends AppCompatActivity {
         newsId = getIntent().getIntExtra("news_id", -1);
 
         DataRepository.getInstance().sendNewsDetailsRequest(newsId, new DataRepository.DetailResponseListener() {
-            @Override
-            public void onResponse(NewsDetailsResponseModel response) {
-                binding.progressBar.setVisibility(View.GONE);
 
-                data = response.data;
+            @Override
+            public void onResponse(NewsDetailsResponseModel.NewsDetailsDataResponseModel response) {
+                data = response;
+                binding.progressBar.setVisibility(View.GONE);
 
                 initRecyclerView(data);
             }
@@ -76,7 +75,7 @@ public class NewsDetailsActivity extends AppCompatActivity {
 
     }
 
-    private void initRecyclerView(NewsDetailsDataResponseModel newsDetails) {
+    private void initRecyclerView(NewsDetailsResponseModel.NewsDetailsDataResponseModel newsDetails) {
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(NewsDetailsActivity.this));
         binding.recyclerView.setAdapter(new NewsDetailsAdapter(newsDetails));
     }

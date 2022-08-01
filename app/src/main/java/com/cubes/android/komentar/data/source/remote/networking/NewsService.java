@@ -2,13 +2,13 @@ package com.cubes.android.komentar.data.source.remote.networking;
 
 import com.cubes.android.komentar.data.model.NewsCommentInsert;
 import com.cubes.android.komentar.data.model.NewsCommentVote;
-import com.cubes.android.komentar.data.source.remote.networking.response.categories_response.CategoriesResponseModel;
-import com.cubes.android.komentar.data.source.remote.networking.response.comments_response.CommentsResponseModel;
-import com.cubes.android.komentar.data.source.remote.networking.response.home_response.HomePageResponseModel;
-import com.cubes.android.komentar.data.source.remote.networking.response.news_response.NewsResponseModel;
-import com.cubes.android.komentar.data.source.remote.networking.response.category_response.CategoryResponseModel;
-import com.cubes.android.komentar.data.source.remote.networking.response.news_details_response.NewsDetailsResponseModel;
-import com.cubes.android.komentar.data.source.remote.networking.response.tag_response.TagResponseModel;
+import com.cubes.android.komentar.data.source.remote.networking.response.CategoriesResponseModel;
+import com.cubes.android.komentar.data.source.remote.networking.response.CommentsResponseModel;
+import com.cubes.android.komentar.data.source.remote.networking.response.HomePageResponseModel;
+import com.cubes.android.komentar.data.source.remote.networking.response.NewsResponseModel;
+import com.cubes.android.komentar.data.source.remote.networking.response.CategoryResponseModel;
+import com.cubes.android.komentar.data.source.remote.networking.response.NewsDetailsResponseModel;
+import com.cubes.android.komentar.data.source.remote.networking.response.TagResponseModel;
 
 import retrofit2.Call;
 import retrofit2.http.Body;

@@ -5,7 +5,7 @@ import android.graphics.Color;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.cubes.android.komentar.data.model.News;
-import com.cubes.android.komentar.data.source.remote.networking.response.home_response.CategoryBoxResponseModel;
+import com.cubes.android.komentar.data.source.remote.networking.response.HomePageResponseModel;
 import com.cubes.android.komentar.databinding.RvItemHomeCategoryBoxBinding;
 import com.cubes.android.komentar.ui.main.latest.CategoryAdapter;
 import com.cubes.android.komentar.ui.main.home.HomeAdapter;
@@ -18,7 +18,7 @@ public class RvItemModelCategoryBox implements ItemModelHome {
     private String categoryColor;
     private ArrayList<News> list;
 
-    public RvItemModelCategoryBox(CategoryBoxResponseModel category) {
+    public RvItemModelCategoryBox(HomePageResponseModel.CategoryBoxResponseModel category) {
         this.categoryTitle = category.title;
         this.categoryColor = category.color;
         this.list = category.news;

@@ -7,10 +7,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewbinding.ViewBinding;
 
-import com.cubes.android.komentar.data.DataRepository;
 import com.cubes.android.komentar.data.model.News;
-import com.cubes.android.komentar.data.source.remote.networking.response.news_response.NewsResponseModel;
-import com.cubes.android.komentar.data.source.remote.networking.response.tag_response.TagResponseModel;
+import com.cubes.android.komentar.data.source.remote.networking.response.NewsResponseModel;
+import com.cubes.android.komentar.data.source.remote.networking.response.TagResponseModel;
 import com.cubes.android.komentar.databinding.RvItemLoadingBinding;
 import com.cubes.android.komentar.ui.main.latest.LoadNextPageListener;
 import com.cubes.android.komentar.ui.main.search.rv_model_search.ItemModelSearch;
@@ -40,7 +39,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
     }
 
 
-    public void updateList(NewsResponseModel responseModel) {
+    public void updateList(NewsResponseModel.NewsDataResponseModel responseModel) {
 
         itemModels.clear();
 
@@ -49,7 +48,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
             return;
         }
 
-        for (News news : responseModel.data.news) {
+        for (News news : responseModel.news) {
             itemModels.add(new RvItemModelSearch(news, true));
         }
 
@@ -57,7 +56,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
 //            itemModels.add(new RvItemModelSearchLoading(listener));
 //        }
 
-        if (responseModel.data.news.size() == 20) {
+        if (responseModel.news.size() == 20) {
             itemModels.add(new RvItemModelSearchLoading(listener));
         }
 
@@ -65,7 +64,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
 
     }
 
-    public void updateList(TagResponseModel responseModel) {
+    public void updateList(TagResponseModel.TagDataResponseModel responseModel) {
 
         itemModels.clear();
 
@@ -74,7 +73,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
             return;
         }
 
-        for (News news : responseModel.data.news) {
+        for (News news : responseModel.news) {
             itemModels.add(new RvItemModelSearch(news, true));
         }
 
@@ -82,7 +81,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
 //            itemModels.add(new RvItemModelSearchLoading(listener));
 //        }
 
-        if (responseModel.data.news.size() == 20) {
+        if (responseModel.news.size() == 20) {
             itemModels.add(new RvItemModelSearchLoading(listener));
         }
 
@@ -129,13 +128,13 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
         return itemModels.get(position).getType();
     }
 
-    public void loadNextPage(NewsResponseModel response) {
+    public void loadNextPage(NewsResponseModel.NewsDataResponseModel response) {
 
         int lastIndex = itemModels.size() - 1;
 
         itemModels.remove(lastIndex);
 
-        for (News news : response.data.news) {
+        for (News news : response.news) {
             itemModels.add(new RvItemModelSearch(news));
         }
 
@@ -143,7 +142,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
 //            itemModels.add(new RvItemModelSearchLoading(listener));
 //        }
 
-        if (response.data.news.size() == 20) {
+        if (response.news.size() == 20) {
             itemModels.add(new RvItemModelSearchLoading(listener));
         }
 
@@ -154,13 +153,13 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
 //        notifyDataSetChanged();
     }
 
-    public void loadNextPage(TagResponseModel response) {
+    public void loadNextPage(TagResponseModel.TagDataResponseModel response) {
 
         int lastIndex = itemModels.size() - 1;
 
         itemModels.remove(lastIndex);
 
-        for (News news : response.data.news) {
+        for (News news : response.news) {
             itemModels.add(new RvItemModelSearch(news));
         }
 
@@ -168,7 +167,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
 //            itemModels.add(new RvItemModelSearchLoading(listener));
 //        }
 
-        if (response.data.news.size() == 20) {
+        if (response.news.size() == 20) {
             itemModels.add(new RvItemModelSearchLoading(listener));
         }
 

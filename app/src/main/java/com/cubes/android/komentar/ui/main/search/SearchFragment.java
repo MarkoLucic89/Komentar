@@ -11,15 +11,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.cubes.android.komentar.data.DataRepository;
-import com.cubes.android.komentar.data.model.News;
-import com.cubes.android.komentar.data.source.remote.networking.response.news_response.NewsResponseModel;
+import com.cubes.android.komentar.data.source.remote.networking.response.NewsResponseModel;
 import com.cubes.android.komentar.databinding.FragmentSearchBinding;
 import com.cubes.android.komentar.ui.main.latest.LoadNextPageListener;
-
-import java.util.ArrayList;
+import com.cubes.android.komentar.ui.tools.MyMethodsClass;
 
 
 public class SearchFragment extends Fragment implements LoadNextPageListener {
@@ -59,7 +56,11 @@ public class SearchFragment extends Fragment implements LoadNextPageListener {
         binding.recyclerView.setAdapter(adapter);
 
         binding.imageViewSearch.setOnClickListener(view1 -> searchListByTerm());
-        binding.imageViewRefresh.setOnClickListener(view1 -> searchListByTerm());
+        binding.imageViewRefresh.setOnClickListener(view1 -> {
+
+            MyMethodsClass.startRefreshAnimation(binding.imageViewRefresh);
+            searchListByTerm();
+        });
     }
 
     private void searchListByTerm() {
@@ -83,7 +84,7 @@ public class SearchFragment extends Fragment implements LoadNextPageListener {
 
         DataRepository.getInstance().searchNews(searchTerm, page, new DataRepository.SearchResponseListener() {
             @Override
-            public void onResponse(NewsResponseModel response) {
+            public void onResponse(NewsResponseModel.NewsDataResponseModel response) {
 
 
                 if (binding.recyclerView.getVisibility() == View.GONE) {
@@ -128,7 +129,7 @@ public class SearchFragment extends Fragment implements LoadNextPageListener {
 
         DataRepository.getInstance().searchNews(searchTerm, page, new DataRepository.SearchResponseListener() {
             @Override
-            public void onResponse(NewsResponseModel response) {
+            public void onResponse(NewsResponseModel.NewsDataResponseModel response) {
 
                 if (binding.recyclerView.getVisibility() == View.GONE) {
                     binding.recyclerView.setVisibility(View.VISIBLE);

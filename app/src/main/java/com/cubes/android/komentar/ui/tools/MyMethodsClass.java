@@ -1,7 +1,12 @@
 package com.cubes.android.komentar.ui.tools;
 
 import android.content.Intent;
+
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.RotateAnimation;
+import android.widget.ImageView;
+
 
 import com.cubes.android.komentar.ui.category.CategoryActivity;
 import com.cubes.android.komentar.ui.comments.CommentsActivity;
@@ -56,5 +61,12 @@ public class MyMethodsClass {
         intent.putExtra("category_id", categoryId);
         intent.putExtra("subcategory_id", subcategoryID);
         view.getContext().startActivity(intent);
+    }
+
+    public static void startRefreshAnimation(ImageView imageView) {
+        RotateAnimation rotate = new RotateAnimation(0, 360, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        rotate.setDuration(300);
+        imageView.startAnimation(rotate);
+
     }
 }

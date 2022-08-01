@@ -8,7 +8,7 @@ import android.view.View;
 
 import com.cubes.android.komentar.data.DataRepository;
 import com.cubes.android.komentar.data.model.NewsComment;
-import com.cubes.android.komentar.data.source.remote.networking.response.comments_response.CommentsResponseModel;
+import com.cubes.android.komentar.data.source.remote.networking.response.CommentsResponseModel;
 import com.cubes.android.komentar.databinding.ActivityCommentsBinding;
 
 import java.util.ArrayList;
@@ -30,12 +30,14 @@ public class CommentsActivity extends AppCompatActivity {
         binding.imageViewBack.setOnClickListener(view -> finish());
 
         DataRepository.getInstance().getComments(news_id, new DataRepository.CommentsResponseListener() {
+
+
             @Override
-            public void onResponse(CommentsResponseModel response) {
-                if (response.data.isEmpty()) {
+            public void onResponse(ArrayList<NewsComment> response) {
+                if (response.isEmpty()) {
                     binding.textView.setVisibility(View.VISIBLE);
                 } else {
-                    initRecyclerView(response.data);
+                    initRecyclerView(response);
                 }
             }
 

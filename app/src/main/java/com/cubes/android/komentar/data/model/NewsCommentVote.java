@@ -10,7 +10,8 @@ public class NewsCommentVote {
 
     @PrimaryKey
     @NonNull
-    public String comment;
+    @ColumnInfo(name = "comment")
+    public String id;
 
     @ColumnInfo
     public boolean vote;
@@ -18,8 +19,8 @@ public class NewsCommentVote {
     public NewsCommentVote() {
     }
 
-    public NewsCommentVote(String comment, boolean vote) {
-        this.comment = comment;
+    public NewsCommentVote(String id, boolean vote) {
+        this.id = id;
         this.vote = vote;
     }
 }

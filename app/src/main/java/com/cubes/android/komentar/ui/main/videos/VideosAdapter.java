@@ -8,10 +8,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewbinding.ViewBinding;
 
 import com.cubes.android.komentar.data.model.News;
-import com.cubes.android.komentar.data.source.remote.networking.response.news_response.NewsResponseModel;
+import com.cubes.android.komentar.data.source.remote.networking.response.NewsResponseModel;
 import com.cubes.android.komentar.databinding.RvItemLoadingVideosBinding;
 import com.cubes.android.komentar.ui.main.latest.LoadNextPageListener;
-import com.cubes.android.komentar.ui.main.search.rv_model_search.RvItemModelSearchLoading;
 import com.cubes.android.komentar.ui.main.videos.rv_model_videos.ItemModelVideo;
 import com.cubes.android.komentar.ui.main.videos.rv_model_videos.RvItemModelVideoLoading;
 import com.cubes.android.komentar.ui.main.videos.rv_model_videos.RvItemModelVideos;
@@ -46,13 +45,13 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.VideosView
         notifyDataSetChanged();
     }
 
-    public void updateList(NewsResponseModel responseModel) {
+    public void updateList(NewsResponseModel.NewsDataResponseModel responseModel) {
 
-        for (News news : responseModel.data.news) {
+        for (News news : responseModel.news) {
             itemModels.add(new RvItemModelVideos(news));
         }
 
-        if (responseModel.data.pagination.has_more_pages) {
+        if (responseModel.pagination.has_more_pages) {
             itemModels.add(new RvItemModelVideoLoading(listener));
         }
 
@@ -104,13 +103,13 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.VideosView
         return itemModels.get(position).getType();
     }
 
-    public void loadNextPage(NewsResponseModel response) {
+    public void loadNextPage(NewsResponseModel.NewsDataResponseModel response) {
 
         int lastIndex = itemModels.size() - 1;
 
         itemModels.remove(lastIndex);
 
-        for (News news : response.data.news) {
+        for (News news : response.news) {
             itemModels.add(new RvItemModelVideos(news));
         }
 
@@ -118,7 +117,7 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.VideosView
 //            itemModels.add(new RvItemModelVideoLoading(listener));
 //        }
 
-        if (response.data.news.size() == 20) {
+        if (response.news.size() == 20) {
             itemModels.add(new RvItemModelVideoLoading(listener));
         }
         notifyItemRangeChanged(lastIndex, itemModels.size());

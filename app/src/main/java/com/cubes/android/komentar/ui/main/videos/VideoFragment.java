@@ -11,14 +11,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.cubes.android.komentar.data.model.News;
-import com.cubes.android.komentar.data.source.remote.networking.response.news_response.NewsResponseModel;
+import com.cubes.android.komentar.data.source.remote.networking.response.NewsResponseModel;
 import com.cubes.android.komentar.databinding.FragmentVideoBinding;
 import com.cubes.android.komentar.data.DataRepository;
 import com.cubes.android.komentar.ui.main.latest.LoadNextPageListener;
-
-import java.util.ArrayList;
-
+import com.cubes.android.komentar.ui.tools.MyMethodsClass;
 
 
 public class VideoFragment extends Fragment implements LoadNextPageListener {
@@ -56,6 +53,9 @@ public class VideoFragment extends Fragment implements LoadNextPageListener {
 //        binding.imageViewRefresh.setOnClickListener(view1 -> sendVideosRequest());
 
         binding.imageViewRefresh.setOnClickListener(view1 -> {
+
+            MyMethodsClass.startRefreshAnimation(binding.imageViewRefresh);
+
             if (page == 1) {
                 sendVideosRequest();
             } else {
@@ -75,8 +75,10 @@ public class VideoFragment extends Fragment implements LoadNextPageListener {
         }
 
         DataRepository.getInstance().getVideosFromApi(page, new DataRepository.VideosResponseListener() {
+
+
             @Override
-            public void onVideosResponse( NewsResponseModel response) {
+            public void onVideosResponse(NewsResponseModel.NewsDataResponseModel response) {
 
                 binding.progressBar.setVisibility(View.GONE);
 
@@ -120,8 +122,10 @@ public class VideoFragment extends Fragment implements LoadNextPageListener {
 
 
         DataRepository.getInstance().getVideosFromApi(page, new DataRepository.VideosResponseListener() {
+
+
             @Override
-            public void onVideosResponse( NewsResponseModel response) {
+            public void onVideosResponse(NewsResponseModel.NewsDataResponseModel response) {
 
                 if (binding.recyclerView.getVisibility() == View.GONE) {
                     binding.recyclerView.setVisibility(View.VISIBLE);

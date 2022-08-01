@@ -15,16 +15,20 @@ import java.util.ArrayList;
 
 public class NewsCategoriesViewPagerAdapter extends FragmentStateAdapter {
 
+    private ArrayList<Category> categories;
     private ArrayList<Category> subcategories;
 
-    public NewsCategoriesViewPagerAdapter(@NonNull FragmentActivity fragmentActivity) {
+    public NewsCategoriesViewPagerAdapter(@NonNull FragmentActivity fragmentActivity, ArrayList<Category> categories) {
         super(fragmentActivity);
+        this.categories = categories;
         this.subcategories = null;
     }
 
-    public NewsCategoriesViewPagerAdapter(CategoryActivity fragmentActivity, ArrayList<Category> subcategories) {
+    public NewsCategoriesViewPagerAdapter(FragmentActivity fragmentActivity, ArrayList<Category> categories, ArrayList<Category> subcategories) {
         super(fragmentActivity);
+        this.categories = categories;
         this.subcategories = subcategories;
+
     }
 
     @NonNull
@@ -47,7 +51,7 @@ public class NewsCategoriesViewPagerAdapter extends FragmentStateAdapter {
                 return LatestNewsFragment.newInstance();
             }
 
-            categoryId = DataContainer.categories.get(position - 2).id;
+            categoryId = categories.get(position - 2).id;
 
         }
 
@@ -59,7 +63,7 @@ public class NewsCategoriesViewPagerAdapter extends FragmentStateAdapter {
         if (subcategories != null) {
             return subcategories.size();
         }
-        return DataContainer.categories.size() + 2;
+        return categories.size() + 2;
     }
 
 

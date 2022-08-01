@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.cubes.android.komentar.data.DataRepository;
-import com.cubes.android.komentar.data.source.remote.networking.response.tag_response.TagResponseModel;
+import com.cubes.android.komentar.data.source.remote.networking.response.TagResponseModel;
 import com.cubes.android.komentar.databinding.ActivityTagBinding;
 import com.cubes.android.komentar.ui.main.latest.LoadNextPageListener;
 import com.cubes.android.komentar.ui.main.search.SearchAdapter;
@@ -58,8 +58,9 @@ public class TagActivity extends AppCompatActivity implements LoadNextPageListen
     private void sendTagRequest() {
 
         DataRepository.getInstance().sendTagRequest(tagId, page, new DataRepository.TagResponseListener() {
+
             @Override
-            public void onResponse(TagResponseModel response) {
+            public void onResponse(TagResponseModel.TagDataResponseModel response) {
 
                 binding.progressBar.setVisibility(View.GONE);
 
@@ -74,7 +75,6 @@ public class TagActivity extends AppCompatActivity implements LoadNextPageListen
                 page++;
 
                 adapter.updateList(response);
-
 
             }
 
@@ -93,9 +93,12 @@ public class TagActivity extends AppCompatActivity implements LoadNextPageListen
     @Override
     public void loadNextPage() {
 
+        binding.progressBar.setVisibility(View.VISIBLE);
+
         DataRepository.getInstance().sendTagRequest(tagId, page, new DataRepository.TagResponseListener() {
+
             @Override
-            public void onResponse(TagResponseModel response) {
+            public void onResponse(TagResponseModel.TagDataResponseModel response) {
 
                 binding.progressBar.setVisibility(View.GONE);
 

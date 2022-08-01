@@ -8,8 +8,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewbinding.ViewBinding;
 
 import com.cubes.android.komentar.data.model.News;
-import com.cubes.android.komentar.data.source.remote.networking.response.category_response.CategoryResponseModel;
-import com.cubes.android.komentar.data.source.remote.networking.response.news_response.NewsResponseModel;
+import com.cubes.android.komentar.data.source.remote.networking.response.CategoryResponseModel;
+import com.cubes.android.komentar.data.source.remote.networking.response.NewsResponseModel;
 import com.cubes.android.komentar.ui.main.latest.rv_model_category.ItemModelCategory;
 import com.cubes.android.komentar.ui.main.latest.rv_model_category.RvItemModelCategoryBig;
 import com.cubes.android.komentar.ui.main.latest.rv_model_category.RvItemModelCategoryLoading;
@@ -58,9 +58,9 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 
     }
 
-    public void updateList(CategoryResponseModel responseModel) {
+    public void updateList(NewsResponseModel.NewsDataResponseModel responseModel) {
 
-        ArrayList<News> newsList = responseModel.data.news;
+        ArrayList<News> newsList = responseModel.news;
 
         itemModels.add(new RvItemModelCategoryBig(newsList.get(0), isSize5));
 
@@ -85,9 +85,9 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         notifyDataSetChanged();
     }
 
-    public void updateList(NewsResponseModel responseModel) {
+    public void updateList(CategoryResponseModel.CategoryDataResponseModel responseModel) {
 
-        ArrayList<News> newsList = responseModel.data.news;
+        ArrayList<News> newsList = responseModel.news;
 
         itemModels.add(new RvItemModelCategoryBig(newsList.get(0), isSize5));
 
@@ -99,7 +99,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
             itemModels.add(new RvItemModelCategorySmall(newsList.get(i), isSize5));
         }
 
-        if (responseModel.data.pagination.has_more_pages) {
+        if (responseModel.pagination.has_more_pages) {
             itemModels.add(new RvItemModelCategoryLoading(listener));
         }
 
@@ -145,13 +145,13 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
     }
 
 
-    public void loadNextPage(NewsResponseModel response) {
+    public void loadNextPage(NewsResponseModel.NewsDataResponseModel response) {
 
         int lastIndex = itemModels.size() - 1;
 
         itemModels.remove(lastIndex);
 
-        for (News news: response.data.news) {
+        for (News news: response.news) {
             itemModels.add(new RvItemModelCategorySmall(news, isSize5));
         }
 
@@ -159,7 +159,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 //            itemModels.add(new RvItemModelCategoryLoading(listener));
 //        }
 
-        if (response.data.news.size() == 20) {
+        if (response.news.size() == 20) {
             itemModels.add(new RvItemModelCategoryLoading( listener));
         }
 
@@ -170,13 +170,13 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         notifyDataSetChanged();
     }
 
-    public void loadNextPage(CategoryResponseModel response) {
+    public void loadNextPage(CategoryResponseModel.CategoryDataResponseModel response) {
 
         int lastIndex = itemModels.size() - 1;
 
         itemModels.remove(lastIndex);
 
-        for (News news: response.data.news) {
+        for (News news: response.news) {
             itemModels.add(new RvItemModelCategorySmall(news, isSize5));
         }
 
@@ -185,7 +185,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 //            itemModels.add(new RvItemModelCategoryLoading( listener));
 //        }
 
-        if (response.data.news.size() == 20) {
+        if (response.news.size() == 20) {
             itemModels.add(new RvItemModelCategoryLoading( listener));
         }
 

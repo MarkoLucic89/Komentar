@@ -3,14 +3,17 @@ package com.cubes.android.komentar.data;
 
 import android.util.Log;
 
+import com.cubes.android.komentar.data.model.NewsComment;
 import com.cubes.android.komentar.data.source.remote.networking.NewsApi;
-import com.cubes.android.komentar.data.source.remote.networking.response.category_response.CategoryResponseModel;
-import com.cubes.android.komentar.data.source.remote.networking.response.comments_response.CommentsResponseModel;
-import com.cubes.android.komentar.data.source.remote.networking.response.home_response.HomePageResponseModel;
-import com.cubes.android.komentar.data.source.remote.networking.response.news_details_response.NewsDetailsResponseModel;
-import com.cubes.android.komentar.data.source.remote.networking.response.news_response.NewsResponseModel;
-import com.cubes.android.komentar.data.source.remote.networking.response.tag_response.TagResponseModel;
+import com.cubes.android.komentar.data.source.remote.networking.response.CategoryResponseModel;
+import com.cubes.android.komentar.data.source.remote.networking.response.CommentsResponseModel;
+import com.cubes.android.komentar.data.source.remote.networking.response.HomePageResponseModel;
+import com.cubes.android.komentar.data.source.remote.networking.response.NewsDetailsResponseModel;
+import com.cubes.android.komentar.data.source.remote.networking.response.NewsResponseModel;
+import com.cubes.android.komentar.data.source.remote.networking.response.TagResponseModel;
 
+
+import java.util.ArrayList;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -36,7 +39,7 @@ public class DataRepository {
 
 
     public interface VideosResponseListener {
-        void onVideosResponse(NewsResponseModel response);
+        void onVideosResponse(NewsResponseModel.NewsDataResponseModel response);
 
         void onVideosFailure(Throwable t);
     }
@@ -53,7 +56,7 @@ public class DataRepository {
                         && response.body().data != null
                         && !response.body().data.news.isEmpty()) {
 
-                    videosResponseListener.onVideosResponse(response.body());
+                    videosResponseListener.onVideosResponse(response.body().data);
 
                 }
 
@@ -69,7 +72,7 @@ public class DataRepository {
     }
 
     public interface LatestResponseListener {
-        void onResponse(NewsResponseModel response);
+        void onResponse(NewsResponseModel.NewsDataResponseModel response);
 
         void onFailure(Throwable t);
     }
@@ -85,7 +88,7 @@ public class DataRepository {
                         && response.body().data != null
                         && !response.body().data.news.isEmpty()) {
 
-                    latestResponseListener.onResponse(response.body());
+                    latestResponseListener.onResponse(response.body().data);
 
                 }
 
@@ -101,7 +104,7 @@ public class DataRepository {
     }
 
     public interface CategoryResponseListener {
-        void onResponse(CategoryResponseModel response);
+        void onResponse(CategoryResponseModel.CategoryDataResponseModel response);
 
         void onFailure(Throwable t);
     }
@@ -120,7 +123,7 @@ public class DataRepository {
                         && !response.body().data.news.isEmpty()) {
 
 
-                    listener.onResponse(response.body());
+                    listener.onResponse(response.body().data);
 
                 }
 
@@ -135,7 +138,7 @@ public class DataRepository {
     }
 
     public interface SearchResponseListener {
-        void onResponse(NewsResponseModel response);
+        void onResponse(NewsResponseModel.NewsDataResponseModel response);
 
         void onFailure(Throwable t);
     }
@@ -150,7 +153,7 @@ public class DataRepository {
                         && response.isSuccessful()
                         && response.body().data != null) {
 
-                    searchResponseListener.onResponse(response.body());
+                    searchResponseListener.onResponse(response.body().data);
 
                 }
 
@@ -166,7 +169,7 @@ public class DataRepository {
     }
 
     public interface HomeResponseListener {
-        void onResponse(HomePageResponseModel response);
+        void onResponse(HomePageResponseModel.HomePageDataResponseModel response);
 
         void onFailure(Throwable t);
     }
@@ -181,7 +184,7 @@ public class DataRepository {
                         && response.isSuccessful()
                         && response.body().data != null) {
 
-                    listener.onResponse(response.body());
+                    listener.onResponse(response.body().data);
 
                 }
 
@@ -198,7 +201,7 @@ public class DataRepository {
     }
 
     public interface DetailResponseListener {
-        void onResponse(NewsDetailsResponseModel response);
+        void onResponse(NewsDetailsResponseModel.NewsDetailsDataResponseModel response);
 
         void onFailure(Throwable t);
     }
@@ -214,7 +217,7 @@ public class DataRepository {
                         && response.isSuccessful()
                         && response.body().data != null) {
 
-                    listener.onResponse(response.body());
+                    listener.onResponse(response.body().data);
 
                 }
 
@@ -230,7 +233,7 @@ public class DataRepository {
     }
 
     public interface TagResponseListener {
-        void onResponse(TagResponseModel response);
+        void onResponse(TagResponseModel.TagDataResponseModel response);
 
         void onFailure(Throwable t);
     }
@@ -246,7 +249,7 @@ public class DataRepository {
                         && response.body().data != null
                         && !response.body().data.news.isEmpty()) {
 
-                    listener.onResponse(response.body());
+                    listener.onResponse(response.body().data);
 
                 }
             }
@@ -261,7 +264,7 @@ public class DataRepository {
     }
 
     public interface CommentsResponseListener {
-        void onResponse(CommentsResponseModel response);
+        void onResponse(ArrayList<NewsComment> response);
 
         void onFailure(Throwable t);
     }
@@ -276,7 +279,7 @@ public class DataRepository {
                         && response.body().data != null
                         && !response.body().data.isEmpty()) {
 
-                    listener.onResponse(response.body());
+                    listener.onResponse(response.body().data);
 
                 }
             }

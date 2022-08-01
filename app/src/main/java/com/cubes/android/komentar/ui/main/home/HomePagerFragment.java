@@ -12,7 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.cubes.android.komentar.data.DataRepository;
-import com.cubes.android.komentar.data.source.remote.networking.response.home_response.HomePageResponseModel;
+import com.cubes.android.komentar.data.source.remote.networking.response.HomePageResponseModel;
 import com.cubes.android.komentar.databinding.FragmentHomePagerBinding;
 
 public class HomePagerFragment extends Fragment {
@@ -54,7 +54,7 @@ public class HomePagerFragment extends Fragment {
         DataRepository.getInstance().getHomeNews(new DataRepository.HomeResponseListener() {
 
             @Override
-            public void onResponse(HomePageResponseModel response) {
+            public void onResponse(HomePageResponseModel.HomePageDataResponseModel response) {
                 binding.progressBar.setVisibility(View.GONE);
                 initRecyclerView(response);
             }
@@ -67,7 +67,7 @@ public class HomePagerFragment extends Fragment {
 
     }
 
-    private void initRecyclerView(HomePageResponseModel response) {
+    private void initRecyclerView(HomePageResponseModel.HomePageDataResponseModel response) {
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.recyclerView.setAdapter(new HomeAdapter(response));
     }

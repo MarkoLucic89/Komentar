@@ -23,7 +23,7 @@ public class DrawerMenuAdapter extends RecyclerView.Adapter<DrawerMenuAdapter.Dr
 
     private ArrayList<ItemModelDrawerMenu> list;
 
-    public DrawerMenuAdapter(Activity activity, OnCategoryClickListener listener) {
+    public DrawerMenuAdapter(Activity activity, OnCategoryClickListener listener, ArrayList<Category> categories) {
 
         list = new ArrayList<>();
 
@@ -31,7 +31,7 @@ public class DrawerMenuAdapter extends RecyclerView.Adapter<DrawerMenuAdapter.Dr
         list.add(new RvItemModelDrawerMenuCategory(null, listener));
 
         //CATEGORIES
-        for (Category category : DataContainer.categories) {
+        for (Category category : categories) {
             list.add(new RvItemModelDrawerMenuCategory(category, listener));
         }
 

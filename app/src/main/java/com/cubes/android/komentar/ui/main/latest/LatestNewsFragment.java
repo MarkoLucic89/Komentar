@@ -11,12 +11,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.cubes.android.komentar.data.model.News;
-import com.cubes.android.komentar.data.source.remote.networking.response.news_response.NewsResponseModel;
+import com.cubes.android.komentar.data.source.remote.networking.response.NewsResponseModel;
 import com.cubes.android.komentar.databinding.FragmentLatestNewsBinding;
 import com.cubes.android.komentar.data.DataRepository;
-
-import java.util.ArrayList;
+import com.cubes.android.komentar.ui.tools.MyMethodsClass;
 
 public class LatestNewsFragment extends Fragment implements LoadNextPageListener {
 
@@ -55,6 +53,9 @@ public class LatestNewsFragment extends Fragment implements LoadNextPageListener
 //        binding.imageViewRefresh.setOnClickListener(view1 -> sendLatestRequest());
 
         binding.imageViewRefresh.setOnClickListener(view1 -> {
+
+            MyMethodsClass.startRefreshAnimation(binding.imageViewRefresh);
+
             if (page == 1) {
                 sendLatestRequest();
             } else {
@@ -71,8 +72,9 @@ public class LatestNewsFragment extends Fragment implements LoadNextPageListener
         binding.progressBar.setVisibility(View.VISIBLE);
 
         DataRepository.getInstance().getLatest(page, new DataRepository.LatestResponseListener() {
+
             @Override
-            public void onResponse(NewsResponseModel response) {
+            public void onResponse(NewsResponseModel.NewsDataResponseModel response) {
 
 
                 if (binding.recyclerView.getVisibility() == View.GONE) {
@@ -124,9 +126,10 @@ public class LatestNewsFragment extends Fragment implements LoadNextPageListener
 
 
         DataRepository.getInstance().getLatest(page, new DataRepository.LatestResponseListener() {
-            @Override
-            public void onResponse(NewsResponseModel response) {
 
+
+            @Override
+            public void onResponse(NewsResponseModel.NewsDataResponseModel response) {
 
                 if (binding.recyclerView.getVisibility() == View.GONE) {
                     binding.recyclerView.setVisibility(View.VISIBLE);

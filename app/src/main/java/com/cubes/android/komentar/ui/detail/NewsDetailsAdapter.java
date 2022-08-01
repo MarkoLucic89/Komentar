@@ -7,7 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewbinding.ViewBinding;
 
-import com.cubes.android.komentar.data.source.remote.networking.response.news_details_response.NewsDetailsDataResponseModel;
+import com.cubes.android.komentar.data.source.remote.networking.response.NewsDetailsResponseModel;
 import com.cubes.android.komentar.ui.detail.rv_item_details.ItemModelDetails;
 import com.cubes.android.komentar.ui.detail.rv_item_details.RvItemModelDetailsComments;
 import com.cubes.android.komentar.ui.detail.rv_item_details.RvItemModelDetailsHeader;
@@ -26,7 +26,7 @@ public class NewsDetailsAdapter extends RecyclerView.Adapter<NewsDetailsAdapter.
 
     private ArrayList<ItemModelDetails> list;
 
-    public NewsDetailsAdapter(NewsDetailsDataResponseModel newsDetails) {
+    public NewsDetailsAdapter(NewsDetailsResponseModel.NewsDetailsDataResponseModel newsDetails) {
         list = new ArrayList<>();
 
         //HEADER

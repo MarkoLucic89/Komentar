@@ -1,15 +1,15 @@
 package com.cubes.android.komentar.ui.detail.rv_item_details;
 
-import com.cubes.android.komentar.data.source.remote.networking.response.news_details_response.NewsDetailsDataResponseModel;
+import com.cubes.android.komentar.data.source.remote.networking.response.NewsDetailsResponseModel;
 import com.cubes.android.komentar.databinding.RvItemDetailsHeaderBinding;
 import com.cubes.android.komentar.ui.detail.NewsDetailsAdapter;
 import com.cubes.android.komentar.ui.tools.MyMethodsClass;
 
 public class RvItemModelDetailsHeader implements ItemModelDetails {
 
-    private NewsDetailsDataResponseModel newsDetails;
+    private NewsDetailsResponseModel.NewsDetailsDataResponseModel newsDetails;
 
-    public RvItemModelDetailsHeader(NewsDetailsDataResponseModel newsDetails) {
+    public RvItemModelDetailsHeader(NewsDetailsResponseModel.NewsDetailsDataResponseModel newsDetails) {
         this.newsDetails = newsDetails;
     }
 

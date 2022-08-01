@@ -13,17 +13,28 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.cubes.android.komentar.data.DataContainer;
+import com.cubes.android.komentar.data.model.Category;
+import com.cubes.android.komentar.data.source.remote.networking.NewsApi;
+import com.cubes.android.komentar.data.source.remote.networking.response.CategoriesResponseModel;
 import com.cubes.android.komentar.databinding.FragmentHomeBinding;
 import com.cubes.android.komentar.ui.main.listeners.OnCategoryClickListener;
 import com.cubes.android.komentar.ui.category.NewsCategoriesViewPagerAdapter;
 import com.cubes.android.komentar.ui.main.drawer_menu.DrawerMenuAdapter;
 import com.google.android.material.tabs.TabLayoutMediator;
 
+import java.util.ArrayList;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class HomeFragment extends Fragment implements OnCategoryClickListener {
 
     private FragmentHomeBinding binding;
 
     private NewsCategoriesViewPagerAdapter pagerAdapter;
+
+    private ArrayList<Category> categories;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -49,26 +60,41 @@ public class HomeFragment extends Fragment implements OnCategoryClickListener {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        initViewPager();
+        NewsApi.getInstance().getNewsService().getCategories().enqueue(new Callback<CategoriesResponseModel>() {
+            @Override
+            public void onResponse(Call<CategoriesResponseModel> call, Response<CategoriesResponseModel> response) {
+
+                categories = response.body().data;
+
+                initDrawerRecyclerView(categories);
+                initViewPager(categories);
+            }
+
+            @Override
+            public void onFailure(Call<CategoriesResponseModel> call, Throwable t) {
+
+            }
+        });
+
+//        initViewPager();
         binding.imageViewDrawerMenu.setOnClickListener(view1 -> binding.getRoot().openDrawer(GravityCompat.END));
-        initDrawerRecyclerView();
 
     }
 
 
-    private void initDrawerRecyclerView() {
+    private void initDrawerRecyclerView(ArrayList<Category> categories) {
 
 //        DrawerAdapter adapter = new DrawerAdapter(this.getActivity(), this);
 
-        DrawerMenuAdapter adapter = new DrawerMenuAdapter(this.getActivity(), this);
+        DrawerMenuAdapter adapter = new DrawerMenuAdapter(this.getActivity(), this, categories);
         binding.recyclerViewDrawer.setLayoutManager(new LinearLayoutManager(getActivity()));
         binding.recyclerViewDrawer.setAdapter(adapter);
 
     }
 
-    private void initViewPager() {
+    private void initViewPager(ArrayList<Category> categories) {
 
-        pagerAdapter = new NewsCategoriesViewPagerAdapter(getActivity());
+        pagerAdapter = new NewsCategoriesViewPagerAdapter(getActivity(), categories);
         binding.viewPager.setAdapter(pagerAdapter);
 
 
@@ -83,7 +109,7 @@ public class HomeFragment extends Fragment implements OnCategoryClickListener {
                     } else if (position == 1) {
                         tab.setText("Najnovije");
                     } else {
-                        tab.setText(DataContainer.categories.get(position - 2).name);
+                        tab.setText(categories.get(position - 2).name);
                     }
 
                 }

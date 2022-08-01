@@ -10,12 +10,10 @@ public class SharedPrefs {
 
     private static SharedPrefs instance;
     private SharedPreferences preferences;
-    private SharedPreferences.Editor editor;
 
 
     private SharedPrefs(Activity activity) {
         preferences = activity.getPreferences(Context.MODE_PRIVATE);
-        editor = preferences.edit();
     }
 
     public synchronized static SharedPrefs getInstance(Activity activity) {
@@ -32,8 +30,7 @@ public class SharedPrefs {
     }
 
     public void setNotificationStatus(boolean isOn) {
-        editor.putBoolean(NOTIFICATION, isOn);
-        editor.apply();
+        preferences.edit().putBoolean(NOTIFICATION, isOn).apply();
     }
 }
 

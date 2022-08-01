@@ -4,7 +4,7 @@ import android.view.View;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.cubes.android.komentar.data.source.remote.networking.response.news_details_response.NewsDetailsDataResponseModel;
+import com.cubes.android.komentar.data.source.remote.networking.response.NewsDetailsResponseModel;
 import com.cubes.android.komentar.databinding.RvItemDetailsCommentsBinding;
 import com.cubes.android.komentar.ui.comments.CommentsAdapter;
 import com.cubes.android.komentar.ui.detail.NewsDetailsAdapter;
@@ -13,9 +13,9 @@ import com.cubes.android.komentar.ui.tools.MyMethodsClass;
 
 public class RvItemModelDetailsComments implements ItemModelDetails {
 
-    private NewsDetailsDataResponseModel data;
+    private NewsDetailsResponseModel.NewsDetailsDataResponseModel data;
 
-    public RvItemModelDetailsComments(NewsDetailsDataResponseModel data) {
+    public RvItemModelDetailsComments(NewsDetailsResponseModel.NewsDetailsDataResponseModel data) {
         this.data = data;
     }
 

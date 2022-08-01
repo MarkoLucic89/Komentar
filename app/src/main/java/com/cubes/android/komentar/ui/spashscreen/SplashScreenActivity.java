@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.cubes.android.komentar.data.DataContainer;
-import com.cubes.android.komentar.data.source.remote.networking.response.categories_response.CategoriesResponseModel;
+import com.cubes.android.komentar.data.source.remote.networking.response.CategoriesResponseModel;
 import com.cubes.android.komentar.databinding.ActivitySplashScreenBinding;
 import com.cubes.android.komentar.data.source.remote.networking.NewsApi;
 import com.cubes.android.komentar.ui.main.NewsListActivity;
@@ -26,43 +26,10 @@ public class SplashScreenActivity extends AppCompatActivity {
         binding = ActivitySplashScreenBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        sendCategoriesRequest();
-        
-        binding.imageViewRefresh.setOnClickListener(view -> sendCategoriesRequest());
+        goToNewsListActivity();
 
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        if (binding.imageViewRefresh.getVisibility() == View.VISIBLE) {
-            sendCategoriesRequest();
-        }
-    }
-
-    private void sendCategoriesRequest() {
-
-        binding.imageViewRefresh.setVisibility(View.GONE);
-
-
-        NewsApi.getInstance().getNewsService().getCategories().enqueue(new Callback<CategoriesResponseModel>() {
-            @Override
-            public void onResponse(Call<CategoriesResponseModel> call, Response<CategoriesResponseModel> response) {
-
-                DataContainer.categories = response.body().data;
-
-                goToNewsListActivity();
-            }
-
-            @Override
-            public void onFailure(Call<CategoriesResponseModel> call, Throwable t) {
-
-                binding.imageViewRefresh.setVisibility(View.VISIBLE);
-
-            }
-        });
-    }
 
     private void goToNewsListActivity() {
 

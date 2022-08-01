@@ -12,19 +12,16 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.cubes.android.komentar.data.DataRepository;
-import com.cubes.android.komentar.data.model.News;
-import com.cubes.android.komentar.data.source.remote.networking.response.category_response.CategoryResponseModel;
+import com.cubes.android.komentar.data.source.remote.networking.response.CategoryResponseModel;
 import com.cubes.android.komentar.databinding.FragmentCategoryBinding;
 import com.cubes.android.komentar.ui.main.latest.LoadNextPageListener;
 import com.cubes.android.komentar.ui.main.latest.CategoryAdapter;
-
-import java.util.ArrayList;
-
+import com.cubes.android.komentar.ui.tools.MyMethodsClass;
 
 
 public class NewsFragment extends Fragment implements LoadNextPageListener {
 
-    private final String TAG = "CategoryFragment";
+    private static final String ARG_CATEGORY_ID = "category_id";
 
     private int mCategoryId;
 
@@ -34,15 +31,25 @@ public class NewsFragment extends Fragment implements LoadNextPageListener {
 
     private int page = 1;
 
-
     public NewsFragment() {
         // Required empty public constructor
     }
 
     public static NewsFragment newInstance(int categoryId) {
         NewsFragment fragment = new NewsFragment();
+        Bundle args = new Bundle();
+        args.putInt(ARG_CATEGORY_ID, categoryId);
+        fragment.setArguments(args);
         fragment.mCategoryId = categoryId;
         return fragment;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            mCategoryId = getArguments().getInt(ARG_CATEGORY_ID);
+        }
     }
 
     @Override
@@ -60,6 +67,9 @@ public class NewsFragment extends Fragment implements LoadNextPageListener {
         categoryRequest();
 
         binding.imageViewRefresh.setOnClickListener(view1 -> {
+
+            MyMethodsClass.startRefreshAnimation(binding.imageViewRefresh);
+
             if (page == 1) {
                 categoryRequest();
             } else {
@@ -87,24 +97,26 @@ public class NewsFragment extends Fragment implements LoadNextPageListener {
         binding.imageViewRefresh.setVisibility(View.GONE);
 
         DataRepository.getInstance().getNewsForCategory(mCategoryId, page, new DataRepository.CategoryResponseListener() {
+
+
             @Override
-            public void onResponse(CategoryResponseModel response) {
+            public void onResponse(CategoryResponseModel.CategoryDataResponseModel response) {
+                    binding.progressBar.setVisibility(View.GONE);
 
-                binding.progressBar.setVisibility(View.GONE);
+                    page++;
 
-                page++;
+                    if (binding.recyclerView.getVisibility() == View.GONE) {
+                        binding.recyclerView.setVisibility(View.VISIBLE);
+                    }
 
-                if (binding.recyclerView.getVisibility() == View.GONE) {
-                    binding.recyclerView.setVisibility(View.VISIBLE);
+                    if (binding.imageViewRefresh.getVisibility() == View.VISIBLE) {
+                        binding.imageViewRefresh.setVisibility(View.GONE);
+                    }
+
+                    categoryAdapter.updateList(response);
+
                 }
 
-                if (binding.imageViewRefresh.getVisibility() == View.VISIBLE) {
-                    binding.imageViewRefresh.setVisibility(View.GONE);
-                }
-
-                categoryAdapter.updateList(response);
-
-            }
 
             @Override
             public void onFailure(Throwable t) {
@@ -130,8 +142,10 @@ public class NewsFragment extends Fragment implements LoadNextPageListener {
 
 
         DataRepository.getInstance().getNewsForCategory(mCategoryId, page, new DataRepository.CategoryResponseListener() {
+
+
             @Override
-            public void onResponse(CategoryResponseModel response) {
+            public void onResponse(CategoryResponseModel.CategoryDataResponseModel response) {
 
 
                 if (binding.recyclerView.getVisibility() == View.GONE) {
@@ -147,7 +161,6 @@ public class NewsFragment extends Fragment implements LoadNextPageListener {
                 page++;
 
                 categoryAdapter.loadNextPage(response);
-
             }
 
             @Override
