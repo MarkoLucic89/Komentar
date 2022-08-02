@@ -1,7 +1,8 @@
 package com.cubes.android.komentar.ui.comments.rv_item_comments;
 
 import android.content.Context;
-
+import android.view.View;
+import android.view.ViewGroup;
 
 import com.cubes.android.komentar.R;
 import com.cubes.android.komentar.data.model.NewsComment;
@@ -12,26 +13,15 @@ import com.cubes.android.komentar.ui.comments.CommentsAdapter;
 import com.cubes.android.komentar.ui.comments.CommentsListener;
 import com.cubes.android.komentar.ui.tools.MyMethodsClass;
 
-
-public class RvItemModelComments implements ItemModelComments {
+public class RvItemModelSubComments implements ItemModelComments {
 
     public NewsComment comment;
-    public int leftPadding;
-    public CommentsListener listener;
     public RvItemCommentBinding binding;
+    public CommentsListener listener;
 
-    public RvItemModelComments(NewsComment comment) {
-        this.comment = comment;
-    }
-
-    public RvItemModelComments(NewsComment comment, CommentsListener listener) {
+    public RvItemModelSubComments(NewsComment comment, CommentsListener listener) {
         this.comment = comment;
         this.listener = listener;
-    }
-
-    public RvItemModelComments(NewsComment comment, int leftPadding) {
-        this.comment = comment;
-        this.leftPadding = leftPadding;
     }
 
     @Override
@@ -41,7 +31,7 @@ public class RvItemModelComments implements ItemModelComments {
 
     @Override
     public int getType() {
-        return 0;
+        return 1;
     }
 
     @Override
@@ -78,7 +68,17 @@ public class RvItemModelComments implements ItemModelComments {
             MyMethodsClass.goToPostCommentsActivity(view, Integer.parseInt(comment.news), Integer.parseInt(comment.id));
         });
 
+        setMargins(binding.layoutRoot, 80, 0, 0, 0);
 
+
+    }
+
+    private void setMargins(View view, int left, int top, int right, int bottom) {
+        if (view.getLayoutParams() instanceof ViewGroup.MarginLayoutParams) {
+            ViewGroup.MarginLayoutParams p = (ViewGroup.MarginLayoutParams) view.getLayoutParams();
+            p.setMargins(left, top, right, bottom);
+            view.requestLayout();
+        }
     }
 
     private void setListeners(RvItemCommentBinding binding, Context context) {
@@ -97,8 +97,8 @@ public class RvItemModelComments implements ItemModelComments {
 
     }
 
-
     public void updateLikedUi() {
+
 
             int likes = Integer.parseInt(binding.textViewLike.getText().toString());
             likes++;
@@ -121,6 +121,5 @@ public class RvItemModelComments implements ItemModelComments {
         binding.buttonDislike.setEnabled(false);
 
         binding.buttonDislike.setBackgroundResource(R.drawable.background_button_dislike);
-
     }
 }

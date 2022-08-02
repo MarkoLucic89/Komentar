@@ -8,16 +8,26 @@ import android.view.View;
 
 import com.cubes.android.komentar.data.DataRepository;
 import com.cubes.android.komentar.data.model.NewsComment;
-import com.cubes.android.komentar.data.source.remote.networking.response.CommentsResponseModel;
+import com.cubes.android.komentar.data.model.NewsCommentVote;
+import com.cubes.android.komentar.data.source.local.database.NewsDatabase;
+import com.cubes.android.komentar.data.source.remote.networking.NewsApi;
 import com.cubes.android.komentar.databinding.ActivityCommentsBinding;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class CommentsActivity extends AppCompatActivity {
 
     private ActivityCommentsBinding binding;
     private int news_id;
+    private CommentsAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,11 +43,11 @@ public class CommentsActivity extends AppCompatActivity {
 
 
             @Override
-            public void onResponse(ArrayList<NewsComment> response) {
-                if (response.isEmpty()) {
+            public void onResponse(ArrayList<NewsComment> comments) {
+                if (comments.isEmpty()) {
                     binding.textView.setVisibility(View.VISIBLE);
                 } else {
-                    initRecyclerView(response);
+                    getCommentVotes(comments);
                 }
             }
 
@@ -49,8 +59,122 @@ public class CommentsActivity extends AppCompatActivity {
 
     }
 
-    private void initRecyclerView(ArrayList<NewsComment> comments) {
-        binding.recyclerViewComments.setLayoutManager(new LinearLayoutManager(this));
-        binding.recyclerViewComments.setAdapter(new CommentsAdapter(comments));
+    private void getCommentVotes(ArrayList<NewsComment> comments) {
+
+        ExecutorService service = Executors.newSingleThreadExecutor();
+        service.execute(() -> {
+
+            //onPreExecute
+            runOnUiThread(() -> {
+
+            });
+
+            //doInBackgroundThread
+            List<NewsCommentVote> votes = NewsDatabase.getInstance(binding.getRoot().getContext()).voteDao().getNewsCommentVotes();
+
+            //onPostExecute
+            runOnUiThread(() -> {
+
+                for (NewsCommentVote vote : votes) {
+                    for (NewsComment comment : comments) {
+                        if (vote.id.equals(comment.id)) {
+                            comment.newsCommentVote = vote;
+                        }
+                    }
+                }
+
+                initRecyclerView(comments);
+            });
+
+        });
+
+
+
     }
+
+    private void initRecyclerView(ArrayList<NewsComment> comments) {
+        adapter = new CommentsAdapter(comments, new CommentsListener() {
+            @Override
+            public void onLikeListener(int id, boolean vote) {
+                likeComment(id, vote);
+            }
+
+            @Override
+            public void onDislikeListener(int id, boolean vote) {
+                dislikeComment(id, vote);
+            }
+        });
+        binding.recyclerViewComments.setLayoutManager(new LinearLayoutManager(this));
+        binding.recyclerViewComments.setAdapter(adapter);
+    }
+
+    private void likeComment(int id, boolean vote) {
+
+        DataRepository.getInstance().likeComment(id, vote, new DataRepository.CommentsLikeListener() {
+            @Override
+            public void onResponse(NewsCommentVote response) {
+
+                ExecutorService service = Executors.newSingleThreadExecutor();
+                service.execute(() -> {
+
+                    //onPreExecute
+                    runOnUiThread(() -> {
+
+                    });
+
+                    //doInBackgroundThread
+                    NewsCommentVote newsCommentVote = new NewsCommentVote(String.valueOf(id), vote);
+                    NewsDatabase.getInstance(binding.getRoot().getContext()).voteDao().insert(newsCommentVote);
+
+                    //onPostExecute
+                    runOnUiThread(() -> adapter.commentLiked(id, vote));
+
+                });
+
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+
+            }
+        });
+
+    }
+
+    private void dislikeComment(int id, boolean vote) {
+
+        DataRepository.getInstance().dislikeComment(id, vote, new DataRepository.CommentsLikeListener() {
+            @Override
+            public void onResponse(NewsCommentVote response) {
+
+                ExecutorService service = Executors.newSingleThreadExecutor();
+                service.execute(() -> {
+
+                    //onPreExecute
+                    runOnUiThread(() -> {
+
+                    });
+
+                    NewsCommentVote newsCommentVote = new NewsCommentVote(String.valueOf(id), false);
+                    NewsDatabase.getInstance(binding.getRoot().getContext()).voteDao().insert(newsCommentVote);
+
+                    //onPostExecute
+                    runOnUiThread(() -> adapter.commentDisliked(id, vote));
+
+                });
+
+
+
+
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+
+            }
+        });
+
+    }
+
+
 }

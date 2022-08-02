@@ -3,7 +3,10 @@ package com.cubes.android.komentar.data;
 
 import android.util.Log;
 
+import com.cubes.android.komentar.R;
 import com.cubes.android.komentar.data.model.NewsComment;
+import com.cubes.android.komentar.data.model.NewsCommentVote;
+import com.cubes.android.komentar.data.source.local.database.NewsDatabase;
 import com.cubes.android.komentar.data.source.remote.networking.NewsApi;
 import com.cubes.android.komentar.data.source.remote.networking.response.CategoryResponseModel;
 import com.cubes.android.komentar.data.source.remote.networking.response.CommentsResponseModel;
@@ -290,6 +293,62 @@ public class DataRepository {
                 listener.onFailure(t);
             }
         });
+    }
+
+    public interface CommentsLikeListener {
+        void onResponse(NewsCommentVote response);
+
+        void onFailure(Throwable t);
+    }
+
+    public void likeComment(int id, boolean vote, CommentsLikeListener listener) {
+
+        api.getNewsService().postLike(id, vote)
+                .enqueue(new Callback<NewsCommentVote>() {
+                    @Override
+                    public void onResponse(Call<NewsCommentVote> call, Response<NewsCommentVote> response) {
+                        if (response.isSuccessful()) {
+
+                            listener.onResponse(response.body());
+
+                        } else {
+
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<NewsCommentVote> call, Throwable t) {
+
+                        listener.onFailure(t);
+
+                    }
+                });
+
+    }
+
+    public void dislikeComment(int id, boolean vote, CommentsLikeListener listener) {
+
+        api.getNewsService().postDislike(id, vote)
+                .enqueue(new Callback<NewsCommentVote>() {
+                    @Override
+                    public void onResponse(Call<NewsCommentVote> call, Response<NewsCommentVote> response) {
+                        if (response.isSuccessful()) {
+
+                            listener.onResponse(response.body());
+
+                        } else {
+
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<NewsCommentVote> call, Throwable t) {
+
+                        listener.onFailure(t);
+
+                    }
+                });
+
     }
 
 }

@@ -25,7 +25,6 @@ public abstract class NewsDatabase extends RoomDatabase {
                     NewsDatabase.class,
                     "database-komentar.rs"
             )
-                    .allowMainThreadQueries()
                     .build();
 
         }

@@ -14,4 +14,6 @@ public class NewsComment {
     public String content;
     public ArrayList<NewsComment> children;
 
+    public NewsCommentVote newsCommentVote;
+
 }

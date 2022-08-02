@@ -8,61 +8,78 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewbinding.ViewBinding;
 
 import com.cubes.android.komentar.data.model.NewsComment;
-import com.cubes.android.komentar.ui.comments.rv_item_comments.RvItemModelComments;
 import com.cubes.android.komentar.databinding.RvItemCommentBinding;
+import com.cubes.android.komentar.ui.comments.rv_item_comments.ItemModelComments;
+import com.cubes.android.komentar.ui.comments.rv_item_comments.RvItemModelComments;
+import com.cubes.android.komentar.ui.comments.rv_item_comments.RvItemModelSubComments;
 
 import java.util.ArrayList;
 
 public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.CommentsViewHolder> {
 
-    private ArrayList<RvItemModelComments> list;
-    private int leftPadding = 0;
+    private ArrayList<ItemModelComments> list;
     private boolean isSize5;
+    private CommentsListener listener;
 
     public CommentsAdapter(ArrayList<NewsComment> comments) {
+
+        addComments(comments);
+    }
+
+    public CommentsAdapter(ArrayList<NewsComment> comments, CommentsListener listener) {
+        this.listener = listener;
+        addComments(comments);
+    }
+
+    public void addComments(ArrayList<NewsComment> comments) {
+
         this.list = new ArrayList<>();
 
         for (NewsComment comment : comments) {
 
-            leftPadding = 0;
+            list.add(new RvItemModelComments(comment, listener));
 
-            list.add(new RvItemModelComments(comment));
-
-            addChildren(comment);
+            addChildren(comment.children);
 
         }
     }
+
+    private void addChildren(ArrayList<NewsComment> comments) {
+
+        if (comments != null && !comments.isEmpty()) {
+
+            for (NewsComment comment : comments) {
+
+                list.add(new RvItemModelSubComments(comment, listener));
+
+                addChildren(comment.children);
+
+            }
+
+        }
+
+    }
+
 
     public CommentsAdapter(ArrayList<NewsComment> comments, boolean isSize5) {
-        this.isSize5 = isSize5;
-
         this.list = new ArrayList<>();
 
         for (NewsComment comment : comments) {
 
-            leftPadding = 0;
-
             list.add(new RvItemModelComments(comment));
 
-            addChildren(comment);
+            for (NewsComment subComment : comment.children) {
 
-        }
-    }
+                list.add(new RvItemModelSubComments(subComment, listener));
 
-    private void addChildren(NewsComment comment) {
+                NewsComment newsComment = subComment;
 
-        if (comment.children == null || comment.children.isEmpty()) {
-            return;
-        }
+                for (NewsComment childComment : newsComment.children) {
 
-        leftPadding += 80;
+                    list.add(new RvItemModelSubComments(childComment, listener));
 
-        for (NewsComment child : comment.children) {
-
-            list.add(new RvItemModelComments(child, leftPadding));
-
-            addChildren(child);
-
+                }
+            }
 
         }
     }
@@ -82,14 +99,71 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
     @Override
     public void onBindViewHolder(@NonNull CommentsViewHolder holder, int position) {
         list.get(position).bind(holder);
+
     }
 
     @Override
     public int getItemCount() {
-        if (isSize5 && list.size() > 5) {
+        if (isSize5) {
             return 5;
         }
         return list.size();
+    }
+
+    public void commentLiked(int id, boolean vote) {
+        
+        for (ItemModelComments itemModel : list) {
+            
+            if (itemModel.getCommentsId() == id) {
+
+                if (itemModel instanceof RvItemModelComments) {
+
+                    RvItemModelComments tempModel = (RvItemModelComments) itemModel;
+
+                    tempModel.updateLikedUi();
+
+                } else {
+
+                    RvItemModelSubComments tempModel = (RvItemModelSubComments) itemModel;
+
+                    tempModel.updateLikedUi();
+
+                }
+
+                break;
+
+            }
+        }
+
+
+    }
+
+    public void commentDisliked(int id, boolean vote) {
+        
+        for (ItemModelComments itemModel : list) {
+
+            if (itemModel.getCommentsId() == id) {
+
+                if (itemModel instanceof RvItemModelComments) {
+
+                    RvItemModelComments tempModel = (RvItemModelComments) itemModel;
+
+                    tempModel.updateDislikedUi();
+
+                } else {
+
+                    RvItemModelSubComments tempModel = (RvItemModelSubComments) itemModel;
+
+                    tempModel.updateDislikedUi();
+
+                }
+
+                break;
+
+            }
+
+        }
+
     }
 
     public class CommentsViewHolder extends RecyclerView.ViewHolder {
