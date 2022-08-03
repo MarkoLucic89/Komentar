@@ -2,18 +2,21 @@ package com.cubes.android.komentar.data;
 
 
 import android.util.Log;
+import android.widget.Toast;
 
-import com.cubes.android.komentar.R;
+import com.cubes.android.komentar.data.model.Category;
 import com.cubes.android.komentar.data.model.NewsComment;
+import com.cubes.android.komentar.data.model.NewsCommentInsert;
 import com.cubes.android.komentar.data.model.NewsCommentVote;
-import com.cubes.android.komentar.data.source.local.database.NewsDatabase;
 import com.cubes.android.komentar.data.source.remote.networking.NewsApi;
+import com.cubes.android.komentar.data.source.remote.networking.response.CategoriesResponseModel;
 import com.cubes.android.komentar.data.source.remote.networking.response.CategoryResponseModel;
 import com.cubes.android.komentar.data.source.remote.networking.response.CommentsResponseModel;
 import com.cubes.android.komentar.data.source.remote.networking.response.HomePageResponseModel;
 import com.cubes.android.komentar.data.source.remote.networking.response.NewsDetailsResponseModel;
 import com.cubes.android.komentar.data.source.remote.networking.response.NewsResponseModel;
 import com.cubes.android.komentar.data.source.remote.networking.response.TagResponseModel;
+import com.cubes.android.komentar.ui.post_comment.PostCommentActivity;
 
 
 import java.util.ArrayList;
@@ -295,13 +298,13 @@ public class DataRepository {
         });
     }
 
-    public interface CommentsLikeListener {
+    public interface CommentsVoteListener {
         void onResponse(NewsCommentVote response);
 
         void onFailure(Throwable t);
     }
 
-    public void likeComment(int id, boolean vote, CommentsLikeListener listener) {
+    public void likeComment(int id, boolean vote, CommentsVoteListener listener) {
 
         api.getNewsService().postLike(id, vote)
                 .enqueue(new Callback<NewsCommentVote>() {
@@ -326,7 +329,7 @@ public class DataRepository {
 
     }
 
-    public void dislikeComment(int id, boolean vote, CommentsLikeListener listener) {
+    public void dislikeComment(int id, boolean vote, CommentsVoteListener listener) {
 
         api.getNewsService().postDislike(id, vote)
                 .enqueue(new Callback<NewsCommentVote>() {
@@ -349,6 +352,57 @@ public class DataRepository {
                     }
                 });
 
+    }
+
+    public interface CategoriesResponseListener {
+        void onResponse(ArrayList<Category> categories);
+
+        void onFailure(Throwable t);
+    }
+
+    public void getAllCategories(CategoriesResponseListener listener) {
+
+        api.getNewsService().getCategories().enqueue(new Callback<CategoriesResponseModel>() {
+            @Override
+            public void onResponse(Call<CategoriesResponseModel> call, Response<CategoriesResponseModel> response) {
+
+                listener.onResponse(response.body().data);
+
+            }
+
+            @Override
+            public void onFailure(Call<CategoriesResponseModel> call, Throwable t) {
+
+                listener.onFailure(t);
+
+            }
+        });
+
+    }
+
+    public interface PostCommentResponseListener {
+        void onResponse(NewsCommentInsert response);
+
+        void onFailure(Throwable t);
+    }
+
+    public void postComment(NewsCommentInsert newsCommentInsert, PostCommentResponseListener listener) {
+
+        NewsApi.getInstance().getNewsService().postComment(newsCommentInsert).enqueue(new Callback<NewsCommentInsert>() {
+            @Override
+            public void onResponse(Call<NewsCommentInsert> call, Response<NewsCommentInsert> response) {
+
+                listener.onResponse(response.body());
+
+            }
+
+            @Override
+            public void onFailure(Call<NewsCommentInsert> call, Throwable t) {
+
+                listener.onFailure(t);
+
+            }
+        });
     }
 
 }

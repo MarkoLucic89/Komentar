@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import com.cubes.android.komentar.data.DataRepository;
 import com.cubes.android.komentar.data.model.NewsCommentInsert;
 import com.cubes.android.komentar.databinding.ActivityPostCommentBinding;
 import com.cubes.android.komentar.data.source.remote.networking.NewsApi;
@@ -63,24 +64,22 @@ public class PostCommentActivity extends AppCompatActivity {
                 content
         );
 
-        NewsApi.getInstance().getNewsService().postComment(newsCommentInsert).enqueue(new Callback<NewsCommentInsert>() {
+        DataRepository.getInstance().postComment(newsCommentInsert, new DataRepository.PostCommentResponseListener() {
             @Override
-            public void onResponse(Call<NewsCommentInsert> call, Response<NewsCommentInsert> response) {
+            public void onResponse(NewsCommentInsert response) {
 
-                if (response.isSuccessful()) {
-                    Toast.makeText(PostCommentActivity.this, "CODE: " + response.code(),
-                                    Toast.LENGTH_SHORT).show();
-                    finish();
-                }
+                finish();
 
             }
 
             @Override
-            public void onFailure(Call<NewsCommentInsert> call, Throwable t) {
-                Toast.makeText(PostCommentActivity.this, t.getLocalizedMessage(),
-                                    Toast.LENGTH_SHORT).show();
+            public void onFailure(Throwable t) {
+
             }
         });
+
+
+
 
         /*
         DRUGI NACIN:
@@ -116,5 +115,11 @@ public class PostCommentActivity extends AppCompatActivity {
 //                });
 
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        binding = null;
     }
 }

@@ -136,4 +136,10 @@ public class TagActivity extends AppCompatActivity implements LoadNextPageListen
         }
 
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        binding = null;
+    }
 }

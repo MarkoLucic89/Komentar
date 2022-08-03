@@ -90,4 +90,10 @@ public class NewsDetailsActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        binding = null;
+    }
+
 }

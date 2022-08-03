@@ -17,4 +17,10 @@ public class HoroscopeActivity extends AppCompatActivity {
         binding = ActivityHoroscopeBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        binding = null;
+    }
 }

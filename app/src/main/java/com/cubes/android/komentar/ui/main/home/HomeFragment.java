@@ -123,4 +123,10 @@ public class HomeFragment extends Fragment implements OnCategoryClickListener {
         binding.viewPager.setCurrentItem(categoryIndex);
         binding.getRoot().closeDrawer(GravityCompat.END);
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        binding = null;
+    }
 }

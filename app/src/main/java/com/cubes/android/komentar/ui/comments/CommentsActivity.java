@@ -10,17 +10,12 @@ import com.cubes.android.komentar.data.DataRepository;
 import com.cubes.android.komentar.data.model.NewsComment;
 import com.cubes.android.komentar.data.model.NewsCommentVote;
 import com.cubes.android.komentar.data.source.local.database.NewsDatabase;
-import com.cubes.android.komentar.data.source.remote.networking.NewsApi;
 import com.cubes.android.komentar.databinding.ActivityCommentsBinding;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 
 public class CommentsActivity extends AppCompatActivity {
@@ -40,7 +35,6 @@ public class CommentsActivity extends AppCompatActivity {
         binding.imageViewBack.setOnClickListener(view -> finish());
 
         DataRepository.getInstance().getComments(news_id, new DataRepository.CommentsResponseListener() {
-
 
             @Override
             public void onResponse(ArrayList<NewsComment> comments) {
@@ -110,7 +104,7 @@ public class CommentsActivity extends AppCompatActivity {
 
     private void likeComment(int id, boolean vote) {
 
-        DataRepository.getInstance().likeComment(id, vote, new DataRepository.CommentsLikeListener() {
+        DataRepository.getInstance().likeComment(id, vote, new DataRepository.CommentsVoteListener() {
             @Override
             public void onResponse(NewsCommentVote response) {
 
@@ -131,6 +125,8 @@ public class CommentsActivity extends AppCompatActivity {
 
                 });
 
+                service.shutdown();
+
             }
 
             @Override
@@ -143,7 +139,7 @@ public class CommentsActivity extends AppCompatActivity {
 
     private void dislikeComment(int id, boolean vote) {
 
-        DataRepository.getInstance().dislikeComment(id, vote, new DataRepository.CommentsLikeListener() {
+        DataRepository.getInstance().dislikeComment(id, vote, new DataRepository.CommentsVoteListener() {
             @Override
             public void onResponse(NewsCommentVote response) {
 
@@ -163,10 +159,9 @@ public class CommentsActivity extends AppCompatActivity {
 
                 });
 
-
-
-
+                service.shutdown();
             }
+
 
             @Override
             public void onFailure(Throwable t) {
@@ -174,6 +169,12 @@ public class CommentsActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        binding = null;
     }
 
 

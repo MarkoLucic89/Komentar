@@ -16,4 +16,10 @@ public class CurrencyListActivity extends AppCompatActivity {
         binding = ActivityCurrencyListBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        binding = null;
+    }
 }

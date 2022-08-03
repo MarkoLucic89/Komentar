@@ -16,4 +16,10 @@ public class WeatherActivity extends AppCompatActivity {
         binding = ActivityWeatherBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        binding = null;
+    }
 }

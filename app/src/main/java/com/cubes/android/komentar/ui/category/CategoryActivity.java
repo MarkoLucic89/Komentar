@@ -4,7 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
-import com.cubes.android.komentar.data.DataContainer;
+import com.cubes.android.komentar.data.DataRepository;
 import com.cubes.android.komentar.data.model.Category;
 import com.cubes.android.komentar.data.source.remote.networking.NewsApi;
 import com.cubes.android.komentar.data.source.remote.networking.response.CategoriesResponseModel;
@@ -22,7 +22,7 @@ public class CategoryActivity extends AppCompatActivity {
     private ActivityCategoryBinding binding;
     private Category mCategory;
     private Category mSubcategory;
-    private ArrayList<Category> categories;
+    private ArrayList<Category> mCategories;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,11 +30,11 @@ public class CategoryActivity extends AppCompatActivity {
         binding = ActivityCategoryBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        NewsApi.getInstance().getNewsService().getCategories().enqueue(new Callback<CategoriesResponseModel>() {
+        DataRepository.getInstance().getAllCategories(new DataRepository.CategoriesResponseListener() {
             @Override
-            public void onResponse(Call<CategoriesResponseModel> call, Response<CategoriesResponseModel> response) {
+            public void onResponse(ArrayList<Category> categories) {
 
-                categories = response.body().data;
+                mCategories = categories;
 
                 getCategoryAndSubcategory(categories);
 
@@ -47,11 +47,10 @@ public class CategoryActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<CategoriesResponseModel> call, Throwable t) {
+            public void onFailure(Throwable t) {
 
             }
         });
-
 
     }
 
@@ -78,7 +77,7 @@ public class CategoryActivity extends AppCompatActivity {
 
     private void initViewPager() {
 
-        NewsCategoriesViewPagerAdapter pagerAdapter = new NewsCategoriesViewPagerAdapter(this,categories,  mCategory.subcategories);
+        NewsCategoriesViewPagerAdapter pagerAdapter = new NewsCategoriesViewPagerAdapter(this, mCategories,  mCategory.subcategories);
         binding.viewPager.setAdapter(pagerAdapter);
 
         new TabLayoutMediator(
@@ -90,5 +89,11 @@ public class CategoryActivity extends AppCompatActivity {
         ).attach();
 
         binding.viewPager.setCurrentItem(mCategory.subcategories.indexOf(mSubcategory));
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        binding = null;
     }
 }

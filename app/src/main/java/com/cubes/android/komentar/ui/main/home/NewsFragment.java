@@ -173,4 +173,10 @@ public class NewsFragment extends Fragment implements LoadNextPageListener {
             }
         });
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        binding = null;
+    }
 }
