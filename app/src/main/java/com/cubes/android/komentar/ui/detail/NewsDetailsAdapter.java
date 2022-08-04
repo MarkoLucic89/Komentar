@@ -24,10 +24,12 @@ import java.util.ArrayList;
 
 public class NewsDetailsAdapter extends RecyclerView.Adapter<NewsDetailsAdapter.NewsDetailsViewHolder> {
 
-    private ArrayList<ItemModelDetails> list;
+    private ArrayList<ItemModelDetails> list = new ArrayList<>();
 
-    public NewsDetailsAdapter(NewsDetailsResponseModel.NewsDetailsDataResponseModel newsDetails) {
-        list = new ArrayList<>();
+    public NewsDetailsAdapter() {
+    }
+
+    public void updateList(NewsDetailsResponseModel.NewsDetailsDataResponseModel newsDetails) {
 
         //HEADER
         list.add(new RvItemModelDetailsHeader(newsDetails));
@@ -43,6 +45,8 @@ public class NewsDetailsAdapter extends RecyclerView.Adapter<NewsDetailsAdapter.
 
         //RELATED NEWS
         list.add(new RvItemModelDetailsRelatedNews(newsDetails.related_news));
+
+        notifyDataSetChanged();
     }
 
     @NonNull

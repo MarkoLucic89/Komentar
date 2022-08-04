@@ -34,6 +34,8 @@ public class CommentsActivity extends AppCompatActivity {
 
         binding.imageViewBack.setOnClickListener(view -> finish());
 
+        initRecyclerView();
+
         DataRepository.getInstance().getComments(news_id, new DataRepository.CommentsResponseListener() {
 
             @Override
@@ -77,7 +79,7 @@ public class CommentsActivity extends AppCompatActivity {
                     }
                 }
 
-                initRecyclerView(comments);
+                adapter.updateList(comments);
             });
 
         });
@@ -86,8 +88,8 @@ public class CommentsActivity extends AppCompatActivity {
 
     }
 
-    private void initRecyclerView(ArrayList<NewsComment> comments) {
-        adapter = new CommentsAdapter(comments, new CommentsListener() {
+    private void initRecyclerView() {
+        adapter = new CommentsAdapter(new CommentsListener() {
             @Override
             public void onLikeListener(int id, boolean vote) {
                 likeComment(id, vote);

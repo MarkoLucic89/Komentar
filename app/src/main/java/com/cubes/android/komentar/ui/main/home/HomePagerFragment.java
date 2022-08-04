@@ -18,6 +18,7 @@ import com.cubes.android.komentar.databinding.FragmentHomePagerBinding;
 public class HomePagerFragment extends Fragment {
 
     private FragmentHomePagerBinding binding;
+    private HomeAdapter adapter;
 
     public HomePagerFragment() {
         // Required empty public constructor
@@ -40,6 +41,8 @@ public class HomePagerFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        initRecyclerView();
+
         sendHomePageRequest();
 
         binding.imageViewRefresh.setOnClickListener(view1 -> sendHomePageRequest());
@@ -56,7 +59,7 @@ public class HomePagerFragment extends Fragment {
             @Override
             public void onResponse(HomePageResponseModel.HomePageDataResponseModel response) {
                 binding.progressBar.setVisibility(View.GONE);
-                initRecyclerView(response);
+                adapter.updateList(response);
             }
 
             @Override
@@ -67,9 +70,10 @@ public class HomePagerFragment extends Fragment {
 
     }
 
-    private void initRecyclerView(HomePageResponseModel.HomePageDataResponseModel response) {
+    private void initRecyclerView() {
+        adapter = new HomeAdapter();
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        binding.recyclerView.setAdapter(new HomeAdapter(response));
+        binding.recyclerView.setAdapter(adapter);
     }
 
     @Override

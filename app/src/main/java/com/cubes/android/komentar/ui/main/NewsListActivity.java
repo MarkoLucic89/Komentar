@@ -57,4 +57,10 @@ public class NewsListActivity extends AppCompatActivity {
             return true;
         });
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        binding = null;
+    }
 }

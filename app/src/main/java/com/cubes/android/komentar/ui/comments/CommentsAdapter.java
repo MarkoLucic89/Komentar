@@ -16,24 +16,26 @@ import com.cubes.android.komentar.ui.comments.rv_item_comments.RvItemModelSubCom
 import java.util.ArrayList;
 
 public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.CommentsViewHolder> {
+    private ArrayList<ItemModelComments> list = new ArrayList<>();
 
-    private ArrayList<ItemModelComments> list;
     private boolean isSize5;
     private CommentsListener listener;
 
-    public CommentsAdapter(ArrayList<NewsComment> comments) {
+    public CommentsAdapter(CommentsListener listener) {
+        this.listener = listener;
 
+    }
+
+    public CommentsAdapter(ArrayList<NewsComment> comments, boolean isSize5) {
         addComments(comments);
     }
 
-    public CommentsAdapter(ArrayList<NewsComment> comments, CommentsListener listener) {
-        this.listener = listener;
+    public void updateList(ArrayList<NewsComment> comments) {
         addComments(comments);
+        notifyDataSetChanged();
     }
 
     public void addComments(ArrayList<NewsComment> comments) {
-
-        this.list = new ArrayList<>();
 
         for (NewsComment comment : comments) {
 
@@ -61,29 +63,6 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
     }
 
 
-    public CommentsAdapter(ArrayList<NewsComment> comments, boolean isSize5) {
-        this.list = new ArrayList<>();
-
-        for (NewsComment comment : comments) {
-
-            list.add(new RvItemModelComments(comment));
-
-            for (NewsComment subComment : comment.children) {
-
-                list.add(new RvItemModelSubComments(subComment, listener));
-
-                NewsComment newsComment = subComment;
-
-                for (NewsComment childComment : newsComment.children) {
-
-                    list.add(new RvItemModelSubComments(childComment, listener));
-
-                }
-            }
-
-        }
-    }
-
     @NonNull
     @Override
     public CommentsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -105,7 +84,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
     @Override
     public int getItemCount() {
         if (isSize5) {
-            return 5;
+            return Math.min(list.size(), 5);
         }
         return list.size();
     }
@@ -165,6 +144,8 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
         }
 
     }
+
+
 
     public class CommentsViewHolder extends RecyclerView.ViewHolder {
 

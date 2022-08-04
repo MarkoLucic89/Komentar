@@ -2,7 +2,6 @@ package com.cubes.android.komentar.data;
 
 
 import android.util.Log;
-import android.widget.Toast;
 
 import com.cubes.android.komentar.data.model.Category;
 import com.cubes.android.komentar.data.model.NewsComment;
@@ -16,7 +15,6 @@ import com.cubes.android.komentar.data.source.remote.networking.response.HomePag
 import com.cubes.android.komentar.data.source.remote.networking.response.NewsDetailsResponseModel;
 import com.cubes.android.komentar.data.source.remote.networking.response.NewsResponseModel;
 import com.cubes.android.komentar.data.source.remote.networking.response.TagResponseModel;
-import com.cubes.android.komentar.ui.post_comment.PostCommentActivity;
 
 
 import java.util.ArrayList;
@@ -42,7 +40,6 @@ public class DataRepository {
 
         return instance;
     }
-
 
     public interface VideosResponseListener {
         void onVideosResponse(NewsResponseModel.NewsDataResponseModel response);
@@ -109,13 +106,13 @@ public class DataRepository {
 
     }
 
-    public interface CategoryResponseListener {
+    public interface CategoryNewsResponseListener {
         void onResponse(CategoryResponseModel.CategoryDataResponseModel response);
 
         void onFailure(Throwable t);
     }
 
-    public void getNewsForCategory(int categoryId, int page, CategoryResponseListener listener) {
+    public void getNewsForCategory(int categoryId, int page, CategoryNewsResponseListener listener) {
 
         Log.d("TAG", "getLatest: " + page);
 

@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Komentar">
         <activity
+            android:name=".ui.detail.news_detail_activity_with_viewpager.DetailsActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.post_comment.PostCommentActivity"
             android:exported="false" />
         <activity

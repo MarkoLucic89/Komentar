@@ -26,7 +26,6 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
 
     public SearchAdapter(LoadNextPageListener listener) {
         this.listener = listener;
-
     }
 
     public SearchAdapter(ArrayList<News> newsList) {
@@ -40,31 +39,6 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
 
 
     public void updateList(NewsResponseModel.NewsDataResponseModel responseModel) {
-
-        itemModels.clear();
-
-        if (responseModel == null) {
-            notifyDataSetChanged();
-            return;
-        }
-
-        for (News news : responseModel.news) {
-            itemModels.add(new RvItemModelSearch(news, true));
-        }
-
-//        if (responseModel.data.pagination.has_more_pages) {
-//            itemModels.add(new RvItemModelSearchLoading(listener));
-//        }
-
-        if (responseModel.news.size() == 20) {
-            itemModels.add(new RvItemModelSearchLoading(listener));
-        }
-
-        notifyDataSetChanged();
-
-    }
-
-    public void updateList(TagResponseModel.TagDataResponseModel responseModel) {
 
         itemModels.clear();
 
@@ -128,11 +102,16 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
         return itemModels.get(position).getType();
     }
 
-    public void loadNextPage(NewsResponseModel.NewsDataResponseModel response) {
+    public void addNextPage(NewsResponseModel.NewsDataResponseModel response) {
 
-        int lastIndex = itemModels.size() - 1;
+        int lastIndex;
 
-        itemModels.remove(lastIndex);
+        if (itemModels.isEmpty()) {
+            lastIndex = 0;
+        } else {
+            lastIndex = itemModels.size() - 1;
+            itemModels.remove(lastIndex);
+        }
 
         for (News news : response.news) {
             itemModels.add(new RvItemModelSearch(news));
@@ -153,11 +132,17 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
 //        notifyDataSetChanged();
     }
 
-    public void loadNextPage(TagResponseModel.TagDataResponseModel response) {
+    public void addNextPage(TagResponseModel.TagDataResponseModel response) {
 
-        int lastIndex = itemModels.size() - 1;
+        int lastIndex;
 
-        itemModels.remove(lastIndex);
+        if (itemModels.isEmpty()) {
+            lastIndex = 0;
+        } else {
+            lastIndex = itemModels.size() - 1;
+            itemModels.remove(lastIndex);
+        }
+
 
         for (News news : response.news) {
             itemModels.add(new RvItemModelSearch(news));

@@ -17,7 +17,7 @@ public class TagActivity extends AppCompatActivity implements LoadNextPageListen
 
     private ActivityTagBinding binding;
     private int tagId;
-    private int page = 1;
+    private int nextPage = 1;
     private SearchAdapter adapter;
 
     @Override
@@ -29,21 +29,16 @@ public class TagActivity extends AppCompatActivity implements LoadNextPageListen
         tagId = getIntent().getIntExtra("tag_id", -1);
         String tagTitle = getIntent().getStringExtra("tag_title");
 
-
         initRecyclerView();
 
-        sendTagRequest();
+        binding.progressBar.setVisibility(View.VISIBLE);
+        loadNextPage();
 
         binding.textViewTitle.setText(tagTitle);
+
         binding.imageViewBack.setOnClickListener(view -> finish());
-//        binding.imageViewRefresh.setOnClickListener(view -> sendTagRequest());
-        binding.imageViewRefresh.setOnClickListener(view -> {
-            if (page == 1) {
-                sendTagRequest();
-            } else {
-                loadNextPage();
-            }
-        });
+
+        binding.imageViewRefresh.setOnClickListener(view -> loadNextPage());
 
 
     }
@@ -54,65 +49,21 @@ public class TagActivity extends AppCompatActivity implements LoadNextPageListen
         binding.recyclerView.setAdapter(adapter);
     }
 
-
-    private void sendTagRequest() {
-
-        DataRepository.getInstance().sendTagRequest(tagId, page, new DataRepository.TagResponseListener() {
-
-            @Override
-            public void onResponse(TagResponseModel.TagDataResponseModel response) {
-
-                binding.progressBar.setVisibility(View.GONE);
-
-                if (binding.recyclerView.getVisibility() == View.GONE) {
-                    binding.recyclerView.setVisibility(View.VISIBLE);
-                }
-
-                if (binding.imageViewRefresh.getVisibility() == View.VISIBLE) {
-                    binding.imageViewRefresh.setVisibility(View.GONE);
-                }
-
-                page++;
-
-                adapter.updateList(response);
-
-            }
-
-            @Override
-            public void onFailure(Throwable t) {
-
-                binding.recyclerView.setVisibility(View.GONE);
-                binding.progressBar.setVisibility(View.GONE);
-                binding.imageViewRefresh.setVisibility(View.VISIBLE);
-
-            }
-        });
-
-    }
-
     @Override
     public void loadNextPage() {
 
-        binding.progressBar.setVisibility(View.VISIBLE);
-
-        DataRepository.getInstance().sendTagRequest(tagId, page, new DataRepository.TagResponseListener() {
+        DataRepository.getInstance().sendTagRequest(tagId, nextPage, new DataRepository.TagResponseListener() {
 
             @Override
             public void onResponse(TagResponseModel.TagDataResponseModel response) {
 
                 binding.progressBar.setVisibility(View.GONE);
+                binding.recyclerView.setVisibility(View.VISIBLE);
+                binding.imageViewRefresh.setVisibility(View.GONE);
 
-                if (binding.recyclerView.getVisibility() == View.GONE) {
-                    binding.recyclerView.setVisibility(View.VISIBLE);
-                }
+                adapter.addNextPage(response);
 
-                if (binding.imageViewRefresh.getVisibility() == View.VISIBLE) {
-                    binding.imageViewRefresh.setVisibility(View.GONE);
-                }
-
-                page++;
-
-                adapter.loadNextPage(response);
+                nextPage++;
             }
 
             @Override
@@ -132,7 +83,7 @@ public class TagActivity extends AppCompatActivity implements LoadNextPageListen
         super.onResume();
 
         if (binding.imageViewRefresh.getVisibility() == View.VISIBLE) {
-            sendTagRequest();
+            loadNextPage();
         }
 
     }

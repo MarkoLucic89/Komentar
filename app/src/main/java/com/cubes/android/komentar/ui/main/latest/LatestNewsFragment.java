@@ -22,7 +22,7 @@ public class LatestNewsFragment extends Fragment implements LoadNextPageListener
 
     private CategoryAdapter categoryAdapter;
 
-    private int page = 1;
+    private int nextPage = 1;
 
 
     public LatestNewsFragment() {
@@ -48,71 +48,70 @@ public class LatestNewsFragment extends Fragment implements LoadNextPageListener
 
         initRecyclerView();
 
-        sendLatestRequest();
+//        sendLatestRequest();
 
-//        binding.imageViewRefresh.setOnClickListener(view1 -> sendLatestRequest());
+        binding.imageViewRefresh.setVisibility(View.GONE);
+        binding.progressBar.setVisibility(View.VISIBLE);
+        loadNextPage();
 
         binding.imageViewRefresh.setOnClickListener(view1 -> {
 
             MyMethodsClass.startRefreshAnimation(binding.imageViewRefresh);
 
-            if (page == 1) {
-                sendLatestRequest();
-            } else {
-                loadNextPage();
-            }
+//            if (page == 1) {
+//                sendLatestRequest();
+//            } else {
+//                loadNextPage();
+//            }
+
+            loadNextPage();
 
         });
 
     }
 
-    private void sendLatestRequest() {
-
-        binding.imageViewRefresh.setVisibility(View.GONE);
-        binding.progressBar.setVisibility(View.VISIBLE);
-
-        DataRepository.getInstance().getLatest(page, new DataRepository.LatestResponseListener() {
-
-            @Override
-            public void onResponse(NewsResponseModel.NewsDataResponseModel response) {
-
-
-                if (binding.recyclerView.getVisibility() == View.GONE) {
-                    binding.recyclerView.setVisibility(View.VISIBLE);
-                }
-
-                if (binding.imageViewRefresh.getVisibility() == View.VISIBLE) {
-                    binding.imageViewRefresh.setVisibility(View.GONE);
-                }
-
-                page++;
-
-                binding.progressBar.setVisibility(View.GONE);
-
-                categoryAdapter.updateList(response);
-            }
-
-            @Override
-            public void onFailure(Throwable t) {
-
-                binding.recyclerView.setVisibility(View.GONE);
-                binding.imageViewRefresh.setVisibility(View.VISIBLE);
-                binding.progressBar.setVisibility(View.GONE);
-            }
-        });
-
-    }
+//    private void sendLatestRequest() {
+//
+//        binding.imageViewRefresh.setVisibility(View.GONE);
+//        binding.progressBar.setVisibility(View.VISIBLE);
+//
+//        DataRepository.getInstance().getLatest(page, new DataRepository.LatestResponseListener() {
+//
+//            @Override
+//            public void onResponse(NewsResponseModel.NewsDataResponseModel response) {
+//
+//                binding.recyclerView.setVisibility(View.VISIBLE);
+//                binding.imageViewRefresh.setVisibility(View.GONE);
+//
+//                page++;
+//
+//                binding.progressBar.setVisibility(View.GONE);
+//
+//                categoryAdapter.addNextPage(response);
+//            }
+//
+//            @Override
+//            public void onFailure(Throwable t) {
+//
+//                binding.recyclerView.setVisibility(View.GONE);
+//                binding.imageViewRefresh.setVisibility(View.VISIBLE);
+//                binding.progressBar.setVisibility(View.GONE);
+//            }
+//        });
+//
+//    }
 
     @Override
     public void onResume() {
         super.onResume();
 
         if (binding.imageViewRefresh.getVisibility() == View.VISIBLE) {
-            sendLatestRequest();
+            binding.imageViewRefresh.setVisibility(View.GONE);
+            binding.progressBar.setVisibility(View.VISIBLE);
+            loadNextPage();
         }
 
     }
-
 
     private void initRecyclerView() {
 
@@ -124,35 +123,31 @@ public class LatestNewsFragment extends Fragment implements LoadNextPageListener
     @Override
     public void loadNextPage() {
 
-
-        DataRepository.getInstance().getLatest(page, new DataRepository.LatestResponseListener() {
-
+        DataRepository.getInstance().getLatest(nextPage, new DataRepository.LatestResponseListener() {
 
             @Override
             public void onResponse(NewsResponseModel.NewsDataResponseModel response) {
 
-                if (binding.recyclerView.getVisibility() == View.GONE) {
-                    binding.recyclerView.setVisibility(View.VISIBLE);
-                }
-
-                if (binding.imageViewRefresh.getVisibility() == View.VISIBLE) {
-                    binding.imageViewRefresh.setVisibility(View.GONE);
-                }
-
-
+                binding.recyclerView.setVisibility(View.VISIBLE);
+                binding.imageViewRefresh.setVisibility(View.GONE);
                 binding.progressBar.setVisibility(View.GONE);
 
-                page++;
+                nextPage++;
 
-                categoryAdapter.loadNextPage(response);
+                categoryAdapter.addNextPage(response);
             }
 
             @Override
             public void onFailure(Throwable t) {
-
+                if (nextPage == 1) {
                 binding.recyclerView.setVisibility(View.GONE);
                 binding.imageViewRefresh.setVisibility(View.VISIBLE);
                 binding.progressBar.setVisibility(View.GONE);
+                } else {
+                    categoryAdapter.addRefresher();
+                }
+
+
             }
         });
 

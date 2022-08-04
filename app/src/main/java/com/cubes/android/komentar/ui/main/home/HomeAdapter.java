@@ -25,11 +25,13 @@ import java.util.ArrayList;
 
 public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder> {
 
-    private ArrayList<ItemModelHome> list;
+    private ArrayList<ItemModelHome> list = new ArrayList<>();
 
-    public HomeAdapter(HomePageResponseModel.HomePageDataResponseModel response) {
+    public HomeAdapter() {
 
-        list = new ArrayList<>();
+    }
+
+    public void updateList(HomePageResponseModel.HomePageDataResponseModel response) {
 
         //SLIDER
         addSlider("SLIDER", response);
@@ -89,7 +91,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
         //REGION
         addCategoryBox("REGION", response);
 
-
+        notifyDataSetChanged();
     }
 
     private void addSlider(String title, HomePageResponseModel.HomePageDataResponseModel response) {

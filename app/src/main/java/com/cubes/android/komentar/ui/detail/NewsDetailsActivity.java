@@ -18,12 +18,16 @@ public class NewsDetailsActivity extends AppCompatActivity {
     private ActivityNewsDetailsBinding binding;
     private int newsId;
     private NewsDetailsResponseModel.NewsDetailsDataResponseModel data;
+    private NewsDetailsAdapter adapter;
 
     @Override
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityNewsDetailsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        initRecyclerView();
 
         sendNewsDetailsRequest();
 
@@ -62,7 +66,8 @@ public class NewsDetailsActivity extends AppCompatActivity {
                 data = response;
                 binding.progressBar.setVisibility(View.GONE);
 
-                initRecyclerView(data);
+                adapter.updateList(response);
+
             }
 
             @Override
@@ -75,9 +80,10 @@ public class NewsDetailsActivity extends AppCompatActivity {
 
     }
 
-    private void initRecyclerView(NewsDetailsResponseModel.NewsDetailsDataResponseModel newsDetails) {
+    private void initRecyclerView() {
+        adapter = new NewsDetailsAdapter();
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(NewsDetailsActivity.this));
-        binding.recyclerView.setAdapter(new NewsDetailsAdapter(newsDetails));
+        binding.recyclerView.setAdapter(adapter);
     }
 
     @Override

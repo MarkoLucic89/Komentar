@@ -21,11 +21,16 @@ import java.util.ArrayList;
 
 public class DrawerMenuAdapter extends RecyclerView.Adapter<DrawerMenuAdapter.DrawerMenuViewHolder> {
 
-    private ArrayList<ItemModelDrawerMenu> list;
+    private ArrayList<ItemModelDrawerMenu> list = new ArrayList<>();
+    private OnCategoryClickListener listener;
+    private Activity activity;
 
-    public DrawerMenuAdapter(Activity activity, OnCategoryClickListener listener, ArrayList<Category> categories) {
+    public DrawerMenuAdapter(Activity activity, OnCategoryClickListener listener) {
+        this.listener = listener;
+        this.activity = activity;
+    }
 
-        list = new ArrayList<>();
+    public void updateList(Activity activity, ArrayList<Category> categories) {
 
         //HOME
         list.add(new RvItemModelDrawerMenuCategory(null, listener, categories));
@@ -56,6 +61,7 @@ public class DrawerMenuAdapter extends RecyclerView.Adapter<DrawerMenuAdapter.Dr
         //CONTACT
         list.add(new RvItemModelDrawerMenuOther(6));
 
+        notifyDataSetChanged();
 
     }
 

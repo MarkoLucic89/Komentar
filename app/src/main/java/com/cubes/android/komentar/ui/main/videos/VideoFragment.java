@@ -48,60 +48,28 @@ public class VideoFragment extends Fragment implements LoadNextPageListener {
 
         initRecyclerView();
 
-        sendVideosRequest();
-
-//        binding.imageViewRefresh.setOnClickListener(view1 -> sendVideosRequest());
+//        sendVideosRequest();
+        binding.imageViewRefresh.setVisibility(View.GONE);
+        binding.progressBar.setVisibility(View.VISIBLE);
+        loadNextPage();
 
         binding.imageViewRefresh.setOnClickListener(view1 -> {
 
             MyMethodsClass.startRefreshAnimation(binding.imageViewRefresh);
 
-            if (page == 1) {
-                sendVideosRequest();
-            } else {
-                loadNextPage();
-            }
+//            if (page == 1) {
+//                sendVideosRequest();
+//            } else {
+//                loadNextPage();
+//            }
+
+            loadNextPage();
         });
-
-    }
-
-    private void sendVideosRequest() {
-
-        binding.imageViewRefresh.setVisibility(View.GONE);
-        binding.progressBar.setVisibility(View.VISIBLE);
-
-        if (binding.recyclerView.getVisibility() == View.GONE) {
-            binding.recyclerView.setVisibility(View.VISIBLE);
-        }
-
-        DataRepository.getInstance().getVideosFromApi(page, new DataRepository.VideosResponseListener() {
-
-
-            @Override
-            public void onVideosResponse(NewsResponseModel.NewsDataResponseModel response) {
-
-                binding.progressBar.setVisibility(View.GONE);
-
-                page++;
-
-                adapter.updateList(response);
-
-            }
-
-            @Override
-            public void onVideosFailure(Throwable t) {
-
-                binding.recyclerView.setVisibility(View.GONE);
-                binding.progressBar.setVisibility(View.GONE);
-                binding.imageViewRefresh.setVisibility(View.VISIBLE);
-            }
-        });
-
 
     }
 
     private void initRecyclerView() {
-        adapter = new VideosAdapter( this);
+        adapter = new VideosAdapter(this);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.recyclerView.setAdapter(adapter);
     }
@@ -112,7 +80,8 @@ public class VideoFragment extends Fragment implements LoadNextPageListener {
         super.onResume();
 
         if (binding.imageViewRefresh.getVisibility() == View.VISIBLE) {
-            sendVideosRequest();
+//            sendVideosRequest();
+            loadNextPage();
         }
 
     }
@@ -120,22 +89,16 @@ public class VideoFragment extends Fragment implements LoadNextPageListener {
     @Override
     public void loadNextPage() {
 
-
         DataRepository.getInstance().getVideosFromApi(page, new DataRepository.VideosResponseListener() {
-
 
             @Override
             public void onVideosResponse(NewsResponseModel.NewsDataResponseModel response) {
 
-                if (binding.recyclerView.getVisibility() == View.GONE) {
-                    binding.recyclerView.setVisibility(View.VISIBLE);
-                }
-
+                binding.recyclerView.setVisibility(View.VISIBLE);
                 binding.progressBar.setVisibility(View.GONE);
-
                 page++;
 
-                adapter.loadNextPage(response);
+                adapter.addNextPage(response);
             }
 
             @Override

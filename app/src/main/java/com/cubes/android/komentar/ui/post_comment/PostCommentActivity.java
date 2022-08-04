@@ -8,11 +8,7 @@ import android.widget.Toast;
 import com.cubes.android.komentar.data.DataRepository;
 import com.cubes.android.komentar.data.model.NewsCommentInsert;
 import com.cubes.android.komentar.databinding.ActivityPostCommentBinding;
-import com.cubes.android.komentar.data.source.remote.networking.NewsApi;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class PostCommentActivity extends AppCompatActivity {
 
@@ -31,7 +27,6 @@ public class PostCommentActivity extends AppCompatActivity {
         reply_id = getIntent().getIntExtra("reply_id", 0);
 
         binding.buttonPostComment.setOnClickListener(view -> postComment());
-
 
     }
 
@@ -67,19 +62,15 @@ public class PostCommentActivity extends AppCompatActivity {
         DataRepository.getInstance().postComment(newsCommentInsert, new DataRepository.PostCommentResponseListener() {
             @Override
             public void onResponse(NewsCommentInsert response) {
-
+                Toast.makeText(PostCommentActivity.this, "Komentar je uspešno unet.", Toast.LENGTH_SHORT).show();
                 finish();
-
             }
 
             @Override
             public void onFailure(Throwable t) {
-
+                Toast.makeText(PostCommentActivity.this, "Komentar nije unet, došlo je do greške.", Toast.LENGTH_SHORT).show();
             }
         });
-
-
-
 
         /*
         DRUGI NACIN:

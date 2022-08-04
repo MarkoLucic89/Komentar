@@ -103,11 +103,16 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.VideosView
         return itemModels.get(position).getType();
     }
 
-    public void loadNextPage(NewsResponseModel.NewsDataResponseModel response) {
+    public void addNextPage(NewsResponseModel.NewsDataResponseModel response) {
 
-        int lastIndex = itemModels.size() - 1;
+        int lastIndex;
 
-        itemModels.remove(lastIndex);
+        if (itemModels.isEmpty()) {
+            lastIndex = 0;
+        } else {
+            lastIndex = itemModels.size() - 1;
+            itemModels.remove(lastIndex);
+        }
 
         for (News news : response.news) {
             itemModels.add(new RvItemModelVideos(news));

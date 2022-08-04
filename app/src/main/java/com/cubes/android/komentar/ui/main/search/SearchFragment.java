@@ -56,6 +56,7 @@ public class SearchFragment extends Fragment implements LoadNextPageListener {
         binding.recyclerView.setAdapter(adapter);
 
         binding.imageViewSearch.setOnClickListener(view1 -> searchListByTerm());
+
         binding.imageViewRefresh.setOnClickListener(view1 -> {
 
             MyMethodsClass.startRefreshAnimation(binding.imageViewRefresh);
@@ -80,17 +81,11 @@ public class SearchFragment extends Fragment implements LoadNextPageListener {
             return;
         }
 
-
-
         DataRepository.getInstance().searchNews(searchTerm, page, new DataRepository.SearchResponseListener() {
             @Override
             public void onResponse(NewsResponseModel.NewsDataResponseModel response) {
 
-
-                if (binding.recyclerView.getVisibility() == View.GONE) {
-                    binding.recyclerView.setVisibility(View.VISIBLE);
-                }
-
+                binding.recyclerView.setVisibility(View.VISIBLE);
                 binding.progressBar.setVisibility(View.GONE);
 
                 page++;
@@ -131,15 +126,12 @@ public class SearchFragment extends Fragment implements LoadNextPageListener {
             @Override
             public void onResponse(NewsResponseModel.NewsDataResponseModel response) {
 
-                if (binding.recyclerView.getVisibility() == View.GONE) {
-                    binding.recyclerView.setVisibility(View.VISIBLE);
-                }
+                binding.recyclerView.setVisibility(View.VISIBLE);
+                binding.progressBar.setVisibility(View.GONE);
 
                 page++;
 
-                binding.progressBar.setVisibility(View.GONE);
-
-                adapter.loadNextPage(response);
+                adapter.addNextPage(response);
 
             }
 

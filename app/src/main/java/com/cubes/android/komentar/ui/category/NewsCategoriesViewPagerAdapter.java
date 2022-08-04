@@ -5,9 +5,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
-import com.cubes.android.komentar.data.DataContainer;
 import com.cubes.android.komentar.data.model.Category;
-import com.cubes.android.komentar.ui.main.home.NewsFragment;
+import com.cubes.android.komentar.ui.main.home.CategoryNewsFragment;
 import com.cubes.android.komentar.ui.main.home.HomePagerFragment;
 import com.cubes.android.komentar.ui.main.latest.LatestNewsFragment;
 
@@ -55,7 +54,7 @@ public class NewsCategoriesViewPagerAdapter extends FragmentStateAdapter {
 
         }
 
-        return NewsFragment.newInstance(categoryId);
+        return CategoryNewsFragment.newInstance(categoryId);
     }
 
     @Override
