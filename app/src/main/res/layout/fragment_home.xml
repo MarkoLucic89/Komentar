@@ -7,54 +7,80 @@
     android:orientation="vertical"
     tools:context=".ui.main.home.HomeFragment">
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <FrameLayout
+        <ImageView
+            android:id="@+id/imageViewRefresh"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_refresh"
+            android:translationZ="90dp"
+            android:visibility="gone"
+            app:tint="@color/blue_dark" />
+
+        <LinearLayout
+            android:id="@+id/linearLayoutHome"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/blue_dark">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/blue_dark">
 
 
-            <ImageView
-                android:layout_width="120dp"
-                android:layout_height="45dp"
-                android:layout_marginStart="10dp"
-                android:src="@drawable/logo_app" />
+                <ImageView
+                    android:layout_width="120dp"
+                    android:layout_height="45dp"
+                    android:layout_marginStart="10dp"
+                    android:src="@drawable/logo_app" />
 
-            <ImageView
-                android:id="@+id/imageViewDrawerMenu"
+                <ImageView
+                    android:id="@+id/imageViewDrawerMenu"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="end"
+                    android:padding="10dp"
+                    android:src="@drawable/ic_drawer" />
+
+            </FrameLayout>
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tabLayout"
+                android:layout_width="match_parent"
+                android:layout_height="36dp"
+                android:backgroundTint="@color/blue_light"
+                app:tabMode="scrollable"
+                app:tabSelectedTextColor="@color/white"
+                app:tabTextColor="@color/grey_light">
+
+            </com.google.android.material.tabs.TabLayout>
+
+            <ProgressBar
+                android:id="@+id/progressBar"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:layout_gravity="end"
-                android:padding="10dp"
-                android:src="@drawable/ic_drawer" />
-
-        </FrameLayout>
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="32dp"
+                android:visibility="gone" />
 
 
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tabLayout"
-            android:layout_width="match_parent"
-            android:layout_height="36dp"
-            android:backgroundTint="@color/blue_light"
-            app:tabMode="scrollable"
-            app:tabSelectedTextColor="@color/white"
-            app:tabTextColor="@color/grey_light">
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/viewPager"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:background="@color/white" />
 
-        </com.google.android.material.tabs.TabLayout>
+        </LinearLayout>
 
 
-        <androidx.viewpager2.widget.ViewPager2
-            android:id="@+id/viewPager"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:background="@color/white" />
+    </FrameLayout>
 
-    </LinearLayout>
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/drawerMenu"

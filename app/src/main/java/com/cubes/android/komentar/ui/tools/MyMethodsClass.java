@@ -1,5 +1,6 @@
 package com.cubes.android.komentar.ui.tools;
 
+import android.content.Context;
 import android.content.Intent;
 
 import android.view.View;
@@ -50,11 +51,11 @@ public class MyMethodsClass {
         view.getContext().startActivity(intent);
     }
 
-    public static void goToPostCommentsActivity(View view, int news, int reply_id) {
-        Intent intent = new Intent(view.getContext(), PostCommentActivity.class);
+    public static void goToPostCommentsActivity(Context context, int news, int reply_id) {
+        Intent intent = new Intent(context, PostCommentActivity.class);
         intent.putExtra("news", news);
         intent.putExtra("reply_id", reply_id);
-        view.getContext().startActivity(intent);
+        context.startActivity(intent);
     }
 
     public static void goToSubcategoriesActivity(View view, int categoryId, int subcategoryID) {

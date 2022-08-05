@@ -5,6 +5,7 @@ import android.view.View;
 import com.cubes.android.komentar.data.model.News;
 import com.cubes.android.komentar.databinding.RvItemCategoryBigBinding;
 import com.cubes.android.komentar.ui.main.latest.CategoryAdapter;
+import com.cubes.android.komentar.ui.main.latest.LoadNextPageListener;
 import com.cubes.android.komentar.ui.tools.MyMethodsClass;
 import com.squareup.picasso.Picasso;
 
@@ -12,15 +13,17 @@ public class RvItemModelCategoryBig implements ItemModelCategory {
 
     private News news;
     private boolean isOnHomePage;
+    private LoadNextPageListener listener;
 
     public RvItemModelCategoryBig(News news) {
         this.news = news;
         isOnHomePage = false;
     }
 
-    public RvItemModelCategoryBig(News news, boolean isOnHomePage) {
+    public RvItemModelCategoryBig(News news, boolean isOnHomePage, LoadNextPageListener listener) {
         this.news = news;
         this.isOnHomePage = isOnHomePage;
+        this.listener = listener;
     }
 
     @Override
@@ -47,6 +50,7 @@ public class RvItemModelCategoryBig implements ItemModelCategory {
         binding.textViewTime.setText(MyMethodsClass.convertTime(news.created_at));
 
         holder.binding.getRoot().setOnClickListener(view -> MyMethodsClass.goToNewsDetailActivity(view, news.id));
+
 
     }
 

@@ -3,6 +3,8 @@ package com.cubes.android.komentar.ui.comments.rv_item_comments;
 import android.content.Context;
 
 
+import androidx.viewbinding.ViewBinding;
+
 import com.cubes.android.komentar.R;
 import com.cubes.android.komentar.data.model.NewsComment;
 import com.cubes.android.komentar.data.model.NewsCommentVote;
@@ -29,11 +31,6 @@ public class RvItemModelComments implements ItemModelComments {
         this.listener = listener;
     }
 
-    public RvItemModelComments(NewsComment comment, int leftPadding) {
-        this.comment = comment;
-        this.leftPadding = leftPadding;
-    }
-
     @Override
     public int getCommentsId() {
         return Integer.parseInt(comment.id);
@@ -57,7 +54,6 @@ public class RvItemModelComments implements ItemModelComments {
         binding.textViewLike.setText(String.valueOf(comment.positive_votes));
         binding.textViewDislike.setText(String.valueOf(comment.negative_votes));
 
-
         if (comment.newsCommentVote == null) {
 
             setListeners(binding, context);
@@ -75,7 +71,7 @@ public class RvItemModelComments implements ItemModelComments {
         }
 
         binding.buttonReply.setOnClickListener(view -> {
-            MyMethodsClass.goToPostCommentsActivity(view, Integer.parseInt(comment.news), Integer.parseInt(comment.id));
+            listener.goOnPostCommentActivity(view.getContext(), Integer.parseInt(comment.news), Integer.parseInt(comment.id));
         });
 
 
@@ -97,21 +93,21 @@ public class RvItemModelComments implements ItemModelComments {
 
     }
 
+    @Override
+    public void updateLikeUi() {
 
-    public void updateLikedUi() {
+        int likes = Integer.parseInt(binding.textViewLike.getText().toString());
+        likes++;
+        binding.textViewLike.setText(String.valueOf(likes));
 
-            int likes = Integer.parseInt(binding.textViewLike.getText().toString());
-            likes++;
-            binding.textViewLike.setText(String.valueOf(likes));
+        binding.buttonLike.setEnabled(false);
+        binding.buttonDislike.setEnabled(false);
 
-            binding.buttonLike.setEnabled(false);
-            binding.buttonDislike.setEnabled(false);
-
-            binding.buttonLike.setBackgroundResource(R.drawable.background_button_like);
-
+        binding.buttonLike.setBackgroundResource(R.drawable.background_button_like);
     }
 
-    public void updateDislikedUi() {
+    @Override
+    public void updateDislikeUi() {
 
         int dislikes = Integer.parseInt(binding.textViewDislike.getText().toString());
         dislikes++;
@@ -123,4 +119,5 @@ public class RvItemModelComments implements ItemModelComments {
         binding.buttonDislike.setBackgroundResource(R.drawable.background_button_dislike);
 
     }
+
 }

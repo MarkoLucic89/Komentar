@@ -59,16 +59,21 @@
         <entry key="..\:/Users/User/AndroidStudioProjects/Komentar/app/src/main/res/layout/vp_item_home_slider.xml" value="0.36102564102564105" />
         <entry key="..\:/Users/User/AndroidStudioProjects/Komentar/app/src/main/res/menu/menu_items_list.xml" value="0.36666666666666664" />
         <entry key="app/src/main/res/drawable/background_search.xml" value="0.2195" />
+        <entry key="app/src/main/res/layout/activity_category.xml" value="0.3703125" />
+        <entry key="app/src/main/res/layout/activity_comments.xml" value="0.3703125" />
         <entry key="app/src/main/res/layout/activity_details.xml" value="0.36018518518518516" />
         <entry key="app/src/main/res/layout/activity_news_details.xml" value="0.3703125" />
         <entry key="app/src/main/res/layout/activity_tag.xml" value="0.3641025641025641" />
         <entry key="app/src/main/res/layout/fragment_details.xml" value="0.3703125" />
+        <entry key="app/src/main/res/layout/fragment_home.xml" value="0.3703125" />
+        <entry key="app/src/main/res/layout/fragment_home_pager.xml" value="0.3277777777777778" />
         <entry key="app/src/main/res/layout/fragment_probni.xml" value="0.3646153846153846" />
         <entry key="app/src/main/res/layout/fragment_search.xml" value="0.36203703703703705" />
         <entry key="app/src/main/res/layout/fragment_video.xml" value="0.3703125" />
         <entry key="app/src/main/res/layout/rv_item_loading.xml" value="0.3703125" />
         <entry key="app/src/main/res/layout/rv_item_loading_videos.xml" value="0.21875" />
         <entry key="app/src/main/res/layout/rv_item_refresh.xml" value="0.3703125" />
+        <entry key="app/src/main/res/layout/rv_item_refresh_videos.xml" value="0.3453125" />
         <entry key="app/src/main/res/layout/rv_item_videos.xml" value="0.3703125" />
       </map>
     </option>

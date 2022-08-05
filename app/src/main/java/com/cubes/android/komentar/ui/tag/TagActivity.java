@@ -69,10 +69,13 @@ public class TagActivity extends AppCompatActivity implements LoadNextPageListen
             @Override
             public void onFailure(Throwable t) {
 
-                binding.recyclerView.setVisibility(View.GONE);
-                binding.progressBar.setVisibility(View.GONE);
-                binding.imageViewRefresh.setVisibility(View.VISIBLE);
-
+                if (nextPage == 1) {
+                    binding.recyclerView.setVisibility(View.GONE);
+                    binding.imageViewRefresh.setVisibility(View.VISIBLE);
+                    binding.progressBar.setVisibility(View.GONE);
+                } else {
+                    adapter.addRefresher();
+                }
             }
         });
 

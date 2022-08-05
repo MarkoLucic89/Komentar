@@ -8,5 +8,9 @@ public interface ItemModelComments {
 
     int getType();
 
+    void updateLikeUi();
+
+    void updateDislikeUi();
+
     void bind(CommentsAdapter.CommentsViewHolder holder);
 }

@@ -10,9 +10,12 @@ import androidx.viewbinding.ViewBinding;
 import com.cubes.android.komentar.data.model.News;
 import com.cubes.android.komentar.data.source.remote.networking.response.NewsResponseModel;
 import com.cubes.android.komentar.databinding.RvItemLoadingVideosBinding;
+import com.cubes.android.komentar.databinding.RvItemRefreshVideosBinding;
 import com.cubes.android.komentar.ui.main.latest.LoadNextPageListener;
+import com.cubes.android.komentar.ui.main.latest.rv_model_category.RvItemModelCategoryRefresh;
 import com.cubes.android.komentar.ui.main.videos.rv_model_videos.ItemModelVideo;
 import com.cubes.android.komentar.ui.main.videos.rv_model_videos.RvItemModelVideoLoading;
+import com.cubes.android.komentar.ui.main.videos.rv_model_videos.RvItemModelVideoRefresh;
 import com.cubes.android.komentar.ui.main.videos.rv_model_videos.RvItemModelVideos;
 import com.cubes.android.komentar.databinding.RvItemVideosBinding;
 
@@ -73,8 +76,14 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.VideosView
                     parent,
                     false
             );
-        } else {
+        } else if (viewType == 1) {
             binding = RvItemLoadingVideosBinding.inflate(
+                    inflater,
+                    parent,
+                    false
+            );
+        } else {
+            binding = RvItemRefreshVideosBinding.inflate(
                     inflater,
                     parent,
                     false
@@ -130,6 +139,19 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.VideosView
 
 
 //        notifyDataSetChanged();
+    }
+
+    public void addRefresher() {
+
+        if (itemModels.isEmpty()) {
+            return;
+        }
+
+        itemModels.remove(itemModels.size() - 1);
+        itemModels.add(new RvItemModelVideoRefresh(listener));
+
+        notifyItemChanged(itemModels.size() - 1);
+
     }
 
     public class VideosViewHolder extends RecyclerView.ViewHolder {

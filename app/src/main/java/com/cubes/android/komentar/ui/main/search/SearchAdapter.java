@@ -11,11 +11,14 @@ import com.cubes.android.komentar.data.model.News;
 import com.cubes.android.komentar.data.source.remote.networking.response.NewsResponseModel;
 import com.cubes.android.komentar.data.source.remote.networking.response.TagResponseModel;
 import com.cubes.android.komentar.databinding.RvItemLoadingBinding;
+import com.cubes.android.komentar.databinding.RvItemRefreshBinding;
 import com.cubes.android.komentar.ui.main.latest.LoadNextPageListener;
 import com.cubes.android.komentar.ui.main.search.rv_model_search.ItemModelSearch;
 import com.cubes.android.komentar.ui.main.search.rv_model_search.RvItemModelSearch;
 import com.cubes.android.komentar.databinding.RvItemCategorySmallBinding;
 import com.cubes.android.komentar.ui.main.search.rv_model_search.RvItemModelSearchLoading;
+import com.cubes.android.komentar.ui.main.search.rv_model_search.RvItemModelSearchRefresh;
+import com.cubes.android.komentar.ui.main.videos.rv_model_videos.RvItemModelVideoRefresh;
 
 import java.util.ArrayList;
 
@@ -76,8 +79,14 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
                     inflater,
                     parent,
                     false);
-        } else {
+        } else if (viewType == 1) {
             binding = RvItemLoadingBinding.inflate(
+                    inflater,
+                    parent,
+                    false
+            );
+        } else {
+            binding = RvItemRefreshBinding.inflate(
                     inflater,
                     parent,
                     false
@@ -125,8 +134,8 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
             itemModels.add(new RvItemModelSearchLoading(listener));
         }
 
-        notifyItemRangeChanged(lastIndex, itemModels.size());
-//        notifyItemRangeInserted(lastIndex, newsList.size());
+//        notifyItemRangeChanged(lastIndex, itemModels.size());
+        notifyItemRangeInserted((lastIndex + 1), response.news.size());
 
 
 //        notifyDataSetChanged();
@@ -156,16 +165,28 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
             itemModels.add(new RvItemModelSearchLoading(listener));
         }
 
-        notifyItemRangeChanged(lastIndex, itemModels.size());
-//        notifyItemRangeInserted(lastIndex, newsList.size());
+//        notifyItemRangeChanged(lastIndex, itemModels.size());
+//        notifyItemRangeInserted((lastIndex + 1), response.news.size());
 
-
-//        notifyDataSetChanged();
+        notifyDataSetChanged();
     }
 
     public void clearList() {
         itemModels.clear();
         notifyDataSetChanged();
+    }
+
+    public void addRefresher() {
+
+        if (itemModels.isEmpty()) {
+            return;
+        }
+
+        itemModels.remove(itemModels.size() - 1);
+        itemModels.add(new RvItemModelSearchRefresh(listener));
+
+        notifyItemChanged(itemModels.size() - 1);
+
     }
 
 

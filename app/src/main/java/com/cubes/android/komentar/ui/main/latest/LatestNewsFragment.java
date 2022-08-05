@@ -139,14 +139,14 @@ public class LatestNewsFragment extends Fragment implements LoadNextPageListener
 
             @Override
             public void onFailure(Throwable t) {
+
                 if (nextPage == 1) {
-                binding.recyclerView.setVisibility(View.GONE);
-                binding.imageViewRefresh.setVisibility(View.VISIBLE);
-                binding.progressBar.setVisibility(View.GONE);
+                    binding.recyclerView.setVisibility(View.GONE);
+                    binding.imageViewRefresh.setVisibility(View.VISIBLE);
+                    binding.progressBar.setVisibility(View.GONE);
                 } else {
                     categoryAdapter.addRefresher();
                 }
-
 
             }
         });

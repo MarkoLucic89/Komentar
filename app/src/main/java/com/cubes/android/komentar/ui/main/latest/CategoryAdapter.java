@@ -46,7 +46,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 
         //BIG ITEM
 
-        itemModels.add(new RvItemModelCategoryBig(newsList.get(0), isSize5));
+        itemModels.add(new RvItemModelCategoryBig(newsList.get(0), isSize5, listener));
 
         //SMALL ITEMS
 
@@ -151,10 +151,11 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
             itemModels.add(new RvItemModelCategoryLoading( listener));
         }
 
-        notifyItemRangeChanged(lastIndex, itemModels.size());
-//        notifyItemRangeInserted(lastIndex, newsList.size());
+//        notifyItemRangeChanged(lastIndex, itemModels.size());
+//        notifyItemRangeInserted(lastIndex, itemModels.size());
 
-//        notifyDataSetChanged();
+        //ovo moram da ostavim zbog itema iznad dodatih sto sam ti pokazao da im se slike zamrznu
+        notifyDataSetChanged();
     }
 
     public void addRefresher() {

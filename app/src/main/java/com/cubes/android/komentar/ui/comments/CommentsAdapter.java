@@ -28,6 +28,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
 
     public CommentsAdapter(ArrayList<NewsComment> comments, boolean isSize5) {
         addComments(comments);
+        this.isSize5 = isSize5;
     }
 
     public void updateList(ArrayList<NewsComment> comments) {
@@ -95,26 +96,12 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
             
             if (itemModel.getCommentsId() == id) {
 
-                if (itemModel instanceof RvItemModelComments) {
-
-                    RvItemModelComments tempModel = (RvItemModelComments) itemModel;
-
-                    tempModel.updateLikedUi();
-
-                } else {
-
-                    RvItemModelSubComments tempModel = (RvItemModelSubComments) itemModel;
-
-                    tempModel.updateLikedUi();
-
-                }
+                itemModel.updateLikeUi();
 
                 break;
 
             }
         }
-
-
     }
 
     public void commentDisliked(int id, boolean vote) {
@@ -123,19 +110,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
 
             if (itemModel.getCommentsId() == id) {
 
-                if (itemModel instanceof RvItemModelComments) {
-
-                    RvItemModelComments tempModel = (RvItemModelComments) itemModel;
-
-                    tempModel.updateDislikedUi();
-
-                } else {
-
-                    RvItemModelSubComments tempModel = (RvItemModelSubComments) itemModel;
-
-                    tempModel.updateDislikedUi();
-
-                }
+                itemModel.updateDislikeUi();
 
                 break;
 
@@ -144,8 +119,6 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
         }
 
     }
-
-
 
     public class CommentsViewHolder extends RecyclerView.ViewHolder {
 

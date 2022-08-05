@@ -21,7 +21,7 @@ import com.cubes.android.komentar.ui.tools.MyMethodsClass;
 public class VideoFragment extends Fragment implements LoadNextPageListener {
 
     private FragmentVideoBinding binding;
-    private int page = 1;
+    private int nextPage = 1;
     private VideosAdapter adapter;
 
     public VideoFragment() {
@@ -57,12 +57,6 @@ public class VideoFragment extends Fragment implements LoadNextPageListener {
 
             MyMethodsClass.startRefreshAnimation(binding.imageViewRefresh);
 
-//            if (page == 1) {
-//                sendVideosRequest();
-//            } else {
-//                loadNextPage();
-//            }
-
             loadNextPage();
         });
 
@@ -80,7 +74,6 @@ public class VideoFragment extends Fragment implements LoadNextPageListener {
         super.onResume();
 
         if (binding.imageViewRefresh.getVisibility() == View.VISIBLE) {
-//            sendVideosRequest();
             loadNextPage();
         }
 
@@ -89,14 +82,16 @@ public class VideoFragment extends Fragment implements LoadNextPageListener {
     @Override
     public void loadNextPage() {
 
-        DataRepository.getInstance().getVideosFromApi(page, new DataRepository.VideosResponseListener() {
+        DataRepository.getInstance().getVideosFromApi(nextPage, new DataRepository.VideosResponseListener() {
 
             @Override
             public void onVideosResponse(NewsResponseModel.NewsDataResponseModel response) {
 
                 binding.recyclerView.setVisibility(View.VISIBLE);
                 binding.progressBar.setVisibility(View.GONE);
-                page++;
+                binding.imageViewRefresh.setVisibility(View.GONE);
+
+                nextPage++;
 
                 adapter.addNextPage(response);
             }
@@ -104,9 +99,13 @@ public class VideoFragment extends Fragment implements LoadNextPageListener {
             @Override
             public void onVideosFailure(Throwable t) {
 
-                binding.recyclerView.setVisibility(View.GONE);
-                binding.progressBar.setVisibility(View.GONE);
-                binding.imageViewRefresh.setVisibility(View.VISIBLE);
+                if (nextPage == 1) {
+                    binding.recyclerView.setVisibility(View.GONE);
+                    binding.imageViewRefresh.setVisibility(View.VISIBLE);
+                    binding.progressBar.setVisibility(View.GONE);
+                } else {
+                    adapter.addRefresher();
+                }
             }
         });
     }

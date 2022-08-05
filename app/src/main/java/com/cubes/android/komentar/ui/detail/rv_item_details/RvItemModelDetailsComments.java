@@ -32,21 +32,6 @@ public class RvItemModelDetailsComments implements ItemModelDetails {
         binding.textViewTitle.setText("Komentari (" + data.comments_count + ")");
         binding.textViewCommentsCount.setText(String.valueOf(data.comments_count));
 
-//        NewsApi.getInstance().getNewsService().getComments(data.id).enqueue(new Callback<CommentsResponseModel>() {
-//            @Override
-//            public void onResponse(Call<CommentsResponseModel> call, Response<CommentsResponseModel> response) {
-//
-//                binding.recyclerView.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext()));
-//                binding.recyclerView.setAdapter(new CommentsAdapter(response.body().data, true));
-//
-//            }
-//
-//            @Override
-//            public void onFailure(Call<CommentsResponseModel> call, Throwable t) {
-//
-//            }
-//        });
-
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext()));
         binding.recyclerView.setAdapter(new CommentsAdapter(data.comments_top_n, true));
 
@@ -58,7 +43,7 @@ public class RvItemModelDetailsComments implements ItemModelDetails {
         }
 
         binding.buttonPostComment.setOnClickListener(view ->  {
-            MyMethodsClass.goToPostCommentsActivity(view, data.id, 0);
+            MyMethodsClass.goToPostCommentsActivity(view.getContext(), data.id, 0);
         });
 
     }

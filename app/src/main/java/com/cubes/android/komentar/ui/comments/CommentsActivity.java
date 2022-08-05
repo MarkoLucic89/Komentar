@@ -3,14 +3,17 @@ package com.cubes.android.komentar.ui.comments;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 import com.cubes.android.komentar.data.DataRepository;
 import com.cubes.android.komentar.data.model.NewsComment;
 import com.cubes.android.komentar.data.model.NewsCommentVote;
 import com.cubes.android.komentar.data.source.local.database.NewsDatabase;
 import com.cubes.android.komentar.databinding.ActivityCommentsBinding;
+import com.cubes.android.komentar.ui.tools.MyMethodsClass;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,13 +36,27 @@ public class CommentsActivity extends AppCompatActivity {
         news_id = getIntent().getIntExtra("news_id", -1);
 
         binding.imageViewBack.setOnClickListener(view -> finish());
+        binding.imageViewRefresh.setOnClickListener(view -> getComments());
 
         initRecyclerView();
+
+        binding.recyclerViewComments.setVisibility(View.GONE);
+
+        getComments();
+
+    }
+
+    private void getComments() {
 
         DataRepository.getInstance().getComments(news_id, new DataRepository.CommentsResponseListener() {
 
             @Override
             public void onResponse(ArrayList<NewsComment> comments) {
+
+                binding.textView.setVisibility(View.GONE);
+                binding.recyclerViewComments.setVisibility(View.VISIBLE);
+                binding.imageViewRefresh.setVisibility(View.GONE);
+
                 if (comments.isEmpty()) {
                     binding.textView.setVisibility(View.VISIBLE);
                 } else {
@@ -49,21 +66,17 @@ public class CommentsActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Throwable t) {
-
+                binding.textView.setVisibility(View.GONE);
+                binding.recyclerViewComments.setVisibility(View.GONE);
+                binding.imageViewRefresh.setVisibility(View.VISIBLE);
             }
         });
-
     }
 
     private void getCommentVotes(ArrayList<NewsComment> comments) {
 
         ExecutorService service = Executors.newSingleThreadExecutor();
         service.execute(() -> {
-
-            //onPreExecute
-            runOnUiThread(() -> {
-
-            });
 
             //doInBackgroundThread
             List<NewsCommentVote> votes = NewsDatabase.getInstance(binding.getRoot().getContext()).voteDao().getNewsCommentVotes();
@@ -84,11 +97,10 @@ public class CommentsActivity extends AppCompatActivity {
 
         });
 
-
-
     }
 
     private void initRecyclerView() {
+
         adapter = new CommentsAdapter(new CommentsListener() {
             @Override
             public void onLikeListener(int id, boolean vote) {
@@ -99,7 +111,13 @@ public class CommentsActivity extends AppCompatActivity {
             public void onDislikeListener(int id, boolean vote) {
                 dislikeComment(id, vote);
             }
+
+            @Override
+            public void goOnPostCommentActivity(Context context, int news, int reply_id) {
+                MyMethodsClass.goToPostCommentsActivity(context, news, reply_id);
+            }
         });
+
         binding.recyclerViewComments.setLayoutManager(new LinearLayoutManager(this));
         binding.recyclerViewComments.setAdapter(adapter);
     }
@@ -112,11 +130,6 @@ public class CommentsActivity extends AppCompatActivity {
 
                 ExecutorService service = Executors.newSingleThreadExecutor();
                 service.execute(() -> {
-
-                    //onPreExecute
-                    runOnUiThread(() -> {
-
-                    });
 
                     //doInBackgroundThread
                     NewsCommentVote newsCommentVote = new NewsCommentVote(String.valueOf(id), vote);
@@ -133,7 +146,7 @@ public class CommentsActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Throwable t) {
-
+                Toast.makeText(CommentsActivity.this, "Komentar nije izglasan, došlo je do greške.", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -148,11 +161,7 @@ public class CommentsActivity extends AppCompatActivity {
                 ExecutorService service = Executors.newSingleThreadExecutor();
                 service.execute(() -> {
 
-                    //onPreExecute
-                    runOnUiThread(() -> {
-
-                    });
-
+                    //doInBackgroundThread
                     NewsCommentVote newsCommentVote = new NewsCommentVote(String.valueOf(id), false);
                     NewsDatabase.getInstance(binding.getRoot().getContext()).voteDao().insert(newsCommentVote);
 
@@ -167,7 +176,7 @@ public class CommentsActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Throwable t) {
-
+                Toast.makeText(CommentsActivity.this, "Komentar nije izglasan, došlo je do greške.", Toast.LENGTH_SHORT).show();
             }
         });
 

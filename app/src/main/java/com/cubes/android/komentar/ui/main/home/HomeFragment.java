@@ -55,24 +55,42 @@ public class HomeFragment extends Fragment implements OnCategoryClickListener {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        binding.tabLayout.setVisibility(View.INVISIBLE);
+        binding.viewPager.setVisibility(View.INVISIBLE);
+        binding.progressBar.setVisibility(View.VISIBLE);
+
         initDrawerRecyclerView();
+
+        getAllCategories();
+
+//        initViewPager();
+        binding.imageViewDrawerMenu.setOnClickListener(view1 -> binding.getRoot().openDrawer(GravityCompat.END));
+
+    }
+
+    private void getAllCategories() {
 
         DataRepository.getInstance().getAllCategories(new DataRepository.CategoriesResponseListener() {
             @Override
             public void onResponse(ArrayList<Category> categories) {
+
+                binding.imageViewRefresh.setVisibility(View.GONE);
+                binding.linearLayoutHome.setVisibility(View.VISIBLE);
+                binding.tabLayout.setVisibility(View.VISIBLE);
+                binding.viewPager.setVisibility(View.VISIBLE);
+                binding.progressBar.setVisibility(View.GONE);
+
                 drawerMenuAdapter.updateList(getActivity(), categories);
                 initViewPager(categories);
             }
 
             @Override
             public void onFailure(Throwable t) {
-
+                binding.progressBar.setVisibility(View.GONE);
+                binding.linearLayoutHome.setVisibility(View.GONE);
+                binding.imageViewRefresh.setVisibility(View.VISIBLE);
             }
         });
-
-//        initViewPager();
-        binding.imageViewDrawerMenu.setOnClickListener(view1 -> binding.getRoot().openDrawer(GravityCompat.END));
-
     }
 
 

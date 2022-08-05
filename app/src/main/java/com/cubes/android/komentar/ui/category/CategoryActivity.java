@@ -3,19 +3,15 @@ package com.cubes.android.komentar.ui.category;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.view.View;
 
 import com.cubes.android.komentar.data.DataRepository;
 import com.cubes.android.komentar.data.model.Category;
-import com.cubes.android.komentar.data.source.remote.networking.NewsApi;
-import com.cubes.android.komentar.data.source.remote.networking.response.CategoriesResponseModel;
 import com.cubes.android.komentar.databinding.ActivityCategoryBinding;
 import com.google.android.material.tabs.TabLayoutMediator;
 
 import java.util.ArrayList;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class CategoryActivity extends AppCompatActivity {
 
@@ -30,9 +26,26 @@ public class CategoryActivity extends AppCompatActivity {
         binding = ActivityCategoryBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        getAllCategories();
+
+        binding.imageViewBack.setOnClickListener(view -> finish());
+        binding.imageViewRefresh.setOnClickListener(view -> getAllCategories());
+
+    }
+
+    private void getAllCategories() {
+
+        binding.proggresBar.setVisibility(View.VISIBLE);
+        binding.linearLayoutCategorypager.setVisibility(View.GONE);
+        binding.proggresBar.setVisibility(View.GONE);
+
         DataRepository.getInstance().getAllCategories(new DataRepository.CategoriesResponseListener() {
             @Override
             public void onResponse(ArrayList<Category> categories) {
+
+                binding.proggresBar.setVisibility(View.GONE);
+                binding.imageViewRefresh.setVisibility(View.GONE);
+                binding.linearLayoutCategorypager.setVisibility(View.VISIBLE);
 
                 mCategories = categories;
 
@@ -48,10 +61,11 @@ public class CategoryActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Throwable t) {
-
+                binding.proggresBar.setVisibility(View.GONE);
+                binding.linearLayoutCategorypager.setVisibility(View.GONE);
+                binding.imageViewRefresh.setVisibility(View.VISIBLE);
             }
         });
-
     }
 
     private void getCategoryAndSubcategory(ArrayList<Category> categories) {
