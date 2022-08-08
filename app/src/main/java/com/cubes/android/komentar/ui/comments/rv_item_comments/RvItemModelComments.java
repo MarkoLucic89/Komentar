@@ -1,34 +1,22 @@
 package com.cubes.android.komentar.ui.comments.rv_item_comments;
 
-import android.content.Context;
-
-
-import androidx.viewbinding.ViewBinding;
-
 import com.cubes.android.komentar.R;
 import com.cubes.android.komentar.data.model.NewsComment;
-import com.cubes.android.komentar.data.model.NewsCommentVote;
-import com.cubes.android.komentar.data.source.local.database.NewsDatabase;
 import com.cubes.android.komentar.databinding.RvItemCommentBinding;
 import com.cubes.android.komentar.ui.comments.CommentsAdapter;
-import com.cubes.android.komentar.ui.comments.CommentsListener;
-import com.cubes.android.komentar.ui.tools.MyMethodsClass;
 
 
 public class RvItemModelComments implements ItemModelComments {
 
     public NewsComment comment;
-    public int leftPadding;
-    public CommentsListener listener;
+    public CommentsAdapter adapter;
+    public CommentsAdapter.CommentsListener listener;
     public RvItemCommentBinding binding;
 
-    public RvItemModelComments(NewsComment comment) {
-        this.comment = comment;
-    }
-
-    public RvItemModelComments(NewsComment comment, CommentsListener listener) {
+    public RvItemModelComments(NewsComment comment, CommentsAdapter.CommentsListener listener, CommentsAdapter adapter) {
         this.comment = comment;
         this.listener = listener;
+        this.adapter = adapter;
     }
 
     @Override
@@ -46,8 +34,6 @@ public class RvItemModelComments implements ItemModelComments {
 
         binding = (RvItemCommentBinding) holder.binding;
 
-        Context context = holder.binding.getRoot().getContext();
-
         binding.textViewName.setText(comment.name);
         binding.textViewTime.setText(comment.created_at);
         binding.textViewComment.setText(comment.content);
@@ -56,7 +42,11 @@ public class RvItemModelComments implements ItemModelComments {
 
         if (comment.newsCommentVote == null) {
 
-            setListeners(binding, context);
+            binding.buttonLike.setOnClickListener(view ->
+                    listener.onLikeListener(adapter, Integer.parseInt(comment.id), true));
+
+            binding.buttonDislike.setOnClickListener(view ->
+                    listener.onDislikeListener(adapter, Integer.parseInt(comment.id), false));
 
         } else {
 
@@ -71,24 +61,7 @@ public class RvItemModelComments implements ItemModelComments {
         }
 
         binding.buttonReply.setOnClickListener(view -> {
-            listener.goOnPostCommentActivity(view.getContext(), Integer.parseInt(comment.news), Integer.parseInt(comment.id));
-        });
-
-
-    }
-
-    private void setListeners(RvItemCommentBinding binding, Context context) {
-
-        binding.buttonLike.setOnClickListener(view -> {
-
-            listener.onLikeListener(Integer.parseInt(comment.id), true);
-
-        });
-
-        binding.buttonDislike.setOnClickListener(view -> {
-
-            listener.onDislikeListener(Integer.parseInt(comment.id), false);
-
+            listener.goOnPostCommentActivity(Integer.parseInt(comment.news), Integer.parseInt(comment.id));
         });
 
     }

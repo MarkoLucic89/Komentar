@@ -81,7 +81,7 @@ public class DetailsFragment extends Fragment {
     }
 
     private void initRecyclerView() {
-        adapter = new NewsDetailsAdapter();
+        adapter = new NewsDetailsAdapter(getContext());
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.recyclerView.setAdapter(adapter);
     }

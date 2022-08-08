@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.cubes.android.komentar.data.model.News;
 import com.cubes.android.komentar.databinding.VpItemHomeSliderBinding;
+import com.cubes.android.komentar.ui.main.latest.NewsListener;
 import com.cubes.android.komentar.ui.tools.MyMethodsClass;
 import com.squareup.picasso.Picasso;
 
@@ -19,13 +20,12 @@ public class HomeSliderAdapter extends RecyclerView.Adapter<HomeSliderAdapter.Ho
     private ArrayList<News> list;
     private boolean showCategory;
 
-    public HomeSliderAdapter(ArrayList<News> list) {
-        this.list = list;
-    }
+    private NewsListener listener;
 
-    public HomeSliderAdapter(ArrayList<News> list, boolean showCategory) {
+    public HomeSliderAdapter(ArrayList<News> list, boolean showCategory, NewsListener listener) {
         this.list = list;
         this.showCategory = showCategory;
+        this.listener = listener;
     }
 
     @NonNull
@@ -55,7 +55,7 @@ public class HomeSliderAdapter extends RecyclerView.Adapter<HomeSliderAdapter.Ho
         Picasso.get().load(news.image).into(holder.binding.imageView);
         holder.binding.textViewTitle.setText(news.title);
 
-        holder.binding.getRoot().setOnClickListener(view -> MyMethodsClass.goToNewsDetailActivity(view, news.id));
+        holder.binding.getRoot().setOnClickListener(view -> listener.onNewsClicked(news.id));
 
     }
 

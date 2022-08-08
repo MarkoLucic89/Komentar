@@ -1,5 +1,6 @@
 package com.cubes.android.komentar.ui.main.home;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -20,6 +21,7 @@ import com.cubes.android.komentar.databinding.RvItemHomeCategoryBoxBinding;
 import com.cubes.android.komentar.databinding.RvItemHomeSliderBinding;
 import com.cubes.android.komentar.databinding.RvItemHomeTabsBinding;
 import com.cubes.android.komentar.databinding.RvItemHomeVideoBinding;
+import com.cubes.android.komentar.ui.main.latest.NewsListener;
 
 import java.util.ArrayList;
 
@@ -27,8 +29,10 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
 
     private ArrayList<ItemModelHome> list = new ArrayList<>();
 
-    public HomeAdapter() {
+    private NewsListener listener;
 
+    public HomeAdapter(NewsListener listener) {
+        this.listener = listener;
     }
 
     public void updateList(HomePageResponseModel.HomePageDataResponseModel response) {
@@ -38,11 +42,11 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
 
         //TOP NEWS
         for (News news : response.top) {
-            list.add(new RvItemModelHomeSmallNews(news));
+            list.add(new RvItemModelHomeSmallNews(news, listener));
         }
 
         //TABS
-        list.add(new RvItemModelTabs(response, this, list.size()));
+        list.add(new RvItemModelTabs(response, this, list.size(), listener));
 
         //SPORT CATEGORY BOX
         addCategoryBox("SPORT", response);
@@ -52,7 +56,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
 
         //VIDEO
         if (!response.videos.isEmpty()) {
-            list.add(new RvItemModelHomeVideo(response.videos));
+            list.add(new RvItemModelHomeVideo(response.videos, listener));
         }
 
         //SHOWBIZ
@@ -103,19 +107,14 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
         if (title.equalsIgnoreCase("SLIDER")) {
 
             if (response.slider != null && !response.slider.isEmpty()) {
-                list.add(new RvItemModelHomeSlider(response.slider));
+                list.add(new RvItemModelHomeSlider(response.slider, false, listener));
             }
 
         } else if (title.equalsIgnoreCase("EDITORS CHOICE")) {
 
-
-//            list.add(new RvItemModelHomeSlider(response.body().data.slider, true));   //BRISI OVO!!!
-
             if (response.editors_choice != null && !response.editors_choice.isEmpty()) {
-                list.add(new RvItemModelHomeSlider(response.editors_choice, true));
+                list.add(new RvItemModelHomeSlider(response.editors_choice, true, listener));
             }
-
-        } else {
 
         }
 
@@ -126,7 +125,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
         HomePageResponseModel.CategoryBoxResponseModel categoryBoxResponseModel = getCategoryForTitle(title, response);
 
         if (categoryBoxResponseModel != null && !categoryBoxResponseModel.news.isEmpty()) {
-            list.add(new RvItemModelCategoryBox(categoryBoxResponseModel));
+            list.add(new RvItemModelCategoryBox(categoryBoxResponseModel, listener));
         }
 
     }

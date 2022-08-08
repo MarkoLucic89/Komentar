@@ -11,8 +11,7 @@ import com.cubes.android.komentar.data.model.News;
 import com.cubes.android.komentar.data.source.remote.networking.response.NewsResponseModel;
 import com.cubes.android.komentar.databinding.RvItemLoadingVideosBinding;
 import com.cubes.android.komentar.databinding.RvItemRefreshVideosBinding;
-import com.cubes.android.komentar.ui.main.latest.LoadNextPageListener;
-import com.cubes.android.komentar.ui.main.latest.rv_model_category.RvItemModelCategoryRefresh;
+import com.cubes.android.komentar.ui.main.latest.NewsListener;
 import com.cubes.android.komentar.ui.main.videos.rv_model_videos.ItemModelVideo;
 import com.cubes.android.komentar.ui.main.videos.rv_model_videos.RvItemModelVideoLoading;
 import com.cubes.android.komentar.ui.main.videos.rv_model_videos.RvItemModelVideoRefresh;
@@ -26,32 +25,26 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.VideosView
 
     private ArrayList<ItemModelVideo> itemModels = new ArrayList<>();
     private boolean isOnHomePage;
-    private LoadNextPageListener listener;
+    private NewsListener listener;
 
-    public VideosAdapter(LoadNextPageListener listener) {
+    public VideosAdapter(NewsListener listener) {
         this.isOnHomePage = false;
         this.listener = listener;
     }
 
-    public VideosAdapter(ArrayList<News> newsList, boolean isOnHomePage) {
+    public VideosAdapter(ArrayList<News> newsList, boolean isOnHomePage, NewsListener listener) {
         this.isOnHomePage = isOnHomePage;
-        initList(newsList);
-    }
-
-    private void initList(ArrayList<News> newsList) {
-        this.itemModels = new ArrayList<>();
+        this.listener = listener;
 
         for (News news : newsList) {
-            itemModels.add(new RvItemModelVideos(news));
+            itemModels.add(new RvItemModelVideos(listener, news));
         }
-
-        notifyDataSetChanged();
     }
 
     public void updateList(NewsResponseModel.NewsDataResponseModel responseModel) {
 
         for (News news : responseModel.news) {
-            itemModels.add(new RvItemModelVideos(news));
+            itemModels.add(new RvItemModelVideos(listener, news));
         }
 
         if (responseModel.pagination.has_more_pages) {
@@ -124,7 +117,7 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.VideosView
         }
 
         for (News news : response.news) {
-            itemModels.add(new RvItemModelVideos(news));
+            itemModels.add(new RvItemModelVideos(listener, news));
         }
 
 //        if (response.data.pagination.has_more_pages) {

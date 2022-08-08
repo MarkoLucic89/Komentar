@@ -9,19 +9,22 @@ import com.cubes.android.komentar.data.source.remote.networking.response.HomePag
 import com.cubes.android.komentar.databinding.RvItemHomeCategoryBoxBinding;
 import com.cubes.android.komentar.ui.main.latest.CategoryAdapter;
 import com.cubes.android.komentar.ui.main.home.HomeAdapter;
+import com.cubes.android.komentar.ui.main.latest.NewsListener;
 
 import java.util.ArrayList;
 
 public class RvItemModelCategoryBox implements ItemModelHome {
 
-    public String categoryTitle;
-    private String categoryColor;
-    private ArrayList<News> list;
+    private final String categoryTitle;
+    private final String categoryColor;
+    private final ArrayList<News> list;
+    private final NewsListener listener;
 
-    public RvItemModelCategoryBox(HomePageResponseModel.CategoryBoxResponseModel category) {
+    public RvItemModelCategoryBox(HomePageResponseModel.CategoryBoxResponseModel category, NewsListener listener) {
         this.categoryTitle = category.title;
         this.categoryColor = category.color;
         this.list = category.news;
+        this.listener = listener;
     }
 
     @Override
@@ -38,6 +41,6 @@ public class RvItemModelCategoryBox implements ItemModelHome {
         binding.viewIndicator.setBackgroundColor(Color.parseColor(this.categoryColor));
 
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(binding.recyclerView.getContext()));
-        binding.recyclerView.setAdapter(new CategoryAdapter(this.list, true));
+        binding.recyclerView.setAdapter(new CategoryAdapter(this.list, true, listener));
     }
 }

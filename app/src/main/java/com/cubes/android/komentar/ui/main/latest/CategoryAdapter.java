@@ -26,15 +26,16 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 
     private ArrayList<ItemModelCategory> itemModels = new ArrayList<>();
     private boolean isSize5;
-    private LoadNextPageListener listener;
+    private NewsListener listener;
 
-    public CategoryAdapter(LoadNextPageListener listener) {
+    public CategoryAdapter(NewsListener listener) {
         isSize5 = false;
         this.listener = listener;
     }
 
-    public CategoryAdapter(ArrayList<News> newsList, boolean isSize5) {
+    public CategoryAdapter(ArrayList<News> newsList, boolean isSize5, NewsListener listener) {
         this.isSize5 = isSize5;
+        this.listener = listener;
         initList(newsList);
     }
 
@@ -55,7 +56,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         }
 
         for (int i = 1; i < newsList.size(); i++) {
-            itemModels.add(new RvItemModelCategorySmall(newsList.get(i), isSize5));
+            itemModels.add(new RvItemModelCategorySmall(newsList.get(i), isSize5, listener));
         }
 
     }
@@ -100,9 +101,26 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
     }
 
 
+    public void updateList(ArrayList<News> news) {
+
+        for (int i = 0; i < news.size(); i++) {
+            if (i == 0) {
+                itemModels.add(new RvItemModelCategoryBig(news.get(0), false, listener));
+            } else {
+                itemModels.add(new RvItemModelCategorySmall(news.get(i), isSize5, listener));
+            }
+        }
+
+        if (news.size() == 20) {
+            itemModels.add(new RvItemModelCategoryLoading(listener));
+        }
+
+        notifyDataSetChanged();
+    }
+
     public void addNextPage(NewsResponseModel.NewsDataResponseModel response) {
 
-        int lastIndex;
+        int lastIndex = 0;
 
         if (itemModels.isEmpty()) {
             lastIndex = 0;
@@ -111,8 +129,8 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
             itemModels.remove(lastIndex);
         }
 
-        for (News news: response.news) {
-            itemModels.add(new RvItemModelCategorySmall(news, isSize5));
+        for (News news : response.news) {
+            itemModels.add(new RvItemModelCategorySmall(news, isSize5, listener));
         }
 
 //        if (response.data.pagination.has_more_pages) {
@@ -120,7 +138,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 //        }
 
         if (response.news.size() == 20) {
-            itemModels.add(new RvItemModelCategoryLoading( listener));
+            itemModels.add(new RvItemModelCategoryLoading(listener));
         }
 
         notifyItemRangeChanged(lastIndex, itemModels.size());
@@ -130,7 +148,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 
     public void addNextPage(CategoryResponseModel.CategoryDataResponseModel response) {
 
-        int lastIndex;
+        int lastIndex = 0;
 
         if (itemModels.isEmpty()) {
             lastIndex = 0;
@@ -139,23 +157,21 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
             itemModels.remove(lastIndex);
         }
 
-        for (News news: response.news) {
-            itemModels.add(new RvItemModelCategorySmall(news, isSize5));
+        for (News news : response.news) {
+            itemModels.add(new RvItemModelCategorySmall(news, isSize5, listener));
         }
 
-//        if (!response.data.pagination.has_more_pages) {
-//            itemModels.add(new RvItemModelCategoryLoading( listener));
+//        if (response.data.pagination.has_more_pages) {
+//            itemModels.add(new RvItemModelCategoryLoading(listener));
 //        }
 
         if (response.news.size() == 20) {
-            itemModels.add(new RvItemModelCategoryLoading( listener));
+            itemModels.add(new RvItemModelCategoryLoading(listener));
         }
 
-//        notifyItemRangeChanged(lastIndex, itemModels.size());
-//        notifyItemRangeInserted(lastIndex, itemModels.size());
-
-        //ovo moram da ostavim zbog itema iznad dodatih sto sam ti pokazao da im se slike zamrznu
-        notifyDataSetChanged();
+        notifyItemRangeChanged(lastIndex, itemModels.size());
+//        notifyItemRangeInserted(lastIndex, newsList.size());
+//        notifyDataSetChanged();
     }
 
     public void addRefresher() {
@@ -168,6 +184,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         itemModels.add(new RvItemModelCategoryRefresh(listener));
 
         notifyItemChanged(itemModels.size() - 1);
+
 
     }
 

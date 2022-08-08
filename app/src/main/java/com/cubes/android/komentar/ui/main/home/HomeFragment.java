@@ -1,6 +1,9 @@
 package com.cubes.android.komentar.ui.main.home;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -8,16 +11,12 @@ import androidx.core.view.GravityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
 import com.cubes.android.komentar.data.DataRepository;
 import com.cubes.android.komentar.data.model.Category;
 import com.cubes.android.komentar.databinding.FragmentHomeBinding;
-import com.cubes.android.komentar.ui.main.listeners.OnCategoryClickListener;
 import com.cubes.android.komentar.ui.category.NewsCategoriesViewPagerAdapter;
 import com.cubes.android.komentar.ui.main.drawer_menu.DrawerMenuAdapter;
+import com.cubes.android.komentar.ui.main.listeners.OnCategoryClickListener;
 import com.google.android.material.tabs.TabLayoutMediator;
 
 import java.util.ArrayList;

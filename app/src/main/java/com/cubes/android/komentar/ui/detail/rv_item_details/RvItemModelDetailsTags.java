@@ -12,9 +12,11 @@ import java.util.ArrayList;
 public class RvItemModelDetailsTags implements ItemModelDetails {
 
     private ArrayList<NewsTag> tags;
+    private NewsDetailsTagsAdapter.TagListener tagListener;
 
-    public RvItemModelDetailsTags(ArrayList<NewsTag> tags) {
+    public RvItemModelDetailsTags(NewsDetailsTagsAdapter.TagListener tagListener, ArrayList<NewsTag> tags) {
         this.tags = tags;
+        this.tagListener = tagListener;
     }
 
     @Override
@@ -37,7 +39,7 @@ public class RvItemModelDetailsTags implements ItemModelDetails {
                 StaggeredGridLayoutManager.HORIZONTAL
         ));
 
-        binding.recyclerView.setAdapter(new NewsDetailsTagsAdapter(tags));
+        binding.recyclerView.setAdapter(new NewsDetailsTagsAdapter(tagListener, tags));
     }
 
     private int getSpanCount() {

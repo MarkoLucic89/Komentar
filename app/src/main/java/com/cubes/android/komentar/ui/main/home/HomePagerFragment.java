@@ -1,5 +1,6 @@
 package com.cubes.android.komentar.ui.main.home;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -14,8 +15,10 @@ import android.view.ViewGroup;
 import com.cubes.android.komentar.data.DataRepository;
 import com.cubes.android.komentar.data.source.remote.networking.response.HomePageResponseModel;
 import com.cubes.android.komentar.databinding.FragmentHomePagerBinding;
+import com.cubes.android.komentar.ui.detail.NewsDetailsActivity;
+import com.cubes.android.komentar.ui.main.latest.NewsListener;
 
-public class HomePagerFragment extends Fragment {
+public class HomePagerFragment extends Fragment implements NewsListener {
 
     private FragmentHomePagerBinding binding;
     private HomeAdapter adapter;
@@ -71,7 +74,7 @@ public class HomePagerFragment extends Fragment {
     }
 
     private void initRecyclerView() {
-        adapter = new HomeAdapter();
+        adapter = new HomeAdapter(this);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.recyclerView.setAdapter(adapter);
     }
@@ -90,5 +93,12 @@ public class HomePagerFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         binding = null;
+    }
+
+    @Override
+    public void onNewsClicked(int newsId) {
+        Intent intent = new Intent(getContext(), NewsDetailsActivity.class);
+        intent.putExtra("news_id", newsId);
+        getActivity().startActivity(intent);
     }
 }

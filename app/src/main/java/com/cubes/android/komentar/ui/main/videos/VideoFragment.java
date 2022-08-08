@@ -1,5 +1,6 @@
 package com.cubes.android.komentar.ui.main.videos;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -14,11 +15,12 @@ import android.view.ViewGroup;
 import com.cubes.android.komentar.data.source.remote.networking.response.NewsResponseModel;
 import com.cubes.android.komentar.databinding.FragmentVideoBinding;
 import com.cubes.android.komentar.data.DataRepository;
-import com.cubes.android.komentar.ui.main.latest.LoadNextPageListener;
+import com.cubes.android.komentar.ui.detail.NewsDetailsActivity;
+import com.cubes.android.komentar.ui.main.latest.NewsListener;
 import com.cubes.android.komentar.ui.tools.MyMethodsClass;
 
 
-public class VideoFragment extends Fragment implements LoadNextPageListener {
+public class VideoFragment extends Fragment implements NewsListener {
 
     private FragmentVideoBinding binding;
     private int nextPage = 1;
@@ -108,6 +110,13 @@ public class VideoFragment extends Fragment implements LoadNextPageListener {
                 }
             }
         });
+    }
+
+    @Override
+    public void onNewsClicked(int newsId) {
+        Intent intent = new Intent(getContext(), NewsDetailsActivity.class);
+        intent.putExtra("news_id", newsId);
+        startActivity(intent);
     }
 
     @Override

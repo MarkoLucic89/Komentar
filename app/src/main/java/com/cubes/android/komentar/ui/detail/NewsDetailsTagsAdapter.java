@@ -9,16 +9,21 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.cubes.android.komentar.R;
 import com.cubes.android.komentar.data.model.NewsTag;
 import com.cubes.android.komentar.databinding.RvItemTagBinding;
-import com.cubes.android.komentar.ui.tools.MyMethodsClass;
 
 import java.util.ArrayList;
 
 public class NewsDetailsTagsAdapter extends RecyclerView.Adapter<NewsDetailsTagsAdapter.NewsDetailsTagsViewHolder> {
 
     private ArrayList<NewsTag> tags;
+    private TagListener listener;
 
-    public NewsDetailsTagsAdapter(ArrayList<NewsTag> tags) {
+    public NewsDetailsTagsAdapter(TagListener listener, ArrayList<NewsTag> tags) {
         this.tags = tags;
+        this.listener = listener;
+    }
+
+    public interface TagListener {
+        void onTagClicked(int tagId, String tagTitle);
     }
 
     @NonNull
@@ -44,12 +49,12 @@ public class NewsDetailsTagsAdapter extends RecyclerView.Adapter<NewsDetailsTags
 
         holder.binding.getRoot().setOnClickListener(view -> {
 
-            MyMethodsClass.goToTagActivity(view, tag.id, tag.title);
-
             holder.binding.textViewTitle.setTextColor(view.getContext().getResources().getColor(R.color.grey_tag));
             holder.binding.rootLayout.setBackgroundColor(view.getContext().getResources().getColor(R.color.blue_dark));
 
             notifyItemChanged(position);
+
+            listener.onTagClicked(tag.id, tag.title);
         });
 
     }

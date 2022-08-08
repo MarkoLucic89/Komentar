@@ -26,6 +26,13 @@ public class MyMethodsClass {
         return created_at.substring(0, (created_at.length() - 3));
     }
 
+    public static void startRefreshAnimation(ImageView imageView) {
+        RotateAnimation rotate = new RotateAnimation(0, 360, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        rotate.setDuration(300);
+        imageView.startAnimation(rotate);
+
+    }
+
     public static void goToNewsDetailActivity(View view, int id) {
         Intent intent = new Intent(view.getContext(), NewsDetailsActivity.class);
         intent.putExtra("news_id", id);
@@ -63,12 +70,5 @@ public class MyMethodsClass {
         intent.putExtra("category_id", categoryId);
         intent.putExtra("subcategory_id", subcategoryID);
         view.getContext().startActivity(intent);
-    }
-
-    public static void startRefreshAnimation(ImageView imageView) {
-        RotateAnimation rotate = new RotateAnimation(0, 360, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-        rotate.setDuration(300);
-        imageView.startAnimation(rotate);
-
     }
 }

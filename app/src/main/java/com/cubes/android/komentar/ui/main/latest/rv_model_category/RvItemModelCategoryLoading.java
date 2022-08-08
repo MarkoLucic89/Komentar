@@ -1,13 +1,13 @@
 package com.cubes.android.komentar.ui.main.latest.rv_model_category;
 
-import com.cubes.android.komentar.ui.main.latest.LoadNextPageListener;
+import com.cubes.android.komentar.ui.main.latest.NewsListener;
 import com.cubes.android.komentar.ui.main.latest.CategoryAdapter;
 
 public class RvItemModelCategoryLoading implements ItemModelCategory {
 
-    private LoadNextPageListener listener;
+    private NewsListener listener;
 
-    public RvItemModelCategoryLoading(LoadNextPageListener listener) {
+    public RvItemModelCategoryLoading(NewsListener listener) {
         this.listener = listener;
     }
 

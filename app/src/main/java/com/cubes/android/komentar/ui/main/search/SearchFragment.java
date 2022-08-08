@@ -1,5 +1,6 @@
 package com.cubes.android.komentar.ui.main.search;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -15,11 +16,12 @@ import android.view.ViewGroup;
 import com.cubes.android.komentar.data.DataRepository;
 import com.cubes.android.komentar.data.source.remote.networking.response.NewsResponseModel;
 import com.cubes.android.komentar.databinding.FragmentSearchBinding;
-import com.cubes.android.komentar.ui.main.latest.LoadNextPageListener;
+import com.cubes.android.komentar.ui.detail.NewsDetailsActivity;
+import com.cubes.android.komentar.ui.main.latest.NewsListener;
 import com.cubes.android.komentar.ui.tools.MyMethodsClass;
 
 
-public class SearchFragment extends Fragment implements LoadNextPageListener {
+public class SearchFragment extends Fragment implements NewsListener {
 
     private static final String TAG = "SearchFragment";
     private FragmentSearchBinding binding;
@@ -55,7 +57,10 @@ public class SearchFragment extends Fragment implements LoadNextPageListener {
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.recyclerView.setAdapter(adapter);
 
-        binding.imageViewSearch.setOnClickListener(view1 -> searchListByTerm());
+        binding.imageViewSearch.setOnClickListener(view1 -> {
+            adapter.clearList();
+            searchListByTerm();
+        });
 
         binding.imageViewRefresh.setOnClickListener(view1 -> {
 
@@ -128,6 +133,13 @@ public class SearchFragment extends Fragment implements LoadNextPageListener {
             }
         });
 
+    }
+
+    @Override
+    public void onNewsClicked(int newsId) {
+        Intent intent = new Intent(getContext(), NewsDetailsActivity.class);
+        intent.putExtra("news_id", newsId);
+        startActivity(intent);
     }
 
     @Override

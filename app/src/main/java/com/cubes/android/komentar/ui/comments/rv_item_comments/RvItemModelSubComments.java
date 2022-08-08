@@ -7,17 +7,18 @@ import com.cubes.android.komentar.R;
 import com.cubes.android.komentar.data.model.NewsComment;
 import com.cubes.android.komentar.databinding.RvItemCommentBinding;
 import com.cubes.android.komentar.ui.comments.CommentsAdapter;
-import com.cubes.android.komentar.ui.comments.CommentsListener;
 
 public class RvItemModelSubComments implements ItemModelComments {
 
     public NewsComment comment;
     public RvItemCommentBinding binding;
-    public CommentsListener listener;
+    public CommentsAdapter adapter;
+    public CommentsAdapter.CommentsListener listener;
 
-    public RvItemModelSubComments(NewsComment comment, CommentsListener listener) {
+    public RvItemModelSubComments(NewsComment comment, CommentsAdapter.CommentsListener listener, CommentsAdapter adapter) {
         this.comment = comment;
         this.listener = listener;
+        this.adapter = adapter;
     }
 
     @Override
@@ -59,7 +60,7 @@ public class RvItemModelSubComments implements ItemModelComments {
         }
 
         binding.buttonReply.setOnClickListener(view -> {
-            listener.goOnPostCommentActivity(view.getContext(), Integer.parseInt(comment.news), Integer.parseInt(comment.id));
+            listener.goOnPostCommentActivity(Integer.parseInt(comment.news), Integer.parseInt(comment.id));
         });
 
         setMargins(binding.layoutRoot, 80, 0, 0, 0);
@@ -76,9 +77,9 @@ public class RvItemModelSubComments implements ItemModelComments {
 
     private void setListeners(RvItemCommentBinding binding) {
 
-        binding.buttonLike.setOnClickListener(view -> listener.onLikeListener(Integer.parseInt(comment.id), true));
+        binding.buttonLike.setOnClickListener(view -> listener.onLikeListener(adapter, Integer.parseInt(comment.id), true));
 
-        binding.buttonDislike.setOnClickListener(view -> listener.onDislikeListener(Integer.parseInt(comment.id), false));
+        binding.buttonDislike.setOnClickListener(view -> listener.onDislikeListener(adapter, Integer.parseInt(comment.id), false));
 
     }
 

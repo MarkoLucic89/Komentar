@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.cubes.android.komentar.data.model.News;
 import com.cubes.android.komentar.databinding.RvItemHomeTabsNewsBinding;
+import com.cubes.android.komentar.ui.main.latest.NewsListener;
 import com.cubes.android.komentar.ui.tools.MyMethodsClass;
 
 import java.util.ArrayList;
@@ -15,9 +16,11 @@ import java.util.ArrayList;
 public class HomeTabsAdapter extends RecyclerView.Adapter<HomeTabsAdapter.HomeTabsViewHolder> {
 
     private ArrayList<News> newsList;
+    private NewsListener listener;
 
-    public HomeTabsAdapter(ArrayList<News> newsList) {
+    public HomeTabsAdapter(ArrayList<News> newsList, NewsListener listener) {
         this.newsList = newsList;
+        this.listener = listener;
     }
 
     @NonNull
@@ -39,7 +42,7 @@ public class HomeTabsAdapter extends RecyclerView.Adapter<HomeTabsAdapter.HomeTa
         holder.binding.textViewTitle.setText(news.title);
         holder.binding.textViewTime.setText(MyMethodsClass.convertTime(news.created_at));
 
-        holder.binding.getRoot().setOnClickListener(view -> MyMethodsClass.goToNewsDetailActivity(view, news.id));
+        holder.binding.getRoot().setOnClickListener(view -> listener.onNewsClicked(news.id));
 
     }
 

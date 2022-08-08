@@ -18,16 +18,19 @@ import java.util.ArrayList;
 public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.CommentsViewHolder> {
     private ArrayList<ItemModelComments> list = new ArrayList<>();
 
-    private boolean isSize5;
+    private final boolean isSize5;
     private CommentsListener listener;
 
+    //CommentsActivity constructor
     public CommentsAdapter(CommentsListener listener) {
         this.listener = listener;
-
+        this.isSize5 = false;
     }
 
-    public CommentsAdapter(ArrayList<NewsComment> comments, boolean isSize5) {
+    //NewsDetailActivity constructor
+    public CommentsAdapter(CommentsListener listener, ArrayList<NewsComment> comments, boolean isSize5) {
         addComments(comments);
+        this.listener = listener;
         this.isSize5 = isSize5;
     }
 
@@ -40,7 +43,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
 
         for (NewsComment comment : comments) {
 
-            list.add(new RvItemModelComments(comment, listener));
+            list.add(new RvItemModelComments(comment, listener, this));
 
             addChildren(comment.children);
 
@@ -53,7 +56,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
 
             for (NewsComment comment : comments) {
 
-                list.add(new RvItemModelSubComments(comment, listener));
+                list.add(new RvItemModelSubComments(comment, listener, this));
 
                 addChildren(comment.children);
 
@@ -91,9 +94,9 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
     }
 
     public void commentLiked(int id, boolean vote) {
-        
+
         for (ItemModelComments itemModel : list) {
-            
+
             if (itemModel.getCommentsId() == id) {
 
                 itemModel.updateLikeUi();
@@ -105,7 +108,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
     }
 
     public void commentDisliked(int id, boolean vote) {
-        
+
         for (ItemModelComments itemModel : list) {
 
             if (itemModel.getCommentsId() == id) {
@@ -129,5 +132,19 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
 
             this.binding = binding;
         }
+    }
+
+    public interface CommentsListener {
+
+        void onLikeListener(CommentsAdapter adapter, int id, boolean vote);
+
+        void onDislikeListener(CommentsAdapter adapter, int id, boolean vote);
+
+        void goOnPostCommentActivity(int newsId, int reply_id);
+
+        default void goToCommentsActivity(int newsId) {
+
+        }
+
     }
 }

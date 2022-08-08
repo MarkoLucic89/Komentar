@@ -10,30 +10,28 @@ import androidx.viewbinding.ViewBinding;
 import com.cubes.android.komentar.data.model.News;
 import com.cubes.android.komentar.data.source.remote.networking.response.NewsResponseModel;
 import com.cubes.android.komentar.data.source.remote.networking.response.TagResponseModel;
+import com.cubes.android.komentar.databinding.RvItemCategorySmallBinding;
 import com.cubes.android.komentar.databinding.RvItemLoadingBinding;
 import com.cubes.android.komentar.databinding.RvItemRefreshBinding;
-import com.cubes.android.komentar.ui.main.latest.LoadNextPageListener;
+import com.cubes.android.komentar.ui.main.latest.NewsListener;
 import com.cubes.android.komentar.ui.main.search.rv_model_search.ItemModelSearch;
 import com.cubes.android.komentar.ui.main.search.rv_model_search.RvItemModelSearch;
-import com.cubes.android.komentar.databinding.RvItemCategorySmallBinding;
 import com.cubes.android.komentar.ui.main.search.rv_model_search.RvItemModelSearchLoading;
 import com.cubes.android.komentar.ui.main.search.rv_model_search.RvItemModelSearchRefresh;
-import com.cubes.android.komentar.ui.main.videos.rv_model_videos.RvItemModelVideoRefresh;
 
 import java.util.ArrayList;
 
 public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchViewHolder> {
 
     private ArrayList<ItemModelSearch> itemModels = new ArrayList<>();
-    private LoadNextPageListener listener;
+    private NewsListener listener;
 
-    public SearchAdapter(LoadNextPageListener listener) {
+    public SearchAdapter(NewsListener listener) {
         this.listener = listener;
     }
 
-    public SearchAdapter(ArrayList<News> newsList) {
-
-        itemModels = new ArrayList<>();
+    public SearchAdapter(NewsListener listener, ArrayList<News> newsList) {
+        this.listener = listener;
 
         for (News news : newsList) {
             itemModels.add(new RvItemModelSearch(news, true));
@@ -123,7 +121,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
         }
 
         for (News news : response.news) {
-            itemModels.add(new RvItemModelSearch(news));
+            itemModels.add(new RvItemModelSearch(news, listener));
         }
 
 //        if (response.data.pagination.has_more_pages) {
@@ -154,7 +152,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
 
 
         for (News news : response.news) {
-            itemModels.add(new RvItemModelSearch(news));
+            itemModels.add(new RvItemModelSearch(news, listener));
         }
 
 //        if (response.data.pagination.has_more_pages) {
@@ -198,6 +196,10 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
             super(binding.getRoot());
             this.binding = binding;
         }
+    }
+
+    public interface NewsClickListener{
+        void onNewsClicked(int newsId);
     }
 }
 

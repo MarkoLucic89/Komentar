@@ -1,25 +1,26 @@
 package com.cubes.android.komentar.ui.main.home;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
 import com.cubes.android.komentar.data.DataRepository;
 import com.cubes.android.komentar.data.source.remote.networking.response.CategoryResponseModel;
 import com.cubes.android.komentar.databinding.FragmentCategoryBinding;
-import com.cubes.android.komentar.ui.main.latest.LoadNextPageListener;
+import com.cubes.android.komentar.ui.detail.NewsDetailsActivity;
 import com.cubes.android.komentar.ui.main.latest.CategoryAdapter;
+import com.cubes.android.komentar.ui.main.latest.NewsListener;
 import com.cubes.android.komentar.ui.tools.MyMethodsClass;
 
 
-public class CategoryNewsFragment extends Fragment implements LoadNextPageListener {
+public class CategoryNewsFragment extends Fragment implements NewsListener {
 
     private static final String ARG_CATEGORY_ID = "category_id";
 
@@ -29,7 +30,7 @@ public class CategoryNewsFragment extends Fragment implements LoadNextPageListen
 
     private CategoryAdapter categoryAdapter;
 
-    private int page = 1;
+    private int nextPage = 1;
 
     public CategoryNewsFragment() {
         // Required empty public constructor
@@ -101,7 +102,7 @@ public class CategoryNewsFragment extends Fragment implements LoadNextPageListen
     @Override
     public void loadNextPage() {
 
-        DataRepository.getInstance().getNewsForCategory(mCategoryId, page, new DataRepository.CategoryNewsResponseListener() {
+        DataRepository.getInstance().getNewsForCategory(mCategoryId, nextPage, new DataRepository.CategoryNewsResponseListener() {
 
             @Override
             public void onResponse(CategoryResponseModel.CategoryDataResponseModel response) {
@@ -110,15 +111,20 @@ public class CategoryNewsFragment extends Fragment implements LoadNextPageListen
                 binding.imageViewRefresh.setVisibility(View.GONE);
                 binding.progressBar.setVisibility(View.GONE);
 
-                page++;
+                if (nextPage == 1) {
+                    categoryAdapter.updateList(response.news);
+                } else {
+                    categoryAdapter.addNextPage(response);
+                }
 
-                categoryAdapter.addNextPage(response);
+                nextPage++;
+
             }
 
             @Override
             public void onFailure(Throwable t) {
 
-                if (page == 1) {
+                if (nextPage == 1) {
                     binding.recyclerView.setVisibility(View.GONE);
                     binding.progressBar.setVisibility(View.GONE);
                     binding.imageViewRefresh.setVisibility(View.VISIBLE);
@@ -128,6 +134,13 @@ public class CategoryNewsFragment extends Fragment implements LoadNextPageListen
 
             }
         });
+    }
+
+    @Override
+    public void onNewsClicked(int newsId) {
+        Intent intent = new Intent(getContext(), NewsDetailsActivity.class);
+        intent.putExtra("news_id", newsId);
+        getContext().startActivity(intent);
     }
 
     @Override

@@ -8,15 +8,16 @@ import com.cubes.android.komentar.data.source.remote.networking.response.NewsDet
 import com.cubes.android.komentar.databinding.RvItemDetailsCommentsBinding;
 import com.cubes.android.komentar.ui.comments.CommentsAdapter;
 import com.cubes.android.komentar.ui.detail.NewsDetailsAdapter;
-import com.cubes.android.komentar.ui.tools.MyMethodsClass;
 
 
 public class RvItemModelDetailsComments implements ItemModelDetails {
 
     private NewsDetailsResponseModel.NewsDetailsDataResponseModel data;
+    private CommentsAdapter.CommentsListener listener;
 
-    public RvItemModelDetailsComments(NewsDetailsResponseModel.NewsDetailsDataResponseModel data) {
+    public RvItemModelDetailsComments(CommentsAdapter.CommentsListener listener, NewsDetailsResponseModel.NewsDetailsDataResponseModel data) {
         this.data = data;
+        this.listener = listener;
     }
 
     @Override
@@ -33,18 +34,16 @@ public class RvItemModelDetailsComments implements ItemModelDetails {
         binding.textViewCommentsCount.setText(String.valueOf(data.comments_count));
 
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext()));
-        binding.recyclerView.setAdapter(new CommentsAdapter(data.comments_top_n, true));
+        binding.recyclerView.setAdapter(new CommentsAdapter(listener, data.comments_top_n, true));
 
         if (data.comments_count > 0) {
             binding.buttonAllComments.setVisibility(View.VISIBLE);
-            binding.buttonAllComments.setOnClickListener(view -> MyMethodsClass.goToCommentsActivity(view, data.id));
+            binding.buttonAllComments.setOnClickListener(view -> listener.goToCommentsActivity(data.id));
         } else {
             binding.buttonAllComments.setVisibility(View.GONE);
         }
 
-        binding.buttonPostComment.setOnClickListener(view ->  {
-            MyMethodsClass.goToPostCommentsActivity(view.getContext(), data.id, 0);
-        });
+        binding.buttonPostComment.setOnClickListener(view -> listener.goOnPostCommentActivity(data.id, 0));
 
     }
 

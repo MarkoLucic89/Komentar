@@ -16,7 +16,6 @@ import com.cubes.android.komentar.data.source.remote.networking.response.NewsDet
 import com.cubes.android.komentar.data.source.remote.networking.response.NewsResponseModel;
 import com.cubes.android.komentar.data.source.remote.networking.response.TagResponseModel;
 
-
 import java.util.ArrayList;
 
 import retrofit2.Call;
@@ -279,8 +278,7 @@ public class DataRepository {
 
                 if (response.body() != null
                         && response.isSuccessful()
-                        && response.body().data != null
-                        && !response.body().data.isEmpty()) {
+                        && response.body().data != null) {
 
                     listener.onResponse(response.body().data);
 

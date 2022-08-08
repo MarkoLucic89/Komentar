@@ -1,19 +1,19 @@
 package com.cubes.android.komentar.ui.comments;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-
-import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.cubes.android.komentar.data.DataRepository;
 import com.cubes.android.komentar.data.model.NewsComment;
 import com.cubes.android.komentar.data.model.NewsCommentVote;
 import com.cubes.android.komentar.data.source.local.database.NewsDatabase;
 import com.cubes.android.komentar.databinding.ActivityCommentsBinding;
-import com.cubes.android.komentar.ui.tools.MyMethodsClass;
+import com.cubes.android.komentar.ui.post_comment.PostCommentActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,6 +60,7 @@ public class CommentsActivity extends AppCompatActivity {
                 if (comments.isEmpty()) {
                     binding.textView.setVisibility(View.VISIBLE);
                 } else {
+                    binding.textView.setVisibility(View.GONE);
                     getCommentVotes(comments);
                 }
             }
@@ -84,10 +85,22 @@ public class CommentsActivity extends AppCompatActivity {
             //onPostExecute
             runOnUiThread(() -> {
 
+                //Reci kakva petlja, ovde ni pesnik ne zna sta je hteo da kaze :D
+
                 for (NewsCommentVote vote : votes) {
+
                     for (NewsComment comment : comments) {
+
                         if (vote.id.equals(comment.id)) {
                             comment.newsCommentVote = vote;
+                        }
+
+                        for (NewsComment subComment : comment.children) {
+
+                            if (vote.id.equals(comment.id)) {
+                                subComment.newsCommentVote = vote;
+                            }
+
                         }
                     }
                 }
@@ -101,20 +114,25 @@ public class CommentsActivity extends AppCompatActivity {
 
     private void initRecyclerView() {
 
-        adapter = new CommentsAdapter(new CommentsListener() {
+        adapter = new CommentsAdapter(new CommentsAdapter.CommentsListener() {
             @Override
-            public void onLikeListener(int id, boolean vote) {
-                likeComment(id, vote);
+            public void onLikeListener(CommentsAdapter adapter, int id, boolean vote) {
+                likeComment(adapter, id, vote);
             }
 
             @Override
-            public void onDislikeListener(int id, boolean vote) {
-                dislikeComment(id, vote);
+            public void onDislikeListener(CommentsAdapter adapter, int id, boolean vote) {
+                dislikeComment(adapter, id, vote);
             }
 
             @Override
-            public void goOnPostCommentActivity(Context context, int news, int reply_id) {
-                MyMethodsClass.goToPostCommentsActivity(context, news, reply_id);
+            public void goOnPostCommentActivity(int newsId, int reply_id) {
+
+                Intent intent = new Intent(CommentsActivity.this, PostCommentActivity.class);
+                intent.putExtra("news", newsId);
+                intent.putExtra("reply_id", reply_id);
+                startActivity(intent);
+
             }
         });
 
@@ -122,7 +140,7 @@ public class CommentsActivity extends AppCompatActivity {
         binding.recyclerViewComments.setAdapter(adapter);
     }
 
-    private void likeComment(int id, boolean vote) {
+    private void likeComment(CommentsAdapter adapter, int id, boolean vote) {
 
         DataRepository.getInstance().likeComment(id, vote, new DataRepository.CommentsVoteListener() {
             @Override
@@ -152,7 +170,7 @@ public class CommentsActivity extends AppCompatActivity {
 
     }
 
-    private void dislikeComment(int id, boolean vote) {
+    private void dislikeComment(CommentsAdapter adapter, int id, boolean vote) {
 
         DataRepository.getInstance().dislikeComment(id, vote, new DataRepository.CommentsVoteListener() {
             @Override

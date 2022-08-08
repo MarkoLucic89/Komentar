@@ -1,5 +1,6 @@
 package com.cubes.android.komentar.ui.detail;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -8,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewbinding.ViewBinding;
 
 import com.cubes.android.komentar.data.source.remote.networking.response.NewsDetailsResponseModel;
+import com.cubes.android.komentar.ui.comments.CommentsAdapter;
 import com.cubes.android.komentar.ui.detail.rv_item_details.ItemModelDetails;
 import com.cubes.android.komentar.ui.detail.rv_item_details.RvItemModelDetailsComments;
 import com.cubes.android.komentar.ui.detail.rv_item_details.RvItemModelDetailsHeader;
@@ -19,14 +21,21 @@ import com.cubes.android.komentar.databinding.RvItemDetailsHeaderBinding;
 import com.cubes.android.komentar.databinding.RvItemDetailsRelatedNewsBinding;
 import com.cubes.android.komentar.databinding.RvItemDetailsTagsBinding;
 import com.cubes.android.komentar.databinding.RvItemDetailsWebViewBinding;
+import com.cubes.android.komentar.ui.main.latest.NewsListener;
 
 import java.util.ArrayList;
 
 public class NewsDetailsAdapter extends RecyclerView.Adapter<NewsDetailsAdapter.NewsDetailsViewHolder> {
 
     private ArrayList<ItemModelDetails> list = new ArrayList<>();
+    private CommentsAdapter.CommentsListener commentsListener;
+    private NewsDetailsTagsAdapter.TagListener tagListener;
+    private NewsListener newsListener;
 
-    public NewsDetailsAdapter() {
+    public NewsDetailsAdapter(Context context) {
+        this.commentsListener = (CommentsAdapter.CommentsListener) context;
+        this.tagListener = (NewsDetailsTagsAdapter.TagListener) context;
+        this.newsListener = (NewsListener) context;
     }
 
     public void updateList(NewsDetailsResponseModel.NewsDetailsDataResponseModel newsDetails) {
@@ -38,13 +47,13 @@ public class NewsDetailsAdapter extends RecyclerView.Adapter<NewsDetailsAdapter.
         list.add(new RvItemModelDetailsWebView(newsDetails.url));
 
         //TAGS
-        list.add(new RvItemModelDetailsTags(newsDetails.tags));
+        list.add(new RvItemModelDetailsTags(tagListener, newsDetails.tags));
 
         //COMMENTS
-        list.add(new RvItemModelDetailsComments(newsDetails));
+        list.add(new RvItemModelDetailsComments(commentsListener, newsDetails));
 
         //RELATED NEWS
-        list.add(new RvItemModelDetailsRelatedNews(newsDetails.related_news));
+        list.add(new RvItemModelDetailsRelatedNews(newsListener, newsDetails.related_news));
 
         notifyDataSetChanged();
     }

@@ -5,15 +5,18 @@ import android.graphics.Color;
 import com.cubes.android.komentar.data.model.News;
 import com.cubes.android.komentar.databinding.RvItemCategorySmallBinding;
 import com.cubes.android.komentar.ui.main.home.HomeAdapter;
+import com.cubes.android.komentar.ui.main.latest.NewsListener;
 import com.cubes.android.komentar.ui.tools.MyMethodsClass;
 import com.squareup.picasso.Picasso;
 
 public class RvItemModelHomeSmallNews implements ItemModelHome {
 
     private News news;
+    private NewsListener listener;
 
-    public RvItemModelHomeSmallNews(News news) {
+    public RvItemModelHomeSmallNews(News news, NewsListener listener) {
         this.news = news;
+        this.listener = listener;
     }
 
     @Override
@@ -32,7 +35,7 @@ public class RvItemModelHomeSmallNews implements ItemModelHome {
         binding.textViewCategory.setTextColor(Color.parseColor(news.category.color));
         binding.textViewTime.setText(getTime(news.created_at));
 
-        holder.binding.getRoot().setOnClickListener(view -> MyMethodsClass.goToNewsDetailActivity(view, news.id));
+        holder.binding.getRoot().setOnClickListener(view -> listener.onNewsClicked(news.id));
 
     }
 

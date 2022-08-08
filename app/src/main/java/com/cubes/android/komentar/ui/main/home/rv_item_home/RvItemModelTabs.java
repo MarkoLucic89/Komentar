@@ -10,6 +10,7 @@ import com.cubes.android.komentar.data.source.remote.networking.response.HomePag
 import com.cubes.android.komentar.databinding.RvItemHomeTabsBinding;
 import com.cubes.android.komentar.ui.main.home.HomeAdapter;
 import com.cubes.android.komentar.ui.main.home.HomeTabsAdapter;
+import com.cubes.android.komentar.ui.main.latest.NewsListener;
 
 import java.util.ArrayList;
 
@@ -23,14 +24,17 @@ public class RvItemModelTabs implements ItemModelHome {
     public int tabPosition = 0;
     public HomeAdapter homeAdapter;
     public HomeTabsAdapter homeTabsAdapter;
+    public NewsListener listener;
 
-    public RvItemModelTabs(HomePageResponseModel.HomePageDataResponseModel data, HomeAdapter adapter, int modelIndex) {
+    public RvItemModelTabs(HomePageResponseModel.HomePageDataResponseModel data, HomeAdapter adapter, int modelIndex, NewsListener listener) {
         this.latest = data.latest;
         this.mostRead = data.most_read;
         this.mostComment = data.most_comment;
 
         this.homeAdapter = adapter;
         this.modelIndex = modelIndex;
+
+        this.listener = listener;
     }
 
     @Override
@@ -74,7 +78,7 @@ public class RvItemModelTabs implements ItemModelHome {
 
     private void initRecyclerView(RvItemHomeTabsBinding binding) {
 
-        homeTabsAdapter = new HomeTabsAdapter(this.latest);
+        homeTabsAdapter = new HomeTabsAdapter(this.latest, listener);
 
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(binding.recyclerView.getContext()));
         binding.recyclerView.setAdapter(homeTabsAdapter);

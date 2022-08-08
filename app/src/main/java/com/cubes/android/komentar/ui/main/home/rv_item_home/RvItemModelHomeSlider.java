@@ -13,6 +13,7 @@ import com.cubes.android.komentar.data.model.News;
 import com.cubes.android.komentar.databinding.RvItemHomeSliderBinding;
 import com.cubes.android.komentar.ui.main.home.HomeAdapter;
 import com.cubes.android.komentar.ui.main.home.HomeSliderAdapter;
+import com.cubes.android.komentar.ui.main.latest.NewsListener;
 
 import java.util.ArrayList;
 
@@ -23,18 +24,14 @@ public class RvItemModelHomeSlider implements ItemModelHome{
     public SnapHelper snapHelper;
     private boolean isEditorsChoice;
 
-    public RvItemModelHomeSlider(ArrayList<News> newsList) {
-        this.newsList = newsList;
-        this.snapHelper = new PagerSnapHelper();
-        this.isSnapHelperAttached = false;
-        this.isEditorsChoice = false;
-    }
+    private NewsListener listener;
 
-    public RvItemModelHomeSlider(ArrayList<News> newsList, boolean showCategory) {
+    public RvItemModelHomeSlider(ArrayList<News> newsList, boolean showCategory, NewsListener listener) {
         this.newsList = newsList;
         this.snapHelper = new PagerSnapHelper();
         this.isSnapHelperAttached = false;
         this.isEditorsChoice = showCategory;
+        this.listener = listener;
     }
 
     @Override
@@ -65,7 +62,7 @@ public class RvItemModelHomeSlider implements ItemModelHome{
 
         snapHelper.attachToRecyclerView(binding.viewPager);
 
-        binding.viewPager.setAdapter(new HomeSliderAdapter(newsList, isEditorsChoice));
+        binding.viewPager.setAdapter(new HomeSliderAdapter(newsList, isEditorsChoice, listener));
 
         binding.progressBar.attachToRecyclerView(binding.viewPager, snapHelper);
 

@@ -1,13 +1,13 @@
 package com.cubes.android.komentar.ui.main.videos.rv_model_videos;
 
-import com.cubes.android.komentar.ui.main.latest.LoadNextPageListener;
+import com.cubes.android.komentar.ui.main.latest.NewsListener;
 import com.cubes.android.komentar.ui.main.videos.VideosAdapter;
 
 public class RvItemModelVideoRefresh implements ItemModelVideo {
 
-    private LoadNextPageListener listener;
+    private NewsListener listener;
 
-    public RvItemModelVideoRefresh(LoadNextPageListener listener) {
+    public RvItemModelVideoRefresh(NewsListener listener) {
         this.listener = listener;
     }
 

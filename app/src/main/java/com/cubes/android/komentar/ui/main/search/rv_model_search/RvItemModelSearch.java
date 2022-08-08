@@ -5,6 +5,7 @@ import android.graphics.Color;
 
 import com.cubes.android.komentar.data.model.News;
 import com.cubes.android.komentar.databinding.RvItemCategorySmallBinding;
+import com.cubes.android.komentar.ui.main.latest.NewsListener;
 import com.cubes.android.komentar.ui.main.search.SearchAdapter;
 import com.cubes.android.komentar.ui.tools.MyMethodsClass;
 import com.squareup.picasso.Picasso;
@@ -14,9 +15,11 @@ public class RvItemModelSearch implements ItemModelSearch {
 
     private News news;
     private boolean isCategoryColored;
+    private NewsListener listener;
 
-    public RvItemModelSearch(News news) {
+    public RvItemModelSearch(News news, NewsListener listener) {
         this.news = news;
+        this.listener = listener;
     }
 
     public RvItemModelSearch(News news, boolean isCategoryColored) {
@@ -44,7 +47,7 @@ public class RvItemModelSearch implements ItemModelSearch {
         binding.textViewCategory.setText(news.category.name);
         binding.textViewTime.setText(MyMethodsClass.convertTime(news.created_at));
 
-        binding.getRoot().setOnClickListener(view -> MyMethodsClass.goToNewsDetailActivity(view, news.id));
+        binding.getRoot().setOnClickListener(view -> listener.onNewsClicked(news.id));
 
     }
 

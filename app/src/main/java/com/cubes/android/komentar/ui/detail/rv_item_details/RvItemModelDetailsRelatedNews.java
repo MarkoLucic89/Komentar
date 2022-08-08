@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.cubes.android.komentar.data.model.News;
 import com.cubes.android.komentar.databinding.RvItemDetailsRelatedNewsBinding;
 import com.cubes.android.komentar.ui.detail.NewsDetailsAdapter;
+import com.cubes.android.komentar.ui.main.latest.NewsListener;
 import com.cubes.android.komentar.ui.main.search.SearchAdapter;
 
 import java.util.ArrayList;
@@ -13,9 +14,11 @@ import java.util.ArrayList;
 public class RvItemModelDetailsRelatedNews implements ItemModelDetails {
 
     private ArrayList<News> list;
+    private NewsListener listener;
 
-    public RvItemModelDetailsRelatedNews(ArrayList<News> list) {
+    public RvItemModelDetailsRelatedNews(NewsListener listener, ArrayList<News> list) {
         this.list = list;
+        this.listener = listener;
     }
 
     @Override
@@ -30,7 +33,7 @@ public class RvItemModelDetailsRelatedNews implements ItemModelDetails {
 
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(holder.binding.getRoot().getContext()));
 
-        SearchAdapter adapter = new SearchAdapter(list);
+        SearchAdapter adapter = new SearchAdapter(listener, list);
 
         binding.recyclerView.setAdapter(adapter);
 

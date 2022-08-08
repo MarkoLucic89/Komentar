@@ -1,22 +1,23 @@
 package com.cubes.android.komentar.ui.main.latest;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
+import com.cubes.android.komentar.data.DataRepository;
 import com.cubes.android.komentar.data.source.remote.networking.response.NewsResponseModel;
 import com.cubes.android.komentar.databinding.FragmentLatestNewsBinding;
-import com.cubes.android.komentar.data.DataRepository;
+import com.cubes.android.komentar.ui.detail.NewsDetailsActivity;
 import com.cubes.android.komentar.ui.tools.MyMethodsClass;
 
-public class LatestNewsFragment extends Fragment implements LoadNextPageListener {
+public class LatestNewsFragment extends Fragment implements NewsListener {
 
     private FragmentLatestNewsBinding binding;
 
@@ -48,58 +49,20 @@ public class LatestNewsFragment extends Fragment implements LoadNextPageListener
 
         initRecyclerView();
 
-//        sendLatestRequest();
-
         binding.imageViewRefresh.setVisibility(View.GONE);
         binding.progressBar.setVisibility(View.VISIBLE);
+
         loadNextPage();
 
         binding.imageViewRefresh.setOnClickListener(view1 -> {
 
             MyMethodsClass.startRefreshAnimation(binding.imageViewRefresh);
 
-//            if (page == 1) {
-//                sendLatestRequest();
-//            } else {
-//                loadNextPage();
-//            }
-
             loadNextPage();
 
         });
 
     }
-
-//    private void sendLatestRequest() {
-//
-//        binding.imageViewRefresh.setVisibility(View.GONE);
-//        binding.progressBar.setVisibility(View.VISIBLE);
-//
-//        DataRepository.getInstance().getLatest(page, new DataRepository.LatestResponseListener() {
-//
-//            @Override
-//            public void onResponse(NewsResponseModel.NewsDataResponseModel response) {
-//
-//                binding.recyclerView.setVisibility(View.VISIBLE);
-//                binding.imageViewRefresh.setVisibility(View.GONE);
-//
-//                page++;
-//
-//                binding.progressBar.setVisibility(View.GONE);
-//
-//                categoryAdapter.addNextPage(response);
-//            }
-//
-//            @Override
-//            public void onFailure(Throwable t) {
-//
-//                binding.recyclerView.setVisibility(View.GONE);
-//                binding.imageViewRefresh.setVisibility(View.VISIBLE);
-//                binding.progressBar.setVisibility(View.GONE);
-//            }
-//        });
-//
-//    }
 
     @Override
     public void onResume() {
@@ -132,9 +95,14 @@ public class LatestNewsFragment extends Fragment implements LoadNextPageListener
                 binding.imageViewRefresh.setVisibility(View.GONE);
                 binding.progressBar.setVisibility(View.GONE);
 
+                if (nextPage == 1) {
+                    categoryAdapter.updateList(response.news);
+                } else {
+                    categoryAdapter.addNextPage(response);
+                }
+
                 nextPage++;
 
-                categoryAdapter.addNextPage(response);
             }
 
             @Override
@@ -151,6 +119,13 @@ public class LatestNewsFragment extends Fragment implements LoadNextPageListener
             }
         });
 
+    }
+
+    @Override
+    public void onNewsClicked(int newsId) {
+        Intent intent = new Intent(getContext(), NewsDetailsActivity.class);
+        intent.putExtra("news_id", newsId);
+        startActivity(intent);
     }
 
     @Override

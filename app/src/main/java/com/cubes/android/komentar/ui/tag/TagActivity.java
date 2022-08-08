@@ -3,17 +3,19 @@ package com.cubes.android.komentar.ui.tag;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
 import com.cubes.android.komentar.data.DataRepository;
 import com.cubes.android.komentar.data.source.remote.networking.response.TagResponseModel;
 import com.cubes.android.komentar.databinding.ActivityTagBinding;
-import com.cubes.android.komentar.ui.main.latest.LoadNextPageListener;
+import com.cubes.android.komentar.ui.detail.NewsDetailsActivity;
+import com.cubes.android.komentar.ui.main.latest.NewsListener;
 import com.cubes.android.komentar.ui.main.search.SearchAdapter;
 
 
-public class TagActivity extends AppCompatActivity implements LoadNextPageListener {
+public class TagActivity extends AppCompatActivity implements NewsListener {
 
     private ActivityTagBinding binding;
     private int tagId;
@@ -79,6 +81,13 @@ public class TagActivity extends AppCompatActivity implements LoadNextPageListen
             }
         });
 
+    }
+
+    @Override
+    public void onNewsClicked(int newsId) {
+        Intent intent = new Intent(this, NewsDetailsActivity.class);
+        intent.putExtra("news_id", newsId);
+        startActivity(intent);
     }
 
     @Override

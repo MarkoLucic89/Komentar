@@ -1,19 +1,32 @@
 package com.cubes.android.komentar.ui.detail;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.cubes.android.komentar.data.DataRepository;
+import com.cubes.android.komentar.data.model.NewsCommentVote;
+import com.cubes.android.komentar.data.source.local.database.NewsDatabase;
 import com.cubes.android.komentar.data.source.remote.networking.response.NewsDetailsResponseModel;
 import com.cubes.android.komentar.databinding.ActivityNewsDetailsBinding;
-import com.cubes.android.komentar.ui.tools.MyMethodsClass;
+import com.cubes.android.komentar.ui.comments.CommentsActivity;
+import com.cubes.android.komentar.ui.comments.CommentsAdapter;
+import com.cubes.android.komentar.ui.main.latest.NewsListener;
+import com.cubes.android.komentar.ui.post_comment.PostCommentActivity;
+import com.cubes.android.komentar.ui.tag.TagActivity;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 
-public class NewsDetailsActivity extends AppCompatActivity {
+public class NewsDetailsActivity extends AppCompatActivity implements
+        CommentsAdapter.CommentsListener,
+        NewsDetailsTagsAdapter.TagListener,
+        NewsListener {
 
     private ActivityNewsDetailsBinding binding;
     private int newsId;
@@ -37,8 +50,11 @@ public class NewsDetailsActivity extends AppCompatActivity {
 
     private void setListeners() {
         binding.imageViewRefresh.setOnClickListener(view -> sendNewsDetailsRequest());
-        binding.imageViewMessages.setOnClickListener(view -> MyMethodsClass.goToCommentsActivity(view, newsId));
+
+        binding.imageViewMessages.setOnClickListener(view -> goToCommentsActivity(newsId));
+
         binding.imageViewBack.setOnClickListener(view -> finish());
+
         binding.imageViewShare.setOnClickListener(view -> {
 
             Intent sendIntent = new Intent();
@@ -81,7 +97,7 @@ public class NewsDetailsActivity extends AppCompatActivity {
     }
 
     private void initRecyclerView() {
-        adapter = new NewsDetailsAdapter();
+        adapter = new NewsDetailsAdapter(this);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(NewsDetailsActivity.this));
         binding.recyclerView.setAdapter(adapter);
     }
@@ -102,4 +118,94 @@ public class NewsDetailsActivity extends AppCompatActivity {
         binding = null;
     }
 
+    @Override
+    public void onLikeListener(CommentsAdapter adapter, int id, boolean vote) {
+        DataRepository.getInstance().likeComment(id, vote, new DataRepository.CommentsVoteListener() {
+            @Override
+            public void onResponse(NewsCommentVote response) {
+
+                ExecutorService service = Executors.newSingleThreadExecutor();
+                service.execute(() -> {
+
+                    //doInBackgroundThread
+                    NewsCommentVote newsCommentVote = new NewsCommentVote(String.valueOf(id), vote);
+                    NewsDatabase.getInstance(binding.getRoot().getContext()).voteDao().insert(newsCommentVote);
+
+                    //onPostExecute
+                    runOnUiThread(() -> adapter.commentLiked(id, vote));
+
+                });
+
+                service.shutdown();
+
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                Toast.makeText(NewsDetailsActivity.this, "Komentar nije izglasan, došlo je do greške.", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    @Override
+    public void onDislikeListener(CommentsAdapter adapter, int id, boolean vote) {
+
+        DataRepository.getInstance().dislikeComment(id, vote, new DataRepository.CommentsVoteListener() {
+            @Override
+            public void onResponse(NewsCommentVote response) {
+
+                ExecutorService service = Executors.newSingleThreadExecutor();
+                service.execute(() -> {
+
+                    //doInBackgroundThread
+                    NewsCommentVote newsCommentVote = new NewsCommentVote(String.valueOf(id), false);
+                    NewsDatabase.getInstance(binding.getRoot().getContext()).voteDao().insert(newsCommentVote);
+
+                    //onPostExecute
+                    runOnUiThread(() -> adapter.commentDisliked(id, vote));
+
+                });
+
+                service.shutdown();
+            }
+
+
+            @Override
+            public void onFailure(Throwable t) {
+                Toast.makeText(NewsDetailsActivity.this, "Komentar nije izglasan, došlo je do greške.", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+    }
+
+    @Override
+    public void goOnPostCommentActivity(int newsId, int reply_id) {
+        Intent intent = new Intent(this, PostCommentActivity.class);
+        intent.putExtra("news", newsId);
+        intent.putExtra("reply_id", reply_id);
+        startActivity(intent);
+
+    }
+
+    @Override
+    public void goToCommentsActivity(int newsId) {
+        Intent intent = new Intent(this, CommentsActivity.class);
+        intent.putExtra("news_id", newsId);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onTagClicked(int tagId, String tagTitle) {
+        Intent intent = new Intent(this, TagActivity.class);
+        intent.putExtra("tag_id", tagId);
+        intent.putExtra("tag_title", tagTitle);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onNewsClicked(int newsId) {
+        Intent intent = new Intent(this, NewsDetailsActivity.class);
+        intent.putExtra("news_id", newsId);
+        startActivity(intent);
+    }
 }
