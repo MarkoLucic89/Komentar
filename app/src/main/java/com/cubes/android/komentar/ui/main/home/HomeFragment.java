@@ -1,5 +1,6 @@
 package com.cubes.android.komentar.ui.main.home;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +15,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.cubes.android.komentar.data.DataRepository;
 import com.cubes.android.komentar.data.model.Category;
 import com.cubes.android.komentar.databinding.FragmentHomeBinding;
+import com.cubes.android.komentar.ui.category.CategoryActivity;
 import com.cubes.android.komentar.ui.category.NewsCategoriesViewPagerAdapter;
+import com.cubes.android.komentar.ui.main.drawer_menu.DrawerAdapter;
 import com.cubes.android.komentar.ui.main.drawer_menu.DrawerMenuAdapter;
 import com.cubes.android.komentar.ui.main.listeners.OnCategoryClickListener;
 import com.google.android.material.tabs.TabLayoutMediator;
@@ -28,7 +31,10 @@ public class HomeFragment extends Fragment implements OnCategoryClickListener {
 
     private NewsCategoriesViewPagerAdapter pagerAdapter;
 
+    //Rezervni adapter (svaki RvCategoryItem ima recuclerView sa podkategorijama)(ne koristim ga trenutno)
     private DrawerMenuAdapter drawerMenuAdapter;
+
+    private DrawerAdapter adapter;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -67,6 +73,17 @@ public class HomeFragment extends Fragment implements OnCategoryClickListener {
 
     }
 
+    private void initDrawerRecyclerView() {
+
+        adapter = new DrawerAdapter(this.getActivity(), this);
+
+//        drawerMenuAdapter = new DrawerMenuAdapter(this.getActivity(), this);
+
+        binding.recyclerViewDrawer.setLayoutManager(new LinearLayoutManager(getActivity()));
+        binding.recyclerViewDrawer.setAdapter(adapter);
+
+    }
+
     private void getAllCategories() {
 
         DataRepository.getInstance().getAllCategories(new DataRepository.CategoriesResponseListener() {
@@ -79,7 +96,8 @@ public class HomeFragment extends Fragment implements OnCategoryClickListener {
                 binding.viewPager.setVisibility(View.VISIBLE);
                 binding.progressBar.setVisibility(View.GONE);
 
-                drawerMenuAdapter.updateList(getActivity(), categories);
+//                drawerMenuAdapter.updateList(getActivity(), categories);
+                adapter.updateList(categories);
                 initViewPager(categories);
             }
 
@@ -92,16 +110,6 @@ public class HomeFragment extends Fragment implements OnCategoryClickListener {
         });
     }
 
-
-    private void initDrawerRecyclerView() {
-
-//        DrawerAdapter adapter = new DrawerAdapter(this.getActivity(), this, categories);
-
-        drawerMenuAdapter = new DrawerMenuAdapter(this.getActivity(), this);
-        binding.recyclerViewDrawer.setLayoutManager(new LinearLayoutManager(getActivity()));
-        binding.recyclerViewDrawer.setAdapter(drawerMenuAdapter);
-
-    }
 
     private void initViewPager(ArrayList<Category> categories) {
 
@@ -131,6 +139,14 @@ public class HomeFragment extends Fragment implements OnCategoryClickListener {
     public void onCategoryClicked(int categoryIndex) {
         binding.viewPager.setCurrentItem(categoryIndex);
         binding.getRoot().closeDrawer(GravityCompat.END);
+    }
+
+    @Override
+    public void onSubCategoryClicked(int categoryId, int subcategoryId) {
+        Intent intent = new Intent(getContext(), CategoryActivity.class);
+        intent.putExtra("category_id", categoryId);
+        intent.putExtra("subcategory_id", subcategoryId);
+        getContext().startActivity(intent);
     }
 
     @Override

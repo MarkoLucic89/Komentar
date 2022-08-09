@@ -10,6 +10,7 @@ import androidx.viewbinding.ViewBinding;
 
 import com.cubes.android.komentar.data.source.remote.networking.response.NewsDetailsResponseModel;
 import com.cubes.android.komentar.ui.comments.CommentsAdapter;
+import com.cubes.android.komentar.ui.detail.news_detail_activity_with_viewpager.DetailsFragment;
 import com.cubes.android.komentar.ui.detail.rv_item_details.ItemModelDetails;
 import com.cubes.android.komentar.ui.detail.rv_item_details.RvItemModelDetailsComments;
 import com.cubes.android.komentar.ui.detail.rv_item_details.RvItemModelDetailsHeader;
@@ -36,6 +37,12 @@ public class NewsDetailsAdapter extends RecyclerView.Adapter<NewsDetailsAdapter.
         this.commentsListener = (CommentsAdapter.CommentsListener) context;
         this.tagListener = (NewsDetailsTagsAdapter.TagListener) context;
         this.newsListener = (NewsListener) context;
+    }
+
+    public NewsDetailsAdapter(CommentsAdapter.CommentsListener commentsListener, NewsDetailsTagsAdapter.TagListener tagListener, NewsListener newsListener) {
+        this.commentsListener = commentsListener;
+        this.tagListener = tagListener;
+        this.newsListener = newsListener;
     }
 
     public void updateList(NewsDetailsResponseModel.NewsDetailsDataResponseModel newsDetails) {

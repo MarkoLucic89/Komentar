@@ -19,12 +19,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         binding = ActivitySplashScreenBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        binding.imageViewRefresh.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                goToNewsListActivity();
-            }
-        }, 1000);
+        binding.getRoot().postDelayed(() -> goToNewsListActivity(), 2000);
     }
 
 

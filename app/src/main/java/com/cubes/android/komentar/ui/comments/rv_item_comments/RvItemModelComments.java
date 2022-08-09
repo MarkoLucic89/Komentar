@@ -1,5 +1,7 @@
 package com.cubes.android.komentar.ui.comments.rv_item_comments;
 
+import android.widget.Toast;
+
 import com.cubes.android.komentar.R;
 import com.cubes.android.komentar.data.model.NewsComment;
 import com.cubes.android.komentar.databinding.RvItemCommentBinding;
@@ -42,16 +44,31 @@ public class RvItemModelComments implements ItemModelComments {
 
         if (comment.newsCommentVote == null) {
 
-            binding.buttonLike.setOnClickListener(view ->
-                    listener.onLikeListener(adapter, Integer.parseInt(comment.id), true));
+            binding.buttonLike.setOnClickListener(view -> {
+                listener.onLikeListener(adapter, Integer.parseInt(comment.id), true);
+                binding.buttonLike.setEnabled(false);
+                binding.buttonDislike.setEnabled(false);
+            });
 
-            binding.buttonDislike.setOnClickListener(view ->
-                    listener.onDislikeListener(adapter, Integer.parseInt(comment.id), false));
+            binding.buttonDislike.setOnClickListener(view -> {
+                listener.onDislikeListener(adapter, Integer.parseInt(comment.id), false);
+                binding.buttonLike.setEnabled(false);
+                binding.buttonDislike.setEnabled(false);
+            });
 
         } else {
 
-            binding.buttonLike.setEnabled(false);
-            binding.buttonDislike.setEnabled(false);
+            binding.buttonLike.setOnClickListener(view -> {
+                Toast.makeText(view.getContext(), "Već ste glasali za ovaj komentar.", Toast.LENGTH_SHORT).show();
+                binding.buttonLike.setEnabled(false);
+                binding.buttonDislike.setEnabled(false);
+            });
+
+            binding.buttonDislike.setOnClickListener(view -> {
+                Toast.makeText(view.getContext(), "Već ste glasali za ovaj komentar.", Toast.LENGTH_SHORT).show();
+                binding.buttonLike.setEnabled(false);
+                binding.buttonDislike.setEnabled(false);
+            });
 
             if (comment.newsCommentVote.vote) {
                 binding.buttonLike.setBackgroundResource(R.drawable.background_button_like);

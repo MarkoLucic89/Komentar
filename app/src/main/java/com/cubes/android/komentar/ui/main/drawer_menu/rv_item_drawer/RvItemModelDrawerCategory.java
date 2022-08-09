@@ -33,7 +33,7 @@ public class RvItemModelDrawerCategory implements ItemModelDrawer {
         subcategoryItems = new ArrayList<>();
 
         for (Category subcategory : category.subcategories) {
-            subcategoryItems.add(new RvItemModelDrawerSubcategory(subcategory, category));
+            subcategoryItems.add(new RvItemModelDrawerSubcategory(subcategory, category, listener));
         }
     }
 

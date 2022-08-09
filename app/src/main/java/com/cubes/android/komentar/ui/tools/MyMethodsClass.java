@@ -71,4 +71,6 @@ public class MyMethodsClass {
         intent.putExtra("subcategory_id", subcategoryID);
         view.getContext().startActivity(intent);
     }
+
+
 }

@@ -97,8 +97,16 @@ public class CommentsActivity extends AppCompatActivity {
 
                         for (NewsComment subComment : comment.children) {
 
-                            if (vote.id.equals(comment.id)) {
+                            if (vote.id.equals(subComment.id)) {
                                 subComment.newsCommentVote = vote;
+                            }
+
+                            for (NewsComment subChild : subComment.children) {
+
+                                if (vote.id.equals(subComment.id)) {
+                                    subChild.newsCommentVote = vote;
+                                }
+
                             }
 
                         }

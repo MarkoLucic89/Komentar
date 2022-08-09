@@ -22,9 +22,10 @@ public class RvItemModelSearch implements ItemModelSearch {
         this.listener = listener;
     }
 
-    public RvItemModelSearch(News news, boolean isCategoryColored) {
+    public RvItemModelSearch(News news, boolean isCategoryColored, NewsListener listener) {
         this.news = news;
         this.isCategoryColored = isCategoryColored;
+        this.listener = listener;
     }
 
     @Override

@@ -11,6 +11,7 @@ import com.cubes.android.komentar.data.model.Category;
 import com.cubes.android.komentar.databinding.RvItemDrawerSubcategoryBinding;
 import com.cubes.android.komentar.ui.category.CategoryActivity;
 import com.cubes.android.komentar.ui.main.drawer_menu.DrawerAdapter;
+import com.cubes.android.komentar.ui.main.listeners.OnCategoryClickListener;
 
 public class RvItemModelDrawerSubcategory implements ItemModelDrawer {
 
@@ -18,10 +19,12 @@ public class RvItemModelDrawerSubcategory implements ItemModelDrawer {
     public Category parentCategory;
     public DrawerAdapter adapter;
     private RvItemDrawerSubcategoryBinding binding;
+    private OnCategoryClickListener listener;
 
-    public RvItemModelDrawerSubcategory(Category subcategory, Category parentCategory) {
+    public RvItemModelDrawerSubcategory(Category subcategory, Category parentCategory, OnCategoryClickListener listener) {
         this.subcategory = subcategory;
         this.parentCategory = parentCategory;
+        this.listener = listener;
     }
 
     @Override

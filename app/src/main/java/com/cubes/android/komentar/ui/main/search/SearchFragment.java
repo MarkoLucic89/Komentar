@@ -1,5 +1,6 @@
 package com.cubes.android.komentar.ui.main.search;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -9,9 +10,13 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.TextView;
 
 import com.cubes.android.komentar.data.DataRepository;
 import com.cubes.android.komentar.data.source.remote.networking.response.NewsResponseModel;
@@ -60,6 +65,20 @@ public class SearchFragment extends Fragment implements NewsListener {
         binding.imageViewSearch.setOnClickListener(view1 -> {
             adapter.clearList();
             searchListByTerm();
+            hideKeyboard(getActivity());
+        });
+
+        binding.editTextSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                if (i == EditorInfo.IME_ACTION_SEARCH) {
+                    adapter.clearList();
+                    searchListByTerm();
+                    hideKeyboard(getActivity());
+                    return true;
+                }
+                return false;
+            }
         });
 
         binding.imageViewRefresh.setOnClickListener(view1 -> {
@@ -133,6 +152,15 @@ public class SearchFragment extends Fragment implements NewsListener {
             }
         });
 
+    }
+
+    public void hideKeyboard(Activity activity) {
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        View view = activity.getCurrentFocus();
+        if (view == null) {
+            view = new View(activity);
+        }
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
     @Override

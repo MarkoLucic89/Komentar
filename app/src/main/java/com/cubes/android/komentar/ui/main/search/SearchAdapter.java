@@ -34,7 +34,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
         this.listener = listener;
 
         for (News news : newsList) {
-            itemModels.add(new RvItemModelSearch(news, true));
+            itemModels.add(new RvItemModelSearch(news, true, listener));
         }
     }
 
@@ -49,7 +49,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
         }
 
         for (News news : responseModel.news) {
-            itemModels.add(new RvItemModelSearch(news, true));
+            itemModels.add(new RvItemModelSearch(news, true, listener));
         }
 
 //        if (responseModel.data.pagination.has_more_pages) {

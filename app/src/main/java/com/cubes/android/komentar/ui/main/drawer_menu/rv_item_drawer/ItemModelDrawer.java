@@ -7,4 +7,5 @@ public interface ItemModelDrawer {
     int getType();
 
     void bind(DrawerAdapter.DrawerViewHolder holder);
+
 }

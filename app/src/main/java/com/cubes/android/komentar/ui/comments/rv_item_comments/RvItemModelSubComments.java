@@ -2,6 +2,7 @@ package com.cubes.android.komentar.ui.comments.rv_item_comments;
 
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.cubes.android.komentar.R;
 import com.cubes.android.komentar.data.model.NewsComment;
@@ -45,12 +46,31 @@ public class RvItemModelSubComments implements ItemModelComments {
 
         if (comment.newsCommentVote == null) {
 
-            setListeners(binding);
+            binding.buttonLike.setOnClickListener(view -> {
+                listener.onLikeListener(adapter, Integer.parseInt(comment.id), true);
+                binding.buttonLike.setEnabled(false);
+                binding.buttonDislike.setEnabled(false);
+            });
+
+            binding.buttonDislike.setOnClickListener(view -> {
+                listener.onDislikeListener(adapter, Integer.parseInt(comment.id), false);
+                binding.buttonLike.setEnabled(false);
+                binding.buttonDislike.setEnabled(false);
+            });
 
         } else {
 
-            binding.buttonLike.setEnabled(false);
-            binding.buttonDislike.setEnabled(false);
+            binding.buttonLike.setOnClickListener(view -> {
+                Toast.makeText(view.getContext(), "Već ste glasali za ovaj komentar.", Toast.LENGTH_SHORT).show();
+                binding.buttonLike.setEnabled(false);
+                binding.buttonDislike.setEnabled(false);
+            });
+
+            binding.buttonDislike.setOnClickListener(view -> {
+                Toast.makeText(view.getContext(), "Već ste glasali za ovaj komentar.", Toast.LENGTH_SHORT).show();
+                binding.buttonLike.setEnabled(false);
+                binding.buttonDislike.setEnabled(false);
+            });
 
             if (comment.newsCommentVote.vote) {
                 binding.buttonLike.setBackgroundResource(R.drawable.background_button_like);
@@ -73,14 +93,6 @@ public class RvItemModelSubComments implements ItemModelComments {
             p.setMargins(left, top, right, bottom);
             view.requestLayout();
         }
-    }
-
-    private void setListeners(RvItemCommentBinding binding) {
-
-        binding.buttonLike.setOnClickListener(view -> listener.onLikeListener(adapter, Integer.parseInt(comment.id), true));
-
-        binding.buttonDislike.setOnClickListener(view -> listener.onDislikeListener(adapter, Integer.parseInt(comment.id), false));
-
     }
 
     @Override

@@ -31,11 +31,17 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.DrawerView
 
     private ArrayList<ItemModelDrawer> list;
     private OnCategoryClickListener listener;
+    private Activity activity;
 
-    public DrawerAdapter(Activity activity, OnCategoryClickListener listener, ArrayList<Category> categories) {
+    public DrawerAdapter(Activity activity, OnCategoryClickListener listener) {
         this.list = new ArrayList<>();
         this.listener = listener;
+        this.activity = activity;
 
+
+    }
+
+    public void updateList(ArrayList<Category> categories) {
         list.add(new RvItemModelDrawerHome(listener));
 
         for (Category category : categories) {

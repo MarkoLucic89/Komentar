@@ -80,6 +80,7 @@ public class NewsDetailsActivity extends AppCompatActivity implements
             @Override
             public void onResponse(NewsDetailsResponseModel.NewsDetailsDataResponseModel response) {
                 data = response;
+
                 binding.progressBar.setVisibility(View.GONE);
 
                 adapter.updateList(response);
@@ -120,6 +121,7 @@ public class NewsDetailsActivity extends AppCompatActivity implements
 
     @Override
     public void onLikeListener(CommentsAdapter adapter, int id, boolean vote) {
+
         DataRepository.getInstance().likeComment(id, vote, new DataRepository.CommentsVoteListener() {
             @Override
             public void onResponse(NewsCommentVote response) {
