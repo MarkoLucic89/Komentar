@@ -1,5 +1,6 @@
 package com.cubes.android.komentar.ui.detail.rv_item_details;
 
+import com.cubes.android.komentar.R;
 import com.cubes.android.komentar.data.source.remote.networking.response.NewsDetailsResponseModel;
 import com.cubes.android.komentar.databinding.RvItemDetailsHeaderBinding;
 import com.cubes.android.komentar.ui.detail.NewsDetailsAdapter;
@@ -15,7 +16,7 @@ public class RvItemModelDetailsHeader implements ItemModelDetails {
 
     @Override
     public int getType() {
-        return 0;
+        return R.layout.rv_item_details_header;
     }
 
     @Override

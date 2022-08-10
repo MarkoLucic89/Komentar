@@ -2,6 +2,7 @@ package com.cubes.android.komentar.ui.detail.rv_item_details;
 
 import android.webkit.WebViewClient;
 
+import com.cubes.android.komentar.R;
 import com.cubes.android.komentar.databinding.RvItemDetailsWebViewBinding;
 import com.cubes.android.komentar.ui.detail.NewsDetailsAdapter;
 
@@ -15,7 +16,7 @@ public class RvItemModelDetailsWebView implements ItemModelDetails {
 
     @Override
     public int getType() {
-        return 1;
+        return R.layout.rv_item_details_web_view;
     }
 
     @Override

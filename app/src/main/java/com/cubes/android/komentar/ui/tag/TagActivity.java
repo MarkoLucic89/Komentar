@@ -8,11 +8,15 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.cubes.android.komentar.data.DataRepository;
+import com.cubes.android.komentar.data.model.News;
 import com.cubes.android.komentar.data.source.remote.networking.response.TagResponseModel;
 import com.cubes.android.komentar.databinding.ActivityTagBinding;
 import com.cubes.android.komentar.ui.detail.NewsDetailsActivity;
+import com.cubes.android.komentar.ui.detail.news_detail_activity_with_viewpager.DetailsActivity;
 import com.cubes.android.komentar.ui.main.latest.NewsListener;
 import com.cubes.android.komentar.ui.main.search.SearchAdapter;
+
+import java.util.ArrayList;
 
 
 public class TagActivity extends AppCompatActivity implements NewsListener {
@@ -21,6 +25,7 @@ public class TagActivity extends AppCompatActivity implements NewsListener {
     private int tagId;
     private int nextPage = 1;
     private SearchAdapter adapter;
+    private ArrayList<News> mNewsList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +68,8 @@ public class TagActivity extends AppCompatActivity implements NewsListener {
                 binding.recyclerView.setVisibility(View.VISIBLE);
                 binding.imageViewRefresh.setVisibility(View.GONE);
 
+                mNewsList = response.news;
+
                 adapter.addNextPage(response);
 
                 nextPage++;
@@ -88,6 +95,27 @@ public class TagActivity extends AppCompatActivity implements NewsListener {
         Intent intent = new Intent(this, NewsDetailsActivity.class);
         intent.putExtra("news_id", newsId);
         startActivity(intent);
+    }
+
+    @Override
+    public void onNewsClicked(int newsId, String newsUrl, ArrayList<News> newsList) {
+        NewsListener.super.onNewsClicked(newsId, newsUrl, newsList);
+
+
+        int[] newsIdList = new int[newsList.size()];
+
+        for (int i = 0; i < newsList.size(); i++) {
+            newsIdList[i] = newsList.get(i).id;
+        }
+
+        Intent intent = new Intent(this, DetailsActivity.class);
+        intent.putExtra("news_id", newsId);
+        intent.putExtra("news_url", newsUrl);
+        intent.putExtra("news_id_list", newsIdList);
+        startActivity(intent);
+
+
+
     }
 
     @Override

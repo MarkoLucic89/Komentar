@@ -1,5 +1,6 @@
 package com.cubes.android.komentar.ui.detail.news_detail_activity_with_viewpager;
 
+
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
@@ -17,7 +18,7 @@ public class ViewPagerAdapter extends FragmentStateAdapter {
     @NonNull
     @Override
     public Fragment createFragment(int position) {
-        return DetailsFragment.newInstance(newsIdList[position], newsIdList);
+        return DetailsFragment.newInstance(newsIdList[position]);
     }
 
     @Override

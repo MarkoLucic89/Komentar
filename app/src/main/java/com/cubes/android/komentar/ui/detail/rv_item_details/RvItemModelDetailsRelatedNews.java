@@ -2,6 +2,7 @@ package com.cubes.android.komentar.ui.detail.rv_item_details;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.cubes.android.komentar.R;
 import com.cubes.android.komentar.data.model.News;
 import com.cubes.android.komentar.databinding.RvItemDetailsRelatedNewsBinding;
 import com.cubes.android.komentar.ui.detail.NewsDetailsAdapter;
@@ -23,7 +24,7 @@ public class RvItemModelDetailsRelatedNews implements ItemModelDetails {
 
     @Override
     public int getType() {
-        return 4;
+        return R.layout.rv_item_details_related_news;
     }
 
     @Override

@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewbinding.ViewBinding;
 
+import com.cubes.android.komentar.R;
 import com.cubes.android.komentar.data.source.remote.networking.response.NewsDetailsResponseModel;
 import com.cubes.android.komentar.ui.comments.CommentsAdapter;
 import com.cubes.android.komentar.ui.detail.news_detail_activity_with_viewpager.DetailsFragment;
@@ -74,19 +75,19 @@ public class NewsDetailsAdapter extends RecyclerView.Adapter<NewsDetailsAdapter.
         ViewBinding binding;
 
         switch (viewType) {
-            case 0:
+            case R.layout.rv_item_details_header:
                 binding = RvItemDetailsHeaderBinding.inflate(inflater, parent, false);
                 break;
-            case 1:
+            case R.layout.rv_item_details_web_view:
                 binding = RvItemDetailsWebViewBinding.inflate(inflater, parent, false);
                 break;
-            case 2:
+            case R.layout.rv_item_details_tags:
                 binding = RvItemDetailsTagsBinding.inflate(inflater, parent, false);
                 break;
-            case 3:
+            case R.layout.rv_item_details_comments:
                 binding = RvItemDetailsCommentsBinding.inflate(inflater, parent, false);
                 break;
-            case 4:
+            case R.layout.rv_item_details_related_news:
                 binding = RvItemDetailsRelatedNewsBinding.inflate(inflater, parent, false);
                 break;
             default:

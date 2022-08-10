@@ -1,9 +1,9 @@
 package com.cubes.android.komentar.ui.post_comment;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.cubes.android.komentar.data.DataRepository;
 import com.cubes.android.komentar.data.model.NewsCommentInsert;
@@ -14,8 +14,8 @@ public class PostCommentActivity extends AppCompatActivity {
 
     private ActivityPostCommentBinding binding;
 
-    private int news;
-    private int reply_id;
+    private int newsId;
+    private int replyId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,8 +23,8 @@ public class PostCommentActivity extends AppCompatActivity {
         binding = ActivityPostCommentBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        news = getIntent().getIntExtra("news", 0);
-        reply_id = getIntent().getIntExtra("reply_id", 0);
+        newsId = getIntent().getIntExtra("news", 0);
+        replyId = getIntent().getIntExtra("reply_id", 0);
 
         binding.buttonPostComment.setOnClickListener(view -> postComment());
 
@@ -52,8 +52,8 @@ public class PostCommentActivity extends AppCompatActivity {
         }
 
         NewsCommentInsert newsCommentInsert = new NewsCommentInsert(
-                news,
-                reply_id,
+                newsId,
+                replyId,
                 name,
                 email,
                 content

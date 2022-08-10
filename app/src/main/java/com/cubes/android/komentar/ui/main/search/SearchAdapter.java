@@ -26,15 +26,18 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
     private ArrayList<ItemModelSearch> itemModels = new ArrayList<>();
     private NewsListener listener;
 
+    private ArrayList<News> newsList;
+
     public SearchAdapter(NewsListener listener) {
         this.listener = listener;
     }
 
     public SearchAdapter(NewsListener listener, ArrayList<News> newsList) {
         this.listener = listener;
+        this.newsList = newsList;
 
         for (News news : newsList) {
-            itemModels.add(new RvItemModelSearch(news, true, listener));
+            itemModels.add(new RvItemModelSearch(news, false, listener, newsList));
         }
     }
 
@@ -49,7 +52,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
         }
 
         for (News news : responseModel.news) {
-            itemModels.add(new RvItemModelSearch(news, true, listener));
+            itemModels.add(new RvItemModelSearch(news, false, listener, newsList));
         }
 
 //        if (responseModel.data.pagination.has_more_pages) {
@@ -121,7 +124,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
         }
 
         for (News news : response.news) {
-            itemModels.add(new RvItemModelSearch(news, listener));
+            itemModels.add(new RvItemModelSearch(news, false, listener, response.news));
         }
 
 //        if (response.data.pagination.has_more_pages) {
@@ -152,7 +155,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
 
 
         for (News news : response.news) {
-            itemModels.add(new RvItemModelSearch(news, listener));
+            itemModels.add(new RvItemModelSearch(news, false, listener, response.news));
         }
 
 //        if (response.data.pagination.has_more_pages) {

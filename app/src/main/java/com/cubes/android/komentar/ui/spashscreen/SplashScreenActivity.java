@@ -1,9 +1,9 @@
 package com.cubes.android.komentar.ui.spashscreen;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.cubes.android.komentar.databinding.ActivitySplashScreenBinding;
 import com.cubes.android.komentar.ui.main.NewsListActivity;

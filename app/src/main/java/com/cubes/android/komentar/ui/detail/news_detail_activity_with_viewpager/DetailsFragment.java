@@ -1,5 +1,7 @@
 package com.cubes.android.komentar.ui.detail.news_detail_activity_with_viewpager;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -12,10 +14,12 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.cubes.android.komentar.data.DataRepository;
 import com.cubes.android.komentar.data.model.News;
+import com.cubes.android.komentar.data.model.NewsComment;
 import com.cubes.android.komentar.data.model.NewsCommentVote;
 import com.cubes.android.komentar.data.source.local.database.NewsDatabase;
 import com.cubes.android.komentar.data.source.remote.networking.response.NewsDetailsResponseModel;
@@ -30,37 +34,45 @@ import com.cubes.android.komentar.ui.post_comment.PostCommentActivity;
 import com.cubes.android.komentar.ui.tag.TagActivity;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class DetailsFragment extends Fragment implements
         CommentsAdapter.CommentsListener,
         NewsDetailsTagsAdapter.TagListener,
-        NewsListener {
+        NewsListener
+{
 
     private FragmentDetailsBinding binding;
 
     private static final String NEWS_ID = "news_id";
-    private static final String NEWS_URL = "news_url";
-    private static final String NEWS_ID_LIST = "news_id_list";
 
     private int mNewsId;
-    private String mNewsUrl;
-    private int[] mNewsIdList;
 
-    private NewsDetailsResponseModel.NewsDetailsDataResponseModel data;
     private NewsDetailsAdapter adapter;
+
+    private DetailsListener listener;
+
+    public interface DetailsListener {
+
+        void onShareClickListener(String newsUrl);
+
+        void onMessagesClickListener(int newsId);
+
+    }
+
 
     public DetailsFragment() {
         // Required empty public constructor
     }
 
-    public static DetailsFragment newInstance(int newsId, int[] newsIdList) {
+    public static DetailsFragment newInstance(int newsId) {
         DetailsFragment fragment = new DetailsFragment();
         Bundle args = new Bundle();
         args.putInt(NEWS_ID, newsId);
-        args.putIntArray(NEWS_ID_LIST, newsIdList);
         fragment.setArguments(args);
+
         return fragment;
     }
 
@@ -69,7 +81,7 @@ public class DetailsFragment extends Fragment implements
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mNewsId = getArguments().getInt(NEWS_ID);
-            mNewsIdList = getArguments().getIntArray(NEWS_ID_LIST);
+
         }
     }
 
@@ -77,6 +89,7 @@ public class DetailsFragment extends Fragment implements
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentDetailsBinding.inflate(inflater, container, false);
+
         return binding.getRoot();
     }
 
@@ -87,6 +100,8 @@ public class DetailsFragment extends Fragment implements
         initRecyclerView();
 
         sendNewsDetailsRequest();
+
+        listener = (DetailsListener) getActivity();
 
         binding.imageViewRefresh.setOnClickListener(view1 -> sendNewsDetailsRequest());
 
@@ -108,10 +123,13 @@ public class DetailsFragment extends Fragment implements
             @Override
             public void onResponse(NewsDetailsResponseModel.NewsDetailsDataResponseModel response) {
 
-                mNewsUrl = response.url;
-
                 binding.progressBar.setVisibility(View.GONE);
                 binding.imageViewRefresh.setVisibility(View.GONE);
+
+                listener.onMessagesClickListener(response.id);
+                listener.onShareClickListener(response.url);
+
+                getCommentVotes(response.comments_top_n);
 
                 adapter.updateList(response);
 
@@ -125,6 +143,56 @@ public class DetailsFragment extends Fragment implements
             }
         });
     }
+
+
+    private void getCommentVotes(ArrayList<NewsComment> comments) {
+
+        ExecutorService service = Executors.newSingleThreadExecutor();
+        Handler handler = new Handler(Looper.getMainLooper());
+        service.execute(() -> {
+
+            //doInBackgroundThread
+            List<NewsCommentVote> votes = NewsDatabase.getInstance(binding.getRoot().getContext()).voteDao().getNewsCommentVotes();
+
+            //onPostExecute
+            handler.post(() -> checkVotedComments(comments, votes));
+
+        });
+
+    }
+
+    private void checkVotedComments(ArrayList<NewsComment> comments, List<NewsCommentVote> votes) {
+
+        for (NewsCommentVote vote : votes) {
+
+            for (NewsComment comment : comments) {
+
+                if (vote.id.equals(comment.id)) {
+                    comment.newsCommentVote = vote;
+                }
+
+                checkChildrenVotes(comment.children, vote);
+
+            }
+        }
+
+    }
+
+    private void checkChildrenVotes(ArrayList<NewsComment> children, NewsCommentVote vote) {
+
+        for (NewsComment subComment : children) {
+
+            if (vote.id.equals(subComment.id)) {
+                subComment.newsCommentVote = vote;
+            }
+
+            if (subComment.children != null) {
+                checkChildrenVotes(subComment.children, vote);
+            }
+
+        }
+    }
+
 
     @Override
     public void onLikeListener(CommentsAdapter adapter, int id, boolean vote) {
@@ -219,15 +287,21 @@ public class DetailsFragment extends Fragment implements
         startActivity(intent);
     }
 
-//    @Override
-//    public void onNewsClicked(int newsId, String newsUrl, ArrayList<News> news) {
-//        Intent intent = new Intent(getContext(), DetailsFragment.class);
-//        intent.putExtra("news_id", mNewsId);
-//        intent.putExtra("news_url", mNewsUrl);
-//        intent.putExtra("news_id_list", mNewsIdList);
-//        startActivity(intent);
-//    }
+    @Override
+    public void onNewsClicked(int newsId, String newsUrl, ArrayList<News> newsList) {
 
+        int[] newsIdList = new int[newsList.size()];
+
+        for (int i = 0; i < newsList.size(); i++) {
+            newsIdList[i] = newsList.get(i).id;
+        }
+
+        Intent intent = new Intent(getContext(), DetailsActivity.class);
+        intent.putExtra("news_id", newsId);
+        intent.putExtra("news_url", newsUrl);
+        intent.putExtra("news_id_list", newsIdList);
+        getContext().startActivity(intent);
+    }
 
     @Override
     public void onResume() {
@@ -237,6 +311,10 @@ public class DetailsFragment extends Fragment implements
             sendNewsDetailsRequest();
         }
 
+    }    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        this.listener = (DetailsListener) context;
     }
 
     @Override
@@ -244,4 +322,5 @@ public class DetailsFragment extends Fragment implements
         super.onDestroyView();
         binding = null;
     }
+
 }

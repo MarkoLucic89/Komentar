@@ -61,8 +61,8 @@ dependencies {
     //leakCanary
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.9.1'
 
-
-
+    //flexBox
+    implementation 'com.google.android.flexbox:flexbox:3.0.0'
 
 
 }

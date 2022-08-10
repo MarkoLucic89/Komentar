@@ -85,39 +85,47 @@ public class CommentsActivity extends AppCompatActivity {
             //onPostExecute
             runOnUiThread(() -> {
 
-                //Reci kakva petlja, ovde ni pesnik ne zna sta je hteo da kaze :D
+                checkVotedComments(comments, votes);
 
-                for (NewsCommentVote vote : votes) {
-
-                    for (NewsComment comment : comments) {
-
-                        if (vote.id.equals(comment.id)) {
-                            comment.newsCommentVote = vote;
-                        }
-
-                        for (NewsComment subComment : comment.children) {
-
-                            if (vote.id.equals(subComment.id)) {
-                                subComment.newsCommentVote = vote;
-                            }
-
-                            for (NewsComment subChild : subComment.children) {
-
-                                if (vote.id.equals(subComment.id)) {
-                                    subChild.newsCommentVote = vote;
-                                }
-
-                            }
-
-                        }
-                    }
-                }
-
-                adapter.updateList(comments);
             });
 
         });
 
+    }
+
+    private void checkVotedComments(ArrayList<NewsComment> comments, List<NewsCommentVote> votes) {
+
+        for (NewsCommentVote vote : votes) {
+
+            for (NewsComment comment : comments) {
+
+                if (vote.id.equals(comment.id)) {
+                    comment.newsCommentVote = vote;
+                }
+
+                if (comment.children != null) {
+                    checkChildrenVotes(comment.children, vote);
+                }
+
+            }
+        }
+
+        adapter.updateList(comments);
+    }
+
+    private void checkChildrenVotes(ArrayList<NewsComment> children, NewsCommentVote vote) {
+
+        for (NewsComment subComment : children) {
+
+            if (vote.id.equals(subComment.id)) {
+                subComment.newsCommentVote = vote;
+            }
+
+            if (subComment.children != null) {
+                checkChildrenVotes(subComment.children, vote);
+            }
+
+        }
     }
 
     private void initRecyclerView() {
