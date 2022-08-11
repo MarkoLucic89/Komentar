@@ -29,7 +29,7 @@ public class RvItemModelSubComments implements ItemModelComments {
 
     @Override
     public int getType() {
-        return 1;
+        return R.layout.rv_item_comment;
     }
 
     @Override

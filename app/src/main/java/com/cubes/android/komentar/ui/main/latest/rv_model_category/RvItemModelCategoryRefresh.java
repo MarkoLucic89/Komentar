@@ -1,5 +1,6 @@
 package com.cubes.android.komentar.ui.main.latest.rv_model_category;
 
+import com.cubes.android.komentar.R;
 import com.cubes.android.komentar.databinding.RvItemRefreshBinding;
 import com.cubes.android.komentar.ui.main.latest.CategoryAdapter;
 import com.cubes.android.komentar.ui.main.latest.NewsListener;
@@ -14,7 +15,7 @@ public class RvItemModelCategoryRefresh implements ItemModelCategory {
 
     @Override
     public int getType() {
-        return 3;
+        return R.layout.rv_item_refresh;
     }
 
     @Override

@@ -48,6 +48,9 @@ public class CommentsActivity extends AppCompatActivity {
 
     private void getComments() {
 
+        binding.imageViewRefresh.setVisibility(View.GONE);
+        binding.progressBar.setVisibility(View.VISIBLE);
+
         DataRepository.getInstance().getComments(news_id, new DataRepository.CommentsResponseListener() {
 
             @Override
@@ -56,6 +59,7 @@ public class CommentsActivity extends AppCompatActivity {
                 binding.textView.setVisibility(View.GONE);
                 binding.recyclerViewComments.setVisibility(View.VISIBLE);
                 binding.imageViewRefresh.setVisibility(View.GONE);
+                binding.progressBar.setVisibility(View.GONE);
 
                 if (comments.isEmpty()) {
                     binding.textView.setVisibility(View.VISIBLE);
@@ -70,6 +74,7 @@ public class CommentsActivity extends AppCompatActivity {
                 binding.textView.setVisibility(View.GONE);
                 binding.recyclerViewComments.setVisibility(View.GONE);
                 binding.imageViewRefresh.setVisibility(View.VISIBLE);
+                binding.progressBar.setVisibility(View.GONE);
             }
         });
     }
@@ -83,11 +88,7 @@ public class CommentsActivity extends AppCompatActivity {
             List<NewsCommentVote> votes = NewsDatabase.getInstance(binding.getRoot().getContext()).voteDao().getNewsCommentVotes();
 
             //onPostExecute
-            runOnUiThread(() -> {
-
-                checkVotedComments(comments, votes);
-
-            });
+            runOnUiThread(() -> checkVotedComments(comments, votes));
 
         });
 

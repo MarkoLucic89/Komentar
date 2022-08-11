@@ -7,8 +7,14 @@ import java.util.ArrayList;
 
 public interface NewsListener {
 
-    void onNewsClicked(int newsId);
+    //metode su default jer ne koristim svaku na svakom mestu gde implementiram interface
 
+    //ovo ce verovatno da se obrise (sluzilo je za NewsDetailActivity bez ViewPager-a)
+    default void onNewsClicked(int newsId) {
+
+    }
+
+    //ova metoda sluzi za otvaranje DetailActivity-ja sa ViewPager-om
     default void onNewsClicked(int newsId, String newsUrl, ArrayList<News> news) {
 
     }

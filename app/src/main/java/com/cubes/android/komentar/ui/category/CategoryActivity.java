@@ -35,15 +35,15 @@ public class CategoryActivity extends AppCompatActivity {
 
     private void getAllCategories() {
 
-        binding.proggresBar.setVisibility(View.VISIBLE);
+        binding.progressBar.setVisibility(View.VISIBLE);
         binding.linearLayoutCategorypager.setVisibility(View.GONE);
-        binding.proggresBar.setVisibility(View.GONE);
+        binding.progressBar.setVisibility(View.GONE);
 
         DataRepository.getInstance().getAllCategories(new DataRepository.CategoriesResponseListener() {
             @Override
             public void onResponse(ArrayList<Category> categories) {
 
-                binding.proggresBar.setVisibility(View.GONE);
+                binding.progressBar.setVisibility(View.GONE);
                 binding.imageViewRefresh.setVisibility(View.GONE);
                 binding.linearLayoutCategorypager.setVisibility(View.VISIBLE);
 
@@ -61,7 +61,7 @@ public class CategoryActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Throwable t) {
-                binding.proggresBar.setVisibility(View.GONE);
+                binding.progressBar.setVisibility(View.GONE);
                 binding.linearLayoutCategorypager.setVisibility(View.GONE);
                 binding.imageViewRefresh.setVisibility(View.VISIBLE);
             }

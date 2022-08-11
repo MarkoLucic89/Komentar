@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewbinding.ViewBinding;
 
+import com.cubes.android.komentar.R;
 import com.cubes.android.komentar.data.DataContainer;
 import com.cubes.android.komentar.data.model.Category;
 import com.cubes.android.komentar.ui.main.drawer_menu.rv_item_drawer.ItemModelDrawer;
@@ -25,7 +26,6 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.DrawerView
 
 
     /*
-    OVO JE ALTERNATIVNI ADAPTER KOJI NE KORISTIM, RADJEN JE NA MALO DRUGACIJI NACIN PA SAM GA OSTAVIO
     (NEMA RECYCLERVIEW ZA PODKATEGORIJE VEC SE DODAJU NOVI ITEMI U ADAPTERU)
      */
 
@@ -69,14 +69,17 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.DrawerView
         ViewBinding binding;
 
         switch (viewType) {
-            case 0:
+            case R.layout.rv_item_drawer_category:
                 binding = RvItemDrawerCategoryBinding.inflate(inflater, parent, false);
                 break;
-            case 1:
+            case R.layout.rv_item_drawer_subcategory:
                 binding = RvItemDrawerSubcategoryBinding.inflate(inflater, parent, false);
                 break;
-            default:
+            case R.layout.rv_item_drawer_other:
                 binding = RvItemDrawerOtherBinding.inflate(inflater, parent, false);
+                break;
+            default:
+                binding = null;
 
         }
 

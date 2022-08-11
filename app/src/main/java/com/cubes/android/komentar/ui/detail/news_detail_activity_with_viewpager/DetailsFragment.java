@@ -1,6 +1,5 @@
 package com.cubes.android.komentar.ui.detail.news_detail_activity_with_viewpager;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,7 +13,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.cubes.android.komentar.data.DataRepository;
@@ -41,14 +39,14 @@ import java.util.concurrent.Executors;
 public class DetailsFragment extends Fragment implements
         CommentsAdapter.CommentsListener,
         NewsDetailsTagsAdapter.TagListener,
-        NewsListener
-{
+        NewsListener {
 
     private FragmentDetailsBinding binding;
 
     private static final String NEWS_ID = "news_id";
 
     private int mNewsId;
+    private String mNewsUrl;
 
     private NewsDetailsAdapter adapter;
 
@@ -56,9 +54,7 @@ public class DetailsFragment extends Fragment implements
 
     public interface DetailsListener {
 
-        void onShareClickListener(String newsUrl);
-
-        void onMessagesClickListener(int newsId);
+        void onDetailsResponseListener(int newsId, String newsUrl);
 
     }
 
@@ -72,16 +68,22 @@ public class DetailsFragment extends Fragment implements
         Bundle args = new Bundle();
         args.putInt(NEWS_ID, newsId);
         fragment.setArguments(args);
-
         return fragment;
     }
+
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        this.listener = (DetailsListener) context;
+    }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mNewsId = getArguments().getInt(NEWS_ID);
-
         }
     }
 
@@ -89,7 +91,6 @@ public class DetailsFragment extends Fragment implements
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentDetailsBinding.inflate(inflater, container, false);
-
         return binding.getRoot();
     }
 
@@ -98,13 +99,28 @@ public class DetailsFragment extends Fragment implements
         super.onViewCreated(view, savedInstanceState);
 
         initRecyclerView();
-
         sendNewsDetailsRequest();
-
-        listener = (DetailsListener) getActivity();
-
         binding.imageViewRefresh.setOnClickListener(view1 -> sendNewsDetailsRequest());
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if (binding.imageViewRefresh.getVisibility() == View.VISIBLE) {
+            sendNewsDetailsRequest();
+        }
+
+        listener.onDetailsResponseListener(mNewsId, mNewsUrl);
+
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        this.listener = null;
+        binding = null;
     }
 
 
@@ -126,8 +142,10 @@ public class DetailsFragment extends Fragment implements
                 binding.progressBar.setVisibility(View.GONE);
                 binding.imageViewRefresh.setVisibility(View.GONE);
 
-                listener.onMessagesClickListener(response.id);
-                listener.onShareClickListener(response.url);
+                mNewsId = response.id;
+                mNewsUrl = response.url;
+
+                listener.onDetailsResponseListener(mNewsId, mNewsUrl);
 
                 getCommentVotes(response.comments_top_n);
 
@@ -301,26 +319,8 @@ public class DetailsFragment extends Fragment implements
         intent.putExtra("news_url", newsUrl);
         intent.putExtra("news_id_list", newsIdList);
         getContext().startActivity(intent);
-    }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        if (binding.imageViewRefresh.getVisibility() == View.VISIBLE) {
-            sendNewsDetailsRequest();
-        }
-
-    }    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-        this.listener = (DetailsListener) context;
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        binding = null;
+        getActivity().finish();
     }
 
 }

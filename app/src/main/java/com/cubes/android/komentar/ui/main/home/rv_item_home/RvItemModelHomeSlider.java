@@ -36,7 +36,7 @@ public class RvItemModelHomeSlider implements ItemModelHome{
 
     @Override
     public int getType() {
-        return 0;
+        return R.layout.rv_item_home_slider;
     }
 
     @Override

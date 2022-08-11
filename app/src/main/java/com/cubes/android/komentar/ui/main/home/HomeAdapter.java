@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewbinding.ViewBinding;
 
+import com.cubes.android.komentar.R;
 import com.cubes.android.komentar.data.model.News;
 import com.cubes.android.komentar.data.source.remote.networking.response.HomePageResponseModel;
 import com.cubes.android.komentar.ui.main.home.rv_item_home.ItemModelHome;
@@ -42,7 +43,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
 
         //TOP NEWS
         for (News news : response.top) {
-            list.add(new RvItemModelHomeSmallNews(news, listener));
+            list.add(new RvItemModelHomeSmallNews(news, listener, response.top));
         }
 
         //TABS
@@ -100,7 +101,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
 
     private void addSlider(String title, HomePageResponseModel.HomePageDataResponseModel response) {
 
-        if (response == null || response == null) {
+        if (response == null) {
             return;
         }
 
@@ -149,19 +150,19 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
         ViewBinding binding;
 
         switch (viewType) {
-            case 0:
+            case R.layout.rv_item_home_slider:
                 binding = RvItemHomeSliderBinding.inflate(inflater, parent, false);
                 break;
-            case 1:
+            case R.layout.rv_item_category_small:
                 binding = RvItemCategorySmallBinding.inflate(inflater, parent, false);
                 break;
-            case 2:
+            case R.layout.rv_item_home_tabs:
                 binding = RvItemHomeTabsBinding.inflate(inflater, parent, false);
                 break;
-            case 3:
+            case R.layout.rv_item_home_category_box:
                 binding = RvItemHomeCategoryBoxBinding.inflate(inflater, parent, false);
                 break;
-            case 4:
+            case R.layout.rv_item_home_video:
                 binding = RvItemHomeVideoBinding.inflate(inflater, parent, false);
                 break;
 

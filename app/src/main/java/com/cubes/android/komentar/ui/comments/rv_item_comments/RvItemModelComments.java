@@ -28,7 +28,7 @@ public class RvItemModelComments implements ItemModelComments {
 
     @Override
     public int getType() {
-        return 0;
+        return R.layout.rv_item_comment;
     }
 
     @Override

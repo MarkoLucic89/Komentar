@@ -26,7 +26,6 @@ public class HomePagerFragment extends Fragment implements NewsListener {
 
     private FragmentHomePagerBinding binding;
     private HomeAdapter adapter;
-    private int[] newsIDs;
 
     public HomePagerFragment() {
         // Required empty public constructor

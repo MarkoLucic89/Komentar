@@ -2,6 +2,7 @@ package com.cubes.android.komentar.ui.main.home.rv_item_home;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.cubes.android.komentar.R;
 import com.cubes.android.komentar.data.model.News;
 import com.cubes.android.komentar.databinding.RvItemHomeVideoBinding;
 import com.cubes.android.komentar.ui.main.home.HomeAdapter;
@@ -22,7 +23,7 @@ public class RvItemModelHomeVideo implements ItemModelHome {
 
     @Override
     public int getType() {
-        return 4;
+        return R.layout.rv_item_home_video;
     }
 
     @Override

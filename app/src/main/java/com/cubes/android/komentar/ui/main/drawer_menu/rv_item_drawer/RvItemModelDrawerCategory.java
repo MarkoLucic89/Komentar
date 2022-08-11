@@ -39,7 +39,7 @@ public class RvItemModelDrawerCategory implements ItemModelDrawer {
 
     @Override
     public int getType() {
-        return 0;
+        return R.layout.rv_item_drawer_category;
     }
 
     @Override

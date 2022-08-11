@@ -1,5 +1,6 @@
 package com.cubes.android.komentar.ui.main.videos.rv_model_videos;
 
+import com.cubes.android.komentar.R;
 import com.cubes.android.komentar.ui.main.latest.NewsListener;
 import com.cubes.android.komentar.ui.main.videos.VideosAdapter;
 
@@ -13,7 +14,7 @@ public class RvItemModelVideoLoading implements ItemModelVideo {
 
     @Override
     public int getType() {
-        return 1;
+        return  R.layout.rv_item_loading_videos;
     }
 
     @Override

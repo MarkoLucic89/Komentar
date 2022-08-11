@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.view.View;
 
 
+import com.cubes.android.komentar.R;
 import com.cubes.android.komentar.data.model.Category;
 import com.cubes.android.komentar.databinding.RvItemDrawerSubcategoryBinding;
 import com.cubes.android.komentar.ui.category.CategoryActivity;
@@ -29,7 +30,7 @@ public class RvItemModelDrawerSubcategory implements ItemModelDrawer {
 
     @Override
     public int getType() {
-        return 1;
+        return R.layout.rv_item_drawer_subcategory;
     }
 
     @Override

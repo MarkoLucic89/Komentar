@@ -1,11 +1,11 @@
 package com.cubes.android.komentar.ui.tag;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.cubes.android.komentar.data.DataRepository;
 import com.cubes.android.komentar.data.model.News;
@@ -25,7 +25,6 @@ public class TagActivity extends AppCompatActivity implements NewsListener {
     private int tagId;
     private int nextPage = 1;
     private SearchAdapter adapter;
-    private ArrayList<News> mNewsList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +38,7 @@ public class TagActivity extends AppCompatActivity implements NewsListener {
         initRecyclerView();
 
         binding.progressBar.setVisibility(View.VISIBLE);
+
         loadNextPage();
 
         binding.textViewTitle.setText(tagTitle);
@@ -68,8 +68,6 @@ public class TagActivity extends AppCompatActivity implements NewsListener {
                 binding.recyclerView.setVisibility(View.VISIBLE);
                 binding.imageViewRefresh.setVisibility(View.GONE);
 
-                mNewsList = response.news;
-
                 adapter.addNextPage(response);
 
                 nextPage++;
@@ -91,16 +89,7 @@ public class TagActivity extends AppCompatActivity implements NewsListener {
     }
 
     @Override
-    public void onNewsClicked(int newsId) {
-        Intent intent = new Intent(this, NewsDetailsActivity.class);
-        intent.putExtra("news_id", newsId);
-        startActivity(intent);
-    }
-
-    @Override
     public void onNewsClicked(int newsId, String newsUrl, ArrayList<News> newsList) {
-        NewsListener.super.onNewsClicked(newsId, newsUrl, newsList);
-
 
         int[] newsIdList = new int[newsList.size()];
 

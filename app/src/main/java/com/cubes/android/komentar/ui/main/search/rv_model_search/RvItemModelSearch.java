@@ -3,6 +3,7 @@ package com.cubes.android.komentar.ui.main.search.rv_model_search;
 
 import android.graphics.Color;
 
+import com.cubes.android.komentar.R;
 import com.cubes.android.komentar.data.model.News;
 import com.cubes.android.komentar.databinding.RvItemCategorySmallBinding;
 import com.cubes.android.komentar.ui.main.latest.NewsListener;
@@ -40,7 +41,7 @@ public class RvItemModelSearch implements ItemModelSearch {
 
     @Override
     public int getType() {
-        return 0;
+        return R.layout.rv_item_category_small;
     }
 
     @Override

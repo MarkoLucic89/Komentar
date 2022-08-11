@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewbinding.ViewBinding;
 
+import com.cubes.android.komentar.R;
 import com.cubes.android.komentar.data.model.News;
 import com.cubes.android.komentar.data.source.remote.networking.response.NewsResponseModel;
 import com.cubes.android.komentar.data.source.remote.networking.response.TagResponseModel;
@@ -26,15 +27,12 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
     private ArrayList<ItemModelSearch> itemModels = new ArrayList<>();
     private NewsListener listener;
 
-    private ArrayList<News> newsList;
-
     public SearchAdapter(NewsListener listener) {
         this.listener = listener;
     }
 
     public SearchAdapter(NewsListener listener, ArrayList<News> newsList) {
         this.listener = listener;
-        this.newsList = newsList;
 
         for (News news : newsList) {
             itemModels.add(new RvItemModelSearch(news, false, listener, newsList));
@@ -52,7 +50,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
         }
 
         for (News news : responseModel.news) {
-            itemModels.add(new RvItemModelSearch(news, false, listener, newsList));
+            itemModels.add(new RvItemModelSearch(news, false, listener, responseModel.news));
         }
 
 //        if (responseModel.data.pagination.has_more_pages) {
@@ -75,23 +73,18 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
 
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
 
-        if (viewType == 0) {
-            binding = RvItemCategorySmallBinding.inflate(
-                    inflater,
-                    parent,
-                    false);
-        } else if (viewType == 1) {
-            binding = RvItemLoadingBinding.inflate(
-                    inflater,
-                    parent,
-                    false
-            );
-        } else {
-            binding = RvItemRefreshBinding.inflate(
-                    inflater,
-                    parent,
-                    false
-            );
+        switch (viewType) {
+            case R.layout.rv_item_category_small:
+                binding = RvItemCategorySmallBinding.inflate(inflater, parent, false);
+                break;
+            case R.layout.rv_item_loading:
+                binding = RvItemLoadingBinding.inflate(inflater, parent, false);
+                break;
+            case R.layout.rv_item_refresh:
+                binding = RvItemRefreshBinding.inflate(inflater, parent, false);
+                break;
+            default:
+                binding = null;
         }
 
         return new SearchAdapter.SearchViewHolder(binding);
@@ -201,8 +194,5 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
         }
     }
 
-    public interface NewsClickListener{
-        void onNewsClicked(int newsId);
-    }
 }
 

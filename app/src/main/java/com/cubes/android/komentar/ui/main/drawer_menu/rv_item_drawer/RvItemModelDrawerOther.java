@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.view.View;
 
+import com.cubes.android.komentar.R;
 import com.cubes.android.komentar.data.source.local.SharedPrefs;
 import com.cubes.android.komentar.databinding.RvItemDrawerOtherBinding;
 import com.cubes.android.komentar.ui.currencylist.CurrencyListActivity;
@@ -43,7 +44,7 @@ public class RvItemModelDrawerOther implements ItemModelDrawer {
 
     @Override
     public int getType() {
-        return 2;
+        return R.layout.rv_item_drawer_other;
     }
 
     @Override

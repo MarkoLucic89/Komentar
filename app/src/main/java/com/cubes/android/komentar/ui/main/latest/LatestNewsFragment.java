@@ -12,10 +12,14 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.cubes.android.komentar.data.DataRepository;
+import com.cubes.android.komentar.data.model.News;
 import com.cubes.android.komentar.data.source.remote.networking.response.NewsResponseModel;
 import com.cubes.android.komentar.databinding.FragmentLatestNewsBinding;
 import com.cubes.android.komentar.ui.detail.NewsDetailsActivity;
+import com.cubes.android.komentar.ui.detail.news_detail_activity_with_viewpager.DetailsActivity;
 import com.cubes.android.komentar.ui.tools.MyMethodsClass;
+
+import java.util.ArrayList;
 
 public class LatestNewsFragment extends Fragment implements NewsListener {
 
@@ -126,6 +130,22 @@ public class LatestNewsFragment extends Fragment implements NewsListener {
         Intent intent = new Intent(getContext(), NewsDetailsActivity.class);
         intent.putExtra("news_id", newsId);
         startActivity(intent);
+    }
+
+    @Override
+    public void onNewsClicked(int newsId, String newsUrl, ArrayList<News> newsList) {
+
+        int[] newsIdList = new int[newsList.size()];
+
+        for (int i = 0; i < newsList.size(); i++) {
+            newsIdList[i] = newsList.get(i).id;
+        }
+
+        Intent intent = new Intent(getContext(), DetailsActivity.class);
+        intent.putExtra("news_id", newsId);
+        intent.putExtra("news_url", newsUrl);
+        intent.putExtra("news_id_list", newsIdList);
+        getContext().startActivity(intent);
     }
 
     @Override

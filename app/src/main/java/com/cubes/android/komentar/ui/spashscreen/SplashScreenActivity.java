@@ -19,7 +19,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         binding = ActivitySplashScreenBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        binding.getRoot().postDelayed(() -> goToNewsListActivity(), 2000);
+        binding.getRoot().postDelayed(this::goToNewsListActivity, 2000);
     }
 
 

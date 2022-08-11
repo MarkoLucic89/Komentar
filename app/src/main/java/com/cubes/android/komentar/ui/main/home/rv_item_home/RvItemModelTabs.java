@@ -39,7 +39,7 @@ public class RvItemModelTabs implements ItemModelHome {
 
     @Override
     public int getType() {
-        return 2;
+        return R.layout.rv_item_home_tabs;
     }
 
     @Override
@@ -79,13 +79,13 @@ public class RvItemModelTabs implements ItemModelHome {
     private void initRecyclerView(RvItemHomeTabsBinding binding) {
 
         homeTabsAdapter = new HomeTabsAdapter(this.latest, listener);
-
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(binding.recyclerView.getContext()));
         binding.recyclerView.setAdapter(homeTabsAdapter);
 
     }
 
     private void initUI(RvItemHomeTabsBinding binding, HomeAdapter.HomeViewHolder holder) {
+
         binding.viewIndicatorLatest.setVisibility(View.GONE);
         binding.viewIndicatorMostRead.setVisibility(View.GONE);
         binding.viewIndicatorMostComment.setVisibility(View.GONE);

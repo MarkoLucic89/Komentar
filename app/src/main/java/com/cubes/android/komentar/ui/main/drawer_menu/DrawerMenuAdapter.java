@@ -21,6 +21,10 @@ import java.util.ArrayList;
 
 public class DrawerMenuAdapter extends RecyclerView.Adapter<DrawerMenuAdapter.DrawerMenuViewHolder> {
 
+/*
+    OVO JE ALTERNATIVNI ADAPTER KOJI NE KORISTIM, RADJEN JE NA MALO DRUGACIJI NACIN PA SAM GA OSTAVIO
+ */
+
     private ArrayList<ItemModelDrawerMenu> list = new ArrayList<>();
     private OnCategoryClickListener listener;
     private Activity activity;

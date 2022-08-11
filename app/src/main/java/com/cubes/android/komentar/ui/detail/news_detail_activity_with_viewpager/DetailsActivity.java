@@ -1,10 +1,9 @@
 package com.cubes.android.komentar.ui.detail.news_detail_activity_with_viewpager;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.cubes.android.komentar.databinding.ActivityDetailsBinding;
 import com.cubes.android.komentar.ui.comments.CommentsActivity;
@@ -46,8 +45,6 @@ public class DetailsActivity extends AppCompatActivity implements DetailsFragmen
 
         binding.imageViewShare.setOnClickListener(view -> {
 
-//            String newsUrl = detailsListener.onShareClickListener();
-
             Intent sendIntent = new Intent();
             sendIntent.setAction(Intent.ACTION_SEND);
             sendIntent.putExtra(Intent.EXTRA_TEXT, mNewsUrl);
@@ -58,8 +55,6 @@ public class DetailsActivity extends AppCompatActivity implements DetailsFragmen
         });
 
         binding.imageViewMessages.setOnClickListener(view -> {
-
-//            int newsId = detailsListener.onMessagesClickListener();
 
             Intent intent = new Intent(this, CommentsActivity.class);
             intent.putExtra("news_id", mNewsId);
@@ -73,16 +68,9 @@ public class DetailsActivity extends AppCompatActivity implements DetailsFragmen
         binding = null;
     }
 
-
-
     @Override
-    public void onShareClickListener(String newsUrl) {
-        mNewsUrl = newsUrl;
-        Log.d("TAG", "onShareClickListener: " + newsUrl);
-    }
-
-    @Override
-    public void onMessagesClickListener(int newsId) {
+    public void onDetailsResponseListener(int newsId, String newsUrl) {
         mNewsId = newsId;
+        mNewsUrl = newsUrl;
     }
 }

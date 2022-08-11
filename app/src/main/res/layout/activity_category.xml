@@ -54,7 +54,7 @@
             app:tint="@color/blue_dark" />
 
         <ProgressBar
-            android:id="@+id/proggresBar"
+            android:id="@+id/progressBar"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:translationZ="90dp"

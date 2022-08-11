@@ -4,11 +4,12 @@ import android.graphics.Color;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.cubes.android.komentar.R;
 import com.cubes.android.komentar.data.model.News;
 import com.cubes.android.komentar.data.source.remote.networking.response.HomePageResponseModel;
 import com.cubes.android.komentar.databinding.RvItemHomeCategoryBoxBinding;
-import com.cubes.android.komentar.ui.main.latest.CategoryAdapter;
 import com.cubes.android.komentar.ui.main.home.HomeAdapter;
+import com.cubes.android.komentar.ui.main.latest.CategoryAdapter;
 import com.cubes.android.komentar.ui.main.latest.NewsListener;
 
 import java.util.ArrayList;
@@ -29,7 +30,7 @@ public class RvItemModelCategoryBox implements ItemModelHome {
 
     @Override
     public int getType() {
-        return 3;
+        return R.layout.rv_item_home_category_box;
     }
 
     @Override

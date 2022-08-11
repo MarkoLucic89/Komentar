@@ -1,5 +1,6 @@
 package com.cubes.android.komentar.ui.main.search.rv_model_search;
 
+import com.cubes.android.komentar.R;
 import com.cubes.android.komentar.databinding.RvItemRefreshBinding;
 import com.cubes.android.komentar.ui.main.latest.NewsListener;
 import com.cubes.android.komentar.ui.main.search.SearchAdapter;
@@ -14,7 +15,7 @@ public class RvItemModelSearchRefresh implements ItemModelSearch {
 
     @Override
     public int getType() {
-        return 2;
+        return R.layout.rv_item_refresh;
     }
 
     @Override
