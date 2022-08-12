@@ -9,6 +9,7 @@ import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 
 
+import com.cubes.android.komentar.data.model.News;
 import com.cubes.android.komentar.ui.category.CategoryActivity;
 import com.cubes.android.komentar.ui.comments.CommentsActivity;
 import com.cubes.android.komentar.ui.detail.NewsDetailsActivity;
@@ -16,7 +17,20 @@ import com.cubes.android.komentar.ui.detail.news_detail_activity_with_viewpager.
 import com.cubes.android.komentar.ui.post_comment.PostCommentActivity;
 import com.cubes.android.komentar.ui.tag.TagActivity;
 
+import java.util.ArrayList;
+
 public class MyMethodsClass {
+
+    public static int[] initNewsIdList(ArrayList<News> newsList) {
+
+        int[] newsIdList = new int[newsList.size()];
+
+        for (int i = 0; i < newsList.size(); i++) {
+            newsIdList[i] = newsList.get(i).id;
+        }
+
+        return newsIdList;
+    }
 
     public static String convertTime(String created_at) {
         return created_at.substring(11, 16);

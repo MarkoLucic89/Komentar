@@ -59,7 +59,7 @@ dependencies {
     annotationProcessor "androidx.room:room-compiler:2.4.3"
 
     //leakCanary
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.9.1'
+//    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.9.1'
 
     //flexBox
     implementation 'com.google.android.flexbox:flexbox:3.0.0'

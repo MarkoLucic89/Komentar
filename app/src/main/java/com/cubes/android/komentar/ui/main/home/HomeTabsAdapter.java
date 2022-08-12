@@ -18,9 +18,13 @@ public class HomeTabsAdapter extends RecyclerView.Adapter<HomeTabsAdapter.HomeTa
     private ArrayList<News> newsList;
     private NewsListener listener;
 
+    private int[] newsIdList;
+
     public HomeTabsAdapter(ArrayList<News> newsList, NewsListener listener) {
         this.newsList = newsList;
         this.listener = listener;
+
+        this.newsIdList = MyMethodsClass.initNewsIdList(newsList);
     }
 
     @NonNull
@@ -37,14 +41,13 @@ public class HomeTabsAdapter extends RecyclerView.Adapter<HomeTabsAdapter.HomeTa
 
     @Override
     public void onBindViewHolder(@NonNull HomeTabsViewHolder holder, int position) {
+
         News news = newsList.get(position);
 
         holder.binding.textViewTitle.setText(news.title);
         holder.binding.textViewTime.setText(MyMethodsClass.convertTime(news.created_at));
 
-//        holder.binding.getRoot().setOnClickListener(view -> listener.onNewsClicked(news.id));
-
-        holder.binding.getRoot().setOnClickListener(view -> listener.onNewsClicked(news.id, news.url, newsList));
+        holder.binding.getRoot().setOnClickListener(view -> listener.onNewsClicked(news.id, news.url, newsIdList));
 
     }
 
@@ -58,6 +61,9 @@ public class HomeTabsAdapter extends RecyclerView.Adapter<HomeTabsAdapter.HomeTa
 
     public void updateNewsList(ArrayList<News> newsList) {
         this.newsList = newsList;
+
+        this.newsIdList = MyMethodsClass.initNewsIdList(newsList);
+
         notifyDataSetChanged();
     }
 

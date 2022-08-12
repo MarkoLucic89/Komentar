@@ -3,6 +3,7 @@ package com.cubes.android.komentar.ui.category;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import com.cubes.android.komentar.data.DataRepository;
@@ -91,6 +92,8 @@ public class CategoryActivity extends AppCompatActivity {
 
     private void initViewPager() {
 
+
+
         NewsCategoriesViewPagerAdapter pagerAdapter = new NewsCategoriesViewPagerAdapter(this, mCategories,  mCategory.subcategories);
         binding.viewPager.setAdapter(pagerAdapter);
 
@@ -101,6 +104,8 @@ public class CategoryActivity extends AppCompatActivity {
                         tab.setText(mCategory.subcategories.get(position).name);
                 }
         ).attach();
+
+        Log.d("ADAPTER", "POSITION: " + mCategory.subcategories.indexOf(mSubcategory));
 
         binding.viewPager.setCurrentItem(mCategory.subcategories.indexOf(mSubcategory));
     }

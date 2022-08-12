@@ -18,6 +18,7 @@ import com.cubes.android.komentar.ui.main.videos.rv_model_videos.ItemModelVideo;
 import com.cubes.android.komentar.ui.main.videos.rv_model_videos.RvItemModelVideoLoading;
 import com.cubes.android.komentar.ui.main.videos.rv_model_videos.RvItemModelVideoRefresh;
 import com.cubes.android.komentar.ui.main.videos.rv_model_videos.RvItemModelVideos;
+import com.cubes.android.komentar.ui.tools.MyMethodsClass;
 
 import java.util.ArrayList;
 
@@ -28,7 +29,7 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.VideosView
     private boolean isOnHomePage;
     private NewsListener listener;
 
-    private ArrayList<News> newsList = new ArrayList<>();
+    private int[] newsIdList;
 
     public VideosAdapter(NewsListener listener) {
         this.isOnHomePage = false;
@@ -36,22 +37,25 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.VideosView
     }
 
     public VideosAdapter(ArrayList<News> newsList, boolean isOnHomePage, NewsListener listener) {
+
         this.isOnHomePage = isOnHomePage;
         this.listener = listener;
 
-        this.newsList = newsList;
+        newsIdList = MyMethodsClass.initNewsIdList(newsList);
 
         for (News news : newsList) {
-            itemModels.add(new RvItemModelVideos(news, listener, newsList));
+            itemModels.add(new RvItemModelVideos(news, listener, newsIdList));
         }
+
     }
+
 
     public void updateList(NewsResponseModel.NewsDataResponseModel responseModel) {
 
-        this.newsList = responseModel.news;
+        newsIdList = MyMethodsClass.initNewsIdList(responseModel.news);
 
         for (News news : responseModel.news) {
-            itemModels.add(new RvItemModelVideos(news, listener, this.newsList));
+            itemModels.add(new RvItemModelVideos(news, listener, newsIdList));
         }
 
         if (responseModel.pagination.has_more_pages) {
@@ -107,8 +111,6 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.VideosView
 
     public void addNextPage(NewsResponseModel.NewsDataResponseModel response) {
 
-        newsList.addAll(response.news);
-
         int lastIndex;
 
         if (itemModels.isEmpty()) {
@@ -118,8 +120,10 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.VideosView
             itemModels.remove(lastIndex);
         }
 
+        newsIdList = MyMethodsClass.initNewsIdList(response.news);
+
         for (News news : response.news) {
-            itemModels.add(new RvItemModelVideos(news, listener, this.newsList));
+            itemModels.add(new RvItemModelVideos(news, listener, newsIdList));
         }
 
 //        if (response.data.pagination.has_more_pages) {
@@ -130,7 +134,7 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.VideosView
             itemModels.add(new RvItemModelVideoLoading(listener));
         }
         notifyItemRangeChanged(lastIndex, itemModels.size());
-//        notifyItemRangeInserted(lastIndex, newsList.size());
+//        notifyItemRangeInserted(lastIndex+1, newsList.size());
 
 
 //        notifyDataSetChanged();

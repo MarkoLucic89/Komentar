@@ -19,24 +19,14 @@ public class RvItemModelSearch implements ItemModelSearch {
     private News news;
     private boolean isCategoryColored;
     private NewsListener listener;
-    private ArrayList<News> newsList;
 
-    public RvItemModelSearch(News news, NewsListener listener) {
-        this.news = news;
-        this.listener = listener;
-    }
+    private int[] newsIdList;
 
-    public RvItemModelSearch(News news, boolean isCategoryColored, NewsListener listener) {
+    public RvItemModelSearch(News news, boolean isCategoryColored, NewsListener listener, int[] newsIdList) {
         this.news = news;
         this.isCategoryColored = isCategoryColored;
         this.listener = listener;
-    }
-
-    public RvItemModelSearch(News news, boolean b, NewsListener listener, ArrayList<News> newsList) {
-        this.news = news;
-        this.isCategoryColored = isCategoryColored;
-        this.listener = listener;
-        this.newsList = newsList;
+        this.newsIdList = newsIdList;
     }
 
     @Override
@@ -59,9 +49,7 @@ public class RvItemModelSearch implements ItemModelSearch {
         binding.textViewCategory.setText(news.category.name);
         binding.textViewTime.setText(MyMethodsClass.convertTime(news.created_at));
 
-//        binding.getRoot().setOnClickListener(view -> listener.onNewsClicked(news.id));
-
-        binding.getRoot().setOnClickListener(view -> listener.onNewsClicked(news.id, news.url, newsList));
+        binding.getRoot().setOnClickListener(view -> listener.onNewsClicked(news.id, news.url, this.newsIdList));
 
 
     }

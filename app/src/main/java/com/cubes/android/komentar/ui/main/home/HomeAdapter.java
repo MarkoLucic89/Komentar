@@ -1,6 +1,5 @@
 package com.cubes.android.komentar.ui.main.home;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -11,17 +10,17 @@ import androidx.viewbinding.ViewBinding;
 import com.cubes.android.komentar.R;
 import com.cubes.android.komentar.data.model.News;
 import com.cubes.android.komentar.data.source.remote.networking.response.HomePageResponseModel;
+import com.cubes.android.komentar.databinding.RvItemCategorySmallBinding;
+import com.cubes.android.komentar.databinding.RvItemHomeCategoryBoxBinding;
+import com.cubes.android.komentar.databinding.RvItemHomeSliderBinding;
+import com.cubes.android.komentar.databinding.RvItemHomeTabsBinding;
+import com.cubes.android.komentar.databinding.RvItemHomeVideoBinding;
 import com.cubes.android.komentar.ui.main.home.rv_item_home.ItemModelHome;
 import com.cubes.android.komentar.ui.main.home.rv_item_home.RvItemModelCategoryBox;
 import com.cubes.android.komentar.ui.main.home.rv_item_home.RvItemModelHomeSlider;
 import com.cubes.android.komentar.ui.main.home.rv_item_home.RvItemModelHomeSmallNews;
 import com.cubes.android.komentar.ui.main.home.rv_item_home.RvItemModelHomeVideo;
 import com.cubes.android.komentar.ui.main.home.rv_item_home.RvItemModelTabs;
-import com.cubes.android.komentar.databinding.RvItemCategorySmallBinding;
-import com.cubes.android.komentar.databinding.RvItemHomeCategoryBoxBinding;
-import com.cubes.android.komentar.databinding.RvItemHomeSliderBinding;
-import com.cubes.android.komentar.databinding.RvItemHomeTabsBinding;
-import com.cubes.android.komentar.databinding.RvItemHomeVideoBinding;
 import com.cubes.android.komentar.ui.main.latest.NewsListener;
 
 import java.util.ArrayList;

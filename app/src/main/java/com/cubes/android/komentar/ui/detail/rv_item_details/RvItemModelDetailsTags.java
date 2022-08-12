@@ -1,7 +1,5 @@
 package com.cubes.android.komentar.ui.detail.rv_item_details;
 
-import androidx.recyclerview.widget.StaggeredGridLayoutManager;
-
 import com.cubes.android.komentar.R;
 import com.cubes.android.komentar.data.model.NewsTag;
 import com.cubes.android.komentar.databinding.RvItemDetailsTagsBinding;

@@ -110,9 +110,9 @@ public class DetailsFragment extends Fragment implements
 
         if (binding.imageViewRefresh.getVisibility() == View.VISIBLE) {
             sendNewsDetailsRequest();
+        } else {
+            listener.onDetailsResponseListener(mNewsId, mNewsUrl);
         }
-
-        listener.onDetailsResponseListener(mNewsId, mNewsUrl);
 
     }
 
@@ -299,28 +299,14 @@ public class DetailsFragment extends Fragment implements
     }
 
     @Override
-    public void onNewsClicked(int newsId) {
-        Intent intent = new Intent(getContext(), NewsDetailsActivity.class);
-        intent.putExtra("news_id", newsId);
-        startActivity(intent);
-    }
-
-    @Override
-    public void onNewsClicked(int newsId, String newsUrl, ArrayList<News> newsList) {
-
-        int[] newsIdList = new int[newsList.size()];
-
-        for (int i = 0; i < newsList.size(); i++) {
-            newsIdList[i] = newsList.get(i).id;
-        }
+    public void onNewsClicked(int newsId, String newsUrl, int[] newsIdList) {
 
         Intent intent = new Intent(getContext(), DetailsActivity.class);
         intent.putExtra("news_id", newsId);
         intent.putExtra("news_url", newsUrl);
         intent.putExtra("news_id_list", newsIdList);
         getContext().startActivity(intent);
-
         getActivity().finish();
-    }
 
+    }
 }

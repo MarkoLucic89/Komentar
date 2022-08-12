@@ -55,8 +55,10 @@ public class VideoFragment extends Fragment implements NewsListener {
         initRecyclerView();
 
 //        sendVideosRequest();
+
         binding.imageViewRefresh.setVisibility(View.GONE);
         binding.progressBar.setVisibility(View.VISIBLE);
+
         loadNextPage();
 
         binding.imageViewRefresh.setOnClickListener(view1 -> {
@@ -117,21 +119,7 @@ public class VideoFragment extends Fragment implements NewsListener {
     }
 
     @Override
-    public void onNewsClicked(int newsId) {
-        Intent intent = new Intent(getContext(), NewsDetailsActivity.class);
-        intent.putExtra("news_id", newsId);
-        getActivity().startActivity(intent);
-    }
-
-    @Override
-    public void onNewsClicked(int newsId, String newsUrl, ArrayList<News> newsList) {
-
-        int[] newsIdList = new int[newsList.size()];
-
-        for (int i = 0; i < newsList.size(); i++) {
-            newsIdList[i] = newsList.get(i).id;
-        }
-
+    public void onNewsClicked(int newsId, String newsUrl, int[] newsIdList) {
         Intent intent = new Intent(getContext(), DetailsActivity.class);
         intent.putExtra("news_id", newsId);
         intent.putExtra("news_url", newsUrl);

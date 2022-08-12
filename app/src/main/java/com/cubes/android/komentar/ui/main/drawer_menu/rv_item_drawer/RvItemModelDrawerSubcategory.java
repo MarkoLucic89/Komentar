@@ -41,15 +41,7 @@ public class RvItemModelDrawerSubcategory implements ItemModelDrawer {
         binding.viewIndicator.setBackgroundColor(Color.parseColor(parentCategory.color));
         binding.textView.setText(subcategory.name);
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(view.getContext(), CategoryActivity.class);
-                intent.putExtra("category_id", parentCategory.id);
-                intent.putExtra("subcategory_id", subcategory.id);
-                view.getContext().startActivity(intent);
-            }
-        });
+        holder.itemView.setOnClickListener(view -> listener.onSubCategoryClicked(parentCategory.id, subcategory.id));
 
 
     }

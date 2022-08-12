@@ -117,7 +117,7 @@ public class HomeFragment extends Fragment implements OnCategoryClickListener {
         pagerAdapter = new NewsCategoriesViewPagerAdapter(getActivity(), categories);
         binding.viewPager.setAdapter(pagerAdapter);
 
-         new TabLayoutMediator(
+        new TabLayoutMediator(
                 binding.tabLayout,
                 binding.viewPager,
                 (tab, position) -> {
@@ -151,14 +151,9 @@ public class HomeFragment extends Fragment implements OnCategoryClickListener {
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        binding = null;
-    }
-
-    @Override
     public void onDestroy() {
         super.onDestroy();
+        binding = null;
 
     }
 }

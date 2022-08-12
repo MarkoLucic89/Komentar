@@ -20,6 +20,7 @@ import com.cubes.android.komentar.ui.main.latest.rv_model_category.RvItemModelCa
 import com.cubes.android.komentar.ui.main.latest.rv_model_category.RvItemModelCategoryLoading;
 import com.cubes.android.komentar.ui.main.latest.rv_model_category.RvItemModelCategoryRefresh;
 import com.cubes.android.komentar.ui.main.latest.rv_model_category.RvItemModelCategorySmall;
+import com.cubes.android.komentar.ui.tools.MyMethodsClass;
 
 import java.util.ArrayList;
 
@@ -28,6 +29,8 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
     private ArrayList<ItemModelCategory> itemModels = new ArrayList<>();
     private boolean isOnHomePage;
     private NewsListener listener;
+
+    private int[] newsIdList;
 
     public CategoryAdapter(NewsListener listener) {
         isOnHomePage = false;
@@ -46,9 +49,11 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
             return;
         }
 
+        newsIdList = MyMethodsClass.initNewsIdList(newsList);
+
         //BIG ITEM
 
-        itemModels.add(new RvItemModelCategoryBig(newsList.get(0), isOnHomePage, listener, newsList));
+        itemModels.add(new RvItemModelCategoryBig(newsList.get(0), isOnHomePage, listener, newsIdList));
 
         //SMALL ITEMS
 
@@ -57,7 +62,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         }
 
         for (int i = 1; i < newsList.size(); i++) {
-            itemModels.add(new RvItemModelCategorySmall(newsList.get(i), isOnHomePage, listener, newsList));
+            itemModels.add(new RvItemModelCategorySmall(newsList.get(i), isOnHomePage, listener, newsIdList));
         }
 
     }
@@ -106,11 +111,13 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 
     public void updateList(ArrayList<News> news) {
 
+        newsIdList = MyMethodsClass.initNewsIdList(news);
+
         for (int i = 0; i < news.size(); i++) {
             if (i == 0) {
-                itemModels.add(new RvItemModelCategoryBig(news.get(0), false, listener, news));
+                itemModels.add(new RvItemModelCategoryBig(news.get(0), false, listener, newsIdList));
             } else {
-                itemModels.add(new RvItemModelCategorySmall(news.get(i), false, listener, news));
+                itemModels.add(new RvItemModelCategorySmall(news.get(i), false, listener, newsIdList));
             }
         }
 
@@ -132,8 +139,10 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
             itemModels.remove(lastIndex);
         }
 
+        newsIdList = MyMethodsClass.initNewsIdList(response.news);
+
         for (News news : response.news) {
-            itemModels.add(new RvItemModelCategorySmall(news, isOnHomePage, listener, response.news));
+            itemModels.add(new RvItemModelCategorySmall(news, isOnHomePage, listener, newsIdList));
         }
 
 //        if (response.data.pagination.has_more_pages) {
@@ -160,8 +169,10 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
             itemModels.remove(lastIndex);
         }
 
+        newsIdList = MyMethodsClass.initNewsIdList(response.news);
+
         for (News news : response.news) {
-            itemModels.add(new RvItemModelCategorySmall(news, isOnHomePage, listener, response.news));
+            itemModels.add(new RvItemModelCategorySmall(news, isOnHomePage, listener, newsIdList));
         }
 
 //        if (response.data.pagination.has_more_pages) {

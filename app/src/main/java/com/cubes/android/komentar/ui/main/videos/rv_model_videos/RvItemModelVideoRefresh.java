@@ -19,7 +19,7 @@ public class RvItemModelVideoRefresh implements ItemModelVideo {
 
     @Override
     public void bind(VideosAdapter.VideosViewHolder holder) {
-        listener.loadNextPage();
+        holder.binding.getRoot().setOnClickListener(view -> listener.loadNextPage());
     }
 
 }

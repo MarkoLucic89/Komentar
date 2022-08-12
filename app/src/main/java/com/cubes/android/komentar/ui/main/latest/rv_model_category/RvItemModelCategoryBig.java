@@ -10,27 +10,19 @@ import com.cubes.android.komentar.ui.main.latest.NewsListener;
 import com.cubes.android.komentar.ui.tools.MyMethodsClass;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
-
 public class RvItemModelCategoryBig implements ItemModelCategory {
 
     private News news;
     private boolean isOnHomePage;
     private NewsListener listener;
 
-    private ArrayList<News> newsList = new ArrayList<>();
+    private int[] newsIdList;
 
-    public RvItemModelCategoryBig(News news, boolean isOnHomePage, NewsListener listener) {
+    public RvItemModelCategoryBig(News news, boolean isOnHomePage, NewsListener listener, int[] newsIdList) {
         this.news = news;
         this.isOnHomePage = isOnHomePage;
         this.listener = listener;
-    }
-
-    public RvItemModelCategoryBig(News news, boolean isOnHomePage, NewsListener listener, ArrayList<News> newsList) {
-        this.news = news;
-        this.isOnHomePage = isOnHomePage;
-        this.listener = listener;
-        this.newsList = newsList;
+        this.newsIdList = newsIdList;
     }
 
     @Override
@@ -56,10 +48,7 @@ public class RvItemModelCategoryBig implements ItemModelCategory {
         binding.textViewCategory.setText(news.category.name);
         binding.textViewTime.setText(MyMethodsClass.convertTime(news.created_at));
 
-//        holder.binding.getRoot().setOnClickListener(view -> listener.onNewsClicked(news.id));
-
-        holder.binding.getRoot().setOnClickListener(view -> listener.onNewsClicked(news.id, news.url, newsList));
-
+        holder.binding.getRoot().setOnClickListener(view -> listener.onNewsClicked(news.id, news.url, newsIdList));
 
     }
 

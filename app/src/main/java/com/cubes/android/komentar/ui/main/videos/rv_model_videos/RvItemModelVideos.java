@@ -15,18 +15,12 @@ public class RvItemModelVideos implements ItemModelVideo {
     private News news;
     private NewsListener listener;
 
-    private ArrayList<News> newsList = new ArrayList<>();
+    private int[] newsIdList;
 
-    public RvItemModelVideos(NewsListener listener, News news) {
+    public RvItemModelVideos(News news, NewsListener listener, int[] newsIdList) {
         this.news = news;
         this.listener = listener;
-
-    }
-
-    public RvItemModelVideos(News news, NewsListener listener, ArrayList<News> newsList) {
-        this.news = news;
-        this.listener = listener;
-        this.newsList = newsList;
+        this.newsIdList = newsIdList;
     }
 
     @Override
@@ -36,6 +30,7 @@ public class RvItemModelVideos implements ItemModelVideo {
 
     @Override
     public void bind(VideosAdapter.VideosViewHolder holder) {
+
         RvItemVideosBinding binding = (RvItemVideosBinding) holder.binding;
 
         Picasso.get().load(news.image).into(binding.imageViewPicture);
@@ -43,7 +38,7 @@ public class RvItemModelVideos implements ItemModelVideo {
         binding.textViewCategory.setText(news.category.name);
         binding.textViewTime.setText(MyMethodsClass.convertTime(news.created_at));
 
-        holder.binding.getRoot().setOnClickListener(view -> listener.onNewsClicked(news.id, news.url, newsList));
+        holder.binding.getRoot().setOnClickListener(view -> listener.onNewsClicked(news.id, news.url, newsIdList));
 
     }
 

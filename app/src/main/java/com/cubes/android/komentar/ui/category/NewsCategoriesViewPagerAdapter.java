@@ -1,5 +1,7 @@
 package com.cubes.android.komentar.ui.category;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
@@ -36,9 +38,16 @@ public class NewsCategoriesViewPagerAdapter extends FragmentStateAdapter {
 
         int categoryId;
 
+        Log.d("ADAPTER", "POSITION: " +position);
+
+
         if (subcategories != null) {
 
             categoryId = subcategories.get(position).id;
+
+            Log.d("ADAPTER", "POSITION: " +position);
+
+
 
         } else {
 

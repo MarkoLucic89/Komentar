@@ -204,10 +204,4 @@ public class NewsDetailsActivity extends AppCompatActivity implements
         startActivity(intent);
     }
 
-    @Override
-    public void onNewsClicked(int newsId) {
-        Intent intent = new Intent(this, NewsDetailsActivity.class);
-        intent.putExtra("news_id", newsId);
-        startActivity(intent);
-    }
 }

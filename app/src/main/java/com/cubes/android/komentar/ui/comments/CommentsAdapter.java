@@ -18,20 +18,20 @@ import java.util.ArrayList;
 public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.CommentsViewHolder> {
     private ArrayList<ItemModelComments> list = new ArrayList<>();
 
-    private final boolean isOnHomePage;
+    private final boolean isOnDetailPage;
     private CommentsListener listener;
 
     //CommentsActivity constructor
     public CommentsAdapter(CommentsListener listener) {
         this.listener = listener;
-        this.isOnHomePage = false;
+        this.isOnDetailPage = false;
     }
 
     //NewsDetailActivity constructor
-    public CommentsAdapter(CommentsListener listener, ArrayList<NewsComment> comments, boolean isOnHomePage) {
+    public CommentsAdapter(CommentsListener listener, ArrayList<NewsComment> comments, boolean isOnDetailPage) {
         addComments(comments);
         this.listener = listener;
-        this.isOnHomePage = isOnHomePage;
+        this.isOnDetailPage = isOnDetailPage;
     }
 
     public void updateList(ArrayList<NewsComment> comments) {
@@ -87,7 +87,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
 
     @Override
     public int getItemCount() {
-        if (isOnHomePage) {
+        if (isOnDetailPage) {
             return Math.min(list.size(), 5);
         }
         return list.size();

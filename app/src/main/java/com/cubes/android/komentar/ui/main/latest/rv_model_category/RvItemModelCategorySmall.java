@@ -17,20 +17,13 @@ public class RvItemModelCategorySmall implements ItemModelCategory {
     private News news;
     private boolean isOnHomePage;
     private NewsListener listener;
+    private int[] newsIdList;
 
-    private ArrayList<News> newsList = new ArrayList<>();
-
-    public RvItemModelCategorySmall(News news, boolean isOnHomePage, NewsListener listener) {
+    public RvItemModelCategorySmall(News news, boolean isOnHomePage, NewsListener listener, int[] newsIdList) {
         this.news = news;
         this.isOnHomePage = isOnHomePage;
         this.listener = listener;
-    }
-
-    public RvItemModelCategorySmall(News news, boolean isOnHomePage, NewsListener listener, ArrayList<News> newsList) {
-        this.news = news;
-        this.isOnHomePage = isOnHomePage;
-        this.listener = listener;
-        this.newsList = newsList;
+        this.newsIdList = newsIdList;
     }
 
     @Override
@@ -56,7 +49,7 @@ public class RvItemModelCategorySmall implements ItemModelCategory {
         binding.textViewCategory.setText(news.category.name);
         binding.textViewTime.setText(MyMethodsClass.convertTime(news.created_at));
 
-        holder.binding.getRoot().setOnClickListener(view -> listener.onNewsClicked(news.id, news.url, newsList));
+        holder.binding.getRoot().setOnClickListener(view -> listener.onNewsClicked(news.id, news.url, newsIdList));
 
     }
 

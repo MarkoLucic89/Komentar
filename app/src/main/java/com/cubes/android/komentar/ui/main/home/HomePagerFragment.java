@@ -2,25 +2,20 @@ package com.cubes.android.komentar.ui.main.home;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
 import com.cubes.android.komentar.data.DataRepository;
-import com.cubes.android.komentar.data.model.News;
 import com.cubes.android.komentar.data.source.remote.networking.response.HomePageResponseModel;
 import com.cubes.android.komentar.databinding.FragmentHomePagerBinding;
-import com.cubes.android.komentar.ui.detail.NewsDetailsActivity;
 import com.cubes.android.komentar.ui.detail.news_detail_activity_with_viewpager.DetailsActivity;
 import com.cubes.android.komentar.ui.main.latest.NewsListener;
-
-import java.util.ArrayList;
 
 public class HomePagerFragment extends Fragment implements NewsListener {
 
@@ -65,13 +60,18 @@ public class HomePagerFragment extends Fragment implements NewsListener {
 
             @Override
             public void onResponse(HomePageResponseModel.HomePageDataResponseModel response) {
-                binding.progressBar.setVisibility(View.GONE);
-                adapter.updateList(response);
 
+                binding.progressBar.setVisibility(View.GONE);
+                binding.recyclerView.setVisibility(View.VISIBLE);
+
+                adapter.updateList(response);
             }
 
             @Override
             public void onFailure(Throwable t) {
+                binding.progressBar.setVisibility(View.GONE);
+                binding.imageViewRefresh.setVisibility(View.VISIBLE);
+                binding.recyclerView.setVisibility(View.GONE);
 
             }
         });
@@ -101,30 +101,13 @@ public class HomePagerFragment extends Fragment implements NewsListener {
     }
 
     @Override
-    public void onNewsClicked(int newsId) {
-        Intent intent = new Intent(getContext(), NewsDetailsActivity.class);
-        intent.putExtra("news_id", newsId);
-        getActivity().startActivity(intent);
-    }
-
-    @Override
-    public void onNewsClicked(int newsId, String newsUrl, ArrayList<News> newsList) {
+    public void onNewsClicked(int newsId, String newsUrl, int[] newsIdList) {
 
         Intent intent = new Intent(getContext(), DetailsActivity.class);
-
-
-        int[] newsIdList = new int[newsList.size()];
-
-        for (int i = 0; i < newsList.size(); i++) {
-            newsIdList[i] = newsList.get(i).id;
-        }
-
         intent.putExtra("news_id", newsId);
-
         intent.putExtra("news_url", newsUrl);
-
         intent.putExtra("news_id_list", newsIdList);
-
         startActivity(intent);
+
     }
 }

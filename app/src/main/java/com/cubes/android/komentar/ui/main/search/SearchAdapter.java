@@ -19,6 +19,7 @@ import com.cubes.android.komentar.ui.main.search.rv_model_search.ItemModelSearch
 import com.cubes.android.komentar.ui.main.search.rv_model_search.RvItemModelSearch;
 import com.cubes.android.komentar.ui.main.search.rv_model_search.RvItemModelSearchLoading;
 import com.cubes.android.komentar.ui.main.search.rv_model_search.RvItemModelSearchRefresh;
+import com.cubes.android.komentar.ui.tools.MyMethodsClass;
 
 import java.util.ArrayList;
 
@@ -27,6 +28,8 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
     private ArrayList<ItemModelSearch> itemModels = new ArrayList<>();
     private NewsListener listener;
 
+    private int[] newsIdList;
+
     public SearchAdapter(NewsListener listener) {
         this.listener = listener;
     }
@@ -34,9 +37,12 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
     public SearchAdapter(NewsListener listener, ArrayList<News> newsList) {
         this.listener = listener;
 
+        newsIdList = MyMethodsClass.initNewsIdList(newsList);
+
         for (News news : newsList) {
-            itemModels.add(new RvItemModelSearch(news, false, listener, newsList));
+            itemModels.add(new RvItemModelSearch(news, false, listener, newsIdList));
         }
+
     }
 
 
@@ -49,8 +55,10 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
             return;
         }
 
+        newsIdList = MyMethodsClass.initNewsIdList(responseModel.news);
+
         for (News news : responseModel.news) {
-            itemModels.add(new RvItemModelSearch(news, false, listener, responseModel.news));
+            itemModels.add(new RvItemModelSearch(news, false, listener, newsIdList));
         }
 
 //        if (responseModel.data.pagination.has_more_pages) {
@@ -116,8 +124,10 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
             itemModels.remove(lastIndex);
         }
 
+        newsIdList = MyMethodsClass.initNewsIdList(response.news);
+
         for (News news : response.news) {
-            itemModels.add(new RvItemModelSearch(news, false, listener, response.news));
+            itemModels.add(new RvItemModelSearch(news, false, listener, newsIdList));
         }
 
 //        if (response.data.pagination.has_more_pages) {
@@ -130,7 +140,6 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
 
 //        notifyItemRangeChanged(lastIndex, itemModels.size());
         notifyItemRangeInserted((lastIndex + 1), response.news.size());
-
 
 //        notifyDataSetChanged();
     }
@@ -146,9 +155,10 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
             itemModels.remove(lastIndex);
         }
 
+        newsIdList = MyMethodsClass.initNewsIdList(response.news);
 
         for (News news : response.news) {
-            itemModels.add(new RvItemModelSearch(news, false, listener, response.news));
+            itemModels.add(new RvItemModelSearch(news, false, listener, newsIdList));
         }
 
 //        if (response.data.pagination.has_more_pages) {

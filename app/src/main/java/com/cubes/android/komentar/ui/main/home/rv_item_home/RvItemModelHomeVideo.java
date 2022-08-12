@@ -13,8 +13,8 @@ import java.util.ArrayList;
 
 public class RvItemModelHomeVideo implements ItemModelHome {
 
-    public ArrayList<News> newsList;
-    public NewsListener listener;
+    private ArrayList<News> newsList;
+    private NewsListener listener;
 
     public RvItemModelHomeVideo(ArrayList<News> newsList, NewsListener listener) {
         this.newsList = newsList;

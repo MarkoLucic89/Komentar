@@ -7,6 +7,7 @@ import com.cubes.android.komentar.data.model.News;
 import com.cubes.android.komentar.databinding.RvItemCategorySmallBinding;
 import com.cubes.android.komentar.ui.main.home.HomeAdapter;
 import com.cubes.android.komentar.ui.main.latest.NewsListener;
+import com.cubes.android.komentar.ui.tools.MyMethodsClass;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -15,17 +16,15 @@ public class RvItemModelHomeSmallNews implements ItemModelHome {
 
     private News news;
     private NewsListener listener;
-    private ArrayList<News> newsList;
 
-    public RvItemModelHomeSmallNews(News news, NewsListener listener) {
-        this.news = news;
-        this.listener = listener;
-    }
+    private int[] newsIdList;
 
     public RvItemModelHomeSmallNews(News news, NewsListener listener, ArrayList<News> newsList) {
         this.news = news;
         this.listener = listener;
-        this.newsList = newsList;
+
+        this.newsIdList = MyMethodsClass.initNewsIdList(newsList);
+
     }
 
     @Override
@@ -44,9 +43,7 @@ public class RvItemModelHomeSmallNews implements ItemModelHome {
         binding.textViewCategory.setTextColor(Color.parseColor(news.category.color));
         binding.textViewTime.setText(getTime(news.created_at));
 
-//        holder.binding.getRoot().setOnClickListener(view -> listener.onNewsClicked(news.id));
-
-        holder.binding.getRoot().setOnClickListener(view -> listener.onNewsClicked(news.id, news.url, newsList));
+        holder.binding.getRoot().setOnClickListener(view -> listener.onNewsClicked(news.id, news.url, newsIdList));
 
     }
 
