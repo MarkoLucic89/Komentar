@@ -6,8 +6,10 @@ import com.cubes.android.komentar.R;
 import com.cubes.android.komentar.data.model.News;
 import com.cubes.android.komentar.databinding.RvItemDetailsRelatedNewsBinding;
 import com.cubes.android.komentar.ui.detail.NewsDetailsAdapter;
+import com.cubes.android.komentar.ui.detail.RelatedNewsAdapter;
 import com.cubes.android.komentar.ui.main.latest.NewsListener;
 import com.cubes.android.komentar.ui.main.search.SearchAdapter;
+import com.cubes.android.komentar.ui.tools.MyMethodsClass;
 
 import java.util.ArrayList;
 
@@ -34,7 +36,8 @@ public class RvItemModelDetailsRelatedNews implements ItemModelDetails {
 
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(holder.binding.getRoot().getContext()));
 
-        SearchAdapter adapter = new SearchAdapter(listener, list);
+//        SearchAdapter adapter = new SearchAdapter(listener, list);
+        RelatedNewsAdapter adapter = new RelatedNewsAdapter(list, listener, MyMethodsClass.initNewsIdList(list));
 
         binding.recyclerView.setAdapter(adapter);
 

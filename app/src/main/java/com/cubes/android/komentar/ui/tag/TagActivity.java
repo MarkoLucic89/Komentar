@@ -8,15 +8,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.cubes.android.komentar.data.DataRepository;
-import com.cubes.android.komentar.data.model.News;
 import com.cubes.android.komentar.data.source.remote.networking.response.TagResponseModel;
 import com.cubes.android.komentar.databinding.ActivityTagBinding;
-import com.cubes.android.komentar.ui.detail.NewsDetailsActivity;
 import com.cubes.android.komentar.ui.detail.news_detail_activity_with_viewpager.DetailsActivity;
 import com.cubes.android.komentar.ui.main.latest.NewsListener;
-import com.cubes.android.komentar.ui.main.search.SearchAdapter;
-
-import java.util.ArrayList;
 
 
 public class TagActivity extends AppCompatActivity implements NewsListener {
@@ -24,7 +19,7 @@ public class TagActivity extends AppCompatActivity implements NewsListener {
     private ActivityTagBinding binding;
     private int tagId;
     private int nextPage = 1;
-    private SearchAdapter adapter;
+    private TagAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +46,7 @@ public class TagActivity extends AppCompatActivity implements NewsListener {
     }
 
     private void initRecyclerView() {
-        adapter = new SearchAdapter(this);
+        adapter = new TagAdapter(this);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(TagActivity.this));
         binding.recyclerView.setAdapter(adapter);
     }

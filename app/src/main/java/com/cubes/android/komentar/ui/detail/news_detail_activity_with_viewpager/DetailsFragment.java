@@ -16,7 +16,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.cubes.android.komentar.data.DataRepository;
-import com.cubes.android.komentar.data.model.News;
 import com.cubes.android.komentar.data.model.NewsComment;
 import com.cubes.android.komentar.data.model.NewsCommentVote;
 import com.cubes.android.komentar.data.source.local.database.NewsDatabase;
@@ -24,7 +23,6 @@ import com.cubes.android.komentar.data.source.remote.networking.response.NewsDet
 import com.cubes.android.komentar.databinding.FragmentDetailsBinding;
 import com.cubes.android.komentar.ui.comments.CommentsActivity;
 import com.cubes.android.komentar.ui.comments.CommentsAdapter;
-import com.cubes.android.komentar.ui.detail.NewsDetailsActivity;
 import com.cubes.android.komentar.ui.detail.NewsDetailsAdapter;
 import com.cubes.android.komentar.ui.detail.NewsDetailsTagsAdapter;
 import com.cubes.android.komentar.ui.main.latest.NewsListener;
@@ -99,8 +97,8 @@ public class DetailsFragment extends Fragment implements
         super.onViewCreated(view, savedInstanceState);
 
         initRecyclerView();
-        sendNewsDetailsRequest();
-        binding.imageViewRefresh.setOnClickListener(view1 -> sendNewsDetailsRequest());
+        getNewsDetails();
+        binding.imageViewRefresh.setOnClickListener(view1 -> getNewsDetails());
 
     }
 
@@ -109,7 +107,7 @@ public class DetailsFragment extends Fragment implements
         super.onResume();
 
         if (binding.imageViewRefresh.getVisibility() == View.VISIBLE) {
-            sendNewsDetailsRequest();
+            getNewsDetails();
         } else {
             listener.onDetailsResponseListener(mNewsId, mNewsUrl);
         }
@@ -130,7 +128,7 @@ public class DetailsFragment extends Fragment implements
         binding.recyclerView.setAdapter(adapter);
     }
 
-    private void sendNewsDetailsRequest() {
+    private void getNewsDetails() {
 
         binding.imageViewRefresh.setVisibility(View.GONE);
         binding.progressBar.setVisibility(View.VISIBLE);

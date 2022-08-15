@@ -1,4 +1,4 @@
-package com.cubes.android.komentar.ui.main.search;
+package com.cubes.android.komentar.ui.tag;
 
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -10,26 +10,27 @@ import androidx.viewbinding.ViewBinding;
 import com.cubes.android.komentar.R;
 import com.cubes.android.komentar.data.model.News;
 import com.cubes.android.komentar.data.source.remote.networking.response.NewsResponseModel;
+import com.cubes.android.komentar.data.source.remote.networking.response.TagResponseModel;
 import com.cubes.android.komentar.databinding.RvItemCategorySmallBinding;
 import com.cubes.android.komentar.databinding.RvItemLoadingBinding;
 import com.cubes.android.komentar.databinding.RvItemRefreshBinding;
 import com.cubes.android.komentar.ui.main.latest.NewsListener;
-import com.cubes.android.komentar.ui.main.search.rv_model_search.ItemModelSearch;
-import com.cubes.android.komentar.ui.main.search.rv_model_search.RvItemModelSearch;
-import com.cubes.android.komentar.ui.main.search.rv_model_search.RvItemModelSearchLoading;
-import com.cubes.android.komentar.ui.main.search.rv_model_search.RvItemModelSearchRefresh;
+import com.cubes.android.komentar.ui.tag.rv_model_tag.ItemModelTag;
+import com.cubes.android.komentar.ui.tag.rv_model_tag.RvItemModelTag;
+import com.cubes.android.komentar.ui.tag.rv_model_tag.RvItemModelTagLoading;
+import com.cubes.android.komentar.ui.tag.rv_model_tag.RvItemModelTagRefresh;
 import com.cubes.android.komentar.ui.tools.MyMethodsClass;
 
 import java.util.ArrayList;
 
-public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchViewHolder> {
+public class TagAdapter extends RecyclerView.Adapter<TagAdapter.TagViewHolder> {
 
-    private ArrayList<ItemModelSearch> itemModels = new ArrayList<>();
+    private ArrayList<ItemModelTag> itemModels = new ArrayList<>();
     private NewsListener listener;
 
     private int[] newsIdList;
 
-    public SearchAdapter(NewsListener listener) {
+    public TagAdapter(NewsListener listener) {
         this.listener = listener;
     }
 
@@ -45,7 +46,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
         newsIdList = MyMethodsClass.initNewsIdList(responseModel.news);
 
         for (News news : responseModel.news) {
-            itemModels.add(new RvItemModelSearch(news,listener, newsIdList));
+            itemModels.add(new RvItemModelTag(news, listener, newsIdList));
         }
 
 //        if (responseModel.data.pagination.has_more_pages) {
@@ -53,7 +54,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
 //        }
 
         if (responseModel.news.size() == 20) {
-            itemModels.add(new RvItemModelSearchLoading(listener));
+            itemModels.add(new RvItemModelTagLoading(listener));
         }
 
         notifyDataSetChanged();
@@ -62,7 +63,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
 
     @NonNull
     @Override
-    public SearchAdapter.SearchViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public TagAdapter.TagViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
         ViewBinding binding;
 
@@ -82,11 +83,11 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
                 binding = null;
         }
 
-        return new SearchAdapter.SearchViewHolder(binding);
+        return new TagAdapter.TagViewHolder(binding);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull SearchAdapter.SearchViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull TagAdapter.TagViewHolder holder, int position) {
         itemModels.get(position).bind(holder);
     }
 
@@ -100,7 +101,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
         return itemModels.get(position).getType();
     }
 
-    public void addNextPage(NewsResponseModel.NewsDataResponseModel response) {
+    public void addNextPage(TagResponseModel.TagDataResponseModel response) {
 
         int lastIndex;
 
@@ -114,7 +115,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
         newsIdList = MyMethodsClass.initNewsIdList(response.news);
 
         for (News news : response.news) {
-            itemModels.add(new RvItemModelSearch(news, listener, newsIdList));
+            itemModels.add(new RvItemModelTag(news, listener, newsIdList));
         }
 
 //        if (response.data.pagination.has_more_pages) {
@@ -122,18 +123,13 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
 //        }
 
         if (response.news.size() == 20) {
-            itemModels.add(new RvItemModelSearchLoading(listener));
+            itemModels.add(new RvItemModelTagLoading(listener));
         }
 
-//        notifyItemRangeChanged(lastIndex, itemModels.size());
-        notifyItemRangeInserted((lastIndex + 1), response.news.size());
+        notifyItemRangeChanged(lastIndex, itemModels.size());
+//        notifyItemRangeInserted((lastIndex + 1), response.news.size());
 
 //        notifyDataSetChanged();
-    }
-
-    public void clearList() {
-        itemModels.clear();
-        notifyDataSetChanged();
     }
 
     public void addRefresher() {
@@ -143,22 +139,23 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
         }
 
         itemModels.remove(itemModels.size() - 1);
-        itemModels.add(new RvItemModelSearchRefresh(listener));
+        itemModels.add(new RvItemModelTagRefresh(listener));
 
         notifyItemChanged(itemModels.size() - 1);
 
     }
 
 
-    public class SearchViewHolder extends RecyclerView.ViewHolder {
+    public class TagViewHolder extends RecyclerView.ViewHolder {
 
         public ViewBinding binding;
 
-        public SearchViewHolder(@NonNull ViewBinding binding) {
+        public TagViewHolder(@NonNull ViewBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }
     }
 
 }
+
 

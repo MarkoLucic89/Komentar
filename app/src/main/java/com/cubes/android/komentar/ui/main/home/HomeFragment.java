@@ -15,11 +15,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.cubes.android.komentar.data.DataRepository;
 import com.cubes.android.komentar.data.model.Category;
 import com.cubes.android.komentar.databinding.FragmentHomeBinding;
-import com.cubes.android.komentar.ui.category.CategoryActivity;
-import com.cubes.android.komentar.ui.category.NewsCategoriesViewPagerAdapter;
-import com.cubes.android.komentar.ui.main.drawer_menu.DrawerAdapter;
-import com.cubes.android.komentar.ui.main.drawer_menu.DrawerMenuAdapter;
-import com.cubes.android.komentar.ui.main.listeners.OnCategoryClickListener;
+import com.cubes.android.komentar.ui.main.home.drawer_menu.DrawerAdapter;
+import com.cubes.android.komentar.ui.main.home.drawer_menu.DrawerMenuAdapter;
+import com.cubes.android.komentar.ui.main.home.drawer_menu.OnCategoryClickListener;
+import com.cubes.android.komentar.ui.subcategories.SubcategoriesActivity;
 import com.google.android.material.tabs.TabLayoutMediator;
 
 import java.util.ArrayList;
@@ -29,7 +28,7 @@ public class HomeFragment extends Fragment implements OnCategoryClickListener {
 
     private FragmentHomeBinding binding;
 
-    private NewsCategoriesViewPagerAdapter pagerAdapter;
+    private CategoriesPagerAdapter pagerAdapter;
 
 
     //Rezervni adapter (svaki RvCategoryItem ima recuclerView sa podkategorijama)(ne koristim ga trenutno)
@@ -114,7 +113,7 @@ public class HomeFragment extends Fragment implements OnCategoryClickListener {
 
     private void initViewPager(ArrayList<Category> categories) {
 
-        pagerAdapter = new NewsCategoriesViewPagerAdapter(getActivity(), categories);
+        pagerAdapter = new CategoriesPagerAdapter(getActivity(), categories);
         binding.viewPager.setAdapter(pagerAdapter);
 
         new TabLayoutMediator(
@@ -144,7 +143,7 @@ public class HomeFragment extends Fragment implements OnCategoryClickListener {
 
     @Override
     public void onSubCategoryClicked(int categoryId, int subcategoryId) {
-        Intent intent = new Intent(getContext(), CategoryActivity.class);
+        Intent intent = new Intent(getContext(), SubcategoriesActivity.class);
         intent.putExtra("category_id", categoryId);
         intent.putExtra("subcategory_id", subcategoryId);
         getContext().startActivity(intent);

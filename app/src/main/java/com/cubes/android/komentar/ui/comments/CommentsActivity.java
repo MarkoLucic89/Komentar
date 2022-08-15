@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.cubes.android.komentar.data.DataRepository;
 import com.cubes.android.komentar.data.model.NewsComment;
 import com.cubes.android.komentar.data.model.NewsCommentVote;
-import com.cubes.android.komentar.data.source.local.database.NewsDatabase;
+import com.cubes.android.komentar.data.source.local.CommentPrefs;
 import com.cubes.android.komentar.databinding.ActivityCommentsBinding;
 import com.cubes.android.komentar.ui.post_comment.PostCommentActivity;
 
@@ -26,6 +26,7 @@ public class CommentsActivity extends AppCompatActivity {
     private ActivityCommentsBinding binding;
     private int news_id;
     private CommentsAdapter adapter;
+    private List<NewsCommentVote> mVotes = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,16 +82,40 @@ public class CommentsActivity extends AppCompatActivity {
 
     private void getCommentVotes(ArrayList<NewsComment> comments) {
 
+        //ROOM
+
+//        ExecutorService service = Executors.newSingleThreadExecutor();
+//        service.execute(() -> {
+//
+//            //doInBackgroundThread
+//            List<NewsCommentVote> votes = NewsDatabase.getInstance(binding.getRoot().getContext()).voteDao().getNewsCommentVotes();
+//
+//            //onPostExecute
+//            runOnUiThread(() -> checkVotedComments(comments, votes));
+//
+//        });
+//
+//        service.shutdown();
+
+
+        //SHARED PREFS
+
         ExecutorService service = Executors.newSingleThreadExecutor();
         service.execute(() -> {
 
             //doInBackgroundThread
-            List<NewsCommentVote> votes = NewsDatabase.getInstance(binding.getRoot().getContext()).voteDao().getNewsCommentVotes();
+            ArrayList votes = (ArrayList) CommentPrefs.readListFromPref(this);
 
+
+            if (votes != null) {
+                mVotes.addAll(votes);
+            }
             //onPostExecute
-            runOnUiThread(() -> checkVotedComments(comments, votes));
+            runOnUiThread(() -> checkVotedComments(comments, mVotes));
 
         });
+
+        service.shutdown();
 
     }
 
@@ -112,6 +137,7 @@ public class CommentsActivity extends AppCompatActivity {
         }
 
         adapter.updateList(comments);
+
     }
 
     private void checkChildrenVotes(ArrayList<NewsComment> children, NewsCommentVote vote) {
@@ -163,12 +189,31 @@ public class CommentsActivity extends AppCompatActivity {
             @Override
             public void onResponse(NewsCommentVote response) {
 
+                //ROOM
+
+//                ExecutorService service = Executors.newSingleThreadExecutor();
+//                service.execute(() -> {
+//
+//                    //doInBackgroundThread
+//                    NewsCommentVote newsCommentVote = new NewsCommentVote(String.valueOf(id), vote);
+//                    NewsDatabase.getInstance(binding.getRoot().getContext()).voteDao().insert(newsCommentVote);
+//
+//                    //onPostExecute
+//                    runOnUiThread(() -> adapter.commentLiked(id, vote));
+//
+//                });
+//
+//                service.shutdown();
+
+                //SHARED PREFS
+
                 ExecutorService service = Executors.newSingleThreadExecutor();
                 service.execute(() -> {
 
                     //doInBackgroundThread
                     NewsCommentVote newsCommentVote = new NewsCommentVote(String.valueOf(id), vote);
-                    NewsDatabase.getInstance(binding.getRoot().getContext()).voteDao().insert(newsCommentVote);
+                    mVotes.add(newsCommentVote);
+                    CommentPrefs.writeListInPref(CommentsActivity.this, mVotes);
 
                     //onPostExecute
                     runOnUiThread(() -> adapter.commentLiked(id, vote));
@@ -193,12 +238,31 @@ public class CommentsActivity extends AppCompatActivity {
             @Override
             public void onResponse(NewsCommentVote response) {
 
+                //ROOM
+
+//                ExecutorService service = Executors.newSingleThreadExecutor();
+//                service.execute(() -> {
+//
+//                    //doInBackgroundThread
+//                    NewsCommentVote newsCommentVote = new NewsCommentVote(String.valueOf(id), false);
+//                    NewsDatabase.getInstance(binding.getRoot().getContext()).voteDao().insert(newsCommentVote);
+//
+//                    //onPostExecute
+//                    runOnUiThread(() -> adapter.commentDisliked(id, vote));
+//
+//                });
+//
+//                service.shutdown();
+
+                //SHARED PREFS
+
                 ExecutorService service = Executors.newSingleThreadExecutor();
                 service.execute(() -> {
 
                     //doInBackgroundThread
-                    NewsCommentVote newsCommentVote = new NewsCommentVote(String.valueOf(id), false);
-                    NewsDatabase.getInstance(binding.getRoot().getContext()).voteDao().insert(newsCommentVote);
+                    NewsCommentVote newsCommentVote = new NewsCommentVote(String.valueOf(id), vote);
+                    mVotes.add(newsCommentVote);
+                    CommentPrefs.writeListInPref(CommentsActivity.this, mVotes);
 
                     //onPostExecute
                     runOnUiThread(() -> adapter.commentDisliked(id, vote));

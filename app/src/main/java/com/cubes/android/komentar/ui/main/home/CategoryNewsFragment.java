@@ -151,9 +151,4 @@ public class CategoryNewsFragment extends Fragment implements NewsListener {
 
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        binding = null;
-    }
 }
