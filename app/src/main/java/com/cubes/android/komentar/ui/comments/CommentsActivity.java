@@ -160,12 +160,12 @@ public class CommentsActivity extends AppCompatActivity {
         adapter = new CommentsAdapter(new CommentsAdapter.CommentsListener() {
             @Override
             public void onLikeListener(CommentsAdapter adapter, int id, boolean vote) {
-                likeComment(adapter, id, vote);
+                likeComment(id, vote);
             }
 
             @Override
             public void onDislikeListener(CommentsAdapter adapter, int id, boolean vote) {
-                dislikeComment(adapter, id, vote);
+                dislikeComment(id, vote);
             }
 
             @Override
@@ -183,7 +183,7 @@ public class CommentsActivity extends AppCompatActivity {
         binding.recyclerViewComments.setAdapter(adapter);
     }
 
-    private void likeComment(CommentsAdapter adapter, int id, boolean vote) {
+    private void likeComment(int id, boolean vote) {
 
         DataRepository.getInstance().likeComment(id, vote, new DataRepository.CommentsVoteListener() {
             @Override
@@ -232,7 +232,7 @@ public class CommentsActivity extends AppCompatActivity {
 
     }
 
-    private void dislikeComment(CommentsAdapter adapter, int id, boolean vote) {
+    private void dislikeComment(int id, boolean vote) {
 
         DataRepository.getInstance().dislikeComment(id, vote, new DataRepository.CommentsVoteListener() {
             @Override

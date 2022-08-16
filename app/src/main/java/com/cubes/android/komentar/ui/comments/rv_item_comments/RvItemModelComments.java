@@ -1,5 +1,7 @@
 package com.cubes.android.komentar.ui.comments.rv_item_comments;
 
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.cubes.android.komentar.R;
@@ -14,11 +16,13 @@ public class RvItemModelComments implements ItemModelComments {
     public CommentsAdapter adapter;
     public CommentsAdapter.CommentsListener listener;
     public RvItemCommentBinding binding;
+    private boolean isSubComment;
 
-    public RvItemModelComments(NewsComment comment, CommentsAdapter.CommentsListener listener, CommentsAdapter adapter) {
+    public RvItemModelComments(NewsComment comment, CommentsAdapter.CommentsListener listener, CommentsAdapter adapter, boolean isSubComment) {
         this.comment = comment;
         this.listener = listener;
         this.adapter = adapter;
+        this.isSubComment = isSubComment;
     }
 
     @Override
@@ -81,6 +85,18 @@ public class RvItemModelComments implements ItemModelComments {
             listener.goOnPostCommentActivity(Integer.parseInt(comment.news), Integer.parseInt(comment.id));
         });
 
+        if (isSubComment) {
+            setMargins(binding.layoutRoot, 80, 0, 0, 0);
+        }
+
+    }
+
+    private void setMargins(View view, int left, int top, int right, int bottom) {
+        if (view.getLayoutParams() instanceof ViewGroup.MarginLayoutParams) {
+            ViewGroup.MarginLayoutParams p = (ViewGroup.MarginLayoutParams) view.getLayoutParams();
+            p.setMargins(left, top, right, bottom);
+            view.requestLayout();
+        }
     }
 
     @Override

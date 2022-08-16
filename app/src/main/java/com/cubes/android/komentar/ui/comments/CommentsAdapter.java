@@ -11,7 +11,6 @@ import com.cubes.android.komentar.data.model.NewsComment;
 import com.cubes.android.komentar.databinding.RvItemCommentBinding;
 import com.cubes.android.komentar.ui.comments.rv_item_comments.ItemModelComments;
 import com.cubes.android.komentar.ui.comments.rv_item_comments.RvItemModelComments;
-import com.cubes.android.komentar.ui.comments.rv_item_comments.RvItemModelSubComments;
 
 import java.util.ArrayList;
 
@@ -20,6 +19,8 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
 
     private final boolean isOnDetailPage;
     private CommentsListener listener;
+
+
 
     //CommentsActivity constructor
     public CommentsAdapter(CommentsListener listener) {
@@ -43,7 +44,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
 
         for (NewsComment comment : comments) {
 
-            list.add(new RvItemModelComments(comment, listener, this));
+            list.add(new RvItemModelComments(comment, listener, this, false));
 
             addChildren(comment.children);
 
@@ -56,7 +57,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
 
             for (NewsComment comment : comments) {
 
-                list.add(new RvItemModelSubComments(comment, listener, this));
+                list.add(new RvItemModelComments(comment, listener, this, true));
 
                 addChildren(comment.children);
 
