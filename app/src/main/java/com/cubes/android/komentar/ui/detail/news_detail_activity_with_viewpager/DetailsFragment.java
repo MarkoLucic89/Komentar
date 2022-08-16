@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.cubes.android.komentar.data.DataRepository;
 import com.cubes.android.komentar.data.model.NewsComment;
 import com.cubes.android.komentar.data.model.NewsCommentVote;
+import com.cubes.android.komentar.data.source.local.CommentPrefs;
 import com.cubes.android.komentar.data.source.local.database.NewsDatabase;
 import com.cubes.android.komentar.data.source.remote.networking.response.NewsDetailsResponseModel;
 import com.cubes.android.komentar.databinding.FragmentDetailsBinding;
@@ -163,12 +164,28 @@ public class DetailsFragment extends Fragment implements
 
     private void getCommentVotes(ArrayList<NewsComment> comments) {
 
+        //Room
+
+//        ExecutorService service = Executors.newSingleThreadExecutor();
+//        Handler handler = new Handler(Looper.getMainLooper());
+//        service.execute(() -> {
+//
+//            //doInBackgroundThread
+//            List<NewsCommentVote> votes = NewsDatabase.getInstance(binding.getRoot().getContext()).voteDao().getNewsCommentVotes();
+//
+//            //onPostExecute
+//            handler.post(() -> checkVotedComments(comments, votes));
+//
+//        });
+
+        //SHARED PREFS
+
         ExecutorService service = Executors.newSingleThreadExecutor();
         Handler handler = new Handler(Looper.getMainLooper());
         service.execute(() -> {
 
             //doInBackgroundThread
-            List<NewsCommentVote> votes = NewsDatabase.getInstance(binding.getRoot().getContext()).voteDao().getNewsCommentVotes();
+            ArrayList votes = (ArrayList) CommentPrefs.readListFromPref(getActivity());
 
             //onPostExecute
             handler.post(() -> checkVotedComments(comments, votes));

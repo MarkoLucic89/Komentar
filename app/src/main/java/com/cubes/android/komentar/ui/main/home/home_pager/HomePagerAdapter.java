@@ -10,16 +10,19 @@ import androidx.viewbinding.ViewBinding;
 import com.cubes.android.komentar.R;
 import com.cubes.android.komentar.data.model.News;
 import com.cubes.android.komentar.data.source.remote.networking.response.HomePageResponseModel;
+import com.cubes.android.komentar.databinding.RvItemCategoryBigBinding;
 import com.cubes.android.komentar.databinding.RvItemCategorySmallBinding;
-import com.cubes.android.komentar.databinding.RvItemHomeCategoryBoxBinding;
+import com.cubes.android.komentar.databinding.RvItemHomeCategoryTitleBinding;
 import com.cubes.android.komentar.databinding.RvItemHomeSliderBinding;
 import com.cubes.android.komentar.databinding.RvItemHomeTabsBinding;
 import com.cubes.android.komentar.databinding.RvItemHomeVideoBinding;
+import com.cubes.android.komentar.databinding.RvItemVideosBinding;
 import com.cubes.android.komentar.ui.main.home.home_pager.rv_item_home.ItemModelHome;
-import com.cubes.android.komentar.ui.main.home.home_pager.rv_item_home.RvItemModelCategoryBox;
+import com.cubes.android.komentar.ui.main.home.home_pager.rv_item_home.RvItemModelCategoryTitle;
+import com.cubes.android.komentar.ui.main.home.home_pager.rv_item_home.RvItemModelHomeCategoryBig;
 import com.cubes.android.komentar.ui.main.home.home_pager.rv_item_home.RvItemModelHomeSlider;
 import com.cubes.android.komentar.ui.main.home.home_pager.rv_item_home.RvItemModelHomeSmallNews;
-import com.cubes.android.komentar.ui.main.home.home_pager.rv_item_home.RvItemModelHomeVideo;
+import com.cubes.android.komentar.ui.main.home.home_pager.rv_item_home.RvItemModelHomeVideos;
 import com.cubes.android.komentar.ui.main.home.home_pager.rv_item_home.RvItemModelTabs;
 import com.cubes.android.komentar.ui.main.latest.NewsListener;
 import com.cubes.android.komentar.ui.tools.MyMethodsClass;
@@ -54,12 +57,23 @@ public class HomePagerAdapter extends RecyclerView.Adapter<HomePagerAdapter.Home
         //SPORT CATEGORY BOX
         addCategoryBox("SPORT", response);
 
+
+
         //EDITORS CHOICE
         addSlider("EDITORS CHOICE", response);
 
         //VIDEO
         if (!response.videos.isEmpty()) {
-            list.add(new RvItemModelHomeVideo(response.videos, listener));
+
+//            list.add(new RvItemModelHomeVideo(response.videos, listener));
+
+            int[] videosIdList = MyMethodsClass.initNewsIdList(response.videos);
+
+            list.add(new RvItemModelCategoryTitle("Video", "#FE0000"));
+
+            for (News news : response.videos) {
+                list.add(new RvItemModelHomeVideos(news, listener, videosIdList));
+            }
         }
 
         //SHOWBIZ
@@ -128,7 +142,26 @@ public class HomePagerAdapter extends RecyclerView.Adapter<HomePagerAdapter.Home
         HomePageResponseModel.CategoryBoxResponseModel categoryBoxResponseModel = getCategoryForTitle(title, response);
 
         if (categoryBoxResponseModel != null && !categoryBoxResponseModel.news.isEmpty()) {
-            list.add(new RvItemModelCategoryBox(categoryBoxResponseModel, listener));
+
+//            list.add(new RvItemModelCategoryBox(categoryBoxResponseModel, listener));
+
+            list.add(new RvItemModelCategoryTitle(categoryBoxResponseModel.title, categoryBoxResponseModel.color));
+
+            int[] newsIdList = MyMethodsClass.initNewsIdList(categoryBoxResponseModel.news);
+
+            list.add(new RvItemModelHomeCategoryBig(categoryBoxResponseModel.news.get(0), true, listener, newsIdList));
+
+
+            //servisi za svaki CategoryBox vracaju preko 20 vesti, zato je ovo trenutno zakomentarisano
+
+//            for (int i = 1; i < categoryBoxResponseModel.news.size(); i++) {
+//                list.add(new RvItemModelHomeSmallNews(categoryBoxResponseModel.news.get(i), listener, newsIdList));
+//            }
+
+            //trenutno je size 5 zbog testiranja
+            for (int i = 1; i < 5; i++) {
+                list.add(new RvItemModelHomeSmallNews(categoryBoxResponseModel.news.get(i), listener, newsIdList));
+            }
         }
 
     }
@@ -158,11 +191,17 @@ public class HomePagerAdapter extends RecyclerView.Adapter<HomePagerAdapter.Home
             case R.layout.rv_item_category_small:
                 binding = RvItemCategorySmallBinding.inflate(inflater, parent, false);
                 break;
+            case R.layout.rv_item_category_big:
+                binding = RvItemCategoryBigBinding.inflate(inflater, parent, false);
+                break;
             case R.layout.rv_item_home_tabs:
                 binding = RvItemHomeTabsBinding.inflate(inflater, parent, false);
                 break;
-            case R.layout.rv_item_home_category_box:
-                binding = RvItemHomeCategoryBoxBinding.inflate(inflater, parent, false);
+            case R.layout.rv_item_videos:
+                binding = RvItemVideosBinding.inflate(inflater, parent, false);
+                break;
+            case R.layout.rv_item_home_category_title:
+                binding = RvItemHomeCategoryTitleBinding.inflate(inflater, parent, false);
                 break;
             case R.layout.rv_item_home_video:
                 binding = RvItemHomeVideoBinding.inflate(inflater, parent, false);

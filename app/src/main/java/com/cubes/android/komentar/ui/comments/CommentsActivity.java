@@ -45,6 +45,41 @@ public class CommentsActivity extends AppCompatActivity {
 
         getComments();
 
+        binding.swipeRefreshLayout.setOnRefreshListener(() -> refreshList());
+
+    }
+
+    private void refreshList() {
+
+        DataRepository.getInstance().getComments(news_id, new DataRepository.CommentsResponseListener() {
+
+            @Override
+            public void onResponse(ArrayList<NewsComment> comments) {
+
+
+                if (comments.isEmpty()) {
+                    binding.textView.setVisibility(View.VISIBLE);
+                } else {
+                    binding.textView.setVisibility(View.GONE);
+                    getCommentVotes(comments);
+                }
+
+                binding.swipeRefreshLayout.setRefreshing(false);
+
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+
+                binding.textView.setVisibility(View.GONE);
+                binding.recyclerViewComments.setVisibility(View.GONE);
+                binding.imageViewRefresh.setVisibility(View.VISIBLE);
+                binding.progressBar.setVisibility(View.GONE);
+
+                binding.swipeRefreshLayout.setRefreshing(false);
+
+            }
+        });
     }
 
     private void getComments() {
