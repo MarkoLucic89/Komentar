@@ -15,6 +15,10 @@ import com.google.android.material.tabs.TabLayoutMediator;
 import java.util.ArrayList;
 
 
+/*
+NE KORISTI SE VISE
+ */
+
 public class CategoryActivity extends AppCompatActivity {
 
     private ActivityCategoryBinding binding;

@@ -20,7 +20,6 @@ import java.util.ArrayList;
 public class RvItemModelHomeSlider implements ItemModelHome{
 
     public ArrayList<News> newsList;
-    public boolean isSnapHelperAttached;
     public SnapHelper snapHelper;
     private boolean isEditorsChoice;
 
@@ -29,7 +28,6 @@ public class RvItemModelHomeSlider implements ItemModelHome{
     public RvItemModelHomeSlider(ArrayList<News> newsList, boolean showCategory, NewsListener listener) {
         this.newsList = newsList;
         this.snapHelper = new PagerSnapHelper();
-        this.isSnapHelperAttached = false;
         this.isEditorsChoice = showCategory;
         this.listener = listener;
     }

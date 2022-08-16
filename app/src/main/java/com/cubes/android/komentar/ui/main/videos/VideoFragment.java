@@ -54,8 +54,6 @@ public class VideoFragment extends Fragment implements NewsListener {
 
         initRecyclerView();
 
-//        sendVideosRequest();
-
         binding.imageViewRefresh.setVisibility(View.GONE);
         binding.progressBar.setVisibility(View.VISIBLE);
 

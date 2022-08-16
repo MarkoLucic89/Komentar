@@ -22,6 +22,7 @@ import com.cubes.android.komentar.ui.main.home.home_pager.rv_item_home.RvItemMod
 import com.cubes.android.komentar.ui.main.home.home_pager.rv_item_home.RvItemModelHomeVideo;
 import com.cubes.android.komentar.ui.main.home.home_pager.rv_item_home.RvItemModelTabs;
 import com.cubes.android.komentar.ui.main.latest.NewsListener;
+import com.cubes.android.komentar.ui.tools.MyMethodsClass;
 
 import java.util.ArrayList;
 
@@ -41,8 +42,10 @@ public class HomePagerAdapter extends RecyclerView.Adapter<HomePagerAdapter.Home
         addSlider("SLIDER", response);
 
         //TOP NEWS
+        int[] newsIdList = MyMethodsClass.initNewsIdList(response.top);
+
         for (News news : response.top) {
-            list.add(new RvItemModelHomeSmallNews(news, listener, response.top));
+            list.add(new RvItemModelHomeSmallNews(news, listener, newsIdList));
         }
 
         //TABS
@@ -164,7 +167,6 @@ public class HomePagerAdapter extends RecyclerView.Adapter<HomePagerAdapter.Home
             case R.layout.rv_item_home_video:
                 binding = RvItemHomeVideoBinding.inflate(inflater, parent, false);
                 break;
-
             default:
                 binding = null;
         }

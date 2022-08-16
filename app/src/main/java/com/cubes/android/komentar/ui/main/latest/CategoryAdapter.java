@@ -32,10 +32,14 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 
     private int[] newsIdList;
 
+    //CategoriesNewsFragment
+
     public CategoryAdapter(NewsListener listener) {
         isOnHomePage = false;
         this.listener = listener;
     }
+
+    //HomePageFragment
 
     public CategoryAdapter(ArrayList<News> newsList, boolean isOnHomePage, NewsListener listener) {
         this.isOnHomePage = isOnHomePage;
@@ -132,9 +136,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 
         int lastIndex = 0;
 
-        if (itemModels.isEmpty()) {
-            lastIndex = 0;
-        } else {
+        if (!itemModels.isEmpty()) {
             lastIndex = itemModels.size() - 1;
             itemModels.remove(lastIndex);
         }
@@ -153,8 +155,8 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
             itemModels.add(new RvItemModelCategoryLoading(listener));
         }
 
-        notifyItemRangeChanged(lastIndex, itemModels.size());
-//        notifyItemRangeInserted(lastIndex, newsList.size());
+//        notifyItemRangeChanged(lastIndex, itemModels.size());
+        notifyItemRangeInserted(lastIndex + 1, response.news.size());
 //        notifyDataSetChanged();
     }
 
@@ -162,9 +164,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 
         int lastIndex = 0;
 
-        if (itemModels.isEmpty()) {
-            lastIndex = 0;
-        } else {
+        if (!itemModels.isEmpty()) {
             lastIndex = itemModels.size() - 1;
             itemModels.remove(lastIndex);
         }
@@ -183,8 +183,8 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
             itemModels.add(new RvItemModelCategoryLoading(listener));
         }
 
-        notifyItemRangeChanged(lastIndex, itemModels.size());
-//        notifyItemRangeInserted(lastIndex, newsList.size());
+//        notifyItemRangeChanged(lastIndex, itemModels.size());
+        notifyItemRangeInserted(lastIndex + 1, response.news.size());
 //        notifyDataSetChanged();
     }
 

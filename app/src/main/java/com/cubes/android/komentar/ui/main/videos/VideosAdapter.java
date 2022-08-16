@@ -133,10 +133,9 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.VideosView
         if (response.news.size() == 20) {
             itemModels.add(new RvItemModelVideoLoading(listener));
         }
-        notifyItemRangeChanged(lastIndex, itemModels.size());
-//        notifyItemRangeInserted(lastIndex+1, newsList.size());
 
-
+//        notifyItemRangeChanged(lastIndex, itemModels.size());
+        notifyItemRangeInserted(lastIndex + 1, response.news.size());
 //        notifyDataSetChanged();
     }
 

@@ -23,6 +23,10 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 
+/*
+NE KORISTI SE VISE
+ */
+
 public class NewsDetailsActivity extends AppCompatActivity implements
         CommentsAdapter.CommentsListener,
         NewsDetailsTagsAdapter.TagListener,
