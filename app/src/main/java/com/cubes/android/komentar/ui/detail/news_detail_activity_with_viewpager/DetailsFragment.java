@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.cubes.android.komentar.data.DataRepository;
 import com.cubes.android.komentar.data.model.NewsComment;
@@ -50,6 +51,8 @@ public class DetailsFragment extends Fragment implements
     private NewsDetailsAdapter adapter;
 
     private DetailsListener listener;
+
+    private ArrayList<NewsCommentVote> mVotes = new ArrayList<>();
 
     public interface DetailsListener {
 
@@ -101,6 +104,41 @@ public class DetailsFragment extends Fragment implements
         getNewsDetails();
         binding.imageViewRefresh.setOnClickListener(view1 -> getNewsDetails());
 
+        binding.swipeRefreshLayout.setOnRefreshListener(() -> refreshNewsDetails());
+    }
+
+    private void refreshNewsDetails() {
+
+        DataRepository.getInstance().sendNewsDetailsRequest(mNewsId, new DataRepository.DetailResponseListener() {
+            @Override
+            public void onResponse(NewsDetailsResponseModel.NewsDetailsDataResponseModel response) {
+
+                binding.recyclerView.setVisibility(View.VISIBLE);
+                binding.imageViewRefresh.setVisibility(View.GONE);
+
+                mNewsId = response.id;
+                mNewsUrl = response.url;
+
+                listener.onDetailsResponseListener(mNewsId, mNewsUrl);
+
+                getCommentVotes(response.comments_top_n);
+
+                adapter.updateList(response);
+
+                binding.swipeRefreshLayout.setRefreshing(false);
+
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+
+                binding.recyclerView.setVisibility(View.GONE);
+                binding.imageViewRefresh.setVisibility(View.VISIBLE);
+
+                binding.swipeRefreshLayout.setRefreshing(false);
+
+            }
+        });
     }
 
     @Override
@@ -140,6 +178,7 @@ public class DetailsFragment extends Fragment implements
 
                 binding.progressBar.setVisibility(View.GONE);
                 binding.imageViewRefresh.setVisibility(View.GONE);
+                binding.recyclerView.setVisibility(View.VISIBLE);
 
                 mNewsId = response.id;
                 mNewsUrl = response.url;
@@ -150,6 +189,8 @@ public class DetailsFragment extends Fragment implements
 
                 adapter.updateList(response);
 
+                binding.swipeRefreshLayout.setRefreshing(false);
+
             }
 
             @Override
@@ -157,6 +198,9 @@ public class DetailsFragment extends Fragment implements
 
                 binding.progressBar.setVisibility(View.GONE);
                 binding.imageViewRefresh.setVisibility(View.VISIBLE);
+
+                binding.swipeRefreshLayout.setRefreshing(false);
+
             }
         });
     }
@@ -187,8 +231,12 @@ public class DetailsFragment extends Fragment implements
             //doInBackgroundThread
             ArrayList votes = (ArrayList) CommentPrefs.readListFromPref(getActivity());
 
+            if (votes != null) {
+                mVotes.addAll(votes);
+            }
+
             //onPostExecute
-            handler.post(() -> checkVotedComments(comments, votes));
+            handler.post(() -> checkVotedComments(comments, mVotes));
 
         });
 
@@ -228,7 +276,7 @@ public class DetailsFragment extends Fragment implements
 
 
     @Override
-    public void onLikeListener(CommentsAdapter adapter, int id, boolean vote) {
+    public void onLikeListener(int id, boolean vote) {
 
         DataRepository.getInstance().likeComment(id, vote, new DataRepository.CommentsVoteListener() {
             @Override
@@ -258,7 +306,7 @@ public class DetailsFragment extends Fragment implements
     }
 
     @Override
-    public void onDislikeListener(CommentsAdapter adapter, int id, boolean vote) {
+    public void onDislikeListener(int id, boolean vote) {
 
         DataRepository.getInstance().dislikeComment(id, vote, new DataRepository.CommentsVoteListener() {
             @Override
@@ -295,6 +343,8 @@ public class DetailsFragment extends Fragment implements
         intent.putExtra("news", newsId);
         intent.putExtra("reply_id", reply_id);
         startActivity(intent);
+
+        Toast.makeText(getContext(), ("NEWS ID: " + newsId + ", REPLY ID: " + reply_id), Toast.LENGTH_SHORT).show();
 
     }
 

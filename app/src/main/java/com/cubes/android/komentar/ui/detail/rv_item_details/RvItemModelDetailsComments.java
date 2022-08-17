@@ -35,7 +35,7 @@ public class RvItemModelDetailsComments implements ItemModelDetails {
         binding.textViewCommentsCount.setText(String.valueOf(data.comments_count));
 
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext()));
-        binding.recyclerView.setAdapter(new CommentsAdapter(listener, data.comments_top_n, true));
+        binding.recyclerView.setAdapter(new CommentsAdapter(listener, data.comments_top_n));
 
         if (data.comments_count > 0) {
             binding.buttonAllComments.setVisibility(View.VISIBLE);

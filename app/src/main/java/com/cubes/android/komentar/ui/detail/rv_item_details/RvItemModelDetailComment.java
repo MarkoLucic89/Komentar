@@ -1,4 +1,4 @@
-package com.cubes.android.komentar.ui.comments.rv_item_comments;
+package com.cubes.android.komentar.ui.detail.rv_item_details;
 
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,16 +8,18 @@ import com.cubes.android.komentar.R;
 import com.cubes.android.komentar.data.model.NewsComment;
 import com.cubes.android.komentar.databinding.RvItemCommentBinding;
 import com.cubes.android.komentar.ui.comments.CommentsAdapter;
+import com.cubes.android.komentar.ui.comments.rv_item_comments.ItemModelComments;
+import com.cubes.android.komentar.ui.detail.NewsDetailsAdapter;
 
 
-public class RvItemModelComments implements ItemModelComments {
+public class RvItemModelDetailComment implements ItemModelDetails {
 
     public NewsComment comment;
     public CommentsAdapter.CommentsListener listener;
     public RvItemCommentBinding binding;
-    private final boolean isSubComment;
+    private boolean isSubComment;
 
-    public RvItemModelComments(NewsComment comment, CommentsAdapter.CommentsListener listener, boolean isSubComment) {
+    public RvItemModelDetailComment(NewsComment comment, CommentsAdapter.CommentsListener listener, boolean isSubComment) {
         this.comment = comment;
         this.listener = listener;
         this.isSubComment = isSubComment;
@@ -34,7 +36,7 @@ public class RvItemModelComments implements ItemModelComments {
     }
 
     @Override
-    public void bind(CommentsAdapter.CommentsViewHolder holder) {
+    public void bind(NewsDetailsAdapter.NewsDetailsViewHolder holder) {
 
         binding = (RvItemCommentBinding) holder.binding;
 
@@ -58,9 +60,6 @@ public class RvItemModelComments implements ItemModelComments {
                 binding.buttonDislike.setEnabled(false);
             });
 
-                binding.buttonLike.setBackgroundResource(R.drawable.background_vote);
-                binding.buttonDislike.setBackgroundResource(R.drawable.background_vote);
-
         } else {
 
             binding.buttonLike.setOnClickListener(view -> {
@@ -76,10 +75,8 @@ public class RvItemModelComments implements ItemModelComments {
             });
 
             if (comment.newsCommentVote.vote) {
-                binding.buttonDislike.setBackgroundResource(R.drawable.background_vote);
                 binding.buttonLike.setBackgroundResource(R.drawable.background_button_like);
             } else {
-                binding.buttonLike.setBackgroundResource(R.drawable.background_vote);
                 binding.buttonDislike.setBackgroundResource(R.drawable.background_button_dislike);
             }
         }
@@ -90,8 +87,6 @@ public class RvItemModelComments implements ItemModelComments {
 
         if (isSubComment) {
             setMargins(binding.layoutRoot, 80, 0, 0, 0);
-        } else {
-            setMargins(binding.layoutRoot, 0, 0, 0, 0);
         }
 
     }

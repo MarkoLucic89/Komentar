@@ -34,7 +34,7 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.TagViewHolder> {
         this.listener = listener;
     }
 
-    public void updateList(NewsResponseModel.NewsDataResponseModel responseModel) {
+    public void updateList(TagResponseModel.TagDataResponseModel responseModel) {
 
         itemModels.clear();
 

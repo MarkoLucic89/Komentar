@@ -272,6 +272,7 @@ public class DataRepository {
     }
 
     public void getComments(int news_id, CommentsResponseListener listener) {
+
         api.getNewsService().getComments(news_id).enqueue(new Callback<CommentsResponseModel>() {
             @Override
             public void onResponse(Call<CommentsResponseModel> call, Response<CommentsResponseModel> response) {

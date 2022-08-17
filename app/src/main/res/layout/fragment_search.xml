@@ -23,8 +23,8 @@
             android:layout_weight="1"
             android:background="@null"
             android:hint="@string/hint_search"
-            android:inputType="text"
             android:imeOptions="actionSearch"
+            android:inputType="text"
             android:padding="12dp"
             android:textColor="@color/white"
             android:textColorHint="@color/grey_light" />
@@ -41,15 +41,21 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:background="@color/white">
 
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerView"
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipeRefreshLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/white" />
+            android:layout_height="match_parent">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white" />
+
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
         <ProgressBar
             android:id="@+id/progressBar"

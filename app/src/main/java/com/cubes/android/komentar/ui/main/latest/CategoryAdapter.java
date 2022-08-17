@@ -115,6 +115,8 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 
     public void updateList(ArrayList<News> news) {
 
+        itemModels.clear();
+
         newsIdList = MyMethodsClass.initNewsIdList(news);
 
         for (int i = 0; i < news.size(); i++) {

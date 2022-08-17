@@ -15,49 +15,44 @@ import com.cubes.android.komentar.ui.comments.rv_item_comments.RvItemModelCommen
 import java.util.ArrayList;
 
 public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.CommentsViewHolder> {
+
     private ArrayList<ItemModelComments> list = new ArrayList<>();
 
-    private final boolean isOnDetailPage;
-    private CommentsListener listener;
-
-
+    private final CommentsListener listener;
 
     //CommentsActivity constructor
     public CommentsAdapter(CommentsListener listener) {
         this.listener = listener;
-        this.isOnDetailPage = false;
     }
 
     //NewsDetailActivity constructor
-    public CommentsAdapter(CommentsListener listener, ArrayList<NewsComment> comments, boolean isOnDetailPage) {
-        addComments(comments);
+    public CommentsAdapter(CommentsListener listener, ArrayList<NewsComment> comments) {
+        updateList(comments);
         this.listener = listener;
-        this.isOnDetailPage = isOnDetailPage;
     }
 
     public void updateList(ArrayList<NewsComment> comments) {
-        addComments(comments);
-        notifyDataSetChanged();
-    }
 
-    public void addComments(ArrayList<NewsComment> comments) {
+        list.clear();
 
         for (NewsComment comment : comments) {
 
-            list.add(new RvItemModelComments(comment, listener, this, false));
+            list.add(new RvItemModelComments(comment, listener, false));
 
             addChildren(comment.children);
 
         }
+
+        notifyDataSetChanged();
     }
 
     private void addChildren(ArrayList<NewsComment> comments) {
 
-        if (comments != null && !comments.isEmpty()) {
+        if (comments != null) {
 
             for (NewsComment comment : comments) {
 
-                list.add(new RvItemModelComments(comment, listener, this, true));
+                list.add(new RvItemModelComments(comment, listener, true));
 
                 addChildren(comment.children);
 
@@ -65,6 +60,11 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
 
         }
 
+    }
+
+    public void clearList() {
+        list.clear();
+        notifyDataSetChanged();
     }
 
 
@@ -88,9 +88,6 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
 
     @Override
     public int getItemCount() {
-        if (isOnDetailPage) {
-            return Math.min(list.size(), 5);
-        }
         return list.size();
     }
 
@@ -137,9 +134,9 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
 
     public interface CommentsListener {
 
-        void onLikeListener(CommentsAdapter adapter, int id, boolean vote);
+        void onLikeListener(int id, boolean vote);
 
-        void onDislikeListener(CommentsAdapter adapter, int id, boolean vote);
+        void onDislikeListener(int id, boolean vote);
 
         void goOnPostCommentActivity(int newsId, int reply_id);
 

@@ -124,7 +124,7 @@ public class NewsDetailsActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onLikeListener(CommentsAdapter adapter, int id, boolean vote) {
+    public void onLikeListener(int id, boolean vote) {
 
         DataRepository.getInstance().likeComment(id, vote, new DataRepository.CommentsVoteListener() {
             @Override
@@ -138,7 +138,7 @@ public class NewsDetailsActivity extends AppCompatActivity implements
                     NewsDatabase.getInstance(binding.getRoot().getContext()).voteDao().insert(newsCommentVote);
 
                     //onPostExecute
-                    runOnUiThread(() -> adapter.commentLiked(id, vote));
+//                    runOnUiThread(() -> adapter.commentLiked(id, vote));
 
                 });
 
@@ -154,7 +154,7 @@ public class NewsDetailsActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onDislikeListener(CommentsAdapter adapter, int id, boolean vote) {
+    public void onDislikeListener(int id, boolean vote) {
 
         DataRepository.getInstance().dislikeComment(id, vote, new DataRepository.CommentsVoteListener() {
             @Override

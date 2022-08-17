@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.cubes.android.komentar.data.DataRepository;
 import com.cubes.android.komentar.data.source.remote.networking.response.HomePageResponseModel;
@@ -48,6 +49,37 @@ public class HomePagerFragment extends Fragment implements NewsListener {
         sendHomePageRequest();
 
         binding.imageViewRefresh.setOnClickListener(view1 -> sendHomePageRequest());
+
+        binding.swipeRefreshLayout.setOnRefreshListener(() -> refreshListOnSwipe());
+
+    }
+
+    private void refreshListOnSwipe() {
+
+        DataRepository.getInstance().getHomeNews(new DataRepository.HomeResponseListener() {
+
+            @Override
+            public void onResponse(HomePageResponseModel.HomePageDataResponseModel response) {
+
+                binding.recyclerView.setVisibility(View.VISIBLE);
+                binding.imageViewRefresh.setVisibility(View.GONE);
+
+                adapter.updateList(response);
+
+                binding.swipeRefreshLayout.setRefreshing(false);
+
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+
+                binding.recyclerView.setVisibility(View.GONE);
+                binding.imageViewRefresh.setVisibility(View.VISIBLE);
+
+                binding.swipeRefreshLayout.setRefreshing(false);
+
+            }
+        });
 
     }
 

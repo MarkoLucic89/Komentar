@@ -7,4 +7,16 @@ public interface ItemModelDetails {
     int getType();
 
     void bind(NewsDetailsAdapter.NewsDetailsViewHolder holder);
+
+    default int getCommentsId() {
+        return -1;
+    }
+
+    default void updateLikeUi(){
+
+    };
+
+    default void updateDislikeUi(){
+
+    };
 }

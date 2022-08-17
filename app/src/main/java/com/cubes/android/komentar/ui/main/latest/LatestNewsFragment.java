@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.cubes.android.komentar.data.DataRepository;
 import com.cubes.android.komentar.data.model.News;
@@ -66,6 +67,53 @@ public class LatestNewsFragment extends Fragment implements NewsListener {
 
         });
 
+        binding.swipeRefreshLayout.setOnRefreshListener(() -> refreshAdapter());
+
+    }
+
+    private void refreshAdapter() {
+
+        nextPage = 1;
+
+        loadNextPage();
+//
+//        DataRepository.getInstance().getLatest(nextPage, new DataRepository.LatestResponseListener() {
+//
+//            @Override
+//            public void onResponse(NewsResponseModel.NewsDataResponseModel response) {
+//
+//                binding.recyclerView.setVisibility(View.VISIBLE);
+//                binding.imageViewRefresh.setVisibility(View.GONE);
+//                binding.progressBar.setVisibility(View.GONE);
+//
+//                if (nextPage == 1) {
+//                    categoryAdapter.updateList(response.news);
+//                } else {
+//                    categoryAdapter.addNextPage(response);
+//                }
+//
+//                nextPage++;
+//
+//                binding.swipeRefreshLayout.setRefreshing(false);
+//
+//            }
+//
+//            @Override
+//            public void onFailure(Throwable t) {
+//
+//                if (nextPage == 1) {
+//                    binding.recyclerView.setVisibility(View.GONE);
+//                    binding.imageViewRefresh.setVisibility(View.VISIBLE);
+//                    binding.progressBar.setVisibility(View.GONE);
+//                } else {
+//                    categoryAdapter.addRefresher();
+//                }
+//
+//                binding.swipeRefreshLayout.setRefreshing(false);
+//
+//            }
+//        });
+
     }
 
     @Override
@@ -107,6 +155,8 @@ public class LatestNewsFragment extends Fragment implements NewsListener {
 
                 nextPage++;
 
+                binding.swipeRefreshLayout.setRefreshing(false);
+
             }
 
             @Override
@@ -119,6 +169,8 @@ public class LatestNewsFragment extends Fragment implements NewsListener {
                 } else {
                     categoryAdapter.addRefresher();
                 }
+
+                binding.swipeRefreshLayout.setRefreshing(false);
 
             }
         });

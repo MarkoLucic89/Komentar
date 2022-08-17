@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.util.Log;
 import android.view.KeyEvent;
@@ -90,6 +91,11 @@ public class SearchFragment extends Fragment implements NewsListener {
             MyMethodsClass.startRefreshAnimation(binding.imageViewRefresh);
             searchListByTerm();
         });
+
+        binding.swipeRefreshLayout.setOnRefreshListener(() -> {
+            nextPage = 1;
+            searchListByTerm();
+        });
     }
 
     private void searchListByTerm() {
@@ -102,6 +108,8 @@ public class SearchFragment extends Fragment implements NewsListener {
         searchTerm = binding.editTextSearch.getText().toString().trim();
 
         if (searchTerm.equals("")) {
+
+            binding.swipeRefreshLayout.setRefreshing(false);
 
             adapter.clearList();
 
@@ -136,9 +144,15 @@ public class SearchFragment extends Fragment implements NewsListener {
                 binding.recyclerView.setVisibility(View.VISIBLE);
                 binding.progressBar.setVisibility(View.GONE);
 
+                if (nextPage == 1) {
+                    adapter.updateList(response);
+                } else {
+                    adapter.addNextPage(response);
+                }
+
                 nextPage++;
 
-                adapter.addNextPage(response);
+                binding.swipeRefreshLayout.setRefreshing(false);
 
             }
 
@@ -152,6 +166,8 @@ public class SearchFragment extends Fragment implements NewsListener {
                 } else {
                     adapter.addRefresher();
                 }
+
+                binding.swipeRefreshLayout.setRefreshing(false);
 
             }
         });

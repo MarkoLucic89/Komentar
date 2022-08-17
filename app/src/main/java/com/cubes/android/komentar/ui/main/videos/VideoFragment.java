@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -66,6 +67,14 @@ public class VideoFragment extends Fragment implements NewsListener {
             loadNextPage();
         });
 
+        binding.swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                nextPage = 1;
+                loadNextPage();
+            }
+        });
+
     }
 
     private void initRecyclerView() {
@@ -97,9 +106,15 @@ public class VideoFragment extends Fragment implements NewsListener {
                 binding.progressBar.setVisibility(View.GONE);
                 binding.imageViewRefresh.setVisibility(View.GONE);
 
+                if (nextPage == 1) {
+                    adapter.updateList(response);
+                } else {
+                    adapter.addNextPage(response);
+                }
+
                 nextPage++;
 
-                adapter.addNextPage(response);
+                binding.swipeRefreshLayout.setRefreshing(false);
             }
 
             @Override
@@ -112,6 +127,9 @@ public class VideoFragment extends Fragment implements NewsListener {
                 } else {
                     adapter.addRefresher();
                 }
+
+                binding.swipeRefreshLayout.setRefreshing(false);
+
             }
         });
     }

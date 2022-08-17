@@ -52,13 +52,19 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.VideosView
 
     public void updateList(NewsResponseModel.NewsDataResponseModel responseModel) {
 
+        itemModels.clear();
+
         newsIdList = MyMethodsClass.initNewsIdList(responseModel.news);
 
         for (News news : responseModel.news) {
             itemModels.add(new RvItemModelVideos(news, listener, newsIdList));
         }
 
-        if (responseModel.pagination.has_more_pages) {
+//        if (responseModel.pagination.has_more_pages) {
+//            itemModels.add(new RvItemModelVideoLoading(listener));
+//        }
+
+        if (responseModel.news.size() == 20) {
             itemModels.add(new RvItemModelVideoLoading(listener));
         }
 

@@ -6,6 +6,7 @@ import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.cubes.android.komentar.data.DataRepository;
 import com.cubes.android.komentar.data.source.remote.networking.response.TagResponseModel;
@@ -42,6 +43,46 @@ public class TagActivity extends AppCompatActivity implements NewsListener {
 
         binding.imageViewRefresh.setOnClickListener(view -> loadNextPage());
 
+        binding.swipeRefreshLayout.setOnRefreshListener(() -> refreshAdapter());
+
+
+    }
+
+    private void refreshAdapter() {
+
+        nextPage = 1;
+
+        DataRepository.getInstance().sendTagRequest(tagId, nextPage, new DataRepository.TagResponseListener() {
+
+            @Override
+            public void onResponse(TagResponseModel.TagDataResponseModel response) {
+
+                binding.progressBar.setVisibility(View.GONE);
+                binding.recyclerView.setVisibility(View.VISIBLE);
+                binding.imageViewRefresh.setVisibility(View.GONE);
+
+                adapter.updateList(response);
+
+                nextPage++;
+
+                binding.swipeRefreshLayout.setRefreshing(false);
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+
+                if (nextPage == 1) {
+                    binding.recyclerView.setVisibility(View.GONE);
+                    binding.imageViewRefresh.setVisibility(View.VISIBLE);
+                    binding.progressBar.setVisibility(View.GONE);
+                } else {
+                    adapter.addRefresher();
+                }
+
+                binding.swipeRefreshLayout.setRefreshing(false);
+
+            }
+        });
 
     }
 
@@ -63,9 +104,16 @@ public class TagActivity extends AppCompatActivity implements NewsListener {
                 binding.recyclerView.setVisibility(View.VISIBLE);
                 binding.imageViewRefresh.setVisibility(View.GONE);
 
-                adapter.addNextPage(response);
+                if (nextPage == 1) {
+                    adapter.updateList(response);
+                } else {
+                    adapter.addNextPage(response);
+                }
+
 
                 nextPage++;
+
+                binding.swipeRefreshLayout.setRefreshing(false);
             }
 
             @Override
@@ -78,6 +126,9 @@ public class TagActivity extends AppCompatActivity implements NewsListener {
                 } else {
                     adapter.addRefresher();
                 }
+
+                binding.swipeRefreshLayout.setRefreshing(false);
+
             }
         });
 

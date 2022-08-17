@@ -56,12 +56,12 @@ public class CommentsActivity extends AppCompatActivity {
             @Override
             public void onResponse(ArrayList<NewsComment> comments) {
 
-
                 if (comments.isEmpty()) {
                     binding.textView.setVisibility(View.VISIBLE);
                 } else {
                     binding.textView.setVisibility(View.GONE);
-                    getCommentVotes(comments);
+
+                    checkVotedComments(comments, mVotes);
                 }
 
                 binding.swipeRefreshLayout.setRefreshing(false);
@@ -103,6 +103,8 @@ public class CommentsActivity extends AppCompatActivity {
                     binding.textView.setVisibility(View.GONE);
                     getCommentVotes(comments);
                 }
+
+                binding.swipeRefreshLayout.setRefreshing(false);
             }
 
             @Override
@@ -111,6 +113,9 @@ public class CommentsActivity extends AppCompatActivity {
                 binding.recyclerViewComments.setVisibility(View.GONE);
                 binding.imageViewRefresh.setVisibility(View.VISIBLE);
                 binding.progressBar.setVisibility(View.GONE);
+
+                binding.swipeRefreshLayout.setRefreshing(false);
+
             }
         });
     }
@@ -140,7 +145,6 @@ public class CommentsActivity extends AppCompatActivity {
 
             //doInBackgroundThread
             ArrayList votes = (ArrayList) CommentPrefs.readListFromPref(this);
-
 
             if (votes != null) {
                 mVotes.addAll(votes);
@@ -194,12 +198,12 @@ public class CommentsActivity extends AppCompatActivity {
 
         adapter = new CommentsAdapter(new CommentsAdapter.CommentsListener() {
             @Override
-            public void onLikeListener(CommentsAdapter adapter, int id, boolean vote) {
+            public void onLikeListener(int id, boolean vote) {
                 likeComment(id, vote);
             }
 
             @Override
-            public void onDislikeListener(CommentsAdapter adapter, int id, boolean vote) {
+            public void onDislikeListener(int id, boolean vote) {
                 dislikeComment(id, vote);
             }
 

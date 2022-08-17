@@ -41,6 +41,8 @@ public class HomePagerAdapter extends RecyclerView.Adapter<HomePagerAdapter.Home
 
     public void updateList(HomePageResponseModel.HomePageDataResponseModel response) {
 
+        list.clear();
+
         //SLIDER
         addSlider("SLIDER", response);
 
