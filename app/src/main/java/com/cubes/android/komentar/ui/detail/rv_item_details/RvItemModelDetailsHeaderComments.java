@@ -5,13 +5,13 @@ import com.cubes.android.komentar.databinding.RvItemDetailsTitleBinding;
 import com.cubes.android.komentar.ui.comments.CommentsAdapter;
 import com.cubes.android.komentar.ui.detail.NewsDetailsAdapter;
 
-public class RvItemModelDetailsTitle implements ItemModelDetails {
+public class RvItemModelDetailsHeaderComments implements ItemModelDetails {
 
     private final int commentCount;
     private final int newsId;
     private CommentsAdapter.CommentsListener listener;
 
-    public RvItemModelDetailsTitle(int commentCount, int newsId, CommentsAdapter.CommentsListener listener) {
+    public RvItemModelDetailsHeaderComments(int commentCount, int newsId, CommentsAdapter.CommentsListener listener) {
         this.commentCount = commentCount;
         this.newsId = newsId;
         this.listener = listener;

@@ -15,23 +15,19 @@ import com.cubes.android.komentar.data.source.remote.networking.response.NewsDet
 import com.cubes.android.komentar.databinding.RvItemCategorySmallBinding;
 import com.cubes.android.komentar.databinding.RvItemDetailsAllCommentsBinding;
 import com.cubes.android.komentar.databinding.RvItemDetailsTitleBinding;
-import com.cubes.android.komentar.databinding.RvItemHomeCategoryTitleBinding;
 import com.cubes.android.komentar.ui.comments.CommentsAdapter;
-import com.cubes.android.komentar.ui.comments.rv_item_comments.ItemModelComments;
-import com.cubes.android.komentar.ui.detail.news_detail_activity_with_viewpager.DetailsFragment;
 import com.cubes.android.komentar.ui.detail.rv_item_details.ItemModelDetails;
 import com.cubes.android.komentar.ui.detail.rv_item_details.RvItemDetailsButtonAllComments;
 import com.cubes.android.komentar.ui.detail.rv_item_details.RvItemModelDetailComment;
-import com.cubes.android.komentar.ui.detail.rv_item_details.RvItemModelDetailsComments;
 import com.cubes.android.komentar.ui.detail.rv_item_details.RvItemModelDetailsHeader;
-import com.cubes.android.komentar.ui.detail.rv_item_details.RvItemModelDetailsRelatedNews;
+import com.cubes.android.komentar.ui.detail.rv_item_details.RvItemModelDetailsHeaderRelatedNews;
 import com.cubes.android.komentar.ui.detail.rv_item_details.RvItemModelDetailsSmallNews;
 import com.cubes.android.komentar.ui.detail.rv_item_details.RvItemModelDetailsTags;
-import com.cubes.android.komentar.ui.detail.rv_item_details.RvItemModelDetailsTitle;
+import com.cubes.android.komentar.ui.detail.rv_item_details.RvItemModelDetailsHeaderComments;
 import com.cubes.android.komentar.ui.detail.rv_item_details.RvItemModelDetailsWebView;
+import com.cubes.android.komentar.databinding.RvItemHomeCategoryTitleBinding;
 import com.cubes.android.komentar.databinding.RvItemDetailsCommentsBinding;
 import com.cubes.android.komentar.databinding.RvItemDetailsHeaderBinding;
-import com.cubes.android.komentar.databinding.RvItemDetailsRelatedNewsBinding;
 import com.cubes.android.komentar.databinding.RvItemDetailsTagsBinding;
 import com.cubes.android.komentar.databinding.RvItemDetailsWebViewBinding;
 import com.cubes.android.komentar.ui.main.latest.NewsListener;
@@ -75,7 +71,7 @@ public class NewsDetailsAdapter extends RecyclerView.Adapter<NewsDetailsAdapter.
 
 //        list.add(new RvItemModelDetailsComments(commentsListener, newsDetails));
 
-        list.add(new RvItemModelDetailsTitle(newsDetails.comments_count, newsDetails.id, commentsListener));
+        list.add(new RvItemModelDetailsHeaderComments(newsDetails.comments_count, newsDetails.id, commentsListener));
 
         for (NewsComment comment : newsDetails.comments_top_n) {
 
@@ -94,6 +90,8 @@ public class NewsDetailsAdapter extends RecyclerView.Adapter<NewsDetailsAdapter.
         //RELATED NEWS
 
 //        list.add(new RvItemModelDetailsRelatedNews(newsListener, newsDetails.related_news));
+
+        list.add(new RvItemModelDetailsHeaderRelatedNews());
 
         int[] relatedNewsIdList = MyMethodsClass.initNewsIdList(newsDetails.related_news);
 
@@ -130,6 +128,9 @@ public class NewsDetailsAdapter extends RecyclerView.Adapter<NewsDetailsAdapter.
                 break;
             case R.layout.rv_item_details_all_comments:
                 binding = RvItemDetailsAllCommentsBinding.inflate(inflater, parent, false);
+                break;
+            case R.layout.rv_item_home_category_title:
+                binding = RvItemHomeCategoryTitleBinding.inflate(inflater, parent, false);
                 break;
             case R.layout.rv_item_category_small:
                 binding = RvItemCategorySmallBinding.inflate(inflater, parent, false);

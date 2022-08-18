@@ -60,9 +60,12 @@ public class HomeTabsAdapter extends RecyclerView.Adapter<HomeTabsAdapter.HomeTa
     }
 
     public void updateNewsList(ArrayList<News> newsList) {
+
         this.newsList = newsList;
 
-        this.newsIdList = MyMethodsClass.initNewsIdList(newsList);
+        if (newsList != null) {
+            this.newsIdList = MyMethodsClass.initNewsIdList(newsList);
+        }
 
         notifyDataSetChanged();
     }

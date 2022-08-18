@@ -25,7 +25,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
         this.listener = listener;
     }
 
-    //NewsDetailActivity constructor
+    //NewsDetailActivity constructor (NE KORISTI SE VISE)
     public CommentsAdapter(CommentsListener listener, ArrayList<NewsComment> comments) {
         updateList(comments);
         this.listener = listener;
@@ -61,12 +61,6 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
         }
 
     }
-
-    public void clearList() {
-        list.clear();
-        notifyDataSetChanged();
-    }
-
 
     @NonNull
     @Override

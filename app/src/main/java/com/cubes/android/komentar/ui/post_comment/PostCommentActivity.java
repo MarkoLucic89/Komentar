@@ -9,7 +9,6 @@ import com.cubes.android.komentar.data.DataRepository;
 import com.cubes.android.komentar.data.model.NewsCommentInsert;
 import com.cubes.android.komentar.databinding.ActivityPostCommentBinding;
 
-
 public class PostCommentActivity extends AppCompatActivity {
 
     private ActivityPostCommentBinding binding;

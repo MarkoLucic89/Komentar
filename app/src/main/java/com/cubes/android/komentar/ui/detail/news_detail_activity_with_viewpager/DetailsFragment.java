@@ -30,6 +30,7 @@ import com.cubes.android.komentar.ui.detail.NewsDetailsTagsAdapter;
 import com.cubes.android.komentar.ui.main.latest.NewsListener;
 import com.cubes.android.komentar.ui.post_comment.PostCommentActivity;
 import com.cubes.android.komentar.ui.tag.TagActivity;
+import com.cubes.android.komentar.ui.tools.MyMethodsClass;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -100,9 +101,16 @@ public class DetailsFragment extends Fragment implements
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        binding.progressBar.setVisibility(View.VISIBLE);
+
         initRecyclerView();
+
         getNewsDetails();
-        binding.imageViewRefresh.setOnClickListener(view1 -> getNewsDetails());
+
+        binding.imageViewRefresh.setOnClickListener(view1 -> {
+            MyMethodsClass.startRefreshAnimation(binding.imageViewRefresh);
+            getNewsDetails();
+        });
 
         binding.swipeRefreshLayout.setOnRefreshListener(() -> refreshNewsDetails());
     }
@@ -170,7 +178,6 @@ public class DetailsFragment extends Fragment implements
     private void getNewsDetails() {
 
         binding.imageViewRefresh.setVisibility(View.GONE);
-        binding.progressBar.setVisibility(View.VISIBLE);
 
         DataRepository.getInstance().sendNewsDetailsRequest(mNewsId, new DataRepository.DetailResponseListener() {
             @Override
@@ -343,9 +350,6 @@ public class DetailsFragment extends Fragment implements
         intent.putExtra("news", newsId);
         intent.putExtra("reply_id", reply_id);
         startActivity(intent);
-
-        Toast.makeText(getContext(), ("NEWS ID: " + newsId + ", REPLY ID: " + reply_id), Toast.LENGTH_SHORT).show();
-
     }
 
     @Override

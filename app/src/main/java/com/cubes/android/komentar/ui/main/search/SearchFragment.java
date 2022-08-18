@@ -69,6 +69,7 @@ public class SearchFragment extends Fragment implements NewsListener {
 
         binding.imageViewSearch.setOnClickListener(view1 -> {
             adapter.clearList();
+            binding.progressBar.setVisibility(View.VISIBLE);
             searchListByTerm();
             hideKeyboard(getActivity());
         });
@@ -88,22 +89,18 @@ public class SearchFragment extends Fragment implements NewsListener {
 
         binding.imageViewRefresh.setOnClickListener(view1 -> {
 
+            binding.imageViewRefresh.setVisibility(View.GONE);
+
             MyMethodsClass.startRefreshAnimation(binding.imageViewRefresh);
             searchListByTerm();
         });
 
-        binding.swipeRefreshLayout.setOnRefreshListener(() -> {
-            nextPage = 1;
-            searchListByTerm();
-        });
+        binding.swipeRefreshLayout.setOnRefreshListener(() -> searchListByTerm());
     }
 
     private void searchListByTerm() {
 
         nextPage = 1;
-
-        binding.imageViewRefresh.setVisibility(View.GONE);
-        binding.progressBar.setVisibility(View.VISIBLE);
 
         searchTerm = binding.editTextSearch.getText().toString().trim();
 
@@ -127,6 +124,9 @@ public class SearchFragment extends Fragment implements NewsListener {
         super.onResume();
 
         if (binding.imageViewRefresh.getVisibility() == View.VISIBLE) {
+
+            binding.imageViewRefresh.setVisibility(View.GONE);
+
             searchListByTerm();
         }
 

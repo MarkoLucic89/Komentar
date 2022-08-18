@@ -17,6 +17,7 @@ import com.cubes.android.komentar.data.source.remote.networking.response.HomePag
 import com.cubes.android.komentar.databinding.FragmentHomePagerBinding;
 import com.cubes.android.komentar.ui.detail.news_detail_activity_with_viewpager.DetailsActivity;
 import com.cubes.android.komentar.ui.main.latest.NewsListener;
+import com.cubes.android.komentar.ui.tools.MyMethodsClass;
 
 public class HomePagerFragment extends Fragment implements NewsListener {
 
@@ -48,7 +49,10 @@ public class HomePagerFragment extends Fragment implements NewsListener {
 
         sendHomePageRequest();
 
-        binding.imageViewRefresh.setOnClickListener(view1 -> sendHomePageRequest());
+        binding.imageViewRefresh.setOnClickListener(view1 -> {
+            MyMethodsClass.startRefreshAnimation(binding.imageViewRefresh);
+            sendHomePageRequest();
+        });
 
         binding.swipeRefreshLayout.setOnRefreshListener(() -> refreshListOnSwipe());
 
