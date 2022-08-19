@@ -14,26 +14,25 @@ import java.util.ArrayList;
 
 public class RvItemModelDrawerCategory implements ItemModelDrawer {
 
-    public Category category;
+    public Category mCategory;
     public DrawerAdapter adapter;
     public boolean isOpen = false;
-    private OnCategoryClickListener listener;
+    private OnCategoryClickListener categoryClickListener;
+    private OnArrowClickListener arrowClickListener;
 
     private ArrayList<Category> categories;
 
-    public ArrayList<RvItemModelDrawerSubcategory> subcategoryItems;
+    public RvItemModelDrawerCategory(Category category, OnCategoryClickListener categoryClickListener, OnArrowClickListener arrowClickListener, ArrayList<Category> categories) {
 
-    public RvItemModelDrawerCategory(Category category, DrawerAdapter adapter, OnCategoryClickListener listener, ArrayList<Category> categories) {
-        this.category = category;
-        this.adapter = adapter;
-        this.listener = listener;
+        this.mCategory = category;
+        this.categoryClickListener = categoryClickListener;
+        this.arrowClickListener = arrowClickListener;
         this.categories = categories;
 
-        subcategoryItems = new ArrayList<>();
+    }
 
-        for (Category subcategory : category.subcategories) {
-            subcategoryItems.add(new RvItemModelDrawerSubcategory(subcategory, category, listener));
-        }
+    public interface OnArrowClickListener {
+        void onArrowClicked(RvItemModelDrawerCategory item, Category category, boolean isOpen);
     }
 
     @Override
@@ -46,10 +45,10 @@ public class RvItemModelDrawerCategory implements ItemModelDrawer {
 
         RvItemDrawerCategoryBinding binding = (RvItemDrawerCategoryBinding) holder.binding;
 
-        binding.textView.setText(category.name);
-        binding.viewIndicator.setBackgroundColor(Color.parseColor(category.color));
+        binding.textView.setText(mCategory.name);
+        binding.viewIndicator.setBackgroundColor(Color.parseColor(mCategory.color));
 
-        if (category.subcategories.isEmpty()) {
+        if (mCategory.subcategories.isEmpty()) {
 
             binding.imageViewArrow.setVisibility(View.GONE);
 
@@ -66,17 +65,17 @@ public class RvItemModelDrawerCategory implements ItemModelDrawer {
 
         binding.getRoot().setOnClickListener(view -> {
 
-            if (category.subcategories.isEmpty()) {
+            if (mCategory.subcategories.isEmpty()) {
 
-                int categoryIndex = categories.indexOf(category) + 2;
+                int categoryIndex = categories.indexOf(mCategory) + 2;
 
-                //listener
-                listener.onCategoryClicked(categoryIndex);
+                categoryClickListener.onCategoryClicked(categoryIndex);
 
             } else {
 
-                adapter.updateCategoriesForItem(this);
                 isOpen = !isOpen;
+
+                arrowClickListener.onArrowClicked(this, mCategory, isOpen);
 
             }
         });

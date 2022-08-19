@@ -30,8 +30,10 @@ public class HomeFragment extends Fragment implements OnCategoryClickListener {
 
     private CategoriesPagerAdapter pagerAdapter;
 
+    private ArrayList<Category> mCategories = new ArrayList<>();
 
-    //Rezervni adapter (svaki RvCategoryItem ima recuclerView sa podkategorijama)(ne koristim ga trenutno)
+
+    //Rezervni adapter (svaki RvCategoryItem ima recyclerView sa podkategorijama)(ne koristim ga trenutno)
     private DrawerMenuAdapter drawerMenuAdapter;
 
     private DrawerAdapter adapter;
@@ -95,6 +97,8 @@ public class HomeFragment extends Fragment implements OnCategoryClickListener {
                 binding.tabLayout.setVisibility(View.VISIBLE);
                 binding.viewPager.setVisibility(View.VISIBLE);
                 binding.progressBar.setVisibility(View.GONE);
+
+                mCategories = categories;
 
 //                drawerMenuAdapter.updateList(getActivity(), categories);
                 adapter.updateList(categories);

@@ -61,7 +61,8 @@ public class CommentsActivity extends AppCompatActivity {
                 } else {
                     binding.textView.setVisibility(View.GONE);
 
-                    checkVotedComments(comments, mVotes);
+                    getCommentVotes(comments);
+//                    checkVotedComments(comments, mVotes);
                 }
 
                 binding.swipeRefreshLayout.setRefreshing(false);

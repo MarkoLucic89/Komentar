@@ -10,40 +10,43 @@ import androidx.viewbinding.ViewBinding;
 
 import com.cubes.android.komentar.R;
 import com.cubes.android.komentar.data.model.Category;
+import com.cubes.android.komentar.databinding.RvItemDrawerCategoryBinding;
+import com.cubes.android.komentar.databinding.RvItemDrawerOtherBinding;
+import com.cubes.android.komentar.databinding.RvItemDrawerSubcategoryBinding;
 import com.cubes.android.komentar.ui.main.home.drawer_menu.rv_item_drawer.ItemModelDrawer;
 import com.cubes.android.komentar.ui.main.home.drawer_menu.rv_item_drawer.RvItemModelDrawerCategory;
 import com.cubes.android.komentar.ui.main.home.drawer_menu.rv_item_drawer.RvItemModelDrawerHome;
 import com.cubes.android.komentar.ui.main.home.drawer_menu.rv_item_drawer.RvItemModelDrawerOther;
-import com.cubes.android.komentar.databinding.RvItemDrawerCategoryBinding;
-import com.cubes.android.komentar.databinding.RvItemDrawerOtherBinding;
-import com.cubes.android.komentar.databinding.RvItemDrawerSubcategoryBinding;
+import com.cubes.android.komentar.ui.main.home.drawer_menu.rv_item_drawer.RvItemModelDrawerSubcategory;
 
 import java.util.ArrayList;
 
-public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.DrawerViewHolder> {
-
+public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.DrawerViewHolder> implements RvItemModelDrawerCategory.OnArrowClickListener {
 
     /*
     (NEMA RECYCLERVIEW ZA PODKATEGORIJE VEC SE DODAJU NOVI ITEMI U ADAPTERU)
      */
 
     private ArrayList<ItemModelDrawer> list;
-    private OnCategoryClickListener listener;
+    private OnCategoryClickListener categoryClickListener;
     private Activity activity;
 
-    public DrawerAdapter(Activity activity, OnCategoryClickListener listener) {
+    private static final String TAG = "DrawerAdapter";
+
+    public DrawerAdapter(Activity activity, OnCategoryClickListener categoryClickListener) {
         this.list = new ArrayList<>();
-        this.listener = listener;
+        this.categoryClickListener = categoryClickListener;
         this.activity = activity;
-
-
     }
 
     public void updateList(ArrayList<Category> categories) {
-        list.add(new RvItemModelDrawerHome(listener));
+
+        list.clear();
+
+        list.add(new RvItemModelDrawerHome(categoryClickListener));
 
         for (Category category : categories) {
-            list.add(new RvItemModelDrawerCategory(category, this, listener, categories));
+            list.add(new RvItemModelDrawerCategory(category, categoryClickListener, this, categories));
         }
 
         list.add(new RvItemModelDrawerOther("Vremenska prognoza", true));
@@ -100,16 +103,38 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.DrawerView
     }
 
     public void setListener(OnCategoryClickListener listener) {
-        this.listener = listener;
+        this.categoryClickListener = listener;
     }
 
-    public void updateCategoriesForItem(RvItemModelDrawerCategory item) {
+    @Override
+    public void onArrowClicked(RvItemModelDrawerCategory item, Category category, boolean isOpen) {
 
-        if (item.isOpen) {
-            list.removeAll(item.subcategoryItems);
+        if (isOpen) {
+
+            ArrayList<RvItemModelDrawerSubcategory> subcategoryItems = new ArrayList<>();
+
+            for (Category subcategory : category.subcategories) {
+                subcategoryItems.add(new RvItemModelDrawerSubcategory(subcategory, category, categoryClickListener));
+            }
+
+            list.addAll(list.indexOf(item) + 1, subcategoryItems);
+
         } else {
-            this.list.addAll(list.indexOf(item) + 1, item.subcategoryItems);
+
+            int startPosition = list.indexOf(item) + 1;
+            int endPosition = startPosition + category.subcategories.size();
+
+            ArrayList<RvItemModelDrawerSubcategory> subcategoryItems = new ArrayList<>();
+
+
+            for (int i = startPosition; i < endPosition; i++) {
+                subcategoryItems.add((RvItemModelDrawerSubcategory) list.get(i));
+            }
+
+            list.removeAll(subcategoryItems);
+
         }
+
 
         notifyDataSetChanged();
     }
