@@ -14,14 +14,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.cubes.android.komentar.data.DataRepository;
-import com.cubes.android.komentar.data.model.NewsComment;
-import com.cubes.android.komentar.data.model.NewsCommentVote;
+import com.cubes.android.komentar.data.model.domain.NewsComment;
+import com.cubes.android.komentar.data.model.domain.NewsCommentVote;
+import com.cubes.android.komentar.data.model.domain.NewsDetails;
 import com.cubes.android.komentar.data.source.local.CommentPrefs;
 import com.cubes.android.komentar.data.source.local.database.NewsDatabase;
-import com.cubes.android.komentar.data.source.remote.networking.response.NewsDetailsResponseModel;
 import com.cubes.android.komentar.databinding.FragmentDetailsBinding;
 import com.cubes.android.komentar.ui.comments.CommentsActivity;
 import com.cubes.android.komentar.ui.comments.CommentsAdapter;
@@ -117,21 +116,21 @@ public class DetailsFragment extends Fragment implements
 
     private void refreshNewsDetails() {
 
-        DataRepository.getInstance().sendNewsDetailsRequest(mNewsId, new DataRepository.DetailResponseListener() {
+        DataRepository.getInstance().getNewsDetailsRequest(mNewsId, new DataRepository.DetailResponseListener() {
             @Override
-            public void onResponse(NewsDetailsResponseModel.NewsDetailsDataResponseModel response) {
+            public void onResponse(NewsDetails newsDetails) {
 
                 binding.recyclerView.setVisibility(View.VISIBLE);
                 binding.imageViewRefresh.setVisibility(View.GONE);
 
-                mNewsId = response.id;
-                mNewsUrl = response.url;
+                mNewsId = newsDetails.id;
+                mNewsUrl = newsDetails.url;
 
                 listener.onDetailsResponseListener(mNewsId, mNewsUrl);
 
-                getCommentVotes(response.comments_top_n);
+                getCommentVotes(newsDetails.comments_top_n);
 
-                adapter.updateList(response);
+                adapter.updateList(newsDetails);
 
                 binding.swipeRefreshLayout.setRefreshing(false);
 
@@ -179,22 +178,22 @@ public class DetailsFragment extends Fragment implements
 
         binding.imageViewRefresh.setVisibility(View.GONE);
 
-        DataRepository.getInstance().sendNewsDetailsRequest(mNewsId, new DataRepository.DetailResponseListener() {
+        DataRepository.getInstance().getNewsDetailsRequest(mNewsId, new DataRepository.DetailResponseListener() {
             @Override
-            public void onResponse(NewsDetailsResponseModel.NewsDetailsDataResponseModel response) {
+            public void onResponse(NewsDetails newsDetails) {
 
                 binding.progressBar.setVisibility(View.GONE);
                 binding.imageViewRefresh.setVisibility(View.GONE);
                 binding.recyclerView.setVisibility(View.VISIBLE);
 
-                mNewsId = response.id;
-                mNewsUrl = response.url;
+                mNewsId = newsDetails.id;
+                mNewsUrl = newsDetails.url;
 
                 listener.onDetailsResponseListener(mNewsId, mNewsUrl);
 
-                getCommentVotes(response.comments_top_n);
+                getCommentVotes(newsDetails.comments_top_n);
 
-                adapter.updateList(response);
+                adapter.updateList(newsDetails);
 
                 binding.swipeRefreshLayout.setRefreshing(false);
 
@@ -285,7 +284,7 @@ public class DetailsFragment extends Fragment implements
     @Override
     public void onLikeListener(int id, boolean vote) {
 
-        DataRepository.getInstance().likeComment(id, vote, new DataRepository.CommentsVoteListener() {
+        DataRepository.getInstance().likeCommentRequest(id, vote, new DataRepository.CommentsVoteListener() {
             @Override
             public void onResponse(NewsCommentVote response) {
 
@@ -315,7 +314,7 @@ public class DetailsFragment extends Fragment implements
     @Override
     public void onDislikeListener(int id, boolean vote) {
 
-        DataRepository.getInstance().dislikeComment(id, vote, new DataRepository.CommentsVoteListener() {
+        DataRepository.getInstance().dislikeCommentRequest(id, vote, new DataRepository.CommentsVoteListener() {
             @Override
             public void onResponse(NewsCommentVote response) {
 

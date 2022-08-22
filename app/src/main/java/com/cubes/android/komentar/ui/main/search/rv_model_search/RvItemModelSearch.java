@@ -1,17 +1,13 @@
 package com.cubes.android.komentar.ui.main.search.rv_model_search;
 
 
-import android.graphics.Color;
-
 import com.cubes.android.komentar.R;
-import com.cubes.android.komentar.data.model.News;
+import com.cubes.android.komentar.data.model.domain.News;
 import com.cubes.android.komentar.databinding.RvItemCategorySmallBinding;
 import com.cubes.android.komentar.ui.main.latest.NewsListener;
 import com.cubes.android.komentar.ui.main.search.SearchAdapter;
 import com.cubes.android.komentar.ui.tools.MyMethodsClass;
 import com.squareup.picasso.Picasso;
-
-import java.util.ArrayList;
 
 
 public class RvItemModelSearch implements ItemModelSearch {

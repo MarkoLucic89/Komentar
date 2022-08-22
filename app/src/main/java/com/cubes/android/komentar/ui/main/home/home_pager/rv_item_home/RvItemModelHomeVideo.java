@@ -3,7 +3,7 @@ package com.cubes.android.komentar.ui.main.home.home_pager.rv_item_home;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.cubes.android.komentar.R;
-import com.cubes.android.komentar.data.model.News;
+import com.cubes.android.komentar.data.model.domain.News;
 import com.cubes.android.komentar.databinding.RvItemHomeVideoBinding;
 import com.cubes.android.komentar.ui.main.home.home_pager.HomePagerAdapter;
 import com.cubes.android.komentar.ui.main.latest.NewsListener;

@@ -6,13 +6,14 @@ import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.cubes.android.komentar.data.DataRepository;
-import com.cubes.android.komentar.data.source.remote.networking.response.TagResponseModel;
+import com.cubes.android.komentar.data.model.domain.News;
 import com.cubes.android.komentar.databinding.ActivityTagBinding;
 import com.cubes.android.komentar.ui.detail.news_detail_activity_with_viewpager.DetailsActivity;
 import com.cubes.android.komentar.ui.main.latest.NewsListener;
+
+import java.util.ArrayList;
 
 
 public class TagActivity extends AppCompatActivity implements NewsListener {
@@ -52,16 +53,16 @@ public class TagActivity extends AppCompatActivity implements NewsListener {
 
         nextPage = 1;
 
-        DataRepository.getInstance().sendTagRequest(tagId, nextPage, new DataRepository.TagResponseListener() {
+        DataRepository.getInstance().getNewsForTagRequest(tagId, nextPage, new DataRepository.TagResponseListener() {
 
             @Override
-            public void onResponse(TagResponseModel.TagDataResponseModel response) {
+            public void onResponse(ArrayList<News> newsList, boolean hasMorePages) {
 
                 binding.progressBar.setVisibility(View.GONE);
                 binding.recyclerView.setVisibility(View.VISIBLE);
                 binding.imageViewRefresh.setVisibility(View.GONE);
 
-                adapter.updateList(response);
+                adapter.updateList(newsList, hasMorePages);
 
                 nextPage++;
 
@@ -95,19 +96,19 @@ public class TagActivity extends AppCompatActivity implements NewsListener {
     @Override
     public void loadNextPage() {
 
-        DataRepository.getInstance().sendTagRequest(tagId, nextPage, new DataRepository.TagResponseListener() {
+        DataRepository.getInstance().getNewsForTagRequest(tagId, nextPage, new DataRepository.TagResponseListener() {
 
             @Override
-            public void onResponse(TagResponseModel.TagDataResponseModel response) {
+            public void onResponse(ArrayList<News> newsList, boolean hasMorePages) {
 
                 binding.progressBar.setVisibility(View.GONE);
                 binding.recyclerView.setVisibility(View.VISIBLE);
                 binding.imageViewRefresh.setVisibility(View.GONE);
 
                 if (nextPage == 1) {
-                    adapter.updateList(response);
+                    adapter.updateList(newsList, hasMorePages);
                 } else {
-                    adapter.addNextPage(response);
+                    adapter.addNextPage(newsList, hasMorePages);
                 }
 
 

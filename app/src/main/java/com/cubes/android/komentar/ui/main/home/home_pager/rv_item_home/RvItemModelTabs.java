@@ -5,8 +5,8 @@ import android.view.View;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.cubes.android.komentar.R;
-import com.cubes.android.komentar.data.model.News;
-import com.cubes.android.komentar.data.source.remote.networking.response.HomePageResponseModel;
+import com.cubes.android.komentar.data.model.domain.HomePageData;
+import com.cubes.android.komentar.data.model.domain.News;
 import com.cubes.android.komentar.databinding.RvItemHomeTabsBinding;
 import com.cubes.android.komentar.ui.main.home.home_pager.HomePagerAdapter;
 import com.cubes.android.komentar.ui.main.home.home_pager.HomeTabsAdapter;
@@ -26,10 +26,10 @@ public class RvItemModelTabs implements ItemModelHome {
     public HomeTabsAdapter homeTabsAdapter;
     public NewsListener listener;
 
-    public RvItemModelTabs(HomePageResponseModel.HomePageDataResponseModel data, HomePagerAdapter adapter, int modelIndex, NewsListener listener) {
+    public RvItemModelTabs(HomePageData data, HomePagerAdapter adapter, int modelIndex, NewsListener listener) {
         this.latest = data.latest;
         this.mostRead = data.most_read;
-        this.mostComment = data.most_comment;
+        this.mostComment = data.most_commented;
 
         this.homePagerAdapter = adapter;
         this.modelIndex = modelIndex;

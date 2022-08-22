@@ -8,7 +8,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.util.Log;
 import android.view.KeyEvent;
@@ -20,10 +19,8 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
 import com.cubes.android.komentar.data.DataRepository;
-import com.cubes.android.komentar.data.model.News;
-import com.cubes.android.komentar.data.source.remote.networking.response.NewsResponseModel;
+import com.cubes.android.komentar.data.model.domain.News;
 import com.cubes.android.komentar.databinding.FragmentSearchBinding;
-import com.cubes.android.komentar.ui.detail.NewsDetailsActivity;
 import com.cubes.android.komentar.ui.detail.news_detail_activity_with_viewpager.DetailsActivity;
 import com.cubes.android.komentar.ui.main.latest.NewsListener;
 import com.cubes.android.komentar.ui.tools.MyMethodsClass;
@@ -137,17 +134,19 @@ public class SearchFragment extends Fragment implements NewsListener {
 
         Log.d(TAG, "loadNextPage: " + nextPage);
 
-        DataRepository.getInstance().searchNews(searchTerm, nextPage, new DataRepository.SearchResponseListener() {
+        DataRepository.getInstance().searchNewsRequest(searchTerm, nextPage, new DataRepository.SearchResponseListener() {
+
+
             @Override
-            public void onResponse(NewsResponseModel.NewsDataResponseModel response) {
+            public void onResponse(ArrayList<News> newsList, boolean hasMorePages) {
 
                 binding.recyclerView.setVisibility(View.VISIBLE);
                 binding.progressBar.setVisibility(View.GONE);
 
                 if (nextPage == 1) {
-                    adapter.updateList(response);
+                    adapter.updateList(newsList, hasMorePages);
                 } else {
-                    adapter.addNextPage(response);
+                    adapter.addNextPage(newsList, hasMorePages);
                 }
 
                 nextPage++;

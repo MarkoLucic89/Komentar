@@ -1,7 +1,7 @@
 package com.cubes.android.komentar.ui.detail.rv_item_details;
 
 import com.cubes.android.komentar.R;
-import com.cubes.android.komentar.data.model.NewsTag;
+import com.cubes.android.komentar.data.model.domain.NewsTag;
 import com.cubes.android.komentar.databinding.RvItemDetailsTagsBinding;
 import com.cubes.android.komentar.ui.detail.NewsDetailsAdapter;
 import com.cubes.android.komentar.ui.detail.NewsDetailsTagsAdapter;

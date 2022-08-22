@@ -8,7 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewbinding.ViewBinding;
 
-import com.cubes.android.komentar.data.model.Category;
+import com.cubes.android.komentar.data.model.CategoryApi;
 import com.cubes.android.komentar.ui.main.home.drawer_menu.rv_item_drawer_menu.ItemModelDrawerMenu;
 import com.cubes.android.komentar.ui.main.home.drawer_menu.rv_item_drawer_menu.RvItemModelDrawerMenuCategory;
 import com.cubes.android.komentar.ui.main.home.drawer_menu.rv_item_drawer_menu.RvItemModelDrawerMenuOther;
@@ -32,13 +32,13 @@ public class DrawerMenuAdapter extends RecyclerView.Adapter<DrawerMenuAdapter.Dr
         this.activity = activity;
     }
 
-    public void updateList(Activity activity, ArrayList<Category> categories) {
+    public void updateList(Activity activity, ArrayList<CategoryApi> categories) {
 
         //HOME
         list.add(new RvItemModelDrawerMenuCategory(null, listener, categories));
 
         //CATEGORIES
-        for (Category category : categories) {
+        for (CategoryApi category : categories) {
             list.add(new RvItemModelDrawerMenuCategory(category, listener, categories));
         }
 

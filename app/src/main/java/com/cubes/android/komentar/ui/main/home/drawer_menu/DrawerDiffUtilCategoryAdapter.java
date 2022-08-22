@@ -5,6 +5,8 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewbinding.ViewBinding;
 
@@ -22,25 +24,30 @@ import com.cubes.android.komentar.ui.main.home.drawer_menu.rv_item_drawer.RvItem
 
 import java.util.ArrayList;
 
-public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.DrawerViewHolder> implements RvItemModelDrawerCategory.OnArrowClickListener {
+public class DrawerDiffUtilCategoryAdapter extends ListAdapter<ItemModelDrawer, DrawerDiffUtilCategoryAdapter.DrawerViewHolder> implements RvItemModelDrawerCategory.OnArrowClickListener {
 
     /*
-    (NEMA RECYCLERVIEW ZA PODKATEGORIJE VEC SE DODAJU NOVI ITEMI U ADAPTERU)
+    NE KORISTI SE TRENUTNO
      */
 
-    private ArrayList<ItemModelDrawer> list;
-    private OnCategoryClickListener categoryClickListener;
+    private ArrayList<ItemModelDrawer> list = new ArrayList<>();
+
     private Activity activity;
+    private OnCategoryClickListener categoryClickListener;
 
-    private static final String TAG = "DrawerAdapter";
+    public DrawerDiffUtilCategoryAdapter(
+            @NonNull DiffUtil.ItemCallback<ItemModelDrawer> diffCallback,
+            Activity activity,
+            OnCategoryClickListener categoryClickListener
+    ) {
+        super(diffCallback);
 
-    public DrawerAdapter(Activity activity, OnCategoryClickListener categoryClickListener) {
-        this.list = new ArrayList<>();
-        this.categoryClickListener = categoryClickListener;
         this.activity = activity;
+        this.categoryClickListener = categoryClickListener;
+
     }
 
-    public void updateList(ArrayList<Category> categories) {
+    public void setData(ArrayList<Category> categories) {
 
         list.clear();
 
@@ -59,12 +66,13 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.DrawerView
         list.add(new RvItemModelDrawerOther("Uslovi korišćenja", false));
         list.add(new RvItemModelDrawerOther("Kontakt", false, true));
 
-        notifyDataSetChanged();
+        submitList(list);
+
     }
 
     @NonNull
     @Override
-    public DrawerViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public DrawerDiffUtilCategoryAdapter.DrawerViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
 
@@ -84,26 +92,12 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.DrawerView
                 binding = null;
         }
 
-        return new DrawerViewHolder(binding);
+        return new DrawerDiffUtilCategoryAdapter.DrawerViewHolder(binding);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull DrawerViewHolder holder, int position) {
-        list.get(position).bind(holder);
-    }
-
-    @Override
-    public int getItemCount() {
-        return list.size();
-    }
-
-    @Override
-    public int getItemViewType(int position) {
-        return list.get(position).getType();
-    }
-
-    public void setListener(OnCategoryClickListener listener) {
-        this.categoryClickListener = listener;
+    public void onBindViewHolder(@NonNull DrawerDiffUtilCategoryAdapter.DrawerViewHolder holder, int position) {
+//        list.get(position).bind(holder);
     }
 
     @Override
@@ -135,11 +129,15 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.DrawerView
 
         }
 
-
-        notifyDataSetChanged();
+        submitList(list);
     }
 
-    public static class DrawerViewHolder extends RecyclerView.ViewHolder {
+    @Override
+    public int getItemViewType(int position) {
+        return list.get(position).getType();
+    }
+
+    public class DrawerViewHolder extends RecyclerView.ViewHolder {
 
         public ViewBinding binding;
 

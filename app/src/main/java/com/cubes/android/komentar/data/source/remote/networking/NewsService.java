@@ -1,7 +1,7 @@
 package com.cubes.android.komentar.data.source.remote.networking;
 
-import com.cubes.android.komentar.data.model.NewsCommentInsert;
-import com.cubes.android.komentar.data.model.NewsCommentVote;
+import com.cubes.android.komentar.data.model.NewsCommentInsertApi;
+import com.cubes.android.komentar.data.model.domain.NewsCommentVote;
 import com.cubes.android.komentar.data.source.remote.networking.response.CategoriesResponseModel;
 import com.cubes.android.komentar.data.source.remote.networking.response.CommentsResponseModel;
 import com.cubes.android.komentar.data.source.remote.networking.response.HomePageResponseModel;
@@ -29,22 +29,10 @@ public interface NewsService {
             @Query("page") int page
     );
 
-
-    @GET("api/latest")
-    Call<NewsResponseModel> getLatest(
-            @Query("page") int page
-    );
-
     @GET("api/latest")
     Call<NewsResponseModel> getLatest(
             @Query("page") int page,
             @Query("rows") int rows);
-
-
-    @GET("api/search")
-    Call<NewsResponseModel> searchNews(
-            @Query("search_parameter") String searchParameter
-    );
 
     @GET("api/search")
     Call<NewsResponseModel> searchNews(
@@ -54,11 +42,6 @@ public interface NewsService {
 
     @GET("api/categories")
     Call<CategoriesResponseModel> getCategories();
-
-    @GET("api/category/{id}")
-    Call<CategoryResponseModel> getCategory(
-            @Path("id") int id
-    );
 
     @GET("api/category/{id}")
     Call<CategoryResponseModel> getCategory(
@@ -80,11 +63,6 @@ public interface NewsService {
 
     @GET("api/tag")
     Call<TagResponseModel> getTag(
-            @Query("tag") int tag
-    );
-
-    @GET("api/tag")
-    Call<TagResponseModel> getTag(
             @Query("tag") int tag,
             @Query("page") int page
     );
@@ -95,11 +73,11 @@ public interface NewsService {
     );
 
     @POST("api/commentinsert")
-    Call<NewsCommentInsert> postComment(@Body NewsCommentInsert newsCommentInsert);
+    Call<NewsCommentInsertApi> postComment(@Body NewsCommentInsertApi newsCommentInsert);
 
     @FormUrlEncoded
     @POST("api/commentinsert")
-    Call<NewsCommentInsert> postComment(
+    Call<NewsCommentInsertApi> postComment(
             @Field("news") int news,
             @Field("reply_id") int reply_id,
             @Field("name") String name,

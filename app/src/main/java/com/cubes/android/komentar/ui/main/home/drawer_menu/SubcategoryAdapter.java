@@ -6,7 +6,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.cubes.android.komentar.data.model.Category;
+import com.cubes.android.komentar.data.model.CategoryApi;
 import com.cubes.android.komentar.databinding.RvItemDrawerMenuSubcategoryBinding;
 import com.cubes.android.komentar.ui.tools.MyMethodsClass;
 
@@ -14,10 +14,10 @@ import java.util.ArrayList;
 
 public class SubcategoryAdapter extends RecyclerView.Adapter<SubcategoryAdapter.SubcategoryViewModel> {
 
-    private ArrayList<Category> subcategories;
+    private ArrayList<CategoryApi> subcategories;
     private int categoryId;
 
-    public SubcategoryAdapter(ArrayList<Category> subcategories, int categoryId) {
+    public SubcategoryAdapter(ArrayList<CategoryApi> subcategories, int categoryId) {
         this.subcategories = subcategories;
         this.categoryId = categoryId;
     }
@@ -36,7 +36,7 @@ public class SubcategoryAdapter extends RecyclerView.Adapter<SubcategoryAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull SubcategoryViewModel holder, int position) {
-        Category subcategory = subcategories.get(position);
+        CategoryApi subcategory = subcategories.get(position);
         holder.binding.textView.setText(subcategory.name);
 
         holder.binding.getRoot().setOnClickListener(view -> {

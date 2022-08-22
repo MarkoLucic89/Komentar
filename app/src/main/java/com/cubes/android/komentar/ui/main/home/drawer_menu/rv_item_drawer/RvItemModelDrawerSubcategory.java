@@ -4,7 +4,8 @@ package com.cubes.android.komentar.ui.main.home.drawer_menu.rv_item_drawer;
 import android.graphics.Color;
 
 import com.cubes.android.komentar.R;
-import com.cubes.android.komentar.data.model.Category;
+import com.cubes.android.komentar.data.model.CategoryApi;
+import com.cubes.android.komentar.data.model.domain.Category;
 import com.cubes.android.komentar.databinding.RvItemDrawerSubcategoryBinding;
 import com.cubes.android.komentar.ui.main.home.drawer_menu.DrawerAdapter;
 import com.cubes.android.komentar.ui.main.home.drawer_menu.OnCategoryClickListener;

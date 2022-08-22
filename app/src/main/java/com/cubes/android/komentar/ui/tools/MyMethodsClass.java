@@ -9,11 +9,10 @@ import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 
 
-import com.cubes.android.komentar.data.model.News;
+import com.cubes.android.komentar.data.model.domain.News;
 import com.cubes.android.komentar.ui.category.CategoryActivity;
 import com.cubes.android.komentar.ui.comments.CommentsActivity;
 import com.cubes.android.komentar.ui.detail.NewsDetailsActivity;
-import com.cubes.android.komentar.ui.detail.news_detail_activity_with_viewpager.DetailsActivity;
 import com.cubes.android.komentar.ui.post_comment.PostCommentActivity;
 import com.cubes.android.komentar.ui.tag.TagActivity;
 

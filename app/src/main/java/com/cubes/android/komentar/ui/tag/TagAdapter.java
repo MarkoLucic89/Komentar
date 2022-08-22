@@ -8,8 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewbinding.ViewBinding;
 
 import com.cubes.android.komentar.R;
-import com.cubes.android.komentar.data.model.News;
-import com.cubes.android.komentar.data.source.remote.networking.response.NewsResponseModel;
+import com.cubes.android.komentar.data.model.domain.News;
 import com.cubes.android.komentar.data.source.remote.networking.response.TagResponseModel;
 import com.cubes.android.komentar.databinding.RvItemCategorySmallBinding;
 import com.cubes.android.komentar.databinding.RvItemLoadingBinding;
@@ -34,26 +33,21 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.TagViewHolder> {
         this.listener = listener;
     }
 
-    public void updateList(TagResponseModel.TagDataResponseModel responseModel) {
+    public void updateList(ArrayList<News> newsList, boolean hasMorePages) {
 
         itemModels.clear();
 
-        if (responseModel == null) {
-            notifyDataSetChanged();
-            return;
-        }
+        newsIdList = MyMethodsClass.initNewsIdList(newsList);
 
-        newsIdList = MyMethodsClass.initNewsIdList(responseModel.news);
-
-        for (News news : responseModel.news) {
+        for (News news : newsList) {
             itemModels.add(new RvItemModelTag(news, listener, newsIdList));
         }
 
-//        if (responseModel.data.pagination.has_more_pages) {
-//            itemModels.add(new RvItemModelSearchLoading(listener));
+//        if (hasMorePages) {
+//            itemModels.add(new RvItemModelTagLoading(listener));
 //        }
 
-        if (responseModel.news.size() == 20) {
+        if (newsList.size() == 20) {
             itemModels.add(new RvItemModelTagLoading(listener));
         }
 
@@ -101,7 +95,7 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.TagViewHolder> {
         return itemModels.get(position).getType();
     }
 
-    public void addNextPage(TagResponseModel.TagDataResponseModel response) {
+    public void addNextPage(ArrayList<News> newsList, boolean hasMorePages) {
 
         int lastIndex;
 
@@ -112,9 +106,9 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.TagViewHolder> {
             itemModels.remove(lastIndex);
         }
 
-        newsIdList = MyMethodsClass.initNewsIdList(response.news);
+        newsIdList = MyMethodsClass.initNewsIdList(newsList);
 
-        for (News news : response.news) {
+        for (News news : newsList) {
             itemModels.add(new RvItemModelTag(news, listener, newsIdList));
         }
 
@@ -122,7 +116,7 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.TagViewHolder> {
 //            itemModels.add(new RvItemModelSearchLoading(listener));
 //        }
 
-        if (response.news.size() == 20) {
+        if (newsList.size() == 20) {
             itemModels.add(new RvItemModelTagLoading(listener));
         }
 

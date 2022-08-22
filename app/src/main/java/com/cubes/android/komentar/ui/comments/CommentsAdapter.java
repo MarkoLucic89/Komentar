@@ -7,7 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewbinding.ViewBinding;
 
-import com.cubes.android.komentar.data.model.NewsComment;
+import com.cubes.android.komentar.data.model.domain.NewsComment;
 import com.cubes.android.komentar.databinding.RvItemCommentBinding;
 import com.cubes.android.komentar.ui.comments.rv_item_comments.ItemModelComments;
 import com.cubes.android.komentar.ui.comments.rv_item_comments.RvItemModelComments;

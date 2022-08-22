@@ -5,10 +5,9 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.cubes.android.komentar.R;
-import com.cubes.android.komentar.data.model.NewsComment;
+import com.cubes.android.komentar.data.model.domain.NewsComment;
 import com.cubes.android.komentar.databinding.RvItemCommentBinding;
 import com.cubes.android.komentar.ui.comments.CommentsAdapter;
-import com.cubes.android.komentar.ui.comments.rv_item_comments.ItemModelComments;
 import com.cubes.android.komentar.ui.detail.NewsDetailsAdapter;
 
 

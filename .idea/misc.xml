@@ -76,6 +76,7 @@
         <entry key="app/src/main/res/layout/rv_item_comment.xml" value="0.3703125" />
         <entry key="app/src/main/res/layout/rv_item_details_all_comments.xml" value="0.3703125" />
         <entry key="app/src/main/res/layout/rv_item_details_comments.xml" value="0.3703125" />
+        <entry key="app/src/main/res/layout/rv_item_details_header.xml" value="0.3703125" />
         <entry key="app/src/main/res/layout/rv_item_details_tags.xml" value="0.2796296296296296" />
         <entry key="app/src/main/res/layout/rv_item_details_title.xml" value="0.2796296296296296" />
         <entry key="app/src/main/res/layout/rv_item_drawer_subcategory.xml" value="0.3703125" />

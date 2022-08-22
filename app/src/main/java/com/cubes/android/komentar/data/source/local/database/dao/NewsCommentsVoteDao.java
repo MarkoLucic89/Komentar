@@ -4,11 +4,9 @@ import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
-import androidx.room.Update;
 
-import com.cubes.android.komentar.data.model.NewsCommentVote;
+import com.cubes.android.komentar.data.model.domain.NewsCommentVote;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Dao

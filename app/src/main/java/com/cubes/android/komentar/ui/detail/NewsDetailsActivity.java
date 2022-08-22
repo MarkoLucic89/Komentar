@@ -9,7 +9,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.cubes.android.komentar.data.DataRepository;
-import com.cubes.android.komentar.data.model.NewsCommentVote;
+import com.cubes.android.komentar.data.model.domain.NewsCommentVote;
+import com.cubes.android.komentar.data.model.domain.NewsDetails;
 import com.cubes.android.komentar.data.source.local.database.NewsDatabase;
 import com.cubes.android.komentar.data.source.remote.networking.response.NewsDetailsResponseModel;
 import com.cubes.android.komentar.databinding.ActivityNewsDetailsBinding;
@@ -79,15 +80,15 @@ public class NewsDetailsActivity extends AppCompatActivity implements
 
         newsId = getIntent().getIntExtra("news_id", -1);
 
-        DataRepository.getInstance().sendNewsDetailsRequest(newsId, new DataRepository.DetailResponseListener() {
+        DataRepository.getInstance().getNewsDetailsRequest(newsId, new DataRepository.DetailResponseListener() {
 
             @Override
-            public void onResponse(NewsDetailsResponseModel.NewsDetailsDataResponseModel response) {
-                data = response;
+            public void onResponse(NewsDetails newsDetails) {
+//                data = response;
 
                 binding.progressBar.setVisibility(View.GONE);
 
-                adapter.updateList(response);
+                adapter.updateList(newsDetails);
 
             }
 
@@ -126,7 +127,7 @@ public class NewsDetailsActivity extends AppCompatActivity implements
     @Override
     public void onLikeListener(int id, boolean vote) {
 
-        DataRepository.getInstance().likeComment(id, vote, new DataRepository.CommentsVoteListener() {
+        DataRepository.getInstance().likeCommentRequest(id, vote, new DataRepository.CommentsVoteListener() {
             @Override
             public void onResponse(NewsCommentVote response) {
 
@@ -156,7 +157,7 @@ public class NewsDetailsActivity extends AppCompatActivity implements
     @Override
     public void onDislikeListener(int id, boolean vote) {
 
-        DataRepository.getInstance().dislikeComment(id, vote, new DataRepository.CommentsVoteListener() {
+        DataRepository.getInstance().dislikeCommentRequest(id, vote, new DataRepository.CommentsVoteListener() {
             @Override
             public void onResponse(NewsCommentVote response) {
 

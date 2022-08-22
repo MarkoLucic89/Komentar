@@ -3,14 +3,12 @@ package com.cubes.android.komentar.ui.main.latest.rv_model_category;
 import android.view.View;
 
 import com.cubes.android.komentar.R;
-import com.cubes.android.komentar.data.model.News;
+import com.cubes.android.komentar.data.model.domain.News;
 import com.cubes.android.komentar.databinding.RvItemCategorySmallBinding;
 import com.cubes.android.komentar.ui.main.latest.CategoryAdapter;
 import com.cubes.android.komentar.ui.main.latest.NewsListener;
 import com.cubes.android.komentar.ui.tools.MyMethodsClass;
 import com.squareup.picasso.Picasso;
-
-import java.util.ArrayList;
 
 public class RvItemModelCategorySmall implements ItemModelCategory {
 

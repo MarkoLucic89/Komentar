@@ -1,12 +1,10 @@
 package com.cubes.android.komentar.ui.main.home.home_pager.rv_item_home;
 
 import com.cubes.android.komentar.R;
-import com.cubes.android.komentar.data.model.News;
+import com.cubes.android.komentar.data.model.domain.News;
 import com.cubes.android.komentar.databinding.RvItemVideosBinding;
 import com.cubes.android.komentar.ui.main.home.home_pager.HomePagerAdapter;
 import com.cubes.android.komentar.ui.main.latest.NewsListener;
-import com.cubes.android.komentar.ui.main.videos.VideosAdapter;
-import com.cubes.android.komentar.ui.main.videos.rv_model_videos.ItemModelVideo;
 import com.cubes.android.komentar.ui.tools.MyMethodsClass;
 import com.squareup.picasso.Picasso;
 

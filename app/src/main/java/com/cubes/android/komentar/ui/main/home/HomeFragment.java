@@ -13,7 +13,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.cubes.android.komentar.data.DataRepository;
-import com.cubes.android.komentar.data.model.Category;
+import com.cubes.android.komentar.data.model.domain.Category;
 import com.cubes.android.komentar.databinding.FragmentHomeBinding;
 import com.cubes.android.komentar.ui.main.home.drawer_menu.DrawerAdapter;
 import com.cubes.android.komentar.ui.main.home.drawer_menu.DrawerMenuAdapter;
@@ -36,6 +36,7 @@ public class HomeFragment extends Fragment implements OnCategoryClickListener {
     //Rezervni adapter (svaki RvCategoryItem ima recyclerView sa podkategorijama)(ne koristim ga trenutno)
     private DrawerMenuAdapter drawerMenuAdapter;
 
+//    private DrawerAdapter adapter;
     private DrawerAdapter adapter;
 
     public HomeFragment() {
@@ -88,7 +89,7 @@ public class HomeFragment extends Fragment implements OnCategoryClickListener {
 
     private void getAllCategories() {
 
-        DataRepository.getInstance().getAllCategories(new DataRepository.CategoriesResponseListener() {
+        DataRepository.getInstance().getAllCategoriesRequest(new DataRepository.CategoriesResponseListener() {
             @Override
             public void onResponse(ArrayList<Category> categories) {
 
@@ -101,6 +102,7 @@ public class HomeFragment extends Fragment implements OnCategoryClickListener {
                 mCategories = categories;
 
 //                drawerMenuAdapter.updateList(getActivity(), categories);
+//                adapter.updateList(categories);
                 adapter.updateList(categories);
                 initViewPager(categories);
             }

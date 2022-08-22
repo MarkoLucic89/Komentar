@@ -3,7 +3,7 @@ package com.cubes.android.komentar.ui.tag.rv_model_tag;
 import android.graphics.Color;
 
 import com.cubes.android.komentar.R;
-import com.cubes.android.komentar.data.model.News;
+import com.cubes.android.komentar.data.model.domain.News;
 import com.cubes.android.komentar.databinding.RvItemCategorySmallBinding;
 import com.cubes.android.komentar.ui.main.latest.NewsListener;
 import com.cubes.android.komentar.ui.tag.TagAdapter;

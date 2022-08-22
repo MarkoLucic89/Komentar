@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewbinding.ViewBinding;
 
 import com.cubes.android.komentar.R;
-import com.cubes.android.komentar.data.model.News;
+import com.cubes.android.komentar.data.model.domain.News;
 import com.cubes.android.komentar.data.source.remote.networking.response.CategoryResponseModel;
 import com.cubes.android.komentar.data.source.remote.networking.response.NewsResponseModel;
 import com.cubes.android.komentar.databinding.RvItemCategoryBigBinding;
@@ -113,7 +113,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
     }
 
 
-    public void updateList(ArrayList<News> news) {
+    public void updateList(ArrayList<News> news, boolean hasMorePages) {
 
         itemModels.clear();
 
@@ -134,7 +134,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         notifyDataSetChanged();
     }
 
-    public void addNextPage(NewsResponseModel.NewsDataResponseModel response) {
+    public void addNextPage(ArrayList<News> newsList, boolean hasMorePages) {
 
         int lastIndex = 0;
 
@@ -143,50 +143,22 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
             itemModels.remove(lastIndex);
         }
 
-        newsIdList = MyMethodsClass.initNewsIdList(response.news);
+        newsIdList = MyMethodsClass.initNewsIdList(newsList);
 
-        for (News news : response.news) {
+        for (News news : newsList) {
             itemModels.add(new RvItemModelCategorySmall(news, isOnHomePage, listener, newsIdList));
         }
 
-//        if (response.data.pagination.has_more_pages) {
+//        if (hasMorePages) {
 //            itemModels.add(new RvItemModelCategoryLoading(listener));
 //        }
 
-        if (response.news.size() == 20) {
+        if (newsList.size() == 20) {
             itemModels.add(new RvItemModelCategoryLoading(listener));
         }
 
 //        notifyItemRangeChanged(lastIndex, itemModels.size());
-        notifyItemRangeInserted(lastIndex + 1, response.news.size());
-//        notifyDataSetChanged();
-    }
-
-    public void addNextPage(CategoryResponseModel.CategoryDataResponseModel response) {
-
-        int lastIndex = 0;
-
-        if (!itemModels.isEmpty()) {
-            lastIndex = itemModels.size() - 1;
-            itemModels.remove(lastIndex);
-        }
-
-        newsIdList = MyMethodsClass.initNewsIdList(response.news);
-
-        for (News news : response.news) {
-            itemModels.add(new RvItemModelCategorySmall(news, isOnHomePage, listener, newsIdList));
-        }
-
-//        if (response.data.pagination.has_more_pages) {
-//            itemModels.add(new RvItemModelCategoryLoading(listener));
-//        }
-
-        if (response.news.size() == 20) {
-            itemModels.add(new RvItemModelCategoryLoading(listener));
-        }
-
-//        notifyItemRangeChanged(lastIndex, itemModels.size());
-        notifyItemRangeInserted(lastIndex + 1, response.news.size());
+        notifyItemRangeInserted(lastIndex + 1, newsList.size());
 //        notifyDataSetChanged();
     }
 

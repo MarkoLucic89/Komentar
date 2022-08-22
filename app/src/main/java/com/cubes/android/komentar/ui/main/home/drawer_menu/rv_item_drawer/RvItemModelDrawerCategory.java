@@ -5,7 +5,7 @@ import android.graphics.Color;
 import android.view.View;
 
 import com.cubes.android.komentar.R;
-import com.cubes.android.komentar.data.model.Category;
+import com.cubes.android.komentar.data.model.domain.Category;
 import com.cubes.android.komentar.databinding.RvItemDrawerCategoryBinding;
 import com.cubes.android.komentar.ui.main.home.drawer_menu.DrawerAdapter;
 import com.cubes.android.komentar.ui.main.home.drawer_menu.OnCategoryClickListener;
@@ -40,6 +40,7 @@ public class RvItemModelDrawerCategory implements ItemModelDrawer {
         return R.layout.rv_item_drawer_category;
     }
 
+
     @Override
     public void bind(DrawerAdapter.DrawerViewHolder holder) {
 
@@ -48,7 +49,7 @@ public class RvItemModelDrawerCategory implements ItemModelDrawer {
         binding.textView.setText(mCategory.name);
         binding.viewIndicator.setBackgroundColor(Color.parseColor(mCategory.color));
 
-        if (mCategory.subcategories.isEmpty()) {
+        if (mCategory.subcategories == null || mCategory.subcategories.isEmpty()) {
 
             binding.imageViewArrow.setVisibility(View.GONE);
 
@@ -80,6 +81,11 @@ public class RvItemModelDrawerCategory implements ItemModelDrawer {
             }
         });
 
+    }
+
+    @Override
+    public int getId() {
+        return mCategory.id;
     }
 
 }

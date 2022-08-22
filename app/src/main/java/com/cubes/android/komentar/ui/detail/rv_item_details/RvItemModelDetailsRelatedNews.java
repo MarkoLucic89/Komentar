@@ -3,12 +3,11 @@ package com.cubes.android.komentar.ui.detail.rv_item_details;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.cubes.android.komentar.R;
-import com.cubes.android.komentar.data.model.News;
+import com.cubes.android.komentar.data.model.domain.News;
 import com.cubes.android.komentar.databinding.RvItemDetailsRelatedNewsBinding;
 import com.cubes.android.komentar.ui.detail.NewsDetailsAdapter;
 import com.cubes.android.komentar.ui.detail.RelatedNewsAdapter;
 import com.cubes.android.komentar.ui.main.latest.NewsListener;
-import com.cubes.android.komentar.ui.main.search.SearchAdapter;
 import com.cubes.android.komentar.ui.tools.MyMethodsClass;
 
 import java.util.ArrayList;

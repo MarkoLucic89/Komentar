@@ -7,7 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.cubes.android.komentar.R;
-import com.cubes.android.komentar.data.model.NewsTag;
+import com.cubes.android.komentar.data.model.domain.NewsTag;
 import com.cubes.android.komentar.databinding.RvItemTagBinding;
 
 import java.util.ArrayList;

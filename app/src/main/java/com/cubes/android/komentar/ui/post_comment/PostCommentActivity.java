@@ -6,7 +6,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.cubes.android.komentar.data.DataRepository;
-import com.cubes.android.komentar.data.model.NewsCommentInsert;
+import com.cubes.android.komentar.data.model.NewsCommentInsertApi;
 import com.cubes.android.komentar.databinding.ActivityPostCommentBinding;
 
 public class PostCommentActivity extends AppCompatActivity {
@@ -50,7 +50,7 @@ public class PostCommentActivity extends AppCompatActivity {
             return;
         }
 
-        NewsCommentInsert newsCommentInsert = new NewsCommentInsert(
+        NewsCommentInsertApi newsCommentInsert = new NewsCommentInsertApi(
                 newsId,
                 replyId,
                 name,
@@ -58,9 +58,9 @@ public class PostCommentActivity extends AppCompatActivity {
                 content
         );
 
-        DataRepository.getInstance().postComment(newsCommentInsert, new DataRepository.PostCommentResponseListener() {
+        DataRepository.getInstance().postCommentRequest(newsCommentInsert, new DataRepository.PostCommentResponseListener() {
             @Override
-            public void onResponse(NewsCommentInsert response) {
+            public void onResponse(NewsCommentInsertApi response) {
                 Toast.makeText(PostCommentActivity.this, "Komentar je uspešno unet.", Toast.LENGTH_SHORT).show();
                 finish();
             }

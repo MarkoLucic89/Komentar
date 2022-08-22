@@ -9,8 +9,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.cubes.android.komentar.data.DataRepository;
-import com.cubes.android.komentar.data.model.NewsComment;
-import com.cubes.android.komentar.data.model.NewsCommentVote;
+import com.cubes.android.komentar.data.model.domain.NewsComment;
+import com.cubes.android.komentar.data.model.domain.NewsCommentVote;
 import com.cubes.android.komentar.data.source.local.CommentPrefs;
 import com.cubes.android.komentar.databinding.ActivityCommentsBinding;
 import com.cubes.android.komentar.ui.post_comment.PostCommentActivity;
@@ -51,7 +51,7 @@ public class CommentsActivity extends AppCompatActivity {
 
     private void refreshList() {
 
-        DataRepository.getInstance().getComments(news_id, new DataRepository.CommentsResponseListener() {
+        DataRepository.getInstance().getCommentsRequest(news_id, new DataRepository.CommentsResponseListener() {
 
             @Override
             public void onResponse(ArrayList<NewsComment> comments) {
@@ -88,7 +88,7 @@ public class CommentsActivity extends AppCompatActivity {
         binding.imageViewRefresh.setVisibility(View.GONE);
         binding.progressBar.setVisibility(View.VISIBLE);
 
-        DataRepository.getInstance().getComments(news_id, new DataRepository.CommentsResponseListener() {
+        DataRepository.getInstance().getCommentsRequest(news_id, new DataRepository.CommentsResponseListener() {
 
             @Override
             public void onResponse(ArrayList<NewsComment> comments) {
@@ -225,7 +225,7 @@ public class CommentsActivity extends AppCompatActivity {
 
     private void likeComment(int id, boolean vote) {
 
-        DataRepository.getInstance().likeComment(id, vote, new DataRepository.CommentsVoteListener() {
+        DataRepository.getInstance().likeCommentRequest(id, vote, new DataRepository.CommentsVoteListener() {
             @Override
             public void onResponse(NewsCommentVote response) {
 
@@ -274,7 +274,7 @@ public class CommentsActivity extends AppCompatActivity {
 
     private void dislikeComment(int id, boolean vote) {
 
-        DataRepository.getInstance().dislikeComment(id, vote, new DataRepository.CommentsVoteListener() {
+        DataRepository.getInstance().dislikeCommentRequest(id, vote, new DataRepository.CommentsVoteListener() {
             @Override
             public void onResponse(NewsCommentVote response) {
 

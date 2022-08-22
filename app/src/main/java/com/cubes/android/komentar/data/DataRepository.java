@@ -3,11 +3,16 @@ package com.cubes.android.komentar.data;
 
 import android.util.Log;
 
-import com.cubes.android.komentar.data.model.Category;
-import com.cubes.android.komentar.data.model.NewsComment;
-import com.cubes.android.komentar.data.model.NewsCommentInsert;
-import com.cubes.android.komentar.data.model.NewsCommentVote;
-import com.cubes.android.komentar.data.source.remote.networking.NewsApi;
+import com.cubes.android.komentar.data.model.CategoryApi;
+import com.cubes.android.komentar.data.model.domain.HomePageData;
+import com.cubes.android.komentar.data.model.domain.NewsComment;
+import com.cubes.android.komentar.data.model.NewsCommentInsertApi;
+import com.cubes.android.komentar.data.model.NewsApi;
+import com.cubes.android.komentar.data.model.domain.Category;
+import com.cubes.android.komentar.data.model.domain.News;
+import com.cubes.android.komentar.data.model.domain.NewsCommentVote;
+import com.cubes.android.komentar.data.model.domain.NewsDetails;
+import com.cubes.android.komentar.data.source.remote.networking.NewsRetrofit;
 import com.cubes.android.komentar.data.source.remote.networking.response.CategoriesResponseModel;
 import com.cubes.android.komentar.data.source.remote.networking.response.CategoryResponseModel;
 import com.cubes.android.komentar.data.source.remote.networking.response.CommentsResponseModel;
@@ -25,10 +30,10 @@ import retrofit2.Response;
 public class DataRepository {
 
     private static DataRepository instance;
-    private NewsApi api;
+    private NewsRetrofit api;
 
     private DataRepository() {
-        api = NewsApi.getInstance();
+        api = NewsRetrofit.getInstance();
     }
 
     public static DataRepository getInstance() {
@@ -40,14 +45,69 @@ public class DataRepository {
         return instance;
     }
 
-    public interface VideosResponseListener {
-        void onVideosResponse(NewsResponseModel.NewsDataResponseModel response);
+    private ArrayList<News> mapNewsFromResponse(ArrayList<NewsApi> newsFromResponse) {
 
-        void onVideosFailure(Throwable t);
+        ArrayList<News> newsList = new ArrayList<>();
+
+        for (NewsApi newsItemApi : newsFromResponse) {
+
+            News news = new News();
+
+            news.id = newsItemApi.id;
+            news.image = newsItemApi.image;
+            news.title = newsItemApi.title;
+            news.created_at = newsItemApi.created_at;
+            news.url = newsItemApi.url;
+
+            Category category = new Category();
+
+            category.id = newsItemApi.category.id;
+            category.type = newsItemApi.category.type;
+            category.name = newsItemApi.category.name;
+            category.color = newsItemApi.category.color;
+
+            ArrayList<Category> subcategories = new ArrayList<>();
+
+            if (newsItemApi.category.subcategories != null && !newsItemApi.category.subcategories.isEmpty()) {
+
+
+                for (CategoryApi subcategoryApi : newsItemApi.category.subcategories) {
+
+                    Category subcategory = new Category();
+
+                    subcategory.id = subcategoryApi.id;
+                    subcategory.type = subcategoryApi.type;
+                    subcategory.name = subcategoryApi.name;
+                    subcategory.color = subcategoryApi.color;
+
+                    subcategories.add(subcategory);
+
+                }
+
+            }
+
+
+            category.subcategories = subcategories;
+
+            news.category = category;
+
+            newsList.add(news);
+
+        }
+
+        return newsList;
     }
 
 
-    public void getVideosFromApi(int page, VideosResponseListener videosResponseListener) {
+    public interface VideosResponseListener {
+
+        void onVideosResponse(ArrayList<News> newsList, boolean hasNextPage);
+        void onVideosFailure(Throwable t);
+
+    }
+
+
+    public void getVideosRequest(int page, VideosResponseListener videosResponseListener) {
 
         api.getNewsService().getVideos(page).enqueue(new Callback<NewsResponseModel>() {
             @Override
@@ -58,7 +118,7 @@ public class DataRepository {
                         && response.body().data != null
                         && !response.body().data.news.isEmpty()) {
 
-                    videosResponseListener.onVideosResponse(response.body().data);
+                    videosResponseListener.onVideosResponse(mapNewsFromResponse(response.body().data.news), response.body().data.pagination.has_more_pages);
 
                 }
 
@@ -74,12 +134,12 @@ public class DataRepository {
     }
 
     public interface LatestResponseListener {
-        void onResponse(NewsResponseModel.NewsDataResponseModel response);
+        void onResponse(ArrayList<News> newsList, boolean hasMorePages);
 
         void onFailure(Throwable t);
     }
 
-    public void getLatest(int page, LatestResponseListener latestResponseListener) {
+    public void getLatestNewsRequest(int page, LatestResponseListener latestResponseListener) {
 
         api.getNewsService().getLatest(page, 50).enqueue(new Callback<NewsResponseModel>() {
             @Override
@@ -90,7 +150,7 @@ public class DataRepository {
                         && response.body().data != null
                         && !response.body().data.news.isEmpty()) {
 
-                    latestResponseListener.onResponse(response.body().data);
+                    latestResponseListener.onResponse(mapNewsFromResponse(response.body().data.news), response.body().data.pagination.has_more_pages);
 
                 }
 
@@ -106,12 +166,12 @@ public class DataRepository {
     }
 
     public interface CategoryNewsResponseListener {
-        void onResponse(CategoryResponseModel.CategoryDataResponseModel response);
+        void onResponse(ArrayList<News> newsList, boolean hasMorePages);
 
         void onFailure(Throwable t);
     }
 
-    public void getNewsForCategory(int categoryId, int page, CategoryNewsResponseListener listener) {
+    public void getNewsForCategoryRequest(int categoryId, int page, CategoryNewsResponseListener listener) {
 
         Log.d("TAG", "getLatest: " + page);
 
@@ -125,7 +185,7 @@ public class DataRepository {
                         && !response.body().data.news.isEmpty()) {
 
 
-                    listener.onResponse(response.body().data);
+                    listener.onResponse(mapNewsFromResponse(response.body().data.news), response.body().data.pagination.has_more_pages);
 
                 }
 
@@ -140,12 +200,12 @@ public class DataRepository {
     }
 
     public interface SearchResponseListener {
-        void onResponse(NewsResponseModel.NewsDataResponseModel response);
+        void onResponse(ArrayList<News> newsList, boolean hasMorePages);
 
         void onFailure(Throwable t);
     }
 
-    public void searchNews(String searchTerm, int page, SearchResponseListener searchResponseListener) {
+    public void searchNewsRequest(String searchTerm, int page, SearchResponseListener searchResponseListener) {
 
         api.getNewsService().searchNews(searchTerm, page).enqueue(new Callback<NewsResponseModel>() {
             @Override
@@ -155,7 +215,7 @@ public class DataRepository {
                         && response.isSuccessful()
                         && response.body().data != null) {
 
-                    searchResponseListener.onResponse(response.body().data);
+                    searchResponseListener.onResponse(mapNewsFromResponse(response.body().data.news), response.body().data.pagination.has_more_pages);
 
                 }
 
@@ -171,12 +231,12 @@ public class DataRepository {
     }
 
     public interface HomeResponseListener {
-        void onResponse(HomePageResponseModel.HomePageDataResponseModel response);
+        void onResponse(HomePageData response);
 
         void onFailure(Throwable t);
     }
 
-    public void getHomeNews(HomeResponseListener listener) {
+    public void getHomeNewsRequest(HomeResponseListener listener) {
 
         api.getNewsService().getHomePageData().enqueue(new Callback<HomePageResponseModel>() {
             @Override
@@ -186,7 +246,36 @@ public class DataRepository {
                         && response.isSuccessful()
                         && response.body().data != null) {
 
-                    listener.onResponse(response.body().data);
+                    HomePageData homePageData = new HomePageData();
+
+                    homePageData.slider = mapNewsFromResponse(response.body().data.slider);
+                    homePageData.top = mapNewsFromResponse(response.body().data.top);
+                    homePageData.editors_choice = mapNewsFromResponse(response.body().data.editors_choice);
+                    homePageData.latest = mapNewsFromResponse(response.body().data.latest);
+                    homePageData.most_commented = mapNewsFromResponse(response.body().data.most_comented);
+                    homePageData.most_read = mapNewsFromResponse(response.body().data.most_read);
+                    homePageData.videos = mapNewsFromResponse(response.body().data.videos);
+
+                    ArrayList<HomePageData.CategoryBox> categoryBoxes = new ArrayList<>();
+
+                    for (HomePageResponseModel.CategoryBoxResponseModel model : response.body().data.category) {
+
+                        HomePageData.CategoryBox categoryBox = new HomePageData.CategoryBox();
+
+                        categoryBox.news = mapNewsFromResponse(model.news);
+                        categoryBox.color = model.color;
+                        categoryBox.id = model.id;
+                        categoryBox.title = model.title;
+
+                        categoryBoxes.add(categoryBox);
+
+                    }
+
+                    homePageData.category = categoryBoxes;
+
+
+
+                    listener.onResponse(homePageData);
 
                 }
 
@@ -203,12 +292,12 @@ public class DataRepository {
     }
 
     public interface DetailResponseListener {
-        void onResponse(NewsDetailsResponseModel.NewsDetailsDataResponseModel response);
+        void onResponse(NewsDetails newsDetails);
 
         void onFailure(Throwable t);
     }
 
-    public void sendNewsDetailsRequest(int newsId, DetailResponseListener listener) {
+    public void getNewsDetailsRequest(int newsId, DetailResponseListener listener) {
 
 
         api.getNewsService().getNewsDetails(newsId).enqueue(new Callback<NewsDetailsResponseModel>() {
@@ -219,7 +308,21 @@ public class DataRepository {
                         && response.isSuccessful()
                         && response.body().data != null) {
 
-                    listener.onResponse(response.body().data);
+                    NewsDetails newsDetails = new NewsDetails();
+
+                    newsDetails.id = response.body().data.id;
+                    newsDetails.url = response.body().data.url;
+                    newsDetails.tags = response.body().data.tags;
+                    newsDetails.comments_top_n = response.body().data.comments_top_n;
+                    if (response.body().data.comment_enabled == 1) {
+                        newsDetails.comment_enabled = true;
+                    } else {
+                        newsDetails.comment_enabled = false;
+                    }
+                    newsDetails.comments_count = response.body().data.comments_count;
+                    newsDetails.related_news = response.body().data.related_news;
+
+                    listener.onResponse(newsDetails);
 
                 }
 
@@ -235,12 +338,12 @@ public class DataRepository {
     }
 
     public interface TagResponseListener {
-        void onResponse(TagResponseModel.TagDataResponseModel response);
+        void onResponse(ArrayList<News> newsList, boolean hasMorePages);
 
         void onFailure(Throwable t);
     }
 
-    public void sendTagRequest(int tagId, int page, TagResponseListener listener) {
+    public void getNewsForTagRequest(int tagId, int page, TagResponseListener listener) {
 
         api.getNewsService().getTag(tagId, page).enqueue(new Callback<TagResponseModel>() {
             @Override
@@ -251,7 +354,7 @@ public class DataRepository {
                         && response.body().data != null
                         && !response.body().data.news.isEmpty()) {
 
-                    listener.onResponse(response.body().data);
+                    listener.onResponse(mapNewsFromResponse(response.body().data.news), response.body().data.pagination.has_more_pages);
 
                 }
             }
@@ -271,7 +374,7 @@ public class DataRepository {
         void onFailure(Throwable t);
     }
 
-    public void getComments(int news_id, CommentsResponseListener listener) {
+    public void getCommentsRequest(int news_id, CommentsResponseListener listener) {
 
         api.getNewsService().getComments(news_id).enqueue(new Callback<CommentsResponseModel>() {
             @Override
@@ -300,7 +403,7 @@ public class DataRepository {
         void onFailure(Throwable t);
     }
 
-    public void likeComment(int id, boolean vote, CommentsVoteListener listener) {
+    public void likeCommentRequest(int id, boolean vote, CommentsVoteListener listener) {
 
         api.getNewsService().postLike(id, vote)
                 .enqueue(new Callback<NewsCommentVote>() {
@@ -325,12 +428,13 @@ public class DataRepository {
 
     }
 
-    public void dislikeComment(int id, boolean vote, CommentsVoteListener listener) {
+    public void dislikeCommentRequest(int id, boolean vote, CommentsVoteListener listener) {
 
         api.getNewsService().postDislike(id, vote)
                 .enqueue(new Callback<NewsCommentVote>() {
                     @Override
                     public void onResponse(Call<NewsCommentVote> call, Response<NewsCommentVote> response) {
+
                         if (response.isSuccessful()) {
 
                             listener.onResponse(response.body());
@@ -356,13 +460,44 @@ public class DataRepository {
         void onFailure(Throwable t);
     }
 
-    public void getAllCategories(CategoriesResponseListener listener) {
+    public void getAllCategoriesRequest(CategoriesResponseListener listener) {
 
         api.getNewsService().getCategories().enqueue(new Callback<CategoriesResponseModel>() {
             @Override
             public void onResponse(Call<CategoriesResponseModel> call, Response<CategoriesResponseModel> response) {
 
-                listener.onResponse(response.body().data);
+                ArrayList<Category> categories = new ArrayList<>();
+
+                for (CategoryApi categoryApi : response.body().data) {
+
+                    Category category = new Category();
+
+                    category.id = categoryApi.id;
+                    category.type = categoryApi.type;
+                    category.name = categoryApi.name;
+                    category.color = categoryApi.color;
+
+                    if (category.subcategories != null && !category.subcategories.isEmpty()) {
+
+                        for (CategoryApi subcategoryApi : categoryApi.subcategories) {
+                            Category subcategory = new Category();
+
+                            subcategory.id = subcategoryApi.id;
+                            subcategory.type = subcategoryApi.type;
+                            subcategory.name = subcategoryApi.name;
+                            subcategory.color = subcategoryApi.color;
+
+                            category.subcategories.add(subcategory);
+
+                        }
+
+                    }
+
+                    categories.add(category);
+
+                }
+
+                listener.onResponse(categories);
 
             }
 
@@ -377,23 +512,23 @@ public class DataRepository {
     }
 
     public interface PostCommentResponseListener {
-        void onResponse(NewsCommentInsert response);
+        void onResponse(NewsCommentInsertApi response);
 
         void onFailure(Throwable t);
     }
 
-    public void postComment(NewsCommentInsert newsCommentInsert, PostCommentResponseListener listener) {
+    public void postCommentRequest(NewsCommentInsertApi newsCommentInsert, PostCommentResponseListener listener) {
 
-        NewsApi.getInstance().getNewsService().postComment(newsCommentInsert).enqueue(new Callback<NewsCommentInsert>() {
+        NewsRetrofit.getInstance().getNewsService().postComment(newsCommentInsert).enqueue(new Callback<NewsCommentInsertApi>() {
             @Override
-            public void onResponse(Call<NewsCommentInsert> call, Response<NewsCommentInsert> response) {
+            public void onResponse(Call<NewsCommentInsertApi> call, Response<NewsCommentInsertApi> response) {
 
                 listener.onResponse(response.body());
 
             }
 
             @Override
-            public void onFailure(Call<NewsCommentInsert> call, Throwable t) {
+            public void onFailure(Call<NewsCommentInsertApi> call, Throwable t) {
 
                 listener.onFailure(t);
 

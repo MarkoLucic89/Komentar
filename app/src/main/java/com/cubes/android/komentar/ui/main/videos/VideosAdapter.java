@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewbinding.ViewBinding;
 
 import com.cubes.android.komentar.R;
-import com.cubes.android.komentar.data.model.News;
+import com.cubes.android.komentar.data.model.domain.News;
 import com.cubes.android.komentar.data.source.remote.networking.response.NewsResponseModel;
 import com.cubes.android.komentar.databinding.RvItemLoadingVideosBinding;
 import com.cubes.android.komentar.databinding.RvItemRefreshVideosBinding;
@@ -50,21 +50,21 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.VideosView
     }
 
 
-    public void updateList(NewsResponseModel.NewsDataResponseModel responseModel) {
+    public void updateList(ArrayList<News> newsList,  boolean hasNextPage) {
 
         itemModels.clear();
 
-        newsIdList = MyMethodsClass.initNewsIdList(responseModel.news);
+        newsIdList = MyMethodsClass.initNewsIdList(newsList);
 
-        for (News news : responseModel.news) {
+        for (News news : newsList) {
             itemModels.add(new RvItemModelVideos(news, listener, newsIdList));
         }
 
-//        if (responseModel.pagination.has_more_pages) {
+//        if (hasNextPage) {
 //            itemModels.add(new RvItemModelVideoLoading(listener));
 //        }
 
-        if (responseModel.news.size() == 20) {
+        if (newsList.size() == 20) {
             itemModels.add(new RvItemModelVideoLoading(listener));
         }
 
@@ -115,7 +115,7 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.VideosView
         return itemModels.get(position).getType();
     }
 
-    public void addNextPage(NewsResponseModel.NewsDataResponseModel response) {
+    public void addNextPage(ArrayList<News> newsList,  boolean hasNextPage) {
 
         int lastIndex;
 
@@ -126,22 +126,22 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.VideosView
             itemModels.remove(lastIndex);
         }
 
-        newsIdList = MyMethodsClass.initNewsIdList(response.news);
+        newsIdList = MyMethodsClass.initNewsIdList(newsList);
 
-        for (News news : response.news) {
+        for (News news : newsList) {
             itemModels.add(new RvItemModelVideos(news, listener, newsIdList));
         }
 
-//        if (response.data.pagination.has_more_pages) {
+//        if (hasNextPage) {
 //            itemModels.add(new RvItemModelVideoLoading(listener));
 //        }
 
-        if (response.news.size() == 20) {
+        if (newsList.size() == 20) {
             itemModels.add(new RvItemModelVideoLoading(listener));
         }
 
 //        notifyItemRangeChanged(lastIndex, itemModels.size());
-        notifyItemRangeInserted(lastIndex + 1, response.news.size());
+        notifyItemRangeInserted(lastIndex + 1, newsList.size());
 //        notifyDataSetChanged();
     }
 

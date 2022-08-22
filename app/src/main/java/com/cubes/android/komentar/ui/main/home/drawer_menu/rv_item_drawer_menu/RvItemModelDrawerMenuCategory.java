@@ -7,7 +7,7 @@ import android.view.View;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.cubes.android.komentar.R;
-import com.cubes.android.komentar.data.model.Category;
+import com.cubes.android.komentar.data.model.CategoryApi;
 import com.cubes.android.komentar.databinding.RvItemDrawerMenuCategoryBinding;
 import com.cubes.android.komentar.ui.main.home.drawer_menu.OnCategoryClickListener;
 import com.cubes.android.komentar.ui.main.home.drawer_menu.DrawerMenuAdapter;
@@ -18,13 +18,13 @@ import java.util.ArrayList;
 
 public class RvItemModelDrawerMenuCategory implements ItemModelDrawerMenu {
 
-    public Category category;
+    public CategoryApi category;
     private OnCategoryClickListener listener;
 
-    private ArrayList<Category> categories;
+    private ArrayList<CategoryApi> categories;
 
 
-    public RvItemModelDrawerMenuCategory(Category category, OnCategoryClickListener listener, ArrayList<Category> categories) {
+    public RvItemModelDrawerMenuCategory(CategoryApi category, OnCategoryClickListener listener, ArrayList<CategoryApi> categories) {
         this.category = category;
         this.listener = listener;
         this.categories = categories;

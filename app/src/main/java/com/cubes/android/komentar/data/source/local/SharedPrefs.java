@@ -4,14 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.cubes.android.komentar.data.model.NewsCommentVote;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.List;
-
 public class SharedPrefs {
 
     private final String NOTIFICATION_KEY = "prefs_notification";

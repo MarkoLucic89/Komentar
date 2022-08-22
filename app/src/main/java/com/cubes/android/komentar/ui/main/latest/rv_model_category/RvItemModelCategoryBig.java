@@ -3,7 +3,7 @@ package com.cubes.android.komentar.ui.main.latest.rv_model_category;
 import android.view.View;
 
 import com.cubes.android.komentar.R;
-import com.cubes.android.komentar.data.model.News;
+import com.cubes.android.komentar.data.model.domain.News;
 import com.cubes.android.komentar.databinding.RvItemCategoryBigBinding;
 import com.cubes.android.komentar.ui.main.latest.CategoryAdapter;
 import com.cubes.android.komentar.ui.main.latest.NewsListener;

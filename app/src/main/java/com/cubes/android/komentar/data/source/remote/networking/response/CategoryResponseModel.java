@@ -1,6 +1,6 @@
 package com.cubes.android.komentar.data.source.remote.networking.response;
 
-import com.cubes.android.komentar.data.model.News;
+import com.cubes.android.komentar.data.model.NewsApi;
 
 import java.util.ArrayList;
 
@@ -9,7 +9,7 @@ public class CategoryResponseModel extends BaseResponseModel {
 
     public class CategoryDataResponseModel {
         public CategoryDataPaginationResponseModel pagination;
-        public ArrayList<News> news;
+        public ArrayList<NewsApi> news;
     }
 
     public class CategoryDataPaginationResponseModel {

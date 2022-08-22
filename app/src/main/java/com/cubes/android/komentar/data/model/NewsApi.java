@@ -1,13 +1,13 @@
 package com.cubes.android.komentar.data.model;
 
+public class NewsApi {
 
-public class News {
     public int id;
     public String image;
     public String image_source;
     public String author_name;
     public String source;
-    public Category category;
+    public CategoryApi category;
     public String title;
     public String description;
     public int comment_enabled;

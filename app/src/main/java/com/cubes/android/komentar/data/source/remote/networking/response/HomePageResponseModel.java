@@ -1,6 +1,7 @@
 package com.cubes.android.komentar.data.source.remote.networking.response;
 
-import com.cubes.android.komentar.data.model.News;
+import com.cubes.android.komentar.data.model.NewsApi;
+import com.cubes.android.komentar.data.model.domain.News;
 
 import java.util.ArrayList;
 
@@ -10,14 +11,14 @@ public class HomePageResponseModel extends BaseResponseModel {
 
     public class HomePageDataResponseModel {
 
-        public ArrayList<News> slider;
-        public ArrayList<News> top;
-        public ArrayList<News> editors_choice;
+        public ArrayList<NewsApi> slider;
+        public ArrayList<NewsApi> top;
+        public ArrayList<NewsApi> editors_choice;
         public ArrayList<CategoryBoxResponseModel> category;
-        public ArrayList<News> latest;
-        public ArrayList<News> most_read;
-        public ArrayList<News> most_comment;
-        public ArrayList<News> videos;
+        public ArrayList<NewsApi> latest;
+        public ArrayList<NewsApi> most_read;
+        public ArrayList<NewsApi> most_comented;
+        public ArrayList<NewsApi> videos;
 
     }
 
@@ -25,6 +26,6 @@ public class HomePageResponseModel extends BaseResponseModel {
         public int id;
         public String title;
         public String color;
-        public ArrayList<News> news;
+        public ArrayList<NewsApi> news;
     }
 }

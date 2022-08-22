@@ -3,12 +3,10 @@ package com.cubes.android.komentar.ui.detail.rv_item_details;
 import android.view.View;
 
 import com.cubes.android.komentar.R;
-import com.cubes.android.komentar.data.model.News;
+import com.cubes.android.komentar.data.model.domain.News;
 import com.cubes.android.komentar.databinding.RvItemCategorySmallBinding;
 import com.cubes.android.komentar.ui.detail.NewsDetailsAdapter;
-import com.cubes.android.komentar.ui.main.latest.CategoryAdapter;
 import com.cubes.android.komentar.ui.main.latest.NewsListener;
-import com.cubes.android.komentar.ui.main.latest.rv_model_category.ItemModelCategory;
 import com.cubes.android.komentar.ui.tools.MyMethodsClass;
 import com.squareup.picasso.Picasso;
 

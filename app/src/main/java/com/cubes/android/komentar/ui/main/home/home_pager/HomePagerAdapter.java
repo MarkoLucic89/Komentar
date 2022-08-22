@@ -8,7 +8,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewbinding.ViewBinding;
 
 import com.cubes.android.komentar.R;
-import com.cubes.android.komentar.data.model.News;
+import com.cubes.android.komentar.data.model.domain.HomePageData;
+import com.cubes.android.komentar.data.model.domain.News;
 import com.cubes.android.komentar.data.source.remote.networking.response.HomePageResponseModel;
 import com.cubes.android.komentar.databinding.RvItemCategoryBigBinding;
 import com.cubes.android.komentar.databinding.RvItemCategorySmallBinding;
@@ -39,119 +40,115 @@ public class HomePagerAdapter extends RecyclerView.Adapter<HomePagerAdapter.Home
         this.listener = listener;
     }
 
-    public void updateList(HomePageResponseModel.HomePageDataResponseModel response) {
+    public void updateList(HomePageData data) {
 
         list.clear();
 
         //SLIDER
-        addSlider("SLIDER", response);
+        addSlider("SLIDER", data);
 
         //TOP NEWS
-        int[] newsIdList = MyMethodsClass.initNewsIdList(response.top);
+        int[] newsIdList = MyMethodsClass.initNewsIdList(data.top);
 
-        for (News news : response.top) {
+        for (News news : data.top) {
             list.add(new RvItemModelHomeSmallNews(news, listener, newsIdList));
         }
 
         //TABS
-        list.add(new RvItemModelTabs(response, this, list.size(), listener));
+        list.add(new RvItemModelTabs(data, this, list.size(), listener));
 
         //SPORT CATEGORY BOX
-        addCategoryBox("SPORT", response);
+        addCategoryBox("SPORT", data);
 
 
 
         //EDITORS CHOICE
-        addSlider("EDITORS CHOICE", response);
+        addSlider("EDITORS CHOICE", data);
 
         //VIDEO
-        if (!response.videos.isEmpty()) {
+        if (!data.videos.isEmpty()) {
 
 //            list.add(new RvItemModelHomeVideo(response.videos, listener));
 
-            int[] videosIdList = MyMethodsClass.initNewsIdList(response.videos);
+            int[] videosIdList = MyMethodsClass.initNewsIdList(data.videos);
 
             list.add(new RvItemModelCategoryTitle("Video", "#FE0000"));
 
-            for (News news : response.videos) {
+            for (News news : data.videos) {
                 list.add(new RvItemModelHomeVideos(news, listener, videosIdList));
             }
         }
 
         //SHOWBIZ
-        addCategoryBox("SHOWBIZ", response);  //EMPTY RESPONSE
+        addCategoryBox("SHOWBIZ", data);  //EMPTY RESPONSE
 
         //POLITIKA
-        addCategoryBox("POLITIKA", response);
+        addCategoryBox("POLITIKA", data);
 
         //SVET
-        addCategoryBox("SVET", response);
+        addCategoryBox("SVET", data);
 
         //HRONIKA
-        addCategoryBox("HRONIKA", response);  //EMPTY RESPONSE
+        addCategoryBox("HRONIKA", data);  //EMPTY RESPONSE
 
         //DRUŠTVO
-        addCategoryBox("DRUŠTVO", response);
+        addCategoryBox("DRUŠTVO", data);
 
         //BIZNIS
-        addCategoryBox("BIZNIS", response);  //EMPTY RESPONSE
+        addCategoryBox("BIZNIS", data);  //EMPTY RESPONSE
 
         //STIL ŽIVOTA
-        addCategoryBox("STIL ŽIVOTA", response);  //EMPTY RESPONSE
+        addCategoryBox("STIL ŽIVOTA", data);  //EMPTY RESPONSE
 
         //KULTURA
-        addCategoryBox("KULTURA", response);
+        addCategoryBox("KULTURA", data);
 
         //SLOBODNO VREME
-        addCategoryBox("SLOBODNO VREME", response);  //EMPTY RESPONSE
+        addCategoryBox("SLOBODNO VREME", data);  //EMPTY RESPONSE
 
         //SRBIJA
-        addCategoryBox("SRBIJA", response);  //EMPTY RESPONSE
+        addCategoryBox("SRBIJA", data);  //EMPTY RESPONSE
 
         //BEOGRAD
-        addCategoryBox("BEOGRAD", response);
+        addCategoryBox("BEOGRAD", data);
 
         //REGION
-        addCategoryBox("REGION", response);
+        addCategoryBox("REGION", data);
 
         notifyDataSetChanged();
     }
 
-    private void addSlider(String title, HomePageResponseModel.HomePageDataResponseModel response) {
-
-        if (response == null) {
-            return;
-        }
+    private void addSlider(String title,HomePageData data) {
 
         if (title.equalsIgnoreCase("SLIDER")) {
 
-            if (response.slider != null && !response.slider.isEmpty()) {
-                list.add(new RvItemModelHomeSlider(response.slider, false, listener));
+            if (data.slider != null && !data.slider.isEmpty()) {
+                list.add(new RvItemModelHomeSlider(data.slider, false, listener));
             }
 
         } else if (title.equalsIgnoreCase("EDITORS CHOICE")) {
 
-            if (response.editors_choice != null && !response.editors_choice.isEmpty()) {
-                list.add(new RvItemModelHomeSlider(response.editors_choice, true, listener));
+            if ( data.editors_choice!= null && !data.editors_choice.isEmpty()) {
+                list.add(new RvItemModelHomeSlider(data.editors_choice, true, listener));
             }
 
         }
 
     }
 
-    private void addCategoryBox(String title, HomePageResponseModel.HomePageDataResponseModel response) {
+    private void addCategoryBox(String title, HomePageData data) {
 
-        HomePageResponseModel.CategoryBoxResponseModel categoryBoxResponseModel = getCategoryForTitle(title, response);
+        HomePageData.CategoryBox categoryBox = getCategoryForTitle(title, data);
 
-        if (categoryBoxResponseModel != null && !categoryBoxResponseModel.news.isEmpty()) {
+        if (categoryBox != null && !categoryBox.news.isEmpty()) {
 
 //            list.add(new RvItemModelCategoryBox(categoryBoxResponseModel, listener));
 
-            list.add(new RvItemModelCategoryTitle(categoryBoxResponseModel.title, categoryBoxResponseModel.color));
+            list.add(new RvItemModelCategoryTitle(categoryBox.title, categoryBox.color));
 
-            int[] newsIdList = MyMethodsClass.initNewsIdList(categoryBoxResponseModel.news);
+            int[] newsIdList = MyMethodsClass.initNewsIdList(categoryBox.news);
 
-            list.add(new RvItemModelHomeCategoryBig(categoryBoxResponseModel.news.get(0), true, listener, newsIdList));
+            list.add(new RvItemModelHomeCategoryBig(categoryBox.news.get(0), true, listener, newsIdList));
 
 
             //servisi za svaki CategoryBox vracaju preko 20 vesti, zato je ovo trenutno zakomentarisano
@@ -162,15 +159,15 @@ public class HomePagerAdapter extends RecyclerView.Adapter<HomePagerAdapter.Home
 
             //trenutno je size 5 zbog testiranja
             for (int i = 1; i < 5; i++) {
-                list.add(new RvItemModelHomeSmallNews(categoryBoxResponseModel.news.get(i), listener, newsIdList));
+                list.add(new RvItemModelHomeSmallNews(categoryBox.news.get(i), listener, newsIdList));
             }
         }
 
     }
 
-    private HomePageResponseModel.CategoryBoxResponseModel getCategoryForTitle(String title, HomePageResponseModel.HomePageDataResponseModel response) {
+    private HomePageData.CategoryBox getCategoryForTitle(String title, HomePageData data) {
 
-        for (HomePageResponseModel.CategoryBoxResponseModel categoryBox : response.category) {
+        for (HomePageData.CategoryBox categoryBox : data.category) {
             if (categoryBox.title.equalsIgnoreCase(title)) {
                 return categoryBox;
             }

@@ -10,13 +10,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.cubes.android.komentar.data.DataRepository;
-import com.cubes.android.komentar.data.model.News;
-import com.cubes.android.komentar.data.source.remote.networking.response.CategoryResponseModel;
+import com.cubes.android.komentar.data.model.domain.News;
 import com.cubes.android.komentar.databinding.FragmentCategoryBinding;
-import com.cubes.android.komentar.ui.detail.NewsDetailsActivity;
 import com.cubes.android.komentar.ui.detail.news_detail_activity_with_viewpager.DetailsActivity;
 import com.cubes.android.komentar.ui.main.latest.CategoryAdapter;
 import com.cubes.android.komentar.ui.main.latest.NewsListener;
@@ -83,12 +80,7 @@ public class CategoryNewsFragment extends Fragment implements NewsListener {
 
         });
 
-        binding.swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                refreshAdapter();
-            }
-        });
+        binding.swipeRefreshLayout.setOnRefreshListener(() -> refreshAdapter());
 
     }
 
@@ -119,19 +111,19 @@ public class CategoryNewsFragment extends Fragment implements NewsListener {
     @Override
     public void loadNextPage() {
 
-        DataRepository.getInstance().getNewsForCategory(mCategoryId, nextPage, new DataRepository.CategoryNewsResponseListener() {
+        DataRepository.getInstance().getNewsForCategoryRequest(mCategoryId, nextPage, new DataRepository.CategoryNewsResponseListener() {
 
             @Override
-            public void onResponse(CategoryResponseModel.CategoryDataResponseModel response) {
+            public void onResponse(ArrayList<News> newsList, boolean hasMorePages) {
 
                 binding.recyclerView.setVisibility(View.VISIBLE);
                 binding.imageViewRefresh.setVisibility(View.GONE);
                 binding.progressBar.setVisibility(View.GONE);
 
                 if (nextPage == 1) {
-                    categoryAdapter.updateList(response.news);
+                    categoryAdapter.updateList(newsList, hasMorePages);
                 } else {
-                    categoryAdapter.addNextPage(response);
+                    categoryAdapter.addNextPage(newsList, hasMorePages);
                 }
 
                 nextPage++;

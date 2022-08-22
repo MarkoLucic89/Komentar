@@ -1,4 +1,4 @@
-package com.cubes.android.komentar.data.model;
+package com.cubes.android.komentar.data.model.domain;
 
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;

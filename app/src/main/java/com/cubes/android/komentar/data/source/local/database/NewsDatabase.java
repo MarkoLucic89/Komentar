@@ -6,7 +6,7 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
-import com.cubes.android.komentar.data.model.NewsCommentVote;
+import com.cubes.android.komentar.data.model.domain.NewsCommentVote;
 import com.cubes.android.komentar.data.source.local.database.dao.NewsCommentsVoteDao;
 
 @Database(entities = NewsCommentVote.class, version = 1)

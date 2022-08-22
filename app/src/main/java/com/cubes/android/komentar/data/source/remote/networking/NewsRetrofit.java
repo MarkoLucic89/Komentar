@@ -3,9 +3,9 @@ package com.cubes.android.komentar.data.source.remote.networking;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class NewsApi {
+public class NewsRetrofit {
 
-    private static NewsApi instance = null;
+    private static NewsRetrofit instance = null;
     public static final String BASE_URL = "https://komentar.rs/wp-json/";
 
     private NewsService newsService;
@@ -14,15 +14,15 @@ public class NewsApi {
         return this.newsService;
     }
 
-    public static NewsApi getInstance() {
+    public static NewsRetrofit getInstance() {
         if (instance == null) {
-            instance = new NewsApi();
+            instance = new NewsRetrofit();
         }
 
         return instance;
     }
 
-    private NewsApi() {
+    private NewsRetrofit() {
         buildRetrofit(BASE_URL);
     }
 

@@ -7,7 +7,7 @@ import android.util.Log;
 import android.view.View;
 
 import com.cubes.android.komentar.data.DataRepository;
-import com.cubes.android.komentar.data.model.Category;
+import com.cubes.android.komentar.data.model.domain.Category;
 import com.cubes.android.komentar.databinding.ActivityCategoryBinding;
 import com.cubes.android.komentar.ui.subcategories.SubcategoryPagerAdapter;
 import com.google.android.material.tabs.TabLayoutMediator;
@@ -51,7 +51,7 @@ public class CategoryActivity extends AppCompatActivity {
         mCategoryId = getIntent().getIntExtra("category_id", -1);
         mSubcategoryId = getIntent().getIntExtra("subcategory_id", -1);
 
-        DataRepository.getInstance().getAllCategories(new DataRepository.CategoriesResponseListener() {
+        DataRepository.getInstance().getAllCategoriesRequest(new DataRepository.CategoriesResponseListener() {
             @Override
             public void onResponse(ArrayList<Category> categories) {
 

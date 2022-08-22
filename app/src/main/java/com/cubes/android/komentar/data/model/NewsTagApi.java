@@ -1,6 +1,6 @@
 package com.cubes.android.komentar.data.model;
 
-public class NewsTag {
+public class NewsTagApi {
     public int id;
     public String title;
 }

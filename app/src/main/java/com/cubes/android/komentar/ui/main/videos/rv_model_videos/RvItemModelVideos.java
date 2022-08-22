@@ -1,14 +1,12 @@
 package com.cubes.android.komentar.ui.main.videos.rv_model_videos;
 
 import com.cubes.android.komentar.R;
-import com.cubes.android.komentar.data.model.News;
+import com.cubes.android.komentar.data.model.domain.News;
 import com.cubes.android.komentar.databinding.RvItemVideosBinding;
 import com.cubes.android.komentar.ui.main.latest.NewsListener;
 import com.cubes.android.komentar.ui.main.videos.VideosAdapter;
 import com.cubes.android.komentar.ui.tools.MyMethodsClass;
 import com.squareup.picasso.Picasso;
-
-import java.util.ArrayList;
 
 public class RvItemModelVideos implements ItemModelVideo {
 

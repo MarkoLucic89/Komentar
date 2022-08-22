@@ -13,11 +13,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.cubes.android.komentar.data.model.News;
-import com.cubes.android.komentar.data.source.remote.networking.response.NewsResponseModel;
+import com.cubes.android.komentar.data.model.domain.News;
 import com.cubes.android.komentar.databinding.FragmentVideoBinding;
 import com.cubes.android.komentar.data.DataRepository;
-import com.cubes.android.komentar.ui.detail.NewsDetailsActivity;
 import com.cubes.android.komentar.ui.detail.news_detail_activity_with_viewpager.DetailsActivity;
 import com.cubes.android.komentar.ui.main.latest.NewsListener;
 import com.cubes.android.komentar.ui.tools.MyMethodsClass;
@@ -97,19 +95,19 @@ public class VideoFragment extends Fragment implements NewsListener {
     @Override
     public void loadNextPage() {
 
-        DataRepository.getInstance().getVideosFromApi(nextPage, new DataRepository.VideosResponseListener() {
+        DataRepository.getInstance().getVideosRequest(nextPage, new DataRepository.VideosResponseListener() {
 
             @Override
-            public void onVideosResponse(NewsResponseModel.NewsDataResponseModel response) {
+            public void onVideosResponse(ArrayList<News> newsList, boolean hasNextPage) {
 
                 binding.recyclerView.setVisibility(View.VISIBLE);
                 binding.progressBar.setVisibility(View.GONE);
                 binding.imageViewRefresh.setVisibility(View.GONE);
 
                 if (nextPage == 1) {
-                    adapter.updateList(response);
+                    adapter.updateList(newsList, hasNextPage);
                 } else {
-                    adapter.addNextPage(response);
+                    adapter.addNextPage(newsList, hasNextPage);
                 }
 
                 nextPage++;
