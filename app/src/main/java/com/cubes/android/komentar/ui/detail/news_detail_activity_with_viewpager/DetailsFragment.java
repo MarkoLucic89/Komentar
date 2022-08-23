@@ -116,7 +116,7 @@ public class DetailsFragment extends Fragment implements
 
     private void refreshNewsDetails() {
 
-        DataRepository.getInstance().getNewsDetailsRequest(mNewsId, new DataRepository.DetailResponseListener() {
+        DataRepository.getInstance().getNewsDetails(mNewsId, new DataRepository.DetailResponseListener() {
             @Override
             public void onResponse(NewsDetails newsDetails) {
 
@@ -128,7 +128,7 @@ public class DetailsFragment extends Fragment implements
 
                 listener.onDetailsResponseListener(mNewsId, mNewsUrl);
 
-                getCommentVotes(newsDetails.comments_top_n);
+                getCommentVotes(newsDetails.commentsTop);
 
                 adapter.updateList(newsDetails);
 
@@ -178,7 +178,7 @@ public class DetailsFragment extends Fragment implements
 
         binding.imageViewRefresh.setVisibility(View.GONE);
 
-        DataRepository.getInstance().getNewsDetailsRequest(mNewsId, new DataRepository.DetailResponseListener() {
+        DataRepository.getInstance().getNewsDetails(mNewsId, new DataRepository.DetailResponseListener() {
             @Override
             public void onResponse(NewsDetails newsDetails) {
 
@@ -191,7 +191,7 @@ public class DetailsFragment extends Fragment implements
 
                 listener.onDetailsResponseListener(mNewsId, mNewsUrl);
 
-                getCommentVotes(newsDetails.comments_top_n);
+                getCommentVotes(newsDetails.commentsTop);
 
                 adapter.updateList(newsDetails);
 
@@ -284,7 +284,7 @@ public class DetailsFragment extends Fragment implements
     @Override
     public void onLikeListener(int id, boolean vote) {
 
-        DataRepository.getInstance().likeCommentRequest(id, vote, new DataRepository.CommentsVoteListener() {
+        DataRepository.getInstance().likeComment(id, vote, new DataRepository.CommentsVoteListener() {
             @Override
             public void onResponse(NewsCommentVote response) {
 
@@ -314,7 +314,7 @@ public class DetailsFragment extends Fragment implements
     @Override
     public void onDislikeListener(int id, boolean vote) {
 
-        DataRepository.getInstance().dislikeCommentRequest(id, vote, new DataRepository.CommentsVoteListener() {
+        DataRepository.getInstance().dislikeComment(id, vote, new DataRepository.CommentsVoteListener() {
             @Override
             public void onResponse(NewsCommentVote response) {
 

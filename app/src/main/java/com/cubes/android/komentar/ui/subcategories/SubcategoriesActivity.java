@@ -43,7 +43,7 @@ public class SubcategoriesActivity extends AppCompatActivity {
         binding.progressBar.setVisibility(View.VISIBLE);
         binding.imageViewRefresh.setVisibility(View.GONE);
 
-        DataRepository.getInstance().getAllCategoriesRequest(new DataRepository.CategoriesResponseListener() {
+        DataRepository.getInstance().getAllCategories(new DataRepository.CategoriesResponseListener() {
             @Override
             public void onResponse(ArrayList<Category> categories) {
 

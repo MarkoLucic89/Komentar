@@ -58,7 +58,7 @@ public class PostCommentActivity extends AppCompatActivity {
                 content
         );
 
-        DataRepository.getInstance().postCommentRequest(newsCommentInsert, new DataRepository.PostCommentResponseListener() {
+        DataRepository.getInstance().postComment(newsCommentInsert, new DataRepository.PostCommentResponseListener() {
             @Override
             public void onResponse(NewsCommentInsertApi response) {
                 Toast.makeText(PostCommentActivity.this, "Komentar je uspešno unet.", Toast.LENGTH_SHORT).show();

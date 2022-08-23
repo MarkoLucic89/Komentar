@@ -51,7 +51,7 @@ public class CategoryActivity extends AppCompatActivity {
         mCategoryId = getIntent().getIntExtra("category_id", -1);
         mSubcategoryId = getIntent().getIntExtra("subcategory_id", -1);
 
-        DataRepository.getInstance().getAllCategoriesRequest(new DataRepository.CategoriesResponseListener() {
+        DataRepository.getInstance().getAllCategories(new DataRepository.CategoriesResponseListener() {
             @Override
             public void onResponse(ArrayList<Category> categories) {
 

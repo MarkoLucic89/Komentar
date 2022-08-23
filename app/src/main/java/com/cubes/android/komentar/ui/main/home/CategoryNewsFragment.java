@@ -111,7 +111,7 @@ public class CategoryNewsFragment extends Fragment implements NewsListener {
     @Override
     public void loadNextPage() {
 
-        DataRepository.getInstance().getNewsForCategoryRequest(mCategoryId, nextPage, new DataRepository.CategoryNewsResponseListener() {
+        DataRepository.getInstance().getNewsForCategory(mCategoryId, nextPage, new DataRepository.CategoryNewsResponseListener() {
 
             @Override
             public void onResponse(ArrayList<News> newsList, boolean hasMorePages) {

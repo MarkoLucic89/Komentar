@@ -135,7 +135,7 @@ public class LatestNewsFragment extends Fragment implements NewsListener {
     @Override
     public void loadNextPage() {
 
-        DataRepository.getInstance().getLatestNewsRequest(nextPage, new DataRepository.LatestResponseListener() {
+        DataRepository.getInstance().getLatestNews(nextPage, new DataRepository.LatestResponseListener() {
 
             @Override
             public void onResponse(ArrayList<News> newsList, boolean hasMorePages) {

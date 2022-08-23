@@ -39,10 +39,10 @@ public class RvItemModelComments implements ItemModelComments {
         binding = (RvItemCommentBinding) holder.binding;
 
         binding.textViewName.setText(comment.name);
-        binding.textViewTime.setText(comment.created_at);
+        binding.textViewTime.setText(comment.createdAt);
         binding.textViewComment.setText(comment.content);
-        binding.textViewLike.setText(String.valueOf(comment.positive_votes));
-        binding.textViewDislike.setText(String.valueOf(comment.negative_votes));
+        binding.textViewLike.setText(String.valueOf(comment.positiveVotes));
+        binding.textViewDislike.setText(String.valueOf(comment.negativeVotes));
 
         if (comment.newsCommentVote == null) {
 
@@ -85,7 +85,7 @@ public class RvItemModelComments implements ItemModelComments {
         }
 
         binding.buttonReply.setOnClickListener(view -> {
-            listener.goOnPostCommentActivity(Integer.parseInt(comment.news), Integer.parseInt(comment.id));
+            listener.goOnPostCommentActivity(Integer.parseInt(comment.newsId), Integer.parseInt(comment.id));
         });
 
         if (isSubComment) {

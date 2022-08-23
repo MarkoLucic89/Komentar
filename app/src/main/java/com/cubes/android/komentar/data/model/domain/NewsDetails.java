@@ -7,9 +7,9 @@ public class NewsDetails {
     public int id;
     public String url;
     public ArrayList<NewsTag> tags;
-    public ArrayList<NewsComment> comments_top_n;
-    public boolean comment_enabled;
-    public int comments_count;
-    public ArrayList<News> related_news;
+    public ArrayList<NewsComment> commentsTop;
+    public boolean commentEnabled;
+    public int commentsCount;
+    public ArrayList<News> relatedNews;
 
 }

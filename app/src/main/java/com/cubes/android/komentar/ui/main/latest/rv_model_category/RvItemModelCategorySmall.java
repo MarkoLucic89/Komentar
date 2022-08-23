@@ -45,7 +45,7 @@ public class RvItemModelCategorySmall implements ItemModelCategory {
         Picasso.get().load(news.image).into(binding.imageView);
         binding.textViewTitle.setText(news.title);
         binding.textViewCategory.setText(news.category.name);
-        binding.textViewTime.setText(MyMethodsClass.convertTime(news.created_at));
+        binding.textViewTime.setText(MyMethodsClass.convertTime(news.createdAt));
 
         holder.binding.getRoot().setOnClickListener(view -> listener.onNewsClicked(news.id, news.url, newsIdList));
 

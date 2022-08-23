@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.cubes.android.komentar.data.DataRepository;
 import com.cubes.android.komentar.data.model.domain.HomePageData;
-import com.cubes.android.komentar.data.source.remote.networking.response.HomePageResponseModel;
 import com.cubes.android.komentar.databinding.FragmentHomePagerBinding;
 import com.cubes.android.komentar.ui.detail.news_detail_activity_with_viewpager.DetailsActivity;
 import com.cubes.android.komentar.ui.main.latest.NewsListener;
@@ -60,7 +59,7 @@ public class HomePagerFragment extends Fragment implements NewsListener {
 
     private void refreshListOnSwipe() {
 
-        DataRepository.getInstance().getHomeNewsRequest(new DataRepository.HomeResponseListener() {
+        DataRepository.getInstance().getHomeNews(new DataRepository.HomeResponseListener() {
 
             @Override
             public void onResponse(HomePageData data) {
@@ -92,7 +91,7 @@ public class HomePagerFragment extends Fragment implements NewsListener {
         binding.imageViewRefresh.setVisibility(View.GONE);
         binding.progressBar.setVisibility(View.VISIBLE);
 
-        DataRepository.getInstance().getHomeNewsRequest(new DataRepository.HomeResponseListener() {
+        DataRepository.getInstance().getHomeNews(new DataRepository.HomeResponseListener() {
 
             @Override
             public void onResponse(HomePageData data) {

@@ -51,7 +51,7 @@ public class CommentsActivity extends AppCompatActivity {
 
     private void refreshList() {
 
-        DataRepository.getInstance().getCommentsRequest(news_id, new DataRepository.CommentsResponseListener() {
+        DataRepository.getInstance().getComments(news_id, new DataRepository.CommentsResponseListener() {
 
             @Override
             public void onResponse(ArrayList<NewsComment> comments) {
@@ -88,7 +88,7 @@ public class CommentsActivity extends AppCompatActivity {
         binding.imageViewRefresh.setVisibility(View.GONE);
         binding.progressBar.setVisibility(View.VISIBLE);
 
-        DataRepository.getInstance().getCommentsRequest(news_id, new DataRepository.CommentsResponseListener() {
+        DataRepository.getInstance().getComments(news_id, new DataRepository.CommentsResponseListener() {
 
             @Override
             public void onResponse(ArrayList<NewsComment> comments) {
@@ -225,7 +225,7 @@ public class CommentsActivity extends AppCompatActivity {
 
     private void likeComment(int id, boolean vote) {
 
-        DataRepository.getInstance().likeCommentRequest(id, vote, new DataRepository.CommentsVoteListener() {
+        DataRepository.getInstance().likeComment(id, vote, new DataRepository.CommentsVoteListener() {
             @Override
             public void onResponse(NewsCommentVote response) {
 
@@ -274,7 +274,7 @@ public class CommentsActivity extends AppCompatActivity {
 
     private void dislikeComment(int id, boolean vote) {
 
-        DataRepository.getInstance().dislikeCommentRequest(id, vote, new DataRepository.CommentsVoteListener() {
+        DataRepository.getInstance().dislikeComment(id, vote, new DataRepository.CommentsVoteListener() {
             @Override
             public void onResponse(NewsCommentVote response) {
 

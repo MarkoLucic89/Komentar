@@ -89,7 +89,7 @@ public class HomeFragment extends Fragment implements OnCategoryClickListener {
 
     private void getAllCategories() {
 
-        DataRepository.getInstance().getAllCategoriesRequest(new DataRepository.CategoriesResponseListener() {
+        DataRepository.getInstance().getAllCategories(new DataRepository.CategoriesResponseListener() {
             @Override
             public void onResponse(ArrayList<Category> categories) {
 

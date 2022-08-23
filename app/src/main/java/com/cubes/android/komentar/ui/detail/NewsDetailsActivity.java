@@ -80,7 +80,7 @@ public class NewsDetailsActivity extends AppCompatActivity implements
 
         newsId = getIntent().getIntExtra("news_id", -1);
 
-        DataRepository.getInstance().getNewsDetailsRequest(newsId, new DataRepository.DetailResponseListener() {
+        DataRepository.getInstance().getNewsDetails(newsId, new DataRepository.DetailResponseListener() {
 
             @Override
             public void onResponse(NewsDetails newsDetails) {
@@ -127,7 +127,7 @@ public class NewsDetailsActivity extends AppCompatActivity implements
     @Override
     public void onLikeListener(int id, boolean vote) {
 
-        DataRepository.getInstance().likeCommentRequest(id, vote, new DataRepository.CommentsVoteListener() {
+        DataRepository.getInstance().likeComment(id, vote, new DataRepository.CommentsVoteListener() {
             @Override
             public void onResponse(NewsCommentVote response) {
 
@@ -157,7 +157,7 @@ public class NewsDetailsActivity extends AppCompatActivity implements
     @Override
     public void onDislikeListener(int id, boolean vote) {
 
-        DataRepository.getInstance().dislikeCommentRequest(id, vote, new DataRepository.CommentsVoteListener() {
+        DataRepository.getInstance().dislikeComment(id, vote, new DataRepository.CommentsVoteListener() {
             @Override
             public void onResponse(NewsCommentVote response) {
 

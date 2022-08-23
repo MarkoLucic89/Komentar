@@ -28,8 +28,8 @@ public class RvItemModelTabs implements ItemModelHome {
 
     public RvItemModelTabs(HomePageData data, HomePagerAdapter adapter, int modelIndex, NewsListener listener) {
         this.latest = data.latest;
-        this.mostRead = data.most_read;
-        this.mostComment = data.most_commented;
+        this.mostRead = data.mostRead;
+        this.mostComment = data.mostCommented;
 
         this.homePagerAdapter = adapter;
         this.modelIndex = modelIndex;

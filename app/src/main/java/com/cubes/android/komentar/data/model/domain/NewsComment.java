@@ -4,12 +4,12 @@ import java.util.ArrayList;
 
 public class NewsComment {
 
-    public int negative_votes;
-    public int positive_votes;
-    public String created_at;
-    public String news;
+    public int negativeVotes;
+    public int positiveVotes;
+    public String createdAt;
+    public String newsId;
     public String name;
-    public String parent_comment;
+    public String parentCommentId;
     public String id;
     public String content;
     public ArrayList<NewsComment> children;

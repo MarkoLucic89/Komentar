@@ -38,7 +38,7 @@ public class RvItemModelTag implements ItemModelTag {
         binding.textViewTitle.setText(news.title);
         binding.textViewCategory.setTextColor(Color.parseColor(news.category.color));
         binding.textViewCategory.setText(news.category.name);
-        binding.textViewTime.setText(MyMethodsClass.convertTime(news.created_at));
+        binding.textViewTime.setText(MyMethodsClass.convertTime(news.createdAt));
 
         binding.getRoot().setOnClickListener(view -> listener.onNewsClicked(news.id, news.url, this.newsIdList));
 

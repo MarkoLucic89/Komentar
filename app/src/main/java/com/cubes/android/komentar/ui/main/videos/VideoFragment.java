@@ -95,7 +95,7 @@ public class VideoFragment extends Fragment implements NewsListener {
     @Override
     public void loadNextPage() {
 
-        DataRepository.getInstance().getVideosRequest(nextPage, new DataRepository.VideosResponseListener() {
+        DataRepository.getInstance().getVideos(nextPage, new DataRepository.VideosResponseListener() {
 
             @Override
             public void onVideosResponse(ArrayList<News> newsList, boolean hasNextPage) {

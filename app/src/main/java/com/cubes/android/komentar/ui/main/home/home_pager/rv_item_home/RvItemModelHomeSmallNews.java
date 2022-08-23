@@ -37,7 +37,7 @@ public class RvItemModelHomeSmallNews implements ItemModelHome {
         binding.textViewTitle.setText(news.title);
         binding.textViewCategory.setText(news.category.name);
         binding.textViewCategory.setTextColor(Color.parseColor(news.category.color));
-        binding.textViewTime.setText(getTime(news.created_at));
+        binding.textViewTime.setText(getTime(news.createdAt));
 
         holder.binding.getRoot().setOnClickListener(view -> listener.onNewsClicked(news.id, news.url, newsIdList));
 

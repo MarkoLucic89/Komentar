@@ -134,7 +134,7 @@ public class SearchFragment extends Fragment implements NewsListener {
 
         Log.d(TAG, "loadNextPage: " + nextPage);
 
-        DataRepository.getInstance().searchNewsRequest(searchTerm, nextPage, new DataRepository.SearchResponseListener() {
+        DataRepository.getInstance().searchNews(searchTerm, nextPage, new DataRepository.SearchResponseListener() {
 
 
             @Override

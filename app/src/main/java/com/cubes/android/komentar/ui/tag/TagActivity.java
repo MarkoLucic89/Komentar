@@ -53,7 +53,7 @@ public class TagActivity extends AppCompatActivity implements NewsListener {
 
         nextPage = 1;
 
-        DataRepository.getInstance().getNewsForTagRequest(tagId, nextPage, new DataRepository.TagResponseListener() {
+        DataRepository.getInstance().getNewsForTag(tagId, nextPage, new DataRepository.TagResponseListener() {
 
             @Override
             public void onResponse(ArrayList<News> newsList, boolean hasMorePages) {
@@ -96,7 +96,7 @@ public class TagActivity extends AppCompatActivity implements NewsListener {
     @Override
     public void loadNextPage() {
 
-        DataRepository.getInstance().getNewsForTagRequest(tagId, nextPage, new DataRepository.TagResponseListener() {
+        DataRepository.getInstance().getNewsForTag(tagId, nextPage, new DataRepository.TagResponseListener() {
 
             @Override
             public void onResponse(ArrayList<News> newsList, boolean hasMorePages) {

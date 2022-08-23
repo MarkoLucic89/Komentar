@@ -45,7 +45,7 @@ public class RelatedNewsAdapter extends RecyclerView.Adapter<RelatedNewsAdapter.
         Picasso.get().load(news.image).into(holder.binding.imageView);
         holder.binding.textViewTitle.setText(news.title);
         holder.binding.textViewCategory.setText(news.category.name);
-        holder.binding.textViewTime.setText(MyMethodsClass.convertTime(news.created_at));
+        holder.binding.textViewTime.setText(MyMethodsClass.convertTime(news.createdAt));
 
         holder.binding.getRoot().setOnClickListener(view -> listener.onNewsClicked(news.id, news.url, this.newsIdList));
     }

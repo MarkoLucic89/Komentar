@@ -70,9 +70,9 @@ public class NewsDetailsAdapter extends RecyclerView.Adapter<NewsDetailsAdapter.
 
 //        list.add(new RvItemModelDetailsComments(commentsListener, newsDetails));
 
-        list.add(new RvItemModelDetailsHeaderComments(newsDetails.comments_count, newsDetails.id, commentsListener));
+        list.add(new RvItemModelDetailsHeaderComments(newsDetails.commentsCount, newsDetails.id, commentsListener));
 
-        for (NewsComment comment : newsDetails.comments_top_n) {
+        for (NewsComment comment : newsDetails.commentsTop) {
 
             list.add(new RvItemModelDetailComment(comment, commentsListener, false));
 
@@ -82,8 +82,8 @@ public class NewsDetailsAdapter extends RecyclerView.Adapter<NewsDetailsAdapter.
 
             }
         }
-        if (newsDetails.comments_count > 0) {
-            list.add(new RvItemDetailsButtonAllComments(newsDetails.id, newsDetails.comments_count, commentsListener));
+        if (newsDetails.commentsCount > 0) {
+            list.add(new RvItemDetailsButtonAllComments(newsDetails.id, newsDetails.commentsCount, commentsListener));
         }
 
         //RELATED NEWS
@@ -92,9 +92,9 @@ public class NewsDetailsAdapter extends RecyclerView.Adapter<NewsDetailsAdapter.
 
         list.add(new RvItemModelDetailsHeaderRelatedNews());
 
-        int[] relatedNewsIdList = MyMethodsClass.initNewsIdList(newsDetails.related_news);
+        int[] relatedNewsIdList = MyMethodsClass.initNewsIdList(newsDetails.relatedNews);
 
-        for (News news : newsDetails.related_news) {
+        for (News news : newsDetails.relatedNews) {
             list.add(new RvItemModelDetailsSmallNews(news, false, newsListener, relatedNewsIdList));
         }
 

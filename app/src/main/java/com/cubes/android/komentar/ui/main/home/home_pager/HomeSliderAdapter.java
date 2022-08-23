@@ -51,7 +51,7 @@ public class HomeSliderAdapter extends RecyclerView.Adapter<HomeSliderAdapter.Ho
         if (showCategory) {
             holder.binding.layoutCategoryTime.setVisibility(View.VISIBLE);
             holder.binding.textViewCategory.setText(news.category.name);
-            holder.binding.textViewTime.setText(MyMethodsClass.convertTime(news.created_at));
+            holder.binding.textViewTime.setText(MyMethodsClass.convertTime(news.createdAt));
         } else {
             holder.binding.layoutCategoryTime.setVisibility(View.GONE);
         }

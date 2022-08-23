@@ -4,11 +4,11 @@ import com.cubes.android.komentar.data.model.NewsApi;
 
 import java.util.ArrayList;
 
-public class TagResponseModel extends BaseResponseModel{
+public class TagResponseModel extends BaseResponseModel {
 
     public TagDataResponseModel data;
 
-    public class TagDataResponseModel{
+    public class TagDataResponseModel {
         public TagDataPaginationResponseModel pagination;
         public ArrayList<NewsApi> news;
 
