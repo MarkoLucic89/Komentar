@@ -24,6 +24,7 @@ import com.cubes.android.komentar.databinding.FragmentSearchBinding;
 import com.cubes.android.komentar.ui.detail.news_detail_activity_with_viewpager.DetailsActivity;
 import com.cubes.android.komentar.ui.main.latest.NewsListener;
 import com.cubes.android.komentar.ui.tools.MyMethodsClass;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.util.ArrayList;
 
@@ -110,6 +111,10 @@ public class SearchFragment extends Fragment implements NewsListener {
             binding.progressBar.setVisibility(View.GONE);
             return;
         }
+
+        Bundle bundle = new Bundle();
+        bundle.putString("search_term", searchTerm);
+        FirebaseAnalytics.getInstance(getContext()).logEvent("search_news", bundle);
 
         loadNextPage();
 

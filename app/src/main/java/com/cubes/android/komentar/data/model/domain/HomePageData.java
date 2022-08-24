@@ -6,7 +6,7 @@ public class HomePageData {
 
     public ArrayList<News> slider;
     public ArrayList<News> top;
-    public ArrayList<News> editors_choice;
+    public ArrayList<News> editorsChoice;
     public ArrayList<News> latest;
     public ArrayList<News> mostRead;
     public ArrayList<News> mostCommented;

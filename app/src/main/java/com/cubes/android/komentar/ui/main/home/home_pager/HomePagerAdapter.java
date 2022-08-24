@@ -10,7 +10,6 @@ import androidx.viewbinding.ViewBinding;
 import com.cubes.android.komentar.R;
 import com.cubes.android.komentar.data.model.domain.HomePageData;
 import com.cubes.android.komentar.data.model.domain.News;
-import com.cubes.android.komentar.data.source.remote.networking.response.HomePageResponseModel;
 import com.cubes.android.komentar.databinding.RvItemCategoryBigBinding;
 import com.cubes.android.komentar.databinding.RvItemCategorySmallBinding;
 import com.cubes.android.komentar.databinding.RvItemHomeCategoryTitleBinding;
@@ -128,8 +127,8 @@ public class HomePagerAdapter extends RecyclerView.Adapter<HomePagerAdapter.Home
 
         } else if (title.equalsIgnoreCase("EDITORS CHOICE")) {
 
-            if ( data.editors_choice!= null && !data.editors_choice.isEmpty()) {
-                list.add(new RvItemModelHomeSlider(data.editors_choice, true, listener));
+            if ( data.editorsChoice != null && !data.editorsChoice.isEmpty()) {
+                list.add(new RvItemModelHomeSlider(data.editorsChoice, true, listener));
             }
 
         }

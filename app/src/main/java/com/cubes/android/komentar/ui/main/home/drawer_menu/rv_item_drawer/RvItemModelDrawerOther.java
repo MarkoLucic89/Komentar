@@ -1,13 +1,11 @@
 package com.cubes.android.komentar.ui.main.home.drawer_menu.rv_item_drawer;
 
 
-import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.view.View;
 
 import com.cubes.android.komentar.R;
-import com.cubes.android.komentar.data.source.local.SharedPrefs;
 import com.cubes.android.komentar.databinding.RvItemDrawerOtherBinding;
 import com.cubes.android.komentar.ui.currencylist.CurrencyListActivity;
 import com.cubes.android.komentar.ui.horoscope.HoroscopeActivity;
@@ -18,28 +16,21 @@ import com.cubes.android.komentar.ui.weather.WeatherActivity;
 public class RvItemModelDrawerOther implements ItemModelDrawer {
 
     public String title;
-    public boolean isLineVisible;
-    public boolean isLast;
-    public boolean isPushNotifications;
-    private Activity activity;
+    public boolean isPushNotificationsOn;
+    private OnPushNotificationListener notificationListener;
 
-    public RvItemModelDrawerOther(String title, boolean isLineVisible) {
-        this.title = title;
-        this.isLineVisible = isLineVisible;
+    public interface OnPushNotificationListener {
+        void onPushNotification(boolean isOn);
     }
 
-    public RvItemModelDrawerOther(String title, boolean isLineVisible, boolean isLast) {
+    public RvItemModelDrawerOther(String title) {
         this.title = title;
-        this.isLineVisible = isLineVisible;
-        this.isLast = isLast;
     }
 
-    public RvItemModelDrawerOther(Activity activity, boolean isPushNotifications, String title, boolean isLineVisible) {
-        this.activity = activity;
-        this.isPushNotifications = isPushNotifications;
+    public RvItemModelDrawerOther(OnPushNotificationListener pushNotificationListener, String title, boolean isNotificationsOn) {
         this.title = title;
-        this.isLineVisible = isLineVisible;
-
+        this.notificationListener = pushNotificationListener;
+        this.isPushNotificationsOn = isNotificationsOn;
     }
 
     @Override
@@ -52,35 +43,82 @@ public class RvItemModelDrawerOther implements ItemModelDrawer {
 
         RvItemDrawerOtherBinding binding = (RvItemDrawerOtherBinding) holder.binding;
 
+        setUI(binding);
+    }
+
+    private void setUI(RvItemDrawerOtherBinding binding) {
+
         binding.textView.setText(title);
 
-        if (isPushNotifications) {
+        switch (title.toUpperCase()) {
+            case "VREMENSKA PROGNOZA":
 
-            binding.switchPushNotifications.setVisibility(View.VISIBLE);
-            binding.switchPushNotifications.setChecked(SharedPrefs.getInstance(activity).isNotificationOn());
-            binding.switchPushNotifications.setOnCheckedChangeListener((compoundButton, b) -> {
-                SharedPrefs.getInstance(activity).setNotificationStatus(b);
-            });
+                binding.viewLine.setVisibility(View.VISIBLE);
+                binding.switchPushNotifications.setVisibility(View.GONE);
+                binding.viewEmptySpace.setVisibility(View.GONE);
 
-        } else {
+                binding.getRoot().setOnClickListener(view -> goToActivity(title.toUpperCase().trim(), view));
 
-            binding.switchPushNotifications.setVisibility(View.GONE);
-            binding.getRoot().setOnClickListener(view -> goToActivity(title.toUpperCase().trim(), view));
+                break;
+            case "KURSNA LISTA":
+
+                binding.viewLine.setVisibility(View.GONE);
+                binding.switchPushNotifications.setVisibility(View.GONE);
+                binding.viewEmptySpace.setVisibility(View.GONE);
+
+                binding.getRoot().setOnClickListener(view -> goToActivity(title.toUpperCase().trim(), view));
+
+                break;
+            case "HOROSKOP":
+
+                binding.viewLine.setVisibility(View.GONE);
+                binding.switchPushNotifications.setVisibility(View.GONE);
+                binding.viewEmptySpace.setVisibility(View.GONE);
+
+                binding.getRoot().setOnClickListener(view -> goToActivity(title.toUpperCase().trim(), view));
+
+                break;
+            case "PUSH NOTIFIKACIJE":
+
+                binding.viewLine.setVisibility(View.VISIBLE);
+                binding.switchPushNotifications.setVisibility(View.VISIBLE);
+                binding.viewEmptySpace.setVisibility(View.GONE);
+
+                binding.switchPushNotifications.setChecked(isPushNotificationsOn);
+
+                binding.switchPushNotifications.setOnCheckedChangeListener((compoundButton, b) -> notificationListener.onPushNotification(b));
+
+                break;
+            case "MARKETING":
+
+                binding.viewLine.setVisibility(View.GONE);
+                binding.switchPushNotifications.setVisibility(View.GONE);
+                binding.viewEmptySpace.setVisibility(View.GONE);
+
+                binding.getRoot().setOnClickListener(view -> goToActivity(title.toUpperCase().trim(), view));
+
+                break;
+            case "USLOVI KORIŠĆENJA":
+
+                binding.viewLine.setVisibility(View.GONE);
+                binding.switchPushNotifications.setVisibility(View.GONE);
+                binding.viewEmptySpace.setVisibility(View.GONE);
+
+                binding.getRoot().setOnClickListener(view -> goToActivity(title.toUpperCase().trim(), view));
+
+                break;
+            case "KONTAKT":
+
+                binding.viewLine.setVisibility(View.GONE);
+                binding.switchPushNotifications.setVisibility(View.GONE);
+                binding.viewEmptySpace.setVisibility(View.VISIBLE);
+
+                binding.getRoot().setOnClickListener(view -> goToActivity(title.toUpperCase().trim(), view));
+
+                break;
+            default:
 
         }
-
-        if (isLineVisible) {
-            binding.viewLine.setVisibility(View.VISIBLE);
-        } else {
-            binding.viewLine.setVisibility(View.GONE);
-        }
-
-        if (isLast) {
-            binding.viewEmptySpace.setVisibility(View.VISIBLE);
-        } else {
-            binding.viewEmptySpace.setVisibility(View.GONE);
-        }
-
 
     }
 

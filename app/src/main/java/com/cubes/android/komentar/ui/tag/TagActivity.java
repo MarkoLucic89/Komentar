@@ -12,6 +12,7 @@ import com.cubes.android.komentar.data.model.domain.News;
 import com.cubes.android.komentar.databinding.ActivityTagBinding;
 import com.cubes.android.komentar.ui.detail.news_detail_activity_with_viewpager.DetailsActivity;
 import com.cubes.android.komentar.ui.main.latest.NewsListener;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.util.ArrayList;
 
@@ -32,6 +33,10 @@ public class TagActivity extends AppCompatActivity implements NewsListener {
         tagId = getIntent().getIntExtra("tag_id", -1);
         String tagTitle = getIntent().getStringExtra("tag_title");
 
+        Bundle bundle = new Bundle();
+        bundle.putString("tags", tagTitle);
+        FirebaseAnalytics.getInstance(this).logEvent("tags", bundle);
+
         initRecyclerView();
 
         binding.progressBar.setVisibility(View.VISIBLE);
@@ -44,7 +49,7 @@ public class TagActivity extends AppCompatActivity implements NewsListener {
 
         binding.imageViewRefresh.setOnClickListener(view -> loadNextPage());
 
-        binding.swipeRefreshLayout.setOnRefreshListener(() -> refreshAdapter());
+        binding.swipeRefreshLayout.setOnRefreshListener(this::refreshAdapter);
 
 
     }

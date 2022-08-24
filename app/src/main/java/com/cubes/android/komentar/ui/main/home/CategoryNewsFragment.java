@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -12,12 +13,14 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.cubes.android.komentar.data.DataRepository;
+import com.cubes.android.komentar.data.model.domain.Category;
 import com.cubes.android.komentar.data.model.domain.News;
 import com.cubes.android.komentar.databinding.FragmentCategoryBinding;
 import com.cubes.android.komentar.ui.detail.news_detail_activity_with_viewpager.DetailsActivity;
 import com.cubes.android.komentar.ui.main.latest.CategoryAdapter;
 import com.cubes.android.komentar.ui.main.latest.NewsListener;
 import com.cubes.android.komentar.ui.tools.MyMethodsClass;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.util.ArrayList;
 
@@ -33,6 +36,8 @@ public class CategoryNewsFragment extends Fragment implements NewsListener {
     private CategoryAdapter categoryAdapter;
 
     private int nextPage = 1;
+
+    private FirebaseAnalytics mFirebaseAnalytics;
 
     public CategoryNewsFragment() {
         // Required empty public constructor
@@ -53,6 +58,9 @@ public class CategoryNewsFragment extends Fragment implements NewsListener {
         if (getArguments() != null) {
             mCategoryId = getArguments().getInt(ARG_CATEGORY_ID);
         }
+
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(getContext());
+
     }
 
     @Override
@@ -121,7 +129,28 @@ public class CategoryNewsFragment extends Fragment implements NewsListener {
                 binding.progressBar.setVisibility(View.GONE);
 
                 if (nextPage == 1) {
+
                     categoryAdapter.updateList(newsList, hasMorePages);
+
+                    Category category = newsList.get(0).category;
+
+                    Toast.makeText(getContext(), category.type, Toast.LENGTH_SHORT).show();
+
+                    if (category.type.equalsIgnoreCase("category")) {
+
+                        Bundle bundle = new Bundle();
+                        bundle.putString("category_name", newsList.get(0).category.name);
+                        mFirebaseAnalytics.logEvent("categories", bundle);
+
+                    } else {
+
+                        Bundle bundle = new Bundle();
+                        bundle.putString("subcategory_name", newsList.get(0).category.name);
+                        mFirebaseAnalytics.logEvent("subcategories", bundle);
+
+                    }
+
+
                 } else {
                     categoryAdapter.addNextPage(newsList, hasMorePages);
                 }
@@ -154,8 +183,7 @@ public class CategoryNewsFragment extends Fragment implements NewsListener {
 
         Intent intent = new Intent(getContext(), DetailsActivity.class);
         intent.putExtra("news_id", newsId);
-        intent.putExtra("news_url", newsUrl);
-        intent.putExtra("news_id_list", newsIdList);
+        intent.putExtra("news_url", newsUrl);        intent.putExtra("news_id_list", newsIdList);
         getContext().startActivity(intent);
 
     }

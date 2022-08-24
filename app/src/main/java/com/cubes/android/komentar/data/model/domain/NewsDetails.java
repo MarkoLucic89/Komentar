@@ -5,6 +5,7 @@ import java.util.ArrayList;
 public class NewsDetails {
 
     public int id;
+    public String title;
     public String url;
     public ArrayList<NewsTag> tags;
     public ArrayList<NewsComment> commentsTop;

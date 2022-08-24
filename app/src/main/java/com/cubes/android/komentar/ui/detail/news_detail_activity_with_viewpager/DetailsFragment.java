@@ -30,6 +30,7 @@ import com.cubes.android.komentar.ui.main.latest.NewsListener;
 import com.cubes.android.komentar.ui.post_comment.PostCommentActivity;
 import com.cubes.android.komentar.ui.tag.TagActivity;
 import com.cubes.android.komentar.ui.tools.MyMethodsClass;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +43,8 @@ public class DetailsFragment extends Fragment implements
         NewsListener {
 
     private FragmentDetailsBinding binding;
+
+    private FirebaseAnalytics mFirebaseAnalytics;
 
     private static final String NEWS_ID = "news_id";
 
@@ -87,6 +90,8 @@ public class DetailsFragment extends Fragment implements
         if (getArguments() != null) {
             mNewsId = getArguments().getInt(NEWS_ID);
         }
+
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(getContext());
     }
 
     @Override
@@ -186,8 +191,14 @@ public class DetailsFragment extends Fragment implements
                 binding.imageViewRefresh.setVisibility(View.GONE);
                 binding.recyclerView.setVisibility(View.VISIBLE);
 
+                logNewsNameToAnalytics(newsDetails.id);
+
                 mNewsId = newsDetails.id;
                 mNewsUrl = newsDetails.url;
+
+                Bundle bundle = new Bundle();
+                bundle.putString("news_title", newsDetails.title);
+                FirebaseAnalytics.getInstance(getContext()).logEvent("news", bundle);
 
                 listener.onDetailsResponseListener(mNewsId, mNewsUrl);
 
@@ -209,6 +220,14 @@ public class DetailsFragment extends Fragment implements
 
             }
         });
+    }
+
+    private void logNewsNameToAnalytics(int id) {
+
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, String.valueOf(id));
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+
     }
 
 

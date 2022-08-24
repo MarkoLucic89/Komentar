@@ -1,6 +1,7 @@
 package com.cubes.android.komentar.ui.main.home.drawer_menu;
 
 import android.app.Activity;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -30,14 +31,16 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.DrawerView
 
     private ArrayList<ItemModelDrawer> list;
     private OnCategoryClickListener categoryClickListener;
-    private Activity activity;
+    private RvItemModelDrawerOther.OnPushNotificationListener notificationListener;
+    private boolean isNotificationsOn;
 
     private static final String TAG = "DrawerAdapter";
 
-    public DrawerAdapter(Activity activity, OnCategoryClickListener categoryClickListener) {
+    public DrawerAdapter(OnCategoryClickListener categoryClickListener, RvItemModelDrawerOther.OnPushNotificationListener notificationListener, boolean isNotificationsOn) {
         this.list = new ArrayList<>();
         this.categoryClickListener = categoryClickListener;
-        this.activity = activity;
+        this.notificationListener = notificationListener;
+        this.isNotificationsOn = isNotificationsOn;
     }
 
     public void updateList(ArrayList<Category> categories) {
@@ -50,14 +53,14 @@ public class DrawerAdapter extends RecyclerView.Adapter<DrawerAdapter.DrawerView
             list.add(new RvItemModelDrawerCategory(category, categoryClickListener, this, categories));
         }
 
-        list.add(new RvItemModelDrawerOther("Vremenska prognoza", true));
-        list.add(new RvItemModelDrawerOther("Kursna lista", false));
-        list.add(new RvItemModelDrawerOther("Horoskop", false));
+        list.add(new RvItemModelDrawerOther("Vremenska prognoza"));
+        list.add(new RvItemModelDrawerOther("Kursna lista"));
+        list.add(new RvItemModelDrawerOther("Horoskop"));
 
-        list.add(new RvItemModelDrawerOther(activity, true, "Push notifikacije", true));
-        list.add(new RvItemModelDrawerOther("Marketing", false));
-        list.add(new RvItemModelDrawerOther("Uslovi korišćenja", false));
-        list.add(new RvItemModelDrawerOther("Kontakt", false, true));
+        list.add(new RvItemModelDrawerOther(notificationListener, "Push notifikacije", isNotificationsOn));
+        list.add(new RvItemModelDrawerOther("Marketing"));
+        list.add(new RvItemModelDrawerOther("Uslovi korišćenja"));
+        list.add(new RvItemModelDrawerOther("Kontakt"));
 
         notifyDataSetChanged();
     }

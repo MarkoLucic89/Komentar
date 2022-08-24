@@ -24,7 +24,6 @@ public class CategoryActivity extends AppCompatActivity {
     private ActivityCategoryBinding binding;
     private Category mCategory;
     private Category mSubcategory;
-    private ArrayList<Category> mCategories;
 
     private int mCategoryId;
     private int mSubcategoryId;
@@ -58,8 +57,6 @@ public class CategoryActivity extends AppCompatActivity {
                 binding.progressBar.setVisibility(View.GONE);
                 binding.imageViewRefresh.setVisibility(View.GONE);
                 binding.linearLayoutCategoryPager.setVisibility(View.VISIBLE);
-
-                mCategories = categories;
 
                 getCategoryAndSubcategory(categories);
 

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,29 +15,24 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.cubes.android.komentar.data.DataRepository;
 import com.cubes.android.komentar.data.model.domain.Category;
+import com.cubes.android.komentar.data.source.local.SharedPrefs;
 import com.cubes.android.komentar.databinding.FragmentHomeBinding;
 import com.cubes.android.komentar.ui.main.home.drawer_menu.DrawerAdapter;
-import com.cubes.android.komentar.ui.main.home.drawer_menu.DrawerMenuAdapter;
 import com.cubes.android.komentar.ui.main.home.drawer_menu.OnCategoryClickListener;
+import com.cubes.android.komentar.ui.main.home.drawer_menu.rv_item_drawer.RvItemModelDrawerOther;
 import com.cubes.android.komentar.ui.subcategories.SubcategoriesActivity;
 import com.google.android.material.tabs.TabLayoutMediator;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.ArrayList;
 
 
-public class HomeFragment extends Fragment implements OnCategoryClickListener {
+public class HomeFragment extends Fragment implements OnCategoryClickListener, RvItemModelDrawerOther.OnPushNotificationListener {
 
     private FragmentHomeBinding binding;
 
     private CategoriesPagerAdapter pagerAdapter;
 
-    private ArrayList<Category> mCategories = new ArrayList<>();
-
-
-    //Rezervni adapter (svaki RvCategoryItem ima recyclerView sa podkategorijama)(ne koristim ga trenutno)
-    private DrawerMenuAdapter drawerMenuAdapter;
-
-//    private DrawerAdapter adapter;
     private DrawerAdapter adapter;
 
     public HomeFragment() {
@@ -71,16 +67,15 @@ public class HomeFragment extends Fragment implements OnCategoryClickListener {
 
         getAllCategories();
 
-//        initViewPager();
         binding.imageViewDrawerMenu.setOnClickListener(view1 -> binding.getRoot().openDrawer(GravityCompat.END));
 
     }
 
     private void initDrawerRecyclerView() {
 
-        adapter = new DrawerAdapter(this.getActivity(), this);
+        boolean isNotificationsOn = SharedPrefs.getInstance(getActivity()).isNotificationOn();
 
-//        drawerMenuAdapter = new DrawerMenuAdapter(this.getActivity(), this);
+        adapter = new DrawerAdapter(this, this, isNotificationsOn);
 
         binding.recyclerViewDrawer.setLayoutManager(new LinearLayoutManager(getActivity()));
         binding.recyclerViewDrawer.setAdapter(adapter);
@@ -99,10 +94,6 @@ public class HomeFragment extends Fragment implements OnCategoryClickListener {
                 binding.viewPager.setVisibility(View.VISIBLE);
                 binding.progressBar.setVisibility(View.GONE);
 
-                mCategories = categories;
-
-//                drawerMenuAdapter.updateList(getActivity(), categories);
-//                adapter.updateList(categories);
                 adapter.updateList(categories);
                 initViewPager(categories);
             }
@@ -159,6 +150,20 @@ public class HomeFragment extends Fragment implements OnCategoryClickListener {
     public void onDestroy() {
         super.onDestroy();
         binding = null;
+
+    }
+
+    @Override
+    public void onPushNotification(boolean isOn) {
+        Toast.makeText(getContext(), "NOTIFICATIONS ON: " + isOn, Toast.LENGTH_SHORT).show();
+
+        SharedPrefs.getInstance(getActivity()).setNotificationStatus(isOn);
+
+        if (isOn) {
+            FirebaseMessaging.getInstance().subscribeToTopic("main");
+        } else {
+            FirebaseMessaging.getInstance().unsubscribeFromTopic("main");
+        }
 
     }
 }

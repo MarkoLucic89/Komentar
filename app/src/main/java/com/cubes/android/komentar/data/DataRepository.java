@@ -59,6 +59,7 @@ public class DataRepository {
             News news = new News();
 
             news.id = newsItemApi.id;
+            news.title = newsItemApi.title;
             news.image = newsItemApi.image;
             news.title = newsItemApi.title;
             news.createdAt = newsItemApi.created_at;
@@ -78,6 +79,7 @@ public class DataRepository {
         Category category = new Category();
 
         category.id = categoryApi.id;
+        category.name = categoryApi.name;
         category.type = categoryApi.type;
         category.name = categoryApi.name;
         category.color = categoryApi.color;
@@ -295,7 +297,7 @@ public class DataRepository {
 
         homePageData.slider = mapNewsFromResponse(homePageDataApi.slider);
         homePageData.top = mapNewsFromResponse(homePageDataApi.top);
-        homePageData.editors_choice = mapNewsFromResponse(homePageDataApi.editors_choice);
+        homePageData.editorsChoice = mapNewsFromResponse(homePageDataApi.editors_choice);
         homePageData.latest = mapNewsFromResponse(homePageDataApi.latest);
         homePageData.mostCommented = mapNewsFromResponse(homePageDataApi.most_comented);
         homePageData.mostRead = mapNewsFromResponse(homePageDataApi.most_read);
@@ -360,6 +362,7 @@ public class DataRepository {
         NewsDetails newsDetails = new NewsDetails();
 
         newsDetails.id = newsDetailsApi.id;
+        newsDetails.title = newsDetailsApi.title;
         newsDetails.url = newsDetailsApi.url;
         newsDetails.tags = mapTagsFromResponse(newsDetailsApi.tags);
         newsDetails.commentsTop = mapCommentsFromResponse(newsDetailsApi.comments_top_n);
