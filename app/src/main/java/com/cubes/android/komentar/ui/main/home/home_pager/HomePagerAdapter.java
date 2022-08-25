@@ -10,6 +10,7 @@ import androidx.viewbinding.ViewBinding;
 import com.cubes.android.komentar.R;
 import com.cubes.android.komentar.data.model.domain.HomePageData;
 import com.cubes.android.komentar.data.model.domain.News;
+import com.cubes.android.komentar.databinding.RvItemAdBinding;
 import com.cubes.android.komentar.databinding.RvItemCategoryBigBinding;
 import com.cubes.android.komentar.databinding.RvItemCategorySmallBinding;
 import com.cubes.android.komentar.databinding.RvItemHomeCategoryTitleBinding;
@@ -19,6 +20,7 @@ import com.cubes.android.komentar.databinding.RvItemHomeVideoBinding;
 import com.cubes.android.komentar.databinding.RvItemVideosBinding;
 import com.cubes.android.komentar.ui.main.home.home_pager.rv_item_home.ItemModelHome;
 import com.cubes.android.komentar.ui.main.home.home_pager.rv_item_home.RvItemModelCategoryTitle;
+import com.cubes.android.komentar.ui.main.home.home_pager.rv_item_home.RvItemModelHomeAd;
 import com.cubes.android.komentar.ui.main.home.home_pager.rv_item_home.RvItemModelHomeCategoryBig;
 import com.cubes.android.komentar.ui.main.home.home_pager.rv_item_home.RvItemModelHomeSlider;
 import com.cubes.android.komentar.ui.main.home.home_pager.rv_item_home.RvItemModelHomeSmallNews;
@@ -46,6 +48,9 @@ public class HomePagerAdapter extends RecyclerView.Adapter<HomePagerAdapter.Home
         //SLIDER
         addSlider("SLIDER", data);
 
+        //AD 1
+        list.add(new RvItemModelHomeAd());
+
         //TOP NEWS
         int[] newsIdList = MyMethodsClass.initNewsIdList(data.top);
 
@@ -56,13 +61,21 @@ public class HomePagerAdapter extends RecyclerView.Adapter<HomePagerAdapter.Home
         //TABS
         list.add(new RvItemModelTabs(data, this, list.size(), listener));
 
+        //AD 2
+        list.add(new RvItemModelHomeAd());
+
         //SPORT CATEGORY BOX
         addCategoryBox("SPORT", data);
 
 
+        //AD 3
+        list.add(new RvItemModelHomeAd());
 
         //EDITORS CHOICE
         addSlider("EDITORS CHOICE", data);
+
+        //AD 4
+        list.add(new RvItemModelHomeAd());
 
         //VIDEO
         if (!data.videos.isEmpty()) {
@@ -77,6 +90,9 @@ public class HomePagerAdapter extends RecyclerView.Adapter<HomePagerAdapter.Home
                 list.add(new RvItemModelHomeVideos(news, listener, videosIdList));
             }
         }
+
+        //AD 5
+        list.add(new RvItemModelHomeAd());
 
         //SHOWBIZ
         addCategoryBox("SHOWBIZ", data);  //EMPTY RESPONSE
@@ -117,7 +133,7 @@ public class HomePagerAdapter extends RecyclerView.Adapter<HomePagerAdapter.Home
         notifyDataSetChanged();
     }
 
-    private void addSlider(String title,HomePageData data) {
+    private void addSlider(String title, HomePageData data) {
 
         if (title.equalsIgnoreCase("SLIDER")) {
 
@@ -127,7 +143,7 @@ public class HomePagerAdapter extends RecyclerView.Adapter<HomePagerAdapter.Home
 
         } else if (title.equalsIgnoreCase("EDITORS CHOICE")) {
 
-            if ( data.editorsChoice != null && !data.editorsChoice.isEmpty()) {
+            if (data.editorsChoice != null && !data.editorsChoice.isEmpty()) {
                 list.add(new RvItemModelHomeSlider(data.editorsChoice, true, listener));
             }
 
@@ -203,6 +219,9 @@ public class HomePagerAdapter extends RecyclerView.Adapter<HomePagerAdapter.Home
                 break;
             case R.layout.rv_item_home_video:
                 binding = RvItemHomeVideoBinding.inflate(inflater, parent, false);
+                break;
+            case R.layout.rv_item_ad:
+                binding = RvItemAdBinding.inflate(inflater, parent, false);
                 break;
             default:
                 binding = null;

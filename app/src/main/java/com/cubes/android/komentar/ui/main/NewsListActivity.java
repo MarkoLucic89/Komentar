@@ -2,15 +2,22 @@ package com.cubes.android.komentar.ui.main;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+
 import com.cubes.android.komentar.databinding.ActivityNewsListBinding;
 
 import android.os.Bundle;
+import android.view.View;
 
 import com.cubes.android.komentar.R;
 import com.cubes.android.komentar.ui.main.home.HomeFragment;
 import com.cubes.android.komentar.ui.main.latest.LatestNewsFragment;
 import com.cubes.android.komentar.ui.main.search.SearchFragment;
 import com.cubes.android.komentar.ui.main.videos.VideoFragment;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 
 public class NewsListActivity extends AppCompatActivity {
 
@@ -25,6 +32,33 @@ public class NewsListActivity extends AppCompatActivity {
         replaceFragment(HomeFragment.newInstance());
         setListeners();
 
+        addStickyAd();
+
+
+    }
+
+    private void addStickyAd() {
+
+        binding.imageViewClose.setVisibility(View.GONE);
+        binding.adViewSticky.setVisibility(View.GONE);
+
+        AdRequest adRequest = new AdRequest.Builder().build();
+        binding.adViewSticky.loadAd(adRequest);
+        binding.adViewSticky.setAdListener(new AdListener() {
+            @Override
+            public void onAdLoaded() {
+                super.onAdLoaded();
+
+                binding.imageViewClose.setVisibility(View.VISIBLE);
+                binding.adViewSticky.setVisibility(View.VISIBLE);
+            }
+        });
+
+
+        binding.imageViewClose.setOnClickListener(view -> {
+            binding.imageViewClose.setVisibility(View.GONE);
+            binding.adViewSticky.setVisibility(View.GONE);
+        });
     }
 
     private void replaceFragment(Fragment fragment) {

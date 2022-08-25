@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.main.NewsListActivity">
 
     <FrameLayout
@@ -14,6 +15,25 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.gms.ads.AdView
+        android:id="@+id/adViewSticky"
+        android:layout_width="320dp"
+        android:layout_height="100dp"
+        android:layout_margin="8dp"
+        ads:adSize="LARGE_BANNER"
+        ads:adUnitId="@string/banner_ad_unit_id"
+        app:layout_constraintBottom_toTopOf="@id/bottomNavigationView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageViewClose"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:src="@drawable/ic_close"
+        app:layout_constraintEnd_toEndOf="@id/adViewSticky"
+        app:layout_constraintTop_toTopOf="@id/adViewSticky" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView"

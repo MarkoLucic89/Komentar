@@ -9,13 +9,13 @@ import androidx.viewbinding.ViewBinding;
 
 import com.cubes.android.komentar.R;
 import com.cubes.android.komentar.data.model.domain.News;
-import com.cubes.android.komentar.data.source.remote.networking.response.NewsResponseModel;
 import com.cubes.android.komentar.databinding.RvItemCategorySmallBinding;
 import com.cubes.android.komentar.databinding.RvItemLoadingBinding;
 import com.cubes.android.komentar.databinding.RvItemRefreshBinding;
 import com.cubes.android.komentar.ui.main.latest.NewsListener;
 import com.cubes.android.komentar.ui.main.search.rv_model_search.ItemModelSearch;
 import com.cubes.android.komentar.ui.main.search.rv_model_search.RvItemModelSearch;
+import com.cubes.android.komentar.ui.main.search.rv_model_search.RvItemModelSearchAd;
 import com.cubes.android.komentar.ui.main.search.rv_model_search.RvItemModelSearchLoading;
 import com.cubes.android.komentar.ui.main.search.rv_model_search.RvItemModelSearchRefresh;
 import com.cubes.android.komentar.ui.tools.MyMethodsClass;
@@ -29,18 +29,31 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
 
     private int[] newsIdList;
 
+    private int adsCounter = 0;
+
     public SearchAdapter(NewsListener listener) {
         this.listener = listener;
     }
 
     public void updateList(ArrayList<News> newsList, boolean hasMorePages) {
 
+        adsCounter = 0;
+
         itemModels.clear();
 
         newsIdList = MyMethodsClass.initNewsIdList(newsList);
 
-        for (News news : newsList) {
-            itemModels.add(new RvItemModelSearch(news,listener, newsIdList));
+
+        for (int i = 0; i < newsList.size(); i++) {
+
+            if (i > 0 && i % 5 == 0 && adsCounter < 5) {
+
+                itemModels.add(new RvItemModelSearchAd());
+                adsCounter++;
+            }
+
+            itemModels.add(new RvItemModelSearch(newsList.get(i), listener, newsIdList));
+
         }
 
 //        if (responseModel.data.pagination.has_more_pages) {
@@ -72,6 +85,9 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
                 break;
             case R.layout.rv_item_refresh:
                 binding = RvItemRefreshBinding.inflate(inflater, parent, false);
+                break;
+            case R.layout.rv_item_ad:
+                binding = com.cubes.android.komentar.databinding.RvItemAdBinding.inflate(inflater, parent, false);
                 break;
             default:
                 binding = null;
@@ -108,8 +124,17 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
 
         newsIdList = MyMethodsClass.initNewsIdList(newsList);
 
-        for (News news : newsList) {
-            itemModels.add(new RvItemModelSearch(news, listener, newsIdList));
+
+        for (int i = 0; i < newsList.size(); i++) {
+
+            if (i % 5 == 0 && adsCounter < 5) {
+
+                itemModels.add(new RvItemModelSearchAd());
+                adsCounter++;
+            }
+
+            itemModels.add(new RvItemModelSearch(newsList.get(i), listener, newsIdList));
+
         }
 
 //        if (response.data.pagination.has_more_pages) {

@@ -17,6 +17,7 @@ public class RvItemModelHomeSmallNews implements ItemModelHome {
     private int[] newsIdList;
 
     public RvItemModelHomeSmallNews(News news, NewsListener listener, int[] newsIdList) {
+
         this.news = news;
         this.listener = listener;
         this.newsIdList = newsIdList;

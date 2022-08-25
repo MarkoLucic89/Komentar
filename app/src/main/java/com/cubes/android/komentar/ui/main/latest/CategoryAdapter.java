@@ -9,8 +9,7 @@ import androidx.viewbinding.ViewBinding;
 
 import com.cubes.android.komentar.R;
 import com.cubes.android.komentar.data.model.domain.News;
-import com.cubes.android.komentar.data.source.remote.networking.response.CategoryResponseModel;
-import com.cubes.android.komentar.data.source.remote.networking.response.NewsResponseModel;
+import com.cubes.android.komentar.databinding.RvItemAdBinding;
 import com.cubes.android.komentar.databinding.RvItemCategoryBigBinding;
 import com.cubes.android.komentar.databinding.RvItemCategorySmallBinding;
 import com.cubes.android.komentar.databinding.RvItemLoadingBinding;
@@ -20,7 +19,9 @@ import com.cubes.android.komentar.ui.main.latest.rv_model_category.RvItemModelCa
 import com.cubes.android.komentar.ui.main.latest.rv_model_category.RvItemModelCategoryLoading;
 import com.cubes.android.komentar.ui.main.latest.rv_model_category.RvItemModelCategoryRefresh;
 import com.cubes.android.komentar.ui.main.latest.rv_model_category.RvItemModelCategorySmall;
+import com.cubes.android.komentar.ui.main.latest.rv_model_category.RvItemModelHomeAd;
 import com.cubes.android.komentar.ui.tools.MyMethodsClass;
+
 
 import java.util.ArrayList;
 
@@ -29,6 +30,8 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
     private ArrayList<ItemModelCategory> itemModels = new ArrayList<>();
     private boolean isOnHomePage;
     private NewsListener listener;
+
+    private int adCounter = 0;
 
     private int[] newsIdList;
 
@@ -65,6 +68,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
             return;
         }
 
+
         for (int i = 1; i < newsList.size(); i++) {
             itemModels.add(new RvItemModelCategorySmall(newsList.get(i), isOnHomePage, listener, newsIdList));
         }
@@ -88,6 +92,8 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
             binding = RvItemLoadingBinding.inflate(inflater, parent, false);
         } else if (viewType == R.layout.rv_item_refresh) {
             binding = RvItemRefreshBinding.inflate(inflater, parent, false);
+        } else if (viewType == R.layout.rv_item_ad) {
+            binding = RvItemAdBinding.inflate(inflater, parent, false);
         } else {
             binding = null;
         }
@@ -115,20 +121,37 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 
     public void updateList(ArrayList<News> news, boolean hasMorePages) {
 
+        adCounter = 0;
+
         itemModels.clear();
 
         newsIdList = MyMethodsClass.initNewsIdList(news);
 
         for (int i = 0; i < news.size(); i++) {
+
             if (i == 0) {
+
                 itemModels.add(new RvItemModelCategoryBig(news.get(0), false, listener, newsIdList));
+
             } else {
+
+                if (i == 1 || i == 6 || i == 11 || i == 16) {
+
+                    itemModels.add(new RvItemModelHomeAd());
+
+                    adCounter++;
+
+                }
+
                 itemModels.add(new RvItemModelCategorySmall(news.get(i), false, listener, newsIdList));
+
             }
         }
 
         if (news.size() == 20) {
+
             itemModels.add(new RvItemModelCategoryLoading(listener));
+
         }
 
         notifyDataSetChanged();
@@ -145,8 +168,17 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 
         newsIdList = MyMethodsClass.initNewsIdList(newsList);
 
-        for (News news : newsList) {
-            itemModels.add(new RvItemModelCategorySmall(news, isOnHomePage, listener, newsIdList));
+        for (int i = 0; i < newsList.size(); i++) {
+
+            itemModels.add(new RvItemModelCategorySmall(newsList.get(i), isOnHomePage, listener, newsIdList));
+
+            if (i == 0 && adCounter < 5) {
+
+                itemModels.add(new RvItemModelHomeAd());
+
+                adCounter++;
+
+            }
         }
 
 //        if (hasMorePages) {

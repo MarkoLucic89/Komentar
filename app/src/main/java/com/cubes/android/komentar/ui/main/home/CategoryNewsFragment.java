@@ -134,8 +134,6 @@ public class CategoryNewsFragment extends Fragment implements NewsListener {
 
                     Category category = newsList.get(0).category;
 
-                    Toast.makeText(getContext(), category.type, Toast.LENGTH_SHORT).show();
-
                     if (category.type.equalsIgnoreCase("category")) {
 
                         Bundle bundle = new Bundle();

@@ -12,6 +12,7 @@ import com.cubes.android.komentar.R;
 import com.cubes.android.komentar.data.model.domain.News;
 import com.cubes.android.komentar.data.model.domain.NewsComment;
 import com.cubes.android.komentar.data.model.domain.NewsDetails;
+import com.cubes.android.komentar.databinding.RvItemAdBinding;
 import com.cubes.android.komentar.databinding.RvItemCategorySmallBinding;
 import com.cubes.android.komentar.databinding.RvItemDetailsAllCommentsBinding;
 import com.cubes.android.komentar.databinding.RvItemDetailsCommentsBinding;
@@ -23,6 +24,7 @@ import com.cubes.android.komentar.databinding.RvItemHomeCategoryTitleBinding;
 import com.cubes.android.komentar.ui.comments.CommentsAdapter;
 import com.cubes.android.komentar.ui.detail.rv_item_details.ItemModelDetails;
 import com.cubes.android.komentar.ui.detail.rv_item_details.RvItemDetailsButtonAllComments;
+import com.cubes.android.komentar.ui.detail.rv_item_details.RvItemModelDetailAd;
 import com.cubes.android.komentar.ui.detail.rv_item_details.RvItemModelDetailComment;
 import com.cubes.android.komentar.ui.detail.rv_item_details.RvItemModelDetailsHeaderComments;
 import com.cubes.android.komentar.ui.detail.rv_item_details.RvItemModelDetailsHeaderRelatedNews;
@@ -60,8 +62,14 @@ public class NewsDetailsAdapter extends RecyclerView.Adapter<NewsDetailsAdapter.
         //HEADER
 //        list.add(new RvItemModelDetailsHeader(newsDetails));
 
+        //AD 1
+        list.add(new RvItemModelDetailAd());
+
         //WEB VIEW
         list.add(new RvItemModelDetailsWebView(newsDetails.url, newsDetails.id));
+
+        //AD 2
+        list.add(new RvItemModelDetailAd());
 
         //TAGS
         list.add(new RvItemModelDetailsTags(tagListener, newsDetails.tags));
@@ -85,6 +93,9 @@ public class NewsDetailsAdapter extends RecyclerView.Adapter<NewsDetailsAdapter.
         if (newsDetails.commentsCount > 0) {
             list.add(new RvItemDetailsButtonAllComments(newsDetails.id, newsDetails.commentsCount, commentsListener));
         }
+
+        //AD 3
+        list.add(new RvItemModelDetailAd());
 
         //RELATED NEWS
 
@@ -133,6 +144,9 @@ public class NewsDetailsAdapter extends RecyclerView.Adapter<NewsDetailsAdapter.
                 break;
             case R.layout.rv_item_category_small:
                 binding = RvItemCategorySmallBinding.inflate(inflater, parent, false);
+                break;
+            case R.layout.rv_item_ad:
+                binding = RvItemAdBinding.inflate(inflater, parent, false);
                 break;
             default:
                 binding = null;

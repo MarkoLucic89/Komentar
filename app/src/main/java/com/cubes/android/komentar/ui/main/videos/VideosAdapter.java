@@ -9,12 +9,13 @@ import androidx.viewbinding.ViewBinding;
 
 import com.cubes.android.komentar.R;
 import com.cubes.android.komentar.data.model.domain.News;
-import com.cubes.android.komentar.data.source.remote.networking.response.NewsResponseModel;
 import com.cubes.android.komentar.databinding.RvItemLoadingVideosBinding;
 import com.cubes.android.komentar.databinding.RvItemRefreshVideosBinding;
 import com.cubes.android.komentar.databinding.RvItemVideosBinding;
 import com.cubes.android.komentar.ui.main.latest.NewsListener;
+import com.cubes.android.komentar.ui.main.search.rv_model_search.RvItemModelSearchAd;
 import com.cubes.android.komentar.ui.main.videos.rv_model_videos.ItemModelVideo;
+import com.cubes.android.komentar.ui.main.videos.rv_model_videos.RvItemModelVideoAd;
 import com.cubes.android.komentar.ui.main.videos.rv_model_videos.RvItemModelVideoLoading;
 import com.cubes.android.komentar.ui.main.videos.rv_model_videos.RvItemModelVideoRefresh;
 import com.cubes.android.komentar.ui.main.videos.rv_model_videos.RvItemModelVideos;
@@ -28,6 +29,8 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.VideosView
     private ArrayList<ItemModelVideo> itemModels = new ArrayList<>();
     private boolean isOnHomePage;
     private NewsListener listener;
+
+    private int adsCounter = 0;
 
     private int[] newsIdList;
 
@@ -52,12 +55,21 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.VideosView
 
     public void updateList(ArrayList<News> newsList,  boolean hasNextPage) {
 
+        adsCounter = 0;
+
         itemModels.clear();
 
         newsIdList = MyMethodsClass.initNewsIdList(newsList);
 
-        for (News news : newsList) {
-            itemModels.add(new RvItemModelVideos(news, listener, newsIdList));
+        for (int i = 0; i < newsList.size(); i++) {
+
+            if (i > 0 && i % 5 == 0 && adsCounter < 5) {
+
+                itemModels.add(new RvItemModelVideoAd());
+                adsCounter++;
+            }
+
+            itemModels.add(new RvItemModelVideos(newsList.get(i), listener, newsIdList));
         }
 
 //        if (hasNextPage) {
@@ -88,6 +100,9 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.VideosView
                 break;
             case R.layout.rv_item_refresh_videos:
                 binding = RvItemRefreshVideosBinding.inflate(inflater, parent, false);
+                break;
+            case R.layout.rv_item_ad:
+                binding = com.cubes.android.komentar.databinding.RvItemAdBinding.inflate(inflater, parent, false);
                 break;
             default:
                 binding = null;
@@ -128,8 +143,16 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.VideosView
 
         newsIdList = MyMethodsClass.initNewsIdList(newsList);
 
-        for (News news : newsList) {
-            itemModels.add(new RvItemModelVideos(news, listener, newsIdList));
+        for (int i = 0; i < newsList.size(); i++) {
+
+            if (i % 5 == 0 && adsCounter < 5) {
+
+                itemModels.add(new RvItemModelVideoAd());
+                adsCounter++;
+            }
+
+            itemModels.add(new RvItemModelVideos(newsList.get(i), listener, newsIdList));
+
         }
 
 //        if (hasNextPage) {
