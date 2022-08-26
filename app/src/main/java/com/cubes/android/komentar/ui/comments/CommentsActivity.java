@@ -9,9 +9,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.cubes.android.komentar.data.DataRepository;
+import com.cubes.android.komentar.data.di.AppContainer;
+import com.cubes.android.komentar.data.di.MyApplication;
 import com.cubes.android.komentar.data.model.domain.NewsComment;
 import com.cubes.android.komentar.data.model.domain.NewsCommentVote;
-import com.cubes.android.komentar.data.source.local.CommentPrefs;
+import com.cubes.android.komentar.data.source.local.SharedPrefs;
 import com.cubes.android.komentar.databinding.ActivityCommentsBinding;
 import com.cubes.android.komentar.ui.post_comment.PostCommentActivity;
 
@@ -28,11 +30,15 @@ public class CommentsActivity extends AppCompatActivity {
     private CommentsAdapter adapter;
     private List<NewsCommentVote> mVotes = new ArrayList<>();
 
+    private AppContainer appContainer;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityCommentsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        appContainer = ((MyApplication) getApplication()).appContainer;
 
         news_id = getIntent().getIntExtra("news_id", -1);
 
@@ -51,7 +57,7 @@ public class CommentsActivity extends AppCompatActivity {
 
     private void refreshList() {
 
-        DataRepository.getInstance().getComments(news_id, new DataRepository.CommentsResponseListener() {
+        appContainer.dataRepository.getComments(news_id, new DataRepository.CommentsResponseListener() {
 
             @Override
             public void onResponse(ArrayList<NewsComment> comments) {
@@ -88,7 +94,7 @@ public class CommentsActivity extends AppCompatActivity {
         binding.imageViewRefresh.setVisibility(View.GONE);
         binding.progressBar.setVisibility(View.VISIBLE);
 
-        DataRepository.getInstance().getComments(news_id, new DataRepository.CommentsResponseListener() {
+        appContainer.dataRepository.getComments(news_id, new DataRepository.CommentsResponseListener() {
 
             @Override
             public void onResponse(ArrayList<NewsComment> comments) {
@@ -145,7 +151,7 @@ public class CommentsActivity extends AppCompatActivity {
         service.execute(() -> {
 
             //doInBackgroundThread
-            ArrayList votes = (ArrayList) CommentPrefs.readListFromPref(this);
+            ArrayList votes = (ArrayList) SharedPrefs.readListFromPref(this);
 
             if (votes != null) {
                 mVotes.addAll(votes);
@@ -225,7 +231,7 @@ public class CommentsActivity extends AppCompatActivity {
 
     private void likeComment(int id, boolean vote) {
 
-        DataRepository.getInstance().likeComment(id, vote, new DataRepository.CommentsVoteListener() {
+        appContainer.dataRepository.likeComment(id, vote, new DataRepository.CommentsVoteListener() {
             @Override
             public void onResponse(NewsCommentVote response) {
 
@@ -253,7 +259,7 @@ public class CommentsActivity extends AppCompatActivity {
                     //doInBackgroundThread
                     NewsCommentVote newsCommentVote = new NewsCommentVote(String.valueOf(id), vote);
                     mVotes.add(newsCommentVote);
-                    CommentPrefs.writeListInPref(CommentsActivity.this, mVotes);
+                    SharedPrefs.writeListInPref(CommentsActivity.this, mVotes);
 
                     //onPostExecute
                     runOnUiThread(() -> adapter.commentLiked(id, vote));
@@ -274,7 +280,7 @@ public class CommentsActivity extends AppCompatActivity {
 
     private void dislikeComment(int id, boolean vote) {
 
-        DataRepository.getInstance().dislikeComment(id, vote, new DataRepository.CommentsVoteListener() {
+        appContainer.dataRepository.dislikeComment(id, vote, new DataRepository.CommentsVoteListener() {
             @Override
             public void onResponse(NewsCommentVote response) {
 
@@ -302,7 +308,7 @@ public class CommentsActivity extends AppCompatActivity {
                     //doInBackgroundThread
                     NewsCommentVote newsCommentVote = new NewsCommentVote(String.valueOf(id), vote);
                     mVotes.add(newsCommentVote);
-                    CommentPrefs.writeListInPref(CommentsActivity.this, mVotes);
+                    SharedPrefs.writeListInPref(CommentsActivity.this, mVotes);
 
                     //onPostExecute
                     runOnUiThread(() -> adapter.commentDisliked(id, vote));

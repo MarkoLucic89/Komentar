@@ -1,4 +1,4 @@
-package com.cubes.android.komentar.ui.detail.news_detail_activity_with_viewpager;
+package com.cubes.android.komentar.ui.detail;
 
 import android.content.Context;
 import android.content.Intent;
@@ -16,16 +16,16 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.cubes.android.komentar.data.DataRepository;
+import com.cubes.android.komentar.data.di.AppContainer;
+import com.cubes.android.komentar.data.di.MyApplication;
 import com.cubes.android.komentar.data.model.domain.NewsComment;
 import com.cubes.android.komentar.data.model.domain.NewsCommentVote;
 import com.cubes.android.komentar.data.model.domain.NewsDetails;
-import com.cubes.android.komentar.data.source.local.CommentPrefs;
+import com.cubes.android.komentar.data.source.local.SharedPrefs;
 import com.cubes.android.komentar.data.source.local.database.NewsDatabase;
 import com.cubes.android.komentar.databinding.FragmentDetailsBinding;
 import com.cubes.android.komentar.ui.comments.CommentsActivity;
 import com.cubes.android.komentar.ui.comments.CommentsAdapter;
-import com.cubes.android.komentar.ui.detail.NewsDetailsAdapter;
-import com.cubes.android.komentar.ui.detail.NewsDetailsTagsAdapter;
 import com.cubes.android.komentar.ui.main.latest.NewsListener;
 import com.cubes.android.komentar.ui.post_comment.PostCommentActivity;
 import com.cubes.android.komentar.ui.tag.TagActivity;
@@ -56,6 +56,8 @@ public class DetailsFragment extends Fragment implements
     private DetailsListener listener;
 
     private ArrayList<NewsCommentVote> mVotes = new ArrayList<>();
+
+    private AppContainer appContainer;
 
     public interface DetailsListener {
 
@@ -92,6 +94,9 @@ public class DetailsFragment extends Fragment implements
         }
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(getContext());
+
+        appContainer = ((MyApplication) getActivity().getApplication()).appContainer;
+
     }
 
     @Override
@@ -121,7 +126,7 @@ public class DetailsFragment extends Fragment implements
 
     private void refreshNewsDetails() {
 
-        DataRepository.getInstance().getNewsDetails(mNewsId, new DataRepository.DetailResponseListener() {
+        appContainer.dataRepository.getNewsDetails(mNewsId, new DataRepository.DetailResponseListener() {
             @Override
             public void onResponse(NewsDetails newsDetails) {
 
@@ -183,7 +188,7 @@ public class DetailsFragment extends Fragment implements
 
         binding.imageViewRefresh.setVisibility(View.GONE);
 
-        DataRepository.getInstance().getNewsDetails(mNewsId, new DataRepository.DetailResponseListener() {
+        appContainer.dataRepository.getNewsDetails(mNewsId, new DataRepository.DetailResponseListener() {
             @Override
             public void onResponse(NewsDetails newsDetails) {
 
@@ -254,7 +259,7 @@ public class DetailsFragment extends Fragment implements
         service.execute(() -> {
 
             //doInBackgroundThread
-            ArrayList votes = (ArrayList) CommentPrefs.readListFromPref(getActivity());
+            ArrayList votes = (ArrayList) SharedPrefs.readListFromPref(getActivity());
 
             if (votes != null) {
                 mVotes.addAll(votes);
@@ -303,7 +308,7 @@ public class DetailsFragment extends Fragment implements
     @Override
     public void onLikeListener(int id, boolean vote) {
 
-        DataRepository.getInstance().likeComment(id, vote, new DataRepository.CommentsVoteListener() {
+        appContainer.dataRepository.likeComment(id, vote, new DataRepository.CommentsVoteListener() {
             @Override
             public void onResponse(NewsCommentVote response) {
 
@@ -333,7 +338,7 @@ public class DetailsFragment extends Fragment implements
     @Override
     public void onDislikeListener(int id, boolean vote) {
 
-        DataRepository.getInstance().dislikeComment(id, vote, new DataRepository.CommentsVoteListener() {
+        appContainer.dataRepository.dislikeComment(id, vote, new DataRepository.CommentsVoteListener() {
             @Override
             public void onResponse(NewsCommentVote response) {
 

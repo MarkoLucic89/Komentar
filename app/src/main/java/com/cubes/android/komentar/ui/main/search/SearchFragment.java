@@ -3,12 +3,6 @@ package com.cubes.android.komentar.ui.main.search;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -18,10 +12,17 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+
 import com.cubes.android.komentar.data.DataRepository;
+import com.cubes.android.komentar.data.di.AppContainer;
+import com.cubes.android.komentar.data.di.MyApplication;
 import com.cubes.android.komentar.data.model.domain.News;
 import com.cubes.android.komentar.databinding.FragmentSearchBinding;
-import com.cubes.android.komentar.ui.detail.news_detail_activity_with_viewpager.DetailsActivity;
+import com.cubes.android.komentar.ui.detail.DetailsActivity;
 import com.cubes.android.komentar.ui.main.latest.NewsListener;
 import com.cubes.android.komentar.ui.tools.MyMethodsClass;
 import com.google.firebase.analytics.FirebaseAnalytics;
@@ -38,6 +39,9 @@ public class SearchFragment extends Fragment implements NewsListener {
 
     private int nextPage = 1;
 
+    private AppContainer appContainer;
+
+
     public SearchFragment() {
         // Required empty public constructor
     }
@@ -45,6 +49,13 @@ public class SearchFragment extends Fragment implements NewsListener {
     public static SearchFragment newInstance() {
         SearchFragment fragment = new SearchFragment();
         return fragment;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        appContainer = ((MyApplication) getActivity().getApplication()).appContainer;
     }
 
     @Override
@@ -139,7 +150,7 @@ public class SearchFragment extends Fragment implements NewsListener {
 
         Log.d(TAG, "loadNextPage: " + nextPage);
 
-        DataRepository.getInstance().searchNews(searchTerm, nextPage, new DataRepository.SearchResponseListener() {
+        appContainer.dataRepository.searchNews(searchTerm, nextPage, new DataRepository.SearchResponseListener() {
 
 
             @Override

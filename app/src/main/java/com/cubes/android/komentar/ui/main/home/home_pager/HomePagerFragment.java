@@ -12,9 +12,11 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.cubes.android.komentar.data.DataRepository;
+import com.cubes.android.komentar.data.di.AppContainer;
+import com.cubes.android.komentar.data.di.MyApplication;
 import com.cubes.android.komentar.data.model.domain.HomePageData;
 import com.cubes.android.komentar.databinding.FragmentHomePagerBinding;
-import com.cubes.android.komentar.ui.detail.news_detail_activity_with_viewpager.DetailsActivity;
+import com.cubes.android.komentar.ui.detail.DetailsActivity;
 import com.cubes.android.komentar.ui.main.latest.NewsListener;
 import com.cubes.android.komentar.ui.tools.MyMethodsClass;
 
@@ -23,6 +25,8 @@ public class HomePagerFragment extends Fragment implements NewsListener {
     private FragmentHomePagerBinding binding;
     private HomePagerAdapter adapter;
 
+    private AppContainer appContainer;
+
     public HomePagerFragment() {
         // Required empty public constructor
     }
@@ -30,6 +34,14 @@ public class HomePagerFragment extends Fragment implements NewsListener {
     public static HomePagerFragment newInstance() {
         HomePagerFragment fragment = new HomePagerFragment();
         return fragment;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        appContainer = ((MyApplication) getActivity().getApplication()).appContainer;
+
     }
 
     @Override
@@ -59,7 +71,7 @@ public class HomePagerFragment extends Fragment implements NewsListener {
 
     private void refreshListOnSwipe() {
 
-        DataRepository.getInstance().getHomeNews(new DataRepository.HomeResponseListener() {
+        appContainer.dataRepository.getHomeNews(new DataRepository.HomeResponseListener() {
 
             @Override
             public void onResponse(HomePageData data) {
@@ -91,7 +103,7 @@ public class HomePagerFragment extends Fragment implements NewsListener {
         binding.imageViewRefresh.setVisibility(View.GONE);
         binding.progressBar.setVisibility(View.VISIBLE);
 
-        DataRepository.getInstance().getHomeNews(new DataRepository.HomeResponseListener() {
+        appContainer.dataRepository.getHomeNews(new DataRepository.HomeResponseListener() {
 
             @Override
             public void onResponse(HomePageData data) {

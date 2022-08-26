@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.cubes.android.komentar.data.DataRepository;
+import com.cubes.android.komentar.data.di.AppContainer;
+import com.cubes.android.komentar.data.di.MyApplication;
 import com.cubes.android.komentar.data.model.domain.Category;
 import com.cubes.android.komentar.databinding.ActivitySubcategoriesBinding;
 import com.google.android.material.tabs.TabLayoutMediator;
@@ -22,11 +24,15 @@ public class SubcategoriesActivity extends AppCompatActivity {
     private int mCategoryId;
     private int mSubcategoryId;
 
+    private AppContainer appContainer;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivitySubcategoriesBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        appContainer = ((MyApplication) getApplication()).appContainer;
 
         mCategoryId = getIntent().getIntExtra("category_id", -1);
         mSubcategoryId = getIntent().getIntExtra("subcategory_id", -1);
@@ -43,7 +49,7 @@ public class SubcategoriesActivity extends AppCompatActivity {
         binding.progressBar.setVisibility(View.VISIBLE);
         binding.imageViewRefresh.setVisibility(View.GONE);
 
-        DataRepository.getInstance().getAllCategories(new DataRepository.CategoriesResponseListener() {
+        appContainer.dataRepository.getAllCategories(new DataRepository.CategoriesResponseListener() {
             @Override
             public void onResponse(ArrayList<Category> categories) {
 

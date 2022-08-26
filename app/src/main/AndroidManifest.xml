@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
+        android:name=".data.di.MyApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -15,7 +16,7 @@
             android:name=".ui.subcategories.SubcategoriesActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.detail.news_detail_activity_with_viewpager.DetailsActivity"
+            android:name=".ui.detail.DetailsActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
@@ -43,23 +44,17 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.detail.NewsDetailsActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.category.CategoryActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".ui.main.NewsListActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.spashscreen.SplashScreenActivity"
             android:exported="true"
+            android:noHistory="true"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
@@ -67,7 +62,7 @@
 
         <service
             android:name=".data.PushNotificationService"
-            android:exported="false">
+            android:exported="true">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
@@ -75,7 +70,7 @@
 
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-3940256099942544~3347511713"/>
+            android:value="ca-app-pub-3940256099942544~3347511713" />
 
     </application>
 

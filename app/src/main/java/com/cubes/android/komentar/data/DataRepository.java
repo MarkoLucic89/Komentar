@@ -34,20 +34,10 @@ public class DataRepository {
 
     private static final String TAG = "DataRepository";
 
-    private static DataRepository instance;
     private NewsRetrofit api;
 
-    private DataRepository() {
-        api = NewsRetrofit.getInstance();
-    }
-
-    public static DataRepository getInstance() {
-
-        if (instance == null) {
-            instance = new DataRepository();
-        }
-
-        return instance;
+    public DataRepository(NewsRetrofit api) {
+        this.api = api;
     }
 
     private ArrayList<News> mapNewsFromResponse(ArrayList<NewsApi> newsFromResponse) {
@@ -603,7 +593,7 @@ public class DataRepository {
 
     public void postComment(NewsCommentInsertApi newsCommentInsert, PostCommentResponseListener listener) {
 
-        NewsRetrofit.getInstance().getNewsService().postComment(newsCommentInsert).enqueue(new Callback<NewsCommentInsertApi>() {
+        api.getNewsService().postComment(newsCommentInsert).enqueue(new Callback<NewsCommentInsertApi>() {
             @Override
             public void onResponse(Call<NewsCommentInsertApi> call, Response<NewsCommentInsertApi> response) {
 

@@ -6,6 +6,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.cubes.android.komentar.data.DataRepository;
+import com.cubes.android.komentar.data.di.AppContainer;
+import com.cubes.android.komentar.data.di.MyApplication;
 import com.cubes.android.komentar.data.model.NewsCommentInsertApi;
 import com.cubes.android.komentar.databinding.ActivityPostCommentBinding;
 
@@ -16,11 +18,15 @@ public class PostCommentActivity extends AppCompatActivity {
     private int newsId;
     private int replyId;
 
+    private AppContainer appContainer;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityPostCommentBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        appContainer = ((MyApplication) getApplication()).appContainer;
 
         newsId = getIntent().getIntExtra("news", 0);
         replyId = getIntent().getIntExtra("reply_id", 0);
@@ -58,7 +64,7 @@ public class PostCommentActivity extends AppCompatActivity {
                 content
         );
 
-        DataRepository.getInstance().postComment(newsCommentInsert, new DataRepository.PostCommentResponseListener() {
+        appContainer.dataRepository.postComment(newsCommentInsert, new DataRepository.PostCommentResponseListener() {
             @Override
             public void onResponse(NewsCommentInsertApi response) {
                 Toast.makeText(PostCommentActivity.this, "Komentar je uspešno unet.", Toast.LENGTH_SHORT).show();

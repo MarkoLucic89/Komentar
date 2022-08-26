@@ -8,9 +8,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.cubes.android.komentar.data.DataRepository;
+import com.cubes.android.komentar.data.di.AppContainer;
+import com.cubes.android.komentar.data.di.MyApplication;
 import com.cubes.android.komentar.data.model.domain.News;
 import com.cubes.android.komentar.databinding.ActivityTagBinding;
-import com.cubes.android.komentar.ui.detail.news_detail_activity_with_viewpager.DetailsActivity;
+import com.cubes.android.komentar.ui.detail.DetailsActivity;
 import com.cubes.android.komentar.ui.main.latest.NewsListener;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
@@ -24,11 +26,15 @@ public class TagActivity extends AppCompatActivity implements NewsListener {
     private int nextPage = 1;
     private TagAdapter adapter;
 
+    private AppContainer appContainer;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityTagBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        appContainer = ((MyApplication) getApplication()).appContainer;
 
         tagId = getIntent().getIntExtra("tag_id", -1);
         String tagTitle = getIntent().getStringExtra("tag_title");
@@ -58,7 +64,7 @@ public class TagActivity extends AppCompatActivity implements NewsListener {
 
         nextPage = 1;
 
-        DataRepository.getInstance().getNewsForTag(tagId, nextPage, new DataRepository.TagResponseListener() {
+        appContainer.dataRepository.getNewsForTag(tagId, nextPage, new DataRepository.TagResponseListener() {
 
             @Override
             public void onResponse(ArrayList<News> newsList, boolean hasMorePages) {
@@ -101,7 +107,7 @@ public class TagActivity extends AppCompatActivity implements NewsListener {
     @Override
     public void loadNextPage() {
 
-        DataRepository.getInstance().getNewsForTag(tagId, nextPage, new DataRepository.TagResponseListener() {
+        appContainer.dataRepository.getNewsForTag(tagId, nextPage, new DataRepository.TagResponseListener() {
 
             @Override
             public void onResponse(ArrayList<News> newsList, boolean hasMorePages) {

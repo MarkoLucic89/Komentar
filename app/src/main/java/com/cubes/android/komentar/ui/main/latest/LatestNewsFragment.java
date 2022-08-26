@@ -12,9 +12,11 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.cubes.android.komentar.data.DataRepository;
+import com.cubes.android.komentar.data.di.AppContainer;
+import com.cubes.android.komentar.data.di.MyApplication;
 import com.cubes.android.komentar.data.model.domain.News;
 import com.cubes.android.komentar.databinding.FragmentLatestNewsBinding;
-import com.cubes.android.komentar.ui.detail.news_detail_activity_with_viewpager.DetailsActivity;
+import com.cubes.android.komentar.ui.detail.DetailsActivity;
 import com.cubes.android.komentar.ui.tools.MyMethodsClass;
 
 import java.util.ArrayList;
@@ -27,6 +29,8 @@ public class LatestNewsFragment extends Fragment implements NewsListener {
 
     private int nextPage = 1;
 
+    private AppContainer appContainer;
+
 
     public LatestNewsFragment() {
         // Required empty public constructor
@@ -35,6 +39,13 @@ public class LatestNewsFragment extends Fragment implements NewsListener {
     public static LatestNewsFragment newInstance() {
         LatestNewsFragment fragment = new LatestNewsFragment();
         return fragment;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        appContainer = ((MyApplication) getActivity().getApplication()).appContainer;
     }
 
     @Override
@@ -135,7 +146,7 @@ public class LatestNewsFragment extends Fragment implements NewsListener {
     @Override
     public void loadNextPage() {
 
-        DataRepository.getInstance().getLatestNews(nextPage, new DataRepository.LatestResponseListener() {
+        appContainer.dataRepository.getLatestNews(nextPage, new DataRepository.LatestResponseListener() {
 
             @Override
             public void onResponse(ArrayList<News> newsList, boolean hasMorePages) {

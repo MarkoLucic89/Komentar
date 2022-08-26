@@ -71,22 +71,49 @@ public class NewsListActivity extends AppCompatActivity {
     private void setListeners() {
 
 
+//        binding.bottomNavigationView.setOnItemSelectedListener(item -> {
+//
+//            switch (item.getItemId()) {
+//                case R.id.menuHome:
+//                    replaceFragment(HomeFragment.newInstance());
+//                    break;
+//                case R.id.menuLatest:
+//                    replaceFragment(LatestNewsFragment.newInstance());
+//                    break;
+//                case R.id.menuVideo:
+//                    replaceFragment(VideoFragment.newInstance());
+//                    break;
+//                case R.id.menuSearch:
+//                    replaceFragment(SearchFragment.newInstance());
+//                    break;
+//            }
+//
+//            return true;
+//        });
+
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
+
+            Fragment fragment = null;
 
             switch (item.getItemId()) {
                 case R.id.menuHome:
-                    replaceFragment(HomeFragment.newInstance());
+                    fragment = HomeFragment.newInstance();
                     break;
                 case R.id.menuLatest:
-                    replaceFragment(LatestNewsFragment.newInstance());
+                    fragment = LatestNewsFragment.newInstance();
                     break;
                 case R.id.menuVideo:
-                    replaceFragment(VideoFragment.newInstance());
+                    fragment = VideoFragment.newInstance();
                     break;
                 case R.id.menuSearch:
-                    replaceFragment(SearchFragment.newInstance());
+                    fragment = SearchFragment.newInstance();
                     break;
             }
+
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragmentContainer, fragment)
+                    .commit();
 
             return true;
         });

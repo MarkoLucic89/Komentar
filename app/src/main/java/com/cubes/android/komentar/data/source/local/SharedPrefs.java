@@ -1,56 +1,55 @@
 package com.cubes.android.komentar.data.source.local;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+
+import com.cubes.android.komentar.data.model.domain.NewsCommentVote;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SharedPrefs {
 
-    private final String NOTIFICATION_KEY = "prefs_notification";
-    private static final String COMMENTS_KEY = "list_key";
+    private static final String LIST_KEY = "list_key";
+    private static final String NOTIFICATION_KEY = "prefs_notification";
 
+    public static boolean isNotificationOn(Activity activity) {
 
-    private static SharedPrefs instance;
-    private SharedPreferences preferences;
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(activity);
 
-
-    private SharedPrefs(Activity activity) {
-        preferences = activity.getPreferences(Context.MODE_PRIVATE);
+        return pref.getBoolean(NOTIFICATION_KEY, false);
     }
 
-    public synchronized static SharedPrefs getInstance(Activity activity) {
+    public static void setNotificationStatus(Activity activity, boolean isOn) {
 
-        if (instance == null) {
-            instance = new SharedPrefs(activity);
-        }
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(activity);
 
-        return instance;
+        pref.edit().putBoolean(NOTIFICATION_KEY, isOn).apply();
     }
 
-    public boolean isNotificationOn() {
-        return preferences.getBoolean(NOTIFICATION_KEY, false);
+    public static void writeListInPref(Activity activity, List<NewsCommentVote> list) {
+        Gson gson = new Gson();
+        String jsonString = gson.toJson(list);
+
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(activity);
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putString(LIST_KEY, jsonString);
+        editor.apply();
     }
 
-    public void setNotificationStatus(boolean isOn) {
-        preferences.edit().putBoolean(NOTIFICATION_KEY, isOn).apply();
+    public static List<NewsCommentVote> readListFromPref(Activity activity) {
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(activity);
+        String jsonString = pref.getString(LIST_KEY, "");
+
+        Gson gson = new Gson();
+        Type type = new TypeToken<ArrayList<NewsCommentVote>>() {
+        }.getType();
+        List<NewsCommentVote> list = gson.fromJson(jsonString, type);
+        return list;
     }
 
-//    public void writeListInPref(List<NewsCommentVote> list) {
-//        Gson gson = new Gson();
-//        String jsonString = gson.toJson(list);
-//
-//        preferences.edit().putString(COMMENTS_KEY, jsonString);
-//        preferences.edit().apply();
-//    }
-//
-//    public List<NewsCommentVote> readListFromPref() {
-//        String jsonString = preferences.getString(COMMENTS_KEY, "");
-//
-//        Gson gson = new Gson();
-//        Type type = new TypeToken<ArrayList<NewsCommentVote>>() {
-//        }.getType();
-//        List<NewsCommentVote> list = gson.fromJson(jsonString, type);
-//        return list;
-//    }
 }
-

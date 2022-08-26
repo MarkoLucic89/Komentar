@@ -1,4 +1,4 @@
-package com.cubes.android.komentar.ui.detail.news_detail_activity_with_viewpager;
+package com.cubes.android.komentar.ui.detail;
 
 import android.content.Intent;
 import android.os.Bundle;

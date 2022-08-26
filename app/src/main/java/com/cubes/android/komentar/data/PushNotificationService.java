@@ -4,8 +4,12 @@ import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
 
+import androidx.core.app.NotificationCompat;
+
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+
+import java.util.Map;
 
 public class PushNotificationService extends FirebaseMessagingService {
 
@@ -18,16 +22,6 @@ public class PushNotificationService extends FirebaseMessagingService {
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-
-        String url = remoteMessage.getData().get("url");
-
-        if (url == null) {
-            Log.d(TAG, "onMessageReceived: URL IS NULL");
-        } else {
-            Intent i = new Intent(Intent.ACTION_VIEW);
-            i.setData(Uri.parse(url));
-            startActivity(i);
-        }
 
     }
 

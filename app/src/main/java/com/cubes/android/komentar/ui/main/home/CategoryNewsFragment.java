@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -13,10 +12,12 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.cubes.android.komentar.data.DataRepository;
+import com.cubes.android.komentar.data.di.AppContainer;
+import com.cubes.android.komentar.data.di.MyApplication;
 import com.cubes.android.komentar.data.model.domain.Category;
 import com.cubes.android.komentar.data.model.domain.News;
 import com.cubes.android.komentar.databinding.FragmentCategoryBinding;
-import com.cubes.android.komentar.ui.detail.news_detail_activity_with_viewpager.DetailsActivity;
+import com.cubes.android.komentar.ui.detail.DetailsActivity;
 import com.cubes.android.komentar.ui.main.latest.CategoryAdapter;
 import com.cubes.android.komentar.ui.main.latest.NewsListener;
 import com.cubes.android.komentar.ui.tools.MyMethodsClass;
@@ -39,6 +40,9 @@ public class CategoryNewsFragment extends Fragment implements NewsListener {
 
     private FirebaseAnalytics mFirebaseAnalytics;
 
+    private AppContainer appContainer;
+
+
     public CategoryNewsFragment() {
         // Required empty public constructor
     }
@@ -60,6 +64,8 @@ public class CategoryNewsFragment extends Fragment implements NewsListener {
         }
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(getContext());
+
+        appContainer = ((MyApplication) getActivity().getApplication()).appContainer;
 
     }
 
@@ -119,7 +125,7 @@ public class CategoryNewsFragment extends Fragment implements NewsListener {
     @Override
     public void loadNextPage() {
 
-        DataRepository.getInstance().getNewsForCategory(mCategoryId, nextPage, new DataRepository.CategoryNewsResponseListener() {
+        appContainer.dataRepository.getNewsForCategory(mCategoryId, nextPage, new DataRepository.CategoryNewsResponseListener() {
 
             @Override
             public void onResponse(ArrayList<News> newsList, boolean hasMorePages) {
@@ -181,7 +187,8 @@ public class CategoryNewsFragment extends Fragment implements NewsListener {
 
         Intent intent = new Intent(getContext(), DetailsActivity.class);
         intent.putExtra("news_id", newsId);
-        intent.putExtra("news_url", newsUrl);        intent.putExtra("news_id_list", newsIdList);
+        intent.putExtra("news_url", newsUrl);
+        intent.putExtra("news_id_list", newsIdList);
         getContext().startActivity(intent);
 
     }

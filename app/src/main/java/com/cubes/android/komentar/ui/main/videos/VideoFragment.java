@@ -2,6 +2,9 @@ package com.cubes.android.komentar.ui.main.videos;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -9,14 +12,12 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
+import com.cubes.android.komentar.data.DataRepository;
+import com.cubes.android.komentar.data.di.AppContainer;
+import com.cubes.android.komentar.data.di.MyApplication;
 import com.cubes.android.komentar.data.model.domain.News;
 import com.cubes.android.komentar.databinding.FragmentVideoBinding;
-import com.cubes.android.komentar.data.DataRepository;
-import com.cubes.android.komentar.ui.detail.news_detail_activity_with_viewpager.DetailsActivity;
+import com.cubes.android.komentar.ui.detail.DetailsActivity;
 import com.cubes.android.komentar.ui.main.latest.NewsListener;
 import com.cubes.android.komentar.ui.tools.MyMethodsClass;
 
@@ -29,6 +30,8 @@ public class VideoFragment extends Fragment implements NewsListener {
     private int nextPage = 1;
     private VideosAdapter adapter;
 
+    private AppContainer appContainer;
+
     public VideoFragment() {
         // Required empty public constructor
     }
@@ -36,6 +39,13 @@ public class VideoFragment extends Fragment implements NewsListener {
     public static VideoFragment newInstance() {
         VideoFragment fragment = new VideoFragment();
         return fragment;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        appContainer = ((MyApplication) getActivity().getApplication()).appContainer;
     }
 
     @Override
@@ -95,7 +105,7 @@ public class VideoFragment extends Fragment implements NewsListener {
     @Override
     public void loadNextPage() {
 
-        DataRepository.getInstance().getVideos(nextPage, new DataRepository.VideosResponseListener() {
+        appContainer.dataRepository.getVideos(nextPage, new DataRepository.VideosResponseListener() {
 
             @Override
             public void onVideosResponse(ArrayList<News> newsList, boolean hasNextPage) {

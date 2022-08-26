@@ -14,6 +14,8 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.cubes.android.komentar.data.DataRepository;
+import com.cubes.android.komentar.data.di.AppContainer;
+import com.cubes.android.komentar.data.di.MyApplication;
 import com.cubes.android.komentar.data.model.domain.Category;
 import com.cubes.android.komentar.data.source.local.SharedPrefs;
 import com.cubes.android.komentar.databinding.FragmentHomeBinding;
@@ -35,6 +37,9 @@ public class HomeFragment extends Fragment implements OnCategoryClickListener, R
 
     private DrawerAdapter adapter;
 
+    private AppContainer appContainer;
+
+
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -45,6 +50,13 @@ public class HomeFragment extends Fragment implements OnCategoryClickListener, R
         return fragment;
     }
 
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        appContainer = ((MyApplication) getActivity().getApplication()).appContainer;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -73,7 +85,7 @@ public class HomeFragment extends Fragment implements OnCategoryClickListener, R
 
     private void initDrawerRecyclerView() {
 
-        boolean isNotificationsOn = SharedPrefs.getInstance(getActivity()).isNotificationOn();
+        boolean isNotificationsOn = SharedPrefs.isNotificationOn(getActivity());
 
         adapter = new DrawerAdapter(this, this, isNotificationsOn);
 
@@ -84,7 +96,7 @@ public class HomeFragment extends Fragment implements OnCategoryClickListener, R
 
     private void getAllCategories() {
 
-        DataRepository.getInstance().getAllCategories(new DataRepository.CategoriesResponseListener() {
+        appContainer.dataRepository.getAllCategories(new DataRepository.CategoriesResponseListener() {
             @Override
             public void onResponse(ArrayList<Category> categories) {
 
@@ -157,7 +169,9 @@ public class HomeFragment extends Fragment implements OnCategoryClickListener, R
     public void onPushNotification(boolean isOn) {
         Toast.makeText(getContext(), "NOTIFICATIONS ON: " + isOn, Toast.LENGTH_SHORT).show();
 
-        SharedPrefs.getInstance(getActivity()).setNotificationStatus(isOn);
+//        SharedPrefs.getInstance(getActivity()).setNotificationStatus(isOn);
+
+        SharedPrefs.setNotificationStatus(getActivity(), isOn);
 
         if (isOn) {
             FirebaseMessaging.getInstance().subscribeToTopic("main");
