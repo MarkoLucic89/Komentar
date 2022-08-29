@@ -15,7 +15,6 @@ public class DetailsActivity extends AppCompatActivity implements DetailsFragmen
     private String mNewsUrl;
     private int[] mNewsIdList;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

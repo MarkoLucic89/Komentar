@@ -14,8 +14,8 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.cubes.android.komentar.data.DataRepository;
-import com.cubes.android.komentar.data.di.AppContainer;
-import com.cubes.android.komentar.data.di.MyApplication;
+import com.cubes.android.komentar.di.AppContainer;
+import com.cubes.android.komentar.di.MyApplication;
 import com.cubes.android.komentar.data.model.domain.Category;
 import com.cubes.android.komentar.data.source.local.SharedPrefs;
 import com.cubes.android.komentar.databinding.FragmentHomeBinding;
@@ -162,6 +162,7 @@ public class HomeFragment extends Fragment implements OnCategoryClickListener, R
     public void onDestroy() {
         super.onDestroy();
         binding = null;
+        appContainer = null;
 
     }
 

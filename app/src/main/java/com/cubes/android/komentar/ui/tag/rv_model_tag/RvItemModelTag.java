@@ -40,7 +40,7 @@ public class RvItemModelTag implements ItemModelTag {
         binding.textViewCategory.setText(news.category.name);
         binding.textViewTime.setText(MyMethodsClass.convertTime(news.createdAt));
 
-        binding.getRoot().setOnClickListener(view -> listener.onNewsClicked(news.id, news.url, this.newsIdList));
+        binding.getRoot().setOnClickListener(view -> listener.onNewsClicked(news.id, this.newsIdList));
 
 
     }

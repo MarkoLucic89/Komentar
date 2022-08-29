@@ -12,8 +12,8 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.cubes.android.komentar.data.DataRepository;
-import com.cubes.android.komentar.data.di.AppContainer;
-import com.cubes.android.komentar.data.di.MyApplication;
+import com.cubes.android.komentar.di.AppContainer;
+import com.cubes.android.komentar.di.MyApplication;
 import com.cubes.android.komentar.data.model.domain.News;
 import com.cubes.android.komentar.databinding.FragmentLatestNewsBinding;
 import com.cubes.android.komentar.ui.detail.DetailsActivity;
@@ -186,11 +186,10 @@ public class LatestNewsFragment extends Fragment implements NewsListener {
     }
 
     @Override
-    public void onNewsClicked(int newsId, String newsUrl, int[] newsIdList) {
+    public void onNewsClicked(int newsId, int[] newsIdList) {
 
         Intent intent = new Intent(getContext(), DetailsActivity.class);
         intent.putExtra("news_id", newsId);
-        intent.putExtra("news_url", newsUrl);
         intent.putExtra("news_id_list", newsIdList);
         getContext().startActivity(intent);
 
@@ -200,5 +199,7 @@ public class LatestNewsFragment extends Fragment implements NewsListener {
     public void onDestroy() {
         super.onDestroy();
         binding = null;
+        appContainer = null;
+
     }
 }

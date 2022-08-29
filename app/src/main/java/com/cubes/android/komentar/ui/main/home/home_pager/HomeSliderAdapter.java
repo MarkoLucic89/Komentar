@@ -59,7 +59,7 @@ public class HomeSliderAdapter extends RecyclerView.Adapter<HomeSliderAdapter.Ho
         Picasso.get().load(news.image).into(holder.binding.imageView);
         holder.binding.textViewTitle.setText(news.title);
 
-        holder.binding.getRoot().setOnClickListener(view -> listener.onNewsClicked(news.id, news.url, newsIdList));
+        holder.binding.getRoot().setOnClickListener(view -> listener.onNewsClicked(news.id,  newsIdList));
 
     }
 

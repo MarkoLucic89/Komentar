@@ -6,8 +6,8 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.cubes.android.komentar.data.DataRepository;
-import com.cubes.android.komentar.data.di.AppContainer;
-import com.cubes.android.komentar.data.di.MyApplication;
+import com.cubes.android.komentar.di.AppContainer;
+import com.cubes.android.komentar.di.MyApplication;
 import com.cubes.android.komentar.data.model.domain.Category;
 import com.cubes.android.komentar.databinding.ActivitySubcategoriesBinding;
 import com.google.android.material.tabs.TabLayoutMediator;
@@ -100,5 +100,12 @@ public class SubcategoriesActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        appContainer = null;
+        binding = null;
     }
 }

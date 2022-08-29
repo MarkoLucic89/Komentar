@@ -3,6 +3,9 @@ package com.cubes.android.komentar.data;
 
 import android.util.Log;
 
+import com.cubes.android.komentar.data.source.remote.networking.NewsService;
+import com.cubes.android.komentar.di.LocalDataSource;
+import com.cubes.android.komentar.di.RemoteDataSource;
 import com.cubes.android.komentar.data.model.CategoryApi;
 import com.cubes.android.komentar.data.model.NewsApi;
 import com.cubes.android.komentar.data.model.NewsCommentApi;
@@ -34,10 +37,16 @@ public class DataRepository {
 
     private static final String TAG = "DataRepository";
 
-    private NewsRetrofit api;
+    private NewsService api;
 
-    public DataRepository(NewsRetrofit api) {
-        this.api = api;
+    private LocalDataSource localDataSource;
+    private RemoteDataSource remoteDataSource;
+
+    public DataRepository(LocalDataSource localDataSource, RemoteDataSource remoteDataSource) {
+        this.localDataSource = localDataSource;
+        this.remoteDataSource = remoteDataSource;
+
+        this.api = remoteDataSource.newsService;
     }
 
     private ArrayList<News> mapNewsFromResponse(ArrayList<NewsApi> newsFromResponse) {
@@ -111,7 +120,7 @@ public class DataRepository {
 
     public void getVideos(int page, VideosResponseListener videosResponseListener) {
 
-        api.getNewsService().getVideos(page).enqueue(new Callback<NewsResponseModel>() {
+        api.getVideos(page).enqueue(new Callback<NewsResponseModel>() {
             @Override
             public void onResponse(Call<NewsResponseModel> call, Response<NewsResponseModel> response) {
 
@@ -147,7 +156,7 @@ public class DataRepository {
 
     public void getLatestNews(int page, LatestResponseListener latestResponseListener) {
 
-        api.getNewsService().getLatest(page, 50).enqueue(new Callback<NewsResponseModel>() {
+        api.getLatest(page, 50).enqueue(new Callback<NewsResponseModel>() {
             @Override
             public void onResponse(Call<NewsResponseModel> call, Response<NewsResponseModel> response) {
 
@@ -185,7 +194,7 @@ public class DataRepository {
 
         Log.d("TAG", "getLatest: " + page);
 
-        api.getNewsService().getCategoryNews(categoryId, page, 20).enqueue(new Callback<CategoryResponseModel>() {
+        api.getCategoryNews(categoryId, page, 20).enqueue(new Callback<CategoryResponseModel>() {
             @Override
             public void onResponse(Call<CategoryResponseModel> call, Response<CategoryResponseModel> response) {
 
@@ -220,7 +229,7 @@ public class DataRepository {
 
     public void searchNews(String searchTerm, int page, SearchResponseListener searchResponseListener) {
 
-        api.getNewsService().searchNews(searchTerm, page).enqueue(new Callback<NewsResponseModel>() {
+        api.searchNews(searchTerm, page).enqueue(new Callback<NewsResponseModel>() {
             @Override
             public void onResponse(Call<NewsResponseModel> call, Response<NewsResponseModel> response) {
 
@@ -255,7 +264,7 @@ public class DataRepository {
 
     public void getHomeNews(HomeResponseListener listener) {
 
-        api.getNewsService().getHomePageData().enqueue(new Callback<HomePageResponseModel>() {
+        api.getHomePageData().enqueue(new Callback<HomePageResponseModel>() {
             @Override
             public void onResponse(Call<HomePageResponseModel> call, Response<HomePageResponseModel> response) {
 
@@ -322,7 +331,7 @@ public class DataRepository {
     public void getNewsDetails(int newsId, DetailResponseListener listener) {
 
 
-        api.getNewsService().getNewsDetails(newsId).enqueue(new Callback<NewsDetailsResponseModel>() {
+        api.getNewsDetails(newsId).enqueue(new Callback<NewsDetailsResponseModel>() {
             @Override
             public void onResponse(Call<NewsDetailsResponseModel> call, Response<NewsDetailsResponseModel> response) {
 
@@ -397,7 +406,7 @@ public class DataRepository {
 
     public void getNewsForTag(int tagId, int page, TagResponseListener listener) {
 
-        api.getNewsService().getTag(tagId, page).enqueue(new Callback<TagResponseModel>() {
+        api.getTag(tagId, page).enqueue(new Callback<TagResponseModel>() {
             @Override
             public void onResponse(Call<TagResponseModel> call, Response<TagResponseModel> response) {
 
@@ -432,7 +441,7 @@ public class DataRepository {
 
     public void getComments(int news_id, CommentsResponseListener listener) {
 
-        api.getNewsService().getComments(news_id).enqueue(new Callback<CommentsResponseModel>() {
+        api.getComments(news_id).enqueue(new Callback<CommentsResponseModel>() {
             @Override
             public void onResponse(Call<CommentsResponseModel> call, Response<CommentsResponseModel> response) {
 
@@ -497,7 +506,7 @@ public class DataRepository {
 
     public void likeComment(int id, boolean vote, CommentsVoteListener listener) {
 
-        api.getNewsService().postLike(id, vote)
+        api.postLike(id, vote)
                 .enqueue(new Callback<NewsCommentVote>() {
                     @Override
                     public void onResponse(Call<NewsCommentVote> call, Response<NewsCommentVote> response) {
@@ -523,7 +532,7 @@ public class DataRepository {
 
     public void dislikeComment(int id, boolean vote, CommentsVoteListener listener) {
 
-        api.getNewsService().postDislike(id, vote)
+        api.postDislike(id, vote)
                 .enqueue(new Callback<NewsCommentVote>() {
                     @Override
                     public void onResponse(Call<NewsCommentVote> call, Response<NewsCommentVote> response) {
@@ -557,7 +566,7 @@ public class DataRepository {
 
     public void getAllCategories(CategoriesResponseListener listener) {
 
-        api.getNewsService().getCategories().enqueue(new Callback<CategoriesResponseModel>() {
+        api.getCategories().enqueue(new Callback<CategoriesResponseModel>() {
             @Override
             public void onResponse(Call<CategoriesResponseModel> call, Response<CategoriesResponseModel> response) {
 
@@ -593,7 +602,7 @@ public class DataRepository {
 
     public void postComment(NewsCommentInsertApi newsCommentInsert, PostCommentResponseListener listener) {
 
-        api.getNewsService().postComment(newsCommentInsert).enqueue(new Callback<NewsCommentInsertApi>() {
+        api.postComment(newsCommentInsert).enqueue(new Callback<NewsCommentInsertApi>() {
             @Override
             public void onResponse(Call<NewsCommentInsertApi> call, Response<NewsCommentInsertApi> response) {
 

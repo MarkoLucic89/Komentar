@@ -6,8 +6,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.cubes.android.komentar.data.DataRepository;
-import com.cubes.android.komentar.data.di.AppContainer;
-import com.cubes.android.komentar.data.di.MyApplication;
+import com.cubes.android.komentar.di.AppContainer;
+import com.cubes.android.komentar.di.MyApplication;
 import com.cubes.android.komentar.data.model.NewsCommentInsertApi;
 import com.cubes.android.komentar.databinding.ActivityPostCommentBinding;
 
@@ -117,5 +117,7 @@ public class PostCommentActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         binding = null;
+        appContainer = null;
+
     }
 }

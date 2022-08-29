@@ -12,8 +12,8 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.cubes.android.komentar.data.DataRepository;
-import com.cubes.android.komentar.data.di.AppContainer;
-import com.cubes.android.komentar.data.di.MyApplication;
+import com.cubes.android.komentar.di.AppContainer;
+import com.cubes.android.komentar.di.MyApplication;
 import com.cubes.android.komentar.data.model.domain.HomePageData;
 import com.cubes.android.komentar.databinding.FragmentHomePagerBinding;
 import com.cubes.android.komentar.ui.detail.DetailsActivity;
@@ -145,14 +145,15 @@ public class HomePagerFragment extends Fragment implements NewsListener {
     public void onDestroy() {
         super.onDestroy();
         binding = null;
+        appContainer = null;
+
     }
 
     @Override
-    public void onNewsClicked(int newsId, String newsUrl, int[] newsIdList) {
+    public void onNewsClicked(int newsId, int[] newsIdList) {
 
         Intent intent = new Intent(getContext(), DetailsActivity.class);
         intent.putExtra("news_id", newsId);
-        intent.putExtra("news_url", newsUrl);
         intent.putExtra("news_id_list", newsIdList);
         startActivity(intent);
 
