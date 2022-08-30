@@ -161,7 +161,7 @@ public class HomeFragment extends Fragment implements OnCategoryClickListener, R
     @Override
     public void onDestroy() {
         super.onDestroy();
-        binding = null;
+//        binding = null;
         dataRepository = null;
 
     }

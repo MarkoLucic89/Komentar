@@ -65,8 +65,12 @@ public class HomePagerAdapter extends RecyclerView.Adapter<HomePagerAdapter.Home
         list.add(new RvItemModelHomeAd());
 
         //SPORT CATEGORY BOX
-        addCategoryBox("SPORT", data);
-
+        for (HomePageData.CategoryBox categoryBox : data.category) {
+            if (categoryBox.title.equalsIgnoreCase("SPORT")) {
+                addCategoryBox(categoryBox);
+                break;
+            }
+        }
 
         //AD 3
         list.add(new RvItemModelHomeAd());
@@ -80,8 +84,6 @@ public class HomePagerAdapter extends RecyclerView.Adapter<HomePagerAdapter.Home
         //VIDEO
         if (!data.videos.isEmpty()) {
 
-//            list.add(new RvItemModelHomeVideo(response.videos, listener));
-
             int[] videosIdList = MyMethodsClass.initNewsIdList(data.videos);
 
             list.add(new RvItemModelCategoryTitle("Video", "#FE0000"));
@@ -94,43 +96,35 @@ public class HomePagerAdapter extends RecyclerView.Adapter<HomePagerAdapter.Home
         //AD 5
         list.add(new RvItemModelHomeAd());
 
-        //SHOWBIZ
-        addCategoryBox("SHOWBIZ", data);  //EMPTY RESPONSE
-
-        //POLITIKA
-        addCategoryBox("POLITIKA", data);
-
-        //SVET
-        addCategoryBox("SVET", data);
-
-        //HRONIKA
-        addCategoryBox("HRONIKA", data);  //EMPTY RESPONSE
-
-        //DRUŠTVO
-        addCategoryBox("DRUŠTVO", data);
-
-        //BIZNIS
-        addCategoryBox("BIZNIS", data);  //EMPTY RESPONSE
-
-        //STIL ŽIVOTA
-        addCategoryBox("STIL ŽIVOTA", data);  //EMPTY RESPONSE
-
-        //KULTURA
-        addCategoryBox("KULTURA", data);
-
-        //SLOBODNO VREME
-        addCategoryBox("SLOBODNO VREME", data);  //EMPTY RESPONSE
-
-        //SRBIJA
-        addCategoryBox("SRBIJA", data);  //EMPTY RESPONSE
-
-        //BEOGRAD
-        addCategoryBox("BEOGRAD", data);
-
-        //REGION
-        addCategoryBox("REGION", data);
+        //CATEGORY BOX LIST
+        for (HomePageData.CategoryBox categoryBox : data.category) {
+            if (!categoryBox.title.equalsIgnoreCase("SPORT")) {
+                addCategoryBox(categoryBox);
+            }
+        }
 
         notifyDataSetChanged();
+    }
+
+    private void addCategoryBox(HomePageData.CategoryBox categoryBox) {
+
+        list.add(new RvItemModelCategoryTitle(categoryBox.title, categoryBox.color));
+
+        int[] newsIdList = MyMethodsClass.initNewsIdList(categoryBox.news);
+
+        list.add(new RvItemModelHomeCategoryBig(categoryBox.news.get(0), true, listener, newsIdList));
+
+        //servisi za svaki CategoryBox vracaju preko 20 vesti, zato je ovo trenutno zakomentarisano
+
+//            for (int i = 1; i < categoryBoxResponseModel.news.size(); i++) {
+//                list.add(new RvItemModelHomeSmallNews(categoryBoxResponseModel.news.get(i), listener, newsIdList));
+//            }
+
+        //trenutno je size 5 zbog testiranja
+        for (int i = 1; i < 5; i++) {
+            list.add(new RvItemModelHomeSmallNews(categoryBox.news.get(i), listener, newsIdList));
+        }
+
     }
 
     private void addSlider(String title, HomePageData data) {
@@ -149,46 +143,6 @@ public class HomePagerAdapter extends RecyclerView.Adapter<HomePagerAdapter.Home
 
         }
 
-    }
-
-    private void addCategoryBox(String title, HomePageData data) {
-
-        HomePageData.CategoryBox categoryBox = getCategoryForTitle(title, data);
-
-        if (categoryBox != null && !categoryBox.news.isEmpty()) {
-
-//            list.add(new RvItemModelCategoryBox(categoryBoxResponseModel, listener));
-
-            list.add(new RvItemModelCategoryTitle(categoryBox.title, categoryBox.color));
-
-            int[] newsIdList = MyMethodsClass.initNewsIdList(categoryBox.news);
-
-            list.add(new RvItemModelHomeCategoryBig(categoryBox.news.get(0), true, listener, newsIdList));
-
-
-            //servisi za svaki CategoryBox vracaju preko 20 vesti, zato je ovo trenutno zakomentarisano
-
-//            for (int i = 1; i < categoryBoxResponseModel.news.size(); i++) {
-//                list.add(new RvItemModelHomeSmallNews(categoryBoxResponseModel.news.get(i), listener, newsIdList));
-//            }
-
-            //trenutno je size 5 zbog testiranja
-            for (int i = 1; i < 5; i++) {
-                list.add(new RvItemModelHomeSmallNews(categoryBox.news.get(i), listener, newsIdList));
-            }
-        }
-
-    }
-
-    private HomePageData.CategoryBox getCategoryForTitle(String title, HomePageData data) {
-
-        for (HomePageData.CategoryBox categoryBox : data.category) {
-            if (categoryBox.title.equalsIgnoreCase(title)) {
-                return categoryBox;
-            }
-        }
-
-        return null;
     }
 
     @NonNull
