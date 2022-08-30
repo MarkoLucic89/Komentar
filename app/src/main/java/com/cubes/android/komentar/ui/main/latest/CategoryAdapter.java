@@ -135,7 +135,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 
             } else {
 
-                if (i == 1 || i == 6 || i == 11 || i == 16) {
+                if ((i - 1) % 5 == 0) {
 
                     itemModels.add(new RvItemModelHomeAd());
 
