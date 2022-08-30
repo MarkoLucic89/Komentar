@@ -24,15 +24,15 @@ public class SubcategoriesActivity extends AppCompatActivity {
     private int mCategoryId;
     private int mSubcategoryId;
 
-    private AppContainer appContainer;
-
+    private DataRepository dataRepository;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivitySubcategoriesBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        appContainer = ((MyApplication) getApplication()).appContainer;
+        AppContainer appContainer = ((MyApplication) getApplication()).appContainer;
+        dataRepository = appContainer.dataRepository;
 
         mCategoryId = getIntent().getIntExtra("category_id", -1);
         mSubcategoryId = getIntent().getIntExtra("subcategory_id", -1);
@@ -49,7 +49,7 @@ public class SubcategoriesActivity extends AppCompatActivity {
         binding.progressBar.setVisibility(View.VISIBLE);
         binding.imageViewRefresh.setVisibility(View.GONE);
 
-        appContainer.dataRepository.getAllCategories(new DataRepository.CategoriesResponseListener() {
+        dataRepository.getAllCategories(new DataRepository.CategoriesResponseListener() {
             @Override
             public void onResponse(ArrayList<Category> categories) {
 
@@ -105,7 +105,7 @@ public class SubcategoriesActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        appContainer = null;
+        dataRepository = null;
         binding = null;
     }
 }

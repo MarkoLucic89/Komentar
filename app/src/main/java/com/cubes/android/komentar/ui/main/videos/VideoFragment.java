@@ -30,7 +30,7 @@ public class VideoFragment extends Fragment implements NewsListener {
     private int nextPage = 1;
     private VideosAdapter adapter;
 
-    private AppContainer appContainer;
+    private DataRepository dataRepository;
 
     public VideoFragment() {
         // Required empty public constructor
@@ -45,7 +45,8 @@ public class VideoFragment extends Fragment implements NewsListener {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        appContainer = ((MyApplication) getActivity().getApplication()).appContainer;
+        AppContainer appContainer = ((MyApplication) getActivity().getApplication()).appContainer;
+        dataRepository = appContainer.dataRepository;
     }
 
     @Override
@@ -105,7 +106,7 @@ public class VideoFragment extends Fragment implements NewsListener {
     @Override
     public void loadNextPage() {
 
-        appContainer.dataRepository.getVideos(nextPage, new DataRepository.VideosResponseListener() {
+        dataRepository.getVideos(nextPage, new DataRepository.VideosResponseListener() {
 
             @Override
             public void onVideosResponse(ArrayList<News> newsList, boolean hasNextPage) {
@@ -154,7 +155,7 @@ public class VideoFragment extends Fragment implements NewsListener {
     public void onDestroy() {
         super.onDestroy();
         binding = null;
-        appContainer = null;
+        dataRepository = null;
 
     }
 }

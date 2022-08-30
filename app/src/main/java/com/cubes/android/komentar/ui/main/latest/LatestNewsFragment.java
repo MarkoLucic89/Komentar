@@ -12,10 +12,10 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.cubes.android.komentar.data.DataRepository;
-import com.cubes.android.komentar.di.AppContainer;
-import com.cubes.android.komentar.di.MyApplication;
 import com.cubes.android.komentar.data.model.domain.News;
 import com.cubes.android.komentar.databinding.FragmentLatestNewsBinding;
+import com.cubes.android.komentar.di.AppContainer;
+import com.cubes.android.komentar.di.MyApplication;
 import com.cubes.android.komentar.ui.detail.DetailsActivity;
 import com.cubes.android.komentar.ui.tools.MyMethodsClass;
 
@@ -29,8 +29,7 @@ public class LatestNewsFragment extends Fragment implements NewsListener {
 
     private int nextPage = 1;
 
-    private AppContainer appContainer;
-
+    private DataRepository dataRepository;
 
     public LatestNewsFragment() {
         // Required empty public constructor
@@ -45,7 +44,8 @@ public class LatestNewsFragment extends Fragment implements NewsListener {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        appContainer = ((MyApplication) getActivity().getApplication()).appContainer;
+        AppContainer appContainer = ((MyApplication) getActivity().getApplication()).appContainer;
+        dataRepository = appContainer.dataRepository;
     }
 
     @Override
@@ -146,7 +146,8 @@ public class LatestNewsFragment extends Fragment implements NewsListener {
     @Override
     public void loadNextPage() {
 
-        appContainer.dataRepository.getLatestNews(nextPage, new DataRepository.LatestResponseListener() {
+
+        dataRepository.getLatestNews(nextPage, new DataRepository.LatestResponseListener() {
 
             @Override
             public void onResponse(ArrayList<News> newsList, boolean hasMorePages) {
@@ -199,7 +200,7 @@ public class LatestNewsFragment extends Fragment implements NewsListener {
     public void onDestroy() {
         super.onDestroy();
         binding = null;
-        appContainer = null;
+        dataRepository = null;
 
     }
 }

@@ -16,14 +16,13 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.cubes.android.komentar.data.DataRepository;
-import com.cubes.android.komentar.di.AppContainer;
-import com.cubes.android.komentar.di.MyApplication;
 import com.cubes.android.komentar.data.model.domain.NewsComment;
 import com.cubes.android.komentar.data.model.domain.NewsCommentVote;
 import com.cubes.android.komentar.data.model.domain.NewsDetails;
 import com.cubes.android.komentar.data.source.local.SharedPrefs;
-import com.cubes.android.komentar.data.source.local.database.NewsDatabase;
 import com.cubes.android.komentar.databinding.FragmentDetailsBinding;
+import com.cubes.android.komentar.di.AppContainer;
+import com.cubes.android.komentar.di.MyApplication;
 import com.cubes.android.komentar.ui.comments.CommentsActivity;
 import com.cubes.android.komentar.ui.comments.CommentsAdapter;
 import com.cubes.android.komentar.ui.main.latest.NewsListener;
@@ -57,7 +56,7 @@ public class DetailsFragment extends Fragment implements
 
     private ArrayList<NewsCommentVote> mVotes = new ArrayList<>();
 
-    private AppContainer appContainer;
+    private DataRepository dataRepository;
 
     public interface DetailsListener {
 
@@ -95,7 +94,8 @@ public class DetailsFragment extends Fragment implements
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(getContext());
 
-        appContainer = ((MyApplication) getActivity().getApplication()).appContainer;
+        AppContainer appContainer = ((MyApplication) getActivity().getApplication()).appContainer;
+        dataRepository = appContainer.dataRepository;
 
     }
 
@@ -126,7 +126,7 @@ public class DetailsFragment extends Fragment implements
 
     private void refreshNewsDetails() {
 
-        appContainer.dataRepository.getNewsDetails(mNewsId, new DataRepository.DetailResponseListener() {
+        dataRepository.getNewsDetails(mNewsId, new DataRepository.DetailResponseListener() {
             @Override
             public void onResponse(NewsDetails newsDetails) {
 
@@ -175,7 +175,7 @@ public class DetailsFragment extends Fragment implements
         super.onDestroy();
         this.listener = null;
         binding = null;
-        appContainer = null;
+        dataRepository = null;
     }
 
 
@@ -189,7 +189,7 @@ public class DetailsFragment extends Fragment implements
 
         binding.imageViewRefresh.setVisibility(View.GONE);
 
-        appContainer.dataRepository.getNewsDetails(mNewsId, new DataRepository.DetailResponseListener() {
+        dataRepository.getNewsDetails(mNewsId, new DataRepository.DetailResponseListener() {
             @Override
             public void onResponse(NewsDetails newsDetails) {
 
@@ -197,16 +197,15 @@ public class DetailsFragment extends Fragment implements
                 binding.imageViewRefresh.setVisibility(View.GONE);
                 binding.recyclerView.setVisibility(View.VISIBLE);
 
-                logNewsNameToAnalytics(newsDetails.id);
-
                 mNewsId = newsDetails.id;
                 mNewsUrl = newsDetails.url;
 
+                listener.onDetailsResponseListener(mNewsId, mNewsUrl);
+
                 Bundle bundle = new Bundle();
                 bundle.putString("news_title", newsDetails.title);
-                FirebaseAnalytics.getInstance(getContext()).logEvent("news", bundle);
+                mFirebaseAnalytics.logEvent("news", bundle);
 
-                listener.onDetailsResponseListener(mNewsId, mNewsUrl);
 
                 getCommentVotes(newsDetails.commentsTop);
 
@@ -227,15 +226,6 @@ public class DetailsFragment extends Fragment implements
             }
         });
     }
-
-    private void logNewsNameToAnalytics(int id) {
-
-        Bundle bundle = new Bundle();
-        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, String.valueOf(id));
-        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
-
-    }
-
 
     private void getCommentVotes(ArrayList<NewsComment> comments) {
 
@@ -309,9 +299,28 @@ public class DetailsFragment extends Fragment implements
     @Override
     public void onLikeListener(int id, boolean vote) {
 
-        appContainer.dataRepository.likeComment(id, vote, new DataRepository.CommentsVoteListener() {
+        dataRepository.likeComment(id, vote, new DataRepository.CommentsVoteListener() {
             @Override
             public void onResponse(NewsCommentVote response) {
+
+                //ROOM
+
+//                ExecutorService service = Executors.newSingleThreadExecutor();
+//                Handler handler = new Handler(Looper.getMainLooper());
+//                service.execute(() -> {
+//
+//                    //doInBackgroundThread
+//                    NewsCommentVote newsCommentVote = new NewsCommentVote(String.valueOf(id), vote);
+//                    NewsDatabase.getInstance(binding.getRoot().getContext()).voteDao().insert(newsCommentVote);
+//
+//                    //onPostExecute
+//                    handler.post(() -> adapter.commentLiked(id, vote));
+//                });
+//
+//                service.shutdown();
+
+
+                //SHARED PREFS
 
                 ExecutorService service = Executors.newSingleThreadExecutor();
                 Handler handler = new Handler(Looper.getMainLooper());
@@ -319,10 +328,12 @@ public class DetailsFragment extends Fragment implements
 
                     //doInBackgroundThread
                     NewsCommentVote newsCommentVote = new NewsCommentVote(String.valueOf(id), vote);
-                    NewsDatabase.getInstance(binding.getRoot().getContext()).voteDao().insert(newsCommentVote);
+                    mVotes.add(newsCommentVote);
+                    SharedPrefs.writeListInPref(getActivity(), mVotes);
 
                     //onPostExecute
                     handler.post(() -> adapter.commentLiked(id, vote));
+
                 });
 
                 service.shutdown();
@@ -339,17 +350,37 @@ public class DetailsFragment extends Fragment implements
     @Override
     public void onDislikeListener(int id, boolean vote) {
 
-        appContainer.dataRepository.dislikeComment(id, vote, new DataRepository.CommentsVoteListener() {
+        dataRepository.dislikeComment(id, vote, new DataRepository.CommentsVoteListener() {
             @Override
             public void onResponse(NewsCommentVote response) {
+
+                //ROOM
+
+//                ExecutorService service = Executors.newSingleThreadExecutor();
+//                Handler handler = new Handler(Looper.getMainLooper());
+//                service.execute(() -> {
+//
+//                    //doInBackgroundThread
+//                    NewsCommentVote newsCommentVote = new NewsCommentVote(String.valueOf(id), false);
+//                    NewsDatabase.getInstance(binding.getRoot().getContext()).voteDao().insert(newsCommentVote);
+//
+//                    //onPostExecute
+//                    handler.post(() -> adapter.commentDisliked(id, vote));
+//
+//                });
+//
+//                service.shutdown();
+
+                //SHARED PREFS
 
                 ExecutorService service = Executors.newSingleThreadExecutor();
                 Handler handler = new Handler(Looper.getMainLooper());
                 service.execute(() -> {
 
                     //doInBackgroundThread
-                    NewsCommentVote newsCommentVote = new NewsCommentVote(String.valueOf(id), false);
-                    NewsDatabase.getInstance(binding.getRoot().getContext()).voteDao().insert(newsCommentVote);
+                    NewsCommentVote newsCommentVote = new NewsCommentVote(String.valueOf(id), vote);
+                    mVotes.add(newsCommentVote);
+                    SharedPrefs.writeListInPref(getActivity(), mVotes);
 
                     //onPostExecute
                     handler.post(() -> adapter.commentDisliked(id, vote));

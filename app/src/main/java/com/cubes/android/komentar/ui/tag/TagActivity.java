@@ -26,7 +26,7 @@ public class TagActivity extends AppCompatActivity implements NewsListener {
     private int nextPage = 1;
     private TagAdapter adapter;
 
-    private AppContainer appContainer;
+    private DataRepository dataRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +34,8 @@ public class TagActivity extends AppCompatActivity implements NewsListener {
         binding = ActivityTagBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        appContainer = ((MyApplication) getApplication()).appContainer;
+        AppContainer appContainer = ((MyApplication) getApplication()).appContainer;
+        dataRepository = appContainer.dataRepository;
 
         tagId = getIntent().getIntExtra("tag_id", -1);
         String tagTitle = getIntent().getStringExtra("tag_title");
@@ -64,7 +65,7 @@ public class TagActivity extends AppCompatActivity implements NewsListener {
 
         nextPage = 1;
 
-        appContainer.dataRepository.getNewsForTag(tagId, nextPage, new DataRepository.TagResponseListener() {
+        dataRepository.getNewsForTag(tagId, nextPage, new DataRepository.TagResponseListener() {
 
             @Override
             public void onResponse(ArrayList<News> newsList, boolean hasMorePages) {
@@ -107,7 +108,7 @@ public class TagActivity extends AppCompatActivity implements NewsListener {
     @Override
     public void loadNextPage() {
 
-        appContainer.dataRepository.getNewsForTag(tagId, nextPage, new DataRepository.TagResponseListener() {
+        dataRepository.getNewsForTag(tagId, nextPage, new DataRepository.TagResponseListener() {
 
             @Override
             public void onResponse(ArrayList<News> newsList, boolean hasMorePages) {
@@ -170,6 +171,6 @@ public class TagActivity extends AppCompatActivity implements NewsListener {
     protected void onDestroy() {
         super.onDestroy();
         binding = null;
-        appContainer = null;
+        dataRepository = null;
     }
 }

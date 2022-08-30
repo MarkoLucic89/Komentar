@@ -39,8 +39,7 @@ public class SearchFragment extends Fragment implements NewsListener {
 
     private int nextPage = 1;
 
-    private AppContainer appContainer;
-
+    private DataRepository dataRepository;
 
     public SearchFragment() {
         // Required empty public constructor
@@ -55,7 +54,8 @@ public class SearchFragment extends Fragment implements NewsListener {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        appContainer = ((MyApplication) getActivity().getApplication()).appContainer;
+        AppContainer appContainer = ((MyApplication) getActivity().getApplication()).appContainer;
+        dataRepository = appContainer.dataRepository;
     }
 
     @Override
@@ -150,7 +150,7 @@ public class SearchFragment extends Fragment implements NewsListener {
 
         Log.d(TAG, "loadNextPage: " + nextPage);
 
-        appContainer.dataRepository.searchNews(searchTerm, nextPage, new DataRepository.SearchResponseListener() {
+        dataRepository.searchNews(searchTerm, nextPage, new DataRepository.SearchResponseListener() {
 
 
             @Override
@@ -212,7 +212,7 @@ public class SearchFragment extends Fragment implements NewsListener {
     public void onDestroy() {
         super.onDestroy();
         binding = null;
-        appContainer = null;
+        dataRepository = null;
 
     }
 }

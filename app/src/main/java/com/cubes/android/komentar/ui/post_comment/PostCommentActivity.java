@@ -18,7 +18,7 @@ public class PostCommentActivity extends AppCompatActivity {
     private int newsId;
     private int replyId;
 
-    private AppContainer appContainer;
+    private DataRepository dataRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,7 +26,8 @@ public class PostCommentActivity extends AppCompatActivity {
         binding = ActivityPostCommentBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        appContainer = ((MyApplication) getApplication()).appContainer;
+        AppContainer appContainer = ((MyApplication) getApplication()).appContainer;
+        dataRepository = appContainer.dataRepository;
 
         newsId = getIntent().getIntExtra("news", 0);
         replyId = getIntent().getIntExtra("reply_id", 0);
@@ -64,7 +65,7 @@ public class PostCommentActivity extends AppCompatActivity {
                 content
         );
 
-        appContainer.dataRepository.postComment(newsCommentInsert, new DataRepository.PostCommentResponseListener() {
+        dataRepository.postComment(newsCommentInsert, new DataRepository.PostCommentResponseListener() {
             @Override
             public void onResponse(NewsCommentInsertApi response) {
                 Toast.makeText(PostCommentActivity.this, "Komentar je uspešno unet.", Toast.LENGTH_SHORT).show();
@@ -117,7 +118,7 @@ public class PostCommentActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         binding = null;
-        appContainer = null;
+        dataRepository = null;
 
     }
 }

@@ -34,7 +34,6 @@ public class NewsListActivity extends AppCompatActivity {
 
         addStickyAd();
 
-
     }
 
     private void addStickyAd() {

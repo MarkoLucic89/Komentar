@@ -40,8 +40,7 @@ public class CategoryNewsFragment extends Fragment implements NewsListener {
 
     private FirebaseAnalytics mFirebaseAnalytics;
 
-    private AppContainer appContainer;
-
+    private DataRepository dataRepository;
 
     public CategoryNewsFragment() {
         // Required empty public constructor
@@ -65,7 +64,8 @@ public class CategoryNewsFragment extends Fragment implements NewsListener {
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(getContext());
 
-        appContainer = ((MyApplication) getActivity().getApplication()).appContainer;
+        AppContainer appContainer = ((MyApplication) getActivity().getApplication()).appContainer;
+        dataRepository = appContainer.dataRepository;
 
     }
 
@@ -125,7 +125,7 @@ public class CategoryNewsFragment extends Fragment implements NewsListener {
     @Override
     public void loadNextPage() {
 
-        appContainer.dataRepository.getNewsForCategory(mCategoryId, nextPage, new DataRepository.CategoryNewsResponseListener() {
+        dataRepository.getNewsForCategory(mCategoryId, nextPage, new DataRepository.CategoryNewsResponseListener() {
 
             @Override
             public void onResponse(ArrayList<News> newsList, boolean hasMorePages) {
@@ -197,7 +197,7 @@ public class CategoryNewsFragment extends Fragment implements NewsListener {
         super.onDestroy();
 
         binding = null;
-        appContainer = null;
+        dataRepository = null;
 
     }
 }

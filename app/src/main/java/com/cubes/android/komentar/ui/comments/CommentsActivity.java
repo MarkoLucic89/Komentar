@@ -9,12 +9,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.cubes.android.komentar.data.DataRepository;
-import com.cubes.android.komentar.di.AppContainer;
-import com.cubes.android.komentar.di.MyApplication;
 import com.cubes.android.komentar.data.model.domain.NewsComment;
 import com.cubes.android.komentar.data.model.domain.NewsCommentVote;
 import com.cubes.android.komentar.data.source.local.SharedPrefs;
 import com.cubes.android.komentar.databinding.ActivityCommentsBinding;
+import com.cubes.android.komentar.di.AppContainer;
+import com.cubes.android.komentar.di.MyApplication;
 import com.cubes.android.komentar.ui.post_comment.PostCommentActivity;
 
 import java.util.ArrayList;
@@ -28,9 +28,9 @@ public class CommentsActivity extends AppCompatActivity {
     private ActivityCommentsBinding binding;
     private int news_id;
     private CommentsAdapter adapter;
-    private List<NewsCommentVote> mVotes = new ArrayList<>();
+    private final List<NewsCommentVote> mVotes = new ArrayList<>();
 
-    private AppContainer appContainer;
+    private DataRepository dataRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +38,8 @@ public class CommentsActivity extends AppCompatActivity {
         binding = ActivityCommentsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        appContainer = ((MyApplication) getApplication()).appContainer;
+        AppContainer appContainer = ((MyApplication) getApplication()).appContainer;
+        dataRepository = appContainer.dataRepository;
 
         news_id = getIntent().getIntExtra("news_id", -1);
 
@@ -57,7 +58,7 @@ public class CommentsActivity extends AppCompatActivity {
 
     private void refreshList() {
 
-        appContainer.dataRepository.getComments(news_id, new DataRepository.CommentsResponseListener() {
+        dataRepository.getComments(news_id, new DataRepository.CommentsResponseListener() {
 
             @Override
             public void onResponse(ArrayList<NewsComment> comments) {
@@ -94,7 +95,7 @@ public class CommentsActivity extends AppCompatActivity {
         binding.imageViewRefresh.setVisibility(View.GONE);
         binding.progressBar.setVisibility(View.VISIBLE);
 
-        appContainer.dataRepository.getComments(news_id, new DataRepository.CommentsResponseListener() {
+        dataRepository.getComments(news_id, new DataRepository.CommentsResponseListener() {
 
             @Override
             public void onResponse(ArrayList<NewsComment> comments) {
@@ -231,7 +232,7 @@ public class CommentsActivity extends AppCompatActivity {
 
     private void likeComment(int id, boolean vote) {
 
-        appContainer.dataRepository.likeComment(id, vote, new DataRepository.CommentsVoteListener() {
+        dataRepository.likeComment(id, vote, new DataRepository.CommentsVoteListener() {
             @Override
             public void onResponse(NewsCommentVote response) {
 
@@ -280,7 +281,7 @@ public class CommentsActivity extends AppCompatActivity {
 
     private void dislikeComment(int id, boolean vote) {
 
-        appContainer.dataRepository.dislikeComment(id, vote, new DataRepository.CommentsVoteListener() {
+        dataRepository.dislikeComment(id, vote, new DataRepository.CommentsVoteListener() {
             @Override
             public void onResponse(NewsCommentVote response) {
 
@@ -332,7 +333,7 @@ public class CommentsActivity extends AppCompatActivity {
         super.onDestroy();
 
         binding = null;
-        appContainer = null;
+        dataRepository = null;
 
     }
 

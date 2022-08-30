@@ -14,11 +14,11 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.cubes.android.komentar.data.DataRepository;
-import com.cubes.android.komentar.di.AppContainer;
-import com.cubes.android.komentar.di.MyApplication;
 import com.cubes.android.komentar.data.model.domain.Category;
 import com.cubes.android.komentar.data.source.local.SharedPrefs;
 import com.cubes.android.komentar.databinding.FragmentHomeBinding;
+import com.cubes.android.komentar.di.AppContainer;
+import com.cubes.android.komentar.di.MyApplication;
 import com.cubes.android.komentar.ui.main.home.drawer_menu.DrawerAdapter;
 import com.cubes.android.komentar.ui.main.home.drawer_menu.OnCategoryClickListener;
 import com.cubes.android.komentar.ui.main.home.drawer_menu.rv_item_drawer.RvItemModelDrawerOther;
@@ -37,8 +37,7 @@ public class HomeFragment extends Fragment implements OnCategoryClickListener, R
 
     private DrawerAdapter adapter;
 
-    private AppContainer appContainer;
-
+    private DataRepository dataRepository;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -55,7 +54,8 @@ public class HomeFragment extends Fragment implements OnCategoryClickListener, R
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        appContainer = ((MyApplication) getActivity().getApplication()).appContainer;
+        AppContainer appContainer = ((MyApplication) getActivity().getApplication()).appContainer;
+        dataRepository = appContainer.dataRepository;
     }
 
     @Override
@@ -96,7 +96,7 @@ public class HomeFragment extends Fragment implements OnCategoryClickListener, R
 
     private void getAllCategories() {
 
-        appContainer.dataRepository.getAllCategories(new DataRepository.CategoriesResponseListener() {
+        dataRepository.getAllCategories(new DataRepository.CategoriesResponseListener() {
             @Override
             public void onResponse(ArrayList<Category> categories) {
 
@@ -162,7 +162,7 @@ public class HomeFragment extends Fragment implements OnCategoryClickListener, R
     public void onDestroy() {
         super.onDestroy();
         binding = null;
-        appContainer = null;
+        dataRepository = null;
 
     }
 
