@@ -29,8 +29,10 @@ import java.util.ArrayList;
 public class CategoryNewsFragment extends Fragment implements NewsListener {
 
     private static final String ARG_CATEGORY_ID = "category_id";
+    private static final String ARG_IS_SUBCATEGORY= "is_subcategpry";
 
     private int mCategoryId;
+    private boolean mIsSubcategory;
 
     private FragmentCategoryBinding binding;
 
@@ -46,10 +48,11 @@ public class CategoryNewsFragment extends Fragment implements NewsListener {
         // Required empty public constructor
     }
 
-    public static CategoryNewsFragment newInstance(int categoryId) {
+    public static CategoryNewsFragment newInstance(int categoryId, boolean isSubcategory) {
         CategoryNewsFragment fragment = new CategoryNewsFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_CATEGORY_ID, categoryId);
+        args.putBoolean(ARG_IS_SUBCATEGORY, isSubcategory);
         fragment.setArguments(args);
         fragment.mCategoryId = categoryId;
         return fragment;
@@ -60,6 +63,7 @@ public class CategoryNewsFragment extends Fragment implements NewsListener {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mCategoryId = getArguments().getInt(ARG_CATEGORY_ID);
+            mIsSubcategory = getArguments().getBoolean(ARG_IS_SUBCATEGORY);
         }
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(getContext());
@@ -138,22 +142,19 @@ public class CategoryNewsFragment extends Fragment implements NewsListener {
 
                     categoryAdapter.updateList(newsList, hasMorePages);
 
-                    Category category = newsList.get(0).category;
-
-                    if (category.type.equalsIgnoreCase("category")) {
+                    if (mIsSubcategory) {
 
                         Bundle bundle = new Bundle();
-                        bundle.putString("category_name", newsList.get(0).category.name);
-                        mFirebaseAnalytics.logEvent("categories", bundle);
+                        bundle.putString("Potkategorije", newsList.get(0).category.name);
+                        mFirebaseAnalytics.logEvent("android_komentar", bundle);
 
                     } else {
 
                         Bundle bundle = new Bundle();
-                        bundle.putString("subcategory_name", newsList.get(0).category.name);
-                        mFirebaseAnalytics.logEvent("subcategories", bundle);
+                        bundle.putString("Kategorije", newsList.get(0).category.name);
+                        mFirebaseAnalytics.logEvent("android_komentar", bundle);
 
                     }
-
 
                 } else {
                     categoryAdapter.addNextPage(newsList, hasMorePages);

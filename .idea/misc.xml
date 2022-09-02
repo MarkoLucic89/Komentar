@@ -58,12 +58,15 @@
         <entry key="..\:/Users/User/AndroidStudioProjects/Komentar/app/src/main/res/layout/rv_item_videos.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/User/AndroidStudioProjects/Komentar/app/src/main/res/layout/vp_item_home_slider.xml" value="0.36102564102564105" />
         <entry key="..\:/Users/User/AndroidStudioProjects/Komentar/app/src/main/res/menu/menu_items_list.xml" value="0.36666666666666664" />
+        <entry key="app/src/main/res/drawable-v24/ic_launcher_komentarrs_foreground.xml" value="0.2175" />
         <entry key="app/src/main/res/drawable/background_search.xml" value="0.2195" />
+        <entry key="app/src/main/res/drawable/ic_launcher_komentarrs_background.xml" value="0.2175" />
         <entry key="app/src/main/res/layout/activity_category.xml" value="0.3703125" />
         <entry key="app/src/main/res/layout/activity_comments.xml" value="0.3703125" />
         <entry key="app/src/main/res/layout/activity_details.xml" value="0.36018518518518516" />
         <entry key="app/src/main/res/layout/activity_news_details.xml" value="0.3703125" />
         <entry key="app/src/main/res/layout/activity_news_list.xml" value="0.35625" />
+        <entry key="app/src/main/res/layout/activity_post_comment.xml" value="0.35625" />
         <entry key="app/src/main/res/layout/activity_splash_screen.xml" value="0.3703125" />
         <entry key="app/src/main/res/layout/activity_subcategories.xml" value="0.3703125" />
         <entry key="app/src/main/res/layout/activity_tag.xml" value="0.3641025641025641" />
@@ -72,6 +75,7 @@
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.3703125" />
         <entry key="app/src/main/res/layout/fragment_home_pager.xml" value="0.3277777777777778" />
         <entry key="app/src/main/res/layout/fragment_latest_news.xml" value="0.3703125" />
+        <entry key="app/src/main/res/layout/fragment_news_details.xml" value="0.35625" />
         <entry key="app/src/main/res/layout/fragment_probni.xml" value="0.3646153846153846" />
         <entry key="app/src/main/res/layout/fragment_search.xml" value="0.36203703703703705" />
         <entry key="app/src/main/res/layout/fragment_video.xml" value="0.3703125" />
@@ -87,17 +91,24 @@
         <entry key="app/src/main/res/layout/rv_item_details_tags.xml" value="0.2796296296296296" />
         <entry key="app/src/main/res/layout/rv_item_details_title.xml" value="0.2796296296296296" />
         <entry key="app/src/main/res/layout/rv_item_details_web_view.xml" value="0.35625" />
+        <entry key="app/src/main/res/layout/rv_item_drawer_other.xml" value="0.35285359801488836" />
         <entry key="app/src/main/res/layout/rv_item_drawer_subcategory.xml" value="0.3703125" />
         <entry key="app/src/main/res/layout/rv_item_home_category_box.xml" value="0.3703125" />
         <entry key="app/src/main/res/layout/rv_item_home_category_title.xml" value="0.3703125" />
+        <entry key="app/src/main/res/layout/rv_item_home_slider.xml" value="0.19010416666666666" />
         <entry key="app/src/main/res/layout/rv_item_home_tabs.xml" value="0.35625" />
         <entry key="app/src/main/res/layout/rv_item_home_tabs_news.xml" value="0.35625" />
         <entry key="app/src/main/res/layout/rv_item_loading.xml" value="0.3703125" />
         <entry key="app/src/main/res/layout/rv_item_loading_videos.xml" value="0.21875" />
         <entry key="app/src/main/res/layout/rv_item_refresh.xml" value="0.3703125" />
         <entry key="app/src/main/res/layout/rv_item_refresh_videos.xml" value="0.3453125" />
+        <entry key="app/src/main/res/layout/rv_item_tag.xml" value="0.3703125" />
         <entry key="app/src/main/res/layout/rv_item_videos.xml" value="0.3703125" />
+        <entry key="app/src/main/res/layout/vp_item_home_slider.xml" value="0.3703125" />
         <entry key="app/src/main/res/menu/menu_items_list.xml" value="0.35625" />
+        <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.1205" />
+        <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher_komentarrs.xml" value="0.1205" />
+        <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.1205" />
       </map>
     </option>
   </component>

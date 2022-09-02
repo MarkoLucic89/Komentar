@@ -33,7 +33,7 @@ public class CategoriesPagerAdapter extends FragmentStateAdapter {
             return LatestNewsFragment.newInstance();
         }
 
-        return CategoryNewsFragment.newInstance(categories.get(position - 2).id);
+        return CategoryNewsFragment.newInstance(categories.get(position - 2).id, false);
     }
 
     @Override

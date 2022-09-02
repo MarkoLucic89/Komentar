@@ -1,4 +1,4 @@
-package com.cubes.android.komentar.ui.currencylist;
+package com.cubes.android.komentar.ui.currency_list;
 
 import androidx.appcompat.app.AppCompatActivity;
 

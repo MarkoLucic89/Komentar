@@ -52,6 +52,12 @@ public class PostCommentActivity extends AppCompatActivity {
             return;
         }
 
+        if (!isEmailValid(email)) {
+            Toast.makeText(this, "E-mail adresa je neispravna, pokušajte ponovo", Toast.LENGTH_SHORT).show();
+            binding.editTextEmail.getText().clear();
+            return;
+        }
+
         if (content.length() < 1) {
             Toast.makeText(this, "Molim vas, unesite komentar", Toast.LENGTH_SHORT).show();
             return;
@@ -112,6 +118,10 @@ public class PostCommentActivity extends AppCompatActivity {
 //                });
 
 
+    }
+
+    private boolean isEmailValid(CharSequence email) {
+        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
 
     @Override

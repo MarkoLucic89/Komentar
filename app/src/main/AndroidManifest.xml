@@ -7,9 +7,9 @@
     <application
         android:name=".di.MyApplication"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/ic_launcher_komentar_round"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/ic_launcher_komentar_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Komentar">
         <activity
@@ -28,7 +28,7 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.currencylist.CurrencyListActivity"
+            android:name=".ui.currency_list.CurrencyListActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
@@ -46,6 +46,7 @@
         <activity
             android:name=".ui.main.NewsListActivity"
             android:exported="false"
+            android:windowSoftInputMode="adjustPan"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.spashscreen.SplashScreenActivity"

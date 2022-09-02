@@ -27,6 +27,7 @@ import com.google.android.material.tabs.TabLayoutMediator;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 
 public class HomeFragment extends Fragment implements OnCategoryClickListener, RvItemModelDrawerOther.OnPushNotificationListener {
@@ -38,6 +39,8 @@ public class HomeFragment extends Fragment implements OnCategoryClickListener, R
     private DrawerAdapter adapter;
 
     private DataRepository dataRepository;
+
+    private boolean isLoading;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -96,6 +99,12 @@ public class HomeFragment extends Fragment implements OnCategoryClickListener, R
 
     private void getAllCategories() {
 
+        if (isLoading) {
+            return;
+        }
+
+        isLoading = true;
+
         dataRepository.getAllCategories(new DataRepository.CategoriesResponseListener() {
             @Override
             public void onResponse(ArrayList<Category> categories) {
@@ -108,6 +117,9 @@ public class HomeFragment extends Fragment implements OnCategoryClickListener, R
 
                 adapter.updateList(categories);
                 initViewPager(categories);
+
+                isLoading = false;
+
             }
 
             @Override
@@ -115,12 +127,19 @@ public class HomeFragment extends Fragment implements OnCategoryClickListener, R
                 binding.progressBar.setVisibility(View.GONE);
                 binding.linearLayoutHome.setVisibility(View.GONE);
                 binding.imageViewRefresh.setVisibility(View.VISIBLE);
+
+                isLoading = false;
+
             }
         });
     }
 
 
     private void initViewPager(ArrayList<Category> categories) {
+
+        if (getActivity() == null) {
+            return;
+        }
 
         pagerAdapter = new CategoriesPagerAdapter(getActivity(), categories);
         binding.viewPager.setAdapter(pagerAdapter);
@@ -162,7 +181,7 @@ public class HomeFragment extends Fragment implements OnCategoryClickListener, R
     public void onDestroy() {
         super.onDestroy();
 //        binding = null;
-        dataRepository = null;
+//        dataRepository = null;
 
     }
 

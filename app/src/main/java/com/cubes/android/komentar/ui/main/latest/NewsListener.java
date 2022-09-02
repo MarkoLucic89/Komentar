@@ -13,4 +13,5 @@ public interface NewsListener {
     default void loadNextPage() {
 
     }
+
 }

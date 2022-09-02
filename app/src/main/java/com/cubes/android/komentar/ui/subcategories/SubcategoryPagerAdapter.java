@@ -24,7 +24,7 @@ public class SubcategoryPagerAdapter extends FragmentStateAdapter {
     @Override
     public Fragment createFragment(int position) {
         Log.d(TAG, "createFragment: POSITION " + position);
-        return CategoryNewsFragment.newInstance(idList[position]);
+        return CategoryNewsFragment.newInstance(idList[position], true);
     }
 
     @Override

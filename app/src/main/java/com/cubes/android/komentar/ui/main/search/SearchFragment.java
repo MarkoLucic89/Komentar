@@ -124,8 +124,8 @@ public class SearchFragment extends Fragment implements NewsListener {
         }
 
         Bundle bundle = new Bundle();
-        bundle.putString("search_term", searchTerm);
-        FirebaseAnalytics.getInstance(getContext()).logEvent("search_news", bundle);
+        bundle.putString("Pretraga", searchTerm);
+        FirebaseAnalytics.getInstance(getContext()).logEvent("android_komentar", bundle);
 
         loadNextPage();
 
@@ -208,11 +208,11 @@ public class SearchFragment extends Fragment implements NewsListener {
 
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        binding = null;
-        dataRepository = null;
-
-    }
+//    @Override
+//    public void onDestroy() {
+//        super.onDestroy();
+//        binding = null;
+//        dataRepository = null;
+//
+//    }
 }

@@ -27,6 +27,10 @@ public class HomePagerFragment extends Fragment implements NewsListener {
 
     private AppContainer appContainer;
 
+    private boolean isLoading;
+
+    private int[] mNewsIdList;
+
     public HomePagerFragment() {
         // Required empty public constructor
     }
@@ -100,6 +104,12 @@ public class HomePagerFragment extends Fragment implements NewsListener {
 
     private void sendHomePageRequest() {
 
+        if (isLoading) {
+            return;
+        }
+
+        isLoading = true;
+
         binding.imageViewRefresh.setVisibility(View.GONE);
         binding.progressBar.setVisibility(View.VISIBLE);
 
@@ -111,7 +121,11 @@ public class HomePagerFragment extends Fragment implements NewsListener {
                 binding.progressBar.setVisibility(View.GONE);
                 binding.recyclerView.setVisibility(View.VISIBLE);
 
+                mNewsIdList = MyMethodsClass.initNewsIdListFromHomePage(data);
+
                 adapter.updateList(data);
+
+                isLoading = false;
             }
 
             @Override
@@ -120,6 +134,7 @@ public class HomePagerFragment extends Fragment implements NewsListener {
                 binding.imageViewRefresh.setVisibility(View.VISIBLE);
                 binding.recyclerView.setVisibility(View.GONE);
 
+                isLoading = false;
             }
         });
 
@@ -141,21 +156,22 @@ public class HomePagerFragment extends Fragment implements NewsListener {
 
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        binding = null;
-        appContainer = null;
-
-    }
+//    @Override
+//    public void onDestroy() {
+//        super.onDestroy();
+//        binding = null;
+//        appContainer = null;
+//
+//    }
 
     @Override
     public void onNewsClicked(int newsId, int[] newsIdList) {
 
         Intent intent = new Intent(getContext(), DetailsActivity.class);
         intent.putExtra("news_id", newsId);
-        intent.putExtra("news_id_list", newsIdList);
+        intent.putExtra("news_id_list", mNewsIdList);
         startActivity(intent);
 
     }
+
 }

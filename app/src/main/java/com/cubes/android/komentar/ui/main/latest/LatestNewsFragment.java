@@ -196,11 +196,11 @@ public class LatestNewsFragment extends Fragment implements NewsListener {
 
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        binding = null;
-        dataRepository = null;
-
-    }
+//    @Override
+//    public void onDestroy() {
+//        super.onDestroy();
+//        binding = null;
+//        dataRepository = null;
+//
+//    }
 }

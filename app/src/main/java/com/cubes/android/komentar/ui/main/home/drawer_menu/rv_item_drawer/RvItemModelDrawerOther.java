@@ -7,7 +7,7 @@ import android.view.View;
 
 import com.cubes.android.komentar.R;
 import com.cubes.android.komentar.databinding.RvItemDrawerOtherBinding;
-import com.cubes.android.komentar.ui.currencylist.CurrencyListActivity;
+import com.cubes.android.komentar.ui.currency_list.CurrencyListActivity;
 import com.cubes.android.komentar.ui.horoscope.HoroscopeActivity;
 import com.cubes.android.komentar.ui.main.home.drawer_menu.DrawerAdapter;
 import com.cubes.android.komentar.ui.weather.WeatherActivity;

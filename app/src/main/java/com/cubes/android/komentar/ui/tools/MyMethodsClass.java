@@ -4,6 +4,7 @@ import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 
+import com.cubes.android.komentar.data.model.domain.HomePageData;
 import com.cubes.android.komentar.data.model.domain.News;
 
 import java.util.ArrayList;
@@ -37,4 +38,30 @@ public class MyMethodsClass {
     }
 
 
+    public static int[] initNewsIdListFromHomePage(HomePageData data) {
+
+        ArrayList<News> newsList = new ArrayList<>();
+        addNewsToList(newsList, data.slider);
+        addNewsToList(newsList, data.top);
+        addNewsToList(newsList, data.latest);
+        addNewsToList(newsList, data.mostRead);
+        addNewsToList(newsList, data.mostCommented);
+        for (HomePageData.CategoryBox categoryBox : data.category) {
+            if (categoryBox.title.equalsIgnoreCase("SPORT")) {
+                addNewsToList(newsList, categoryBox.news);
+            }
+        }
+        addNewsToList(newsList, data.editorsChoice);
+        addNewsToList(newsList, data.videos);
+        for (HomePageData.CategoryBox categoryBox : data.category) {
+            addNewsToList(newsList, categoryBox.news);
+        }
+        return MyMethodsClass.initNewsIdList(newsList);
+    }
+
+    private static void addNewsToList(ArrayList<News> newsList, ArrayList<News> newsListApi) {
+        for (News news : newsListApi) {
+            newsList.add(news);
+        }
+    }
 }

@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.cubes.android.komentar.databinding.ActivityDetailsBinding;
 import com.cubes.android.komentar.ui.comments.CommentsActivity;
 
-public class DetailsActivity extends AppCompatActivity implements DetailsFragment.DetailsListener {
+public class DetailsActivity extends AppCompatActivity implements NewsDetailsFragment.DetailsListener {
 
     private ActivityDetailsBinding binding;
     private int mNewsId;
@@ -30,6 +30,7 @@ public class DetailsActivity extends AppCompatActivity implements DetailsFragmen
         for (int i = 0; i < mNewsIdList.length; i++) {
             if (mNewsId == mNewsIdList[i]) {
                 binding.viewPager.setCurrentItem(i);
+                adapter.createFragment(i);
                 break;
             }
         }

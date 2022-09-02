@@ -23,7 +23,6 @@ import com.cubes.android.komentar.ui.tools.MyMethodsClass;
 
 import java.util.ArrayList;
 
-
 public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.VideosViewHolder> {
 
     private ArrayList<ItemModelVideo> itemModels = new ArrayList<>();

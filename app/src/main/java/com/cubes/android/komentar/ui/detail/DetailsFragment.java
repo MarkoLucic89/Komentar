@@ -130,9 +130,6 @@ public class DetailsFragment extends Fragment implements
             @Override
             public void onResponse(NewsDetails newsDetails) {
 
-                binding.recyclerView.setVisibility(View.VISIBLE);
-                binding.imageViewRefresh.setVisibility(View.GONE);
-
                 mNewsId = newsDetails.id;
                 mNewsUrl = newsDetails.url;
 
@@ -141,6 +138,9 @@ public class DetailsFragment extends Fragment implements
                 getCommentVotes(newsDetails.commentsTop);
 
                 adapter.updateList(newsDetails);
+
+                binding.recyclerView.setVisibility(View.VISIBLE);
+                binding.imageViewRefresh.setVisibility(View.GONE);
 
                 binding.swipeRefreshLayout.setRefreshing(false);
 

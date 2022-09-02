@@ -41,8 +41,8 @@ public class TagActivity extends AppCompatActivity implements NewsListener {
         String tagTitle = getIntent().getStringExtra("tag_title");
 
         Bundle bundle = new Bundle();
-        bundle.putString("tags", tagTitle);
-        FirebaseAnalytics.getInstance(this).logEvent("tags", bundle);
+        bundle.putString("Tag", tagTitle);
+        FirebaseAnalytics.getInstance(this).logEvent("android_komentar", bundle);
 
         initRecyclerView();
 

@@ -151,11 +151,13 @@ public class VideoFragment extends Fragment implements NewsListener {
         getContext().startActivity(intent);
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        binding = null;
-        dataRepository = null;
-
-    }
+//    @Override
+//    public void onDestroy() {
+//        super.onDestroy();
+//        if (binding != null) {
+//            binding = null;
+//        }
+//        dataRepository = null;
+//
+//    }
 }

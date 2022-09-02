@@ -121,6 +121,6 @@ public class NewsListActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        binding = null;
+//        binding = null;
     }
 }
