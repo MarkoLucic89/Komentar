@@ -32,7 +32,6 @@ import com.cubes.android.komentar.ui.detail.rv_item_details.RvItemModelDetailsSm
 import com.cubes.android.komentar.ui.detail.rv_item_details.RvItemModelDetailsTags;
 import com.cubes.android.komentar.ui.detail.rv_item_details.RvItemModelDetailsWebView;
 import com.cubes.android.komentar.ui.main.latest.NewsListener;
-import com.cubes.android.komentar.ui.tools.MyMethodsClass;
 
 import java.util.ArrayList;
 
@@ -103,10 +102,8 @@ public class NewsDetailsAdapter extends RecyclerView.Adapter<NewsDetailsAdapter.
 
         list.add(new RvItemModelDetailsHeaderRelatedNews());
 
-        int[] relatedNewsIdList = MyMethodsClass.initNewsIdList(newsDetails.relatedNews);
-
         for (News news : newsDetails.relatedNews) {
-            list.add(new RvItemModelDetailsSmallNews(news, false, newsListener, relatedNewsIdList));
+            list.add(new RvItemModelDetailsSmallNews(news, false, newsListener));
         }
 
         notifyDataSetChanged();

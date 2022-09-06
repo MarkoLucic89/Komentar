@@ -50,6 +50,8 @@ public class DetailsFragment extends Fragment implements
     private int mNewsId;
     private String mNewsUrl;
 
+    private int[] newsIdList;
+
     private NewsDetailsAdapter adapter;
 
     private DetailsListener listener;
@@ -199,6 +201,8 @@ public class DetailsFragment extends Fragment implements
 
                 mNewsId = newsDetails.id;
                 mNewsUrl = newsDetails.url;
+
+                newsIdList = MyMethodsClass.initNewsIdList(newsDetails.relatedNews);
 
                 listener.onDetailsResponseListener(mNewsId, mNewsUrl);
 
@@ -423,10 +427,22 @@ public class DetailsFragment extends Fragment implements
     }
 
     @Override
-    public void onNewsClicked(int newsId, int[] newsIdList) {
+    public void onNewsClicked(int newsId) {
 
         Intent intent = new Intent(getContext(), DetailsActivity.class);
         intent.putExtra("news_id", newsId);
+        intent.putExtra("news_id_list", newsIdList);
+        getContext().startActivity(intent);
+        getActivity().finish();
+
+    }
+
+    @Override
+    public void onNewsClicked(int newsId, int newsPosition) {
+
+        Intent intent = new Intent(getContext(), DetailsActivity.class);
+        intent.putExtra("news_id", newsId);
+        intent.putExtra("news_position", newsPosition);
         intent.putExtra("news_id_list", newsIdList);
         getContext().startActivity(intent);
         getActivity().finish();

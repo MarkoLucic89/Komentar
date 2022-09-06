@@ -31,6 +31,8 @@ public class LatestNewsFragment extends Fragment implements NewsListener {
 
     private DataRepository dataRepository;
 
+    private int[] newsIdList;
+
     public LatestNewsFragment() {
         // Required empty public constructor
     }
@@ -63,9 +65,8 @@ public class LatestNewsFragment extends Fragment implements NewsListener {
         initRecyclerView();
 
         binding.imageViewRefresh.setVisibility(View.GONE);
-        binding.progressBar.setVisibility(View.VISIBLE);
 
-        loadNextPage();
+        refreshAdapter();
 
         binding.imageViewRefresh.setOnClickListener(view1 -> {
 
@@ -84,43 +85,6 @@ public class LatestNewsFragment extends Fragment implements NewsListener {
         nextPage = 1;
 
         loadNextPage();
-//
-//        DataRepository.getInstance().getLatest(nextPage, new DataRepository.LatestResponseListener() {
-//
-//            @Override
-//            public void onResponse(NewsResponseModel.NewsDataResponseModel response) {
-//
-//                binding.recyclerView.setVisibility(View.VISIBLE);
-//                binding.imageViewRefresh.setVisibility(View.GONE);
-//                binding.progressBar.setVisibility(View.GONE);
-//
-//                if (nextPage == 1) {
-//                    categoryAdapter.updateList(response.news);
-//                } else {
-//                    categoryAdapter.addNextPage(response);
-//                }
-//
-//                nextPage++;
-//
-//                binding.swipeRefreshLayout.setRefreshing(false);
-//
-//            }
-//
-//            @Override
-//            public void onFailure(Throwable t) {
-//
-//                if (nextPage == 1) {
-//                    binding.recyclerView.setVisibility(View.GONE);
-//                    binding.imageViewRefresh.setVisibility(View.VISIBLE);
-//                    binding.progressBar.setVisibility(View.GONE);
-//                } else {
-//                    categoryAdapter.addRefresher();
-//                }
-//
-//                binding.swipeRefreshLayout.setRefreshing(false);
-//
-//            }
-//        });
 
     }
 
@@ -130,7 +94,6 @@ public class LatestNewsFragment extends Fragment implements NewsListener {
 
         if (binding.imageViewRefresh.getVisibility() == View.VISIBLE) {
             binding.imageViewRefresh.setVisibility(View.GONE);
-            binding.progressBar.setVisibility(View.VISIBLE);
             loadNextPage();
         }
 
@@ -146,6 +109,7 @@ public class LatestNewsFragment extends Fragment implements NewsListener {
     @Override
     public void loadNextPage() {
 
+        binding.swipeRefreshLayout.setRefreshing(true);
 
         dataRepository.getLatestNews(nextPage, new DataRepository.LatestResponseListener() {
 
@@ -154,7 +118,8 @@ public class LatestNewsFragment extends Fragment implements NewsListener {
 
                 binding.recyclerView.setVisibility(View.VISIBLE);
                 binding.imageViewRefresh.setVisibility(View.GONE);
-                binding.progressBar.setVisibility(View.GONE);
+
+                newsIdList = MyMethodsClass.initNewsIdList(newsList);
 
                 if (nextPage == 1) {
                     categoryAdapter.updateList(newsList, hasMorePages);
@@ -174,7 +139,6 @@ public class LatestNewsFragment extends Fragment implements NewsListener {
                 if (nextPage == 1) {
                     binding.recyclerView.setVisibility(View.GONE);
                     binding.imageViewRefresh.setVisibility(View.VISIBLE);
-                    binding.progressBar.setVisibility(View.GONE);
                 } else {
                     categoryAdapter.addRefresher();
                 }
@@ -187,7 +151,7 @@ public class LatestNewsFragment extends Fragment implements NewsListener {
     }
 
     @Override
-    public void onNewsClicked(int newsId, int[] newsIdList) {
+    public void onNewsClicked(int newsId) {
 
         Intent intent = new Intent(getContext(), DetailsActivity.class);
         intent.putExtra("news_id", newsId);

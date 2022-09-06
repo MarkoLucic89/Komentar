@@ -4,6 +4,8 @@ import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 
+import androidx.cardview.widget.CardView;
+
 import com.cubes.android.komentar.data.model.domain.HomePageData;
 import com.cubes.android.komentar.data.model.domain.News;
 
@@ -41,20 +43,38 @@ public class MyMethodsClass {
     public static int[] initNewsIdListFromHomePage(HomePageData data) {
 
         ArrayList<News> newsList = new ArrayList<>();
+
         addNewsToList(newsList, data.slider);
         addNewsToList(newsList, data.top);
         addNewsToList(newsList, data.latest);
         addNewsToList(newsList, data.mostRead);
         addNewsToList(newsList, data.mostCommented);
-        for (HomePageData.CategoryBox categoryBox : data.category) {
-            if (categoryBox.title.equalsIgnoreCase("SPORT")) {
-                addNewsToList(newsList, categoryBox.news);
+
+        for (int i = 0; i < data.category.size(); i++) {
+            if (data.category.get(i).title.equalsIgnoreCase("SPORT")) {
+                for (int j = 0; j < 5; j++) {
+                    newsList.add(data.category.get(i).news.get(j));
+                }
+                break;
             }
         }
+
+//        for (HomePageData.CategoryBox categoryBox : data.category) {
+//            if (categoryBox.title.equalsIgnoreCase("SPORT")) {
+//                addNewsToList(newsList, categoryBox.news);
+//            }
+//        }
         addNewsToList(newsList, data.editorsChoice);
         addNewsToList(newsList, data.videos);
-        for (HomePageData.CategoryBox categoryBox : data.category) {
-            addNewsToList(newsList, categoryBox.news);
+//        for (HomePageData.CategoryBox categoryBox : data.category) {
+//            addNewsToList(newsList, categoryBox.news);
+//        }
+        for (int i = 0; i < data.category.size(); i++) {
+            if (!data.category.get(i).title.equalsIgnoreCase("SPORT")) {
+                for (int j = 0; j < 5; j++) {
+                    newsList.add(data.category.get(i).news.get(j));
+                }
+            }
         }
         return MyMethodsClass.initNewsIdList(newsList);
     }
@@ -63,5 +83,15 @@ public class MyMethodsClass {
         for (News news : newsListApi) {
             newsList.add(news);
         }
+    }
+
+    public static void startProgressBarAnimation(CardView progressBar) {
+
+        progressBar.animate().scaleX(2f).scaleY(2f).alpha(0f).setDuration(1000).withEndAction(() -> {
+            progressBar.setScaleX(1f);
+            progressBar.setScaleY(1f);
+            progressBar.setAlpha(1f);
+        });
+
     }
 }

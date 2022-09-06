@@ -14,6 +14,7 @@ import com.cubes.android.komentar.data.model.domain.News;
 import com.cubes.android.komentar.databinding.ActivityTagBinding;
 import com.cubes.android.komentar.ui.detail.DetailsActivity;
 import com.cubes.android.komentar.ui.main.latest.NewsListener;
+import com.cubes.android.komentar.ui.tools.MyMethodsClass;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.util.ArrayList;
@@ -25,6 +26,8 @@ public class TagActivity extends AppCompatActivity implements NewsListener {
     private int tagId;
     private int nextPage = 1;
     private TagAdapter adapter;
+
+    private int[] newsIdList;
 
     private DataRepository dataRepository;
 
@@ -46,8 +49,6 @@ public class TagActivity extends AppCompatActivity implements NewsListener {
 
         initRecyclerView();
 
-        binding.progressBar.setVisibility(View.VISIBLE);
-
         loadNextPage();
 
         binding.textViewTitle.setText(tagTitle);
@@ -57,7 +58,6 @@ public class TagActivity extends AppCompatActivity implements NewsListener {
         binding.imageViewRefresh.setOnClickListener(view -> loadNextPage());
 
         binding.swipeRefreshLayout.setOnRefreshListener(this::refreshAdapter);
-
 
     }
 
@@ -70,7 +70,6 @@ public class TagActivity extends AppCompatActivity implements NewsListener {
             @Override
             public void onResponse(ArrayList<News> newsList, boolean hasMorePages) {
 
-                binding.progressBar.setVisibility(View.GONE);
                 binding.recyclerView.setVisibility(View.VISIBLE);
                 binding.imageViewRefresh.setVisibility(View.GONE);
 
@@ -87,7 +86,6 @@ public class TagActivity extends AppCompatActivity implements NewsListener {
                 if (nextPage == 1) {
                     binding.recyclerView.setVisibility(View.GONE);
                     binding.imageViewRefresh.setVisibility(View.VISIBLE);
-                    binding.progressBar.setVisibility(View.GONE);
                 } else {
                     adapter.addRefresher();
                 }
@@ -108,21 +106,23 @@ public class TagActivity extends AppCompatActivity implements NewsListener {
     @Override
     public void loadNextPage() {
 
+        binding.swipeRefreshLayout.setRefreshing(true);
+
         dataRepository.getNewsForTag(tagId, nextPage, new DataRepository.TagResponseListener() {
 
             @Override
             public void onResponse(ArrayList<News> newsList, boolean hasMorePages) {
 
-                binding.progressBar.setVisibility(View.GONE);
                 binding.recyclerView.setVisibility(View.VISIBLE);
                 binding.imageViewRefresh.setVisibility(View.GONE);
+
+                newsIdList = MyMethodsClass.initNewsIdList(newsList);
 
                 if (nextPage == 1) {
                     adapter.updateList(newsList, hasMorePages);
                 } else {
                     adapter.addNextPage(newsList, hasMorePages);
                 }
-
 
                 nextPage++;
 
@@ -135,7 +135,6 @@ public class TagActivity extends AppCompatActivity implements NewsListener {
                 if (nextPage == 1) {
                     binding.recyclerView.setVisibility(View.GONE);
                     binding.imageViewRefresh.setVisibility(View.VISIBLE);
-                    binding.progressBar.setVisibility(View.GONE);
                 } else {
                     adapter.addRefresher();
                 }
@@ -148,7 +147,7 @@ public class TagActivity extends AppCompatActivity implements NewsListener {
     }
 
     @Override
-    public void onNewsClicked(int newsId, int[] newsIdList) {
+    public void onNewsClicked(int newsId) {
 
         Intent intent = new Intent(this, DetailsActivity.class);
         intent.putExtra("news_id", newsId);

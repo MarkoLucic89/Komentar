@@ -60,7 +60,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 
         //BIG ITEM
 
-        itemModels.add(new RvItemModelCategoryBig(newsList.get(0), isOnHomePage, listener, newsIdList));
+        itemModels.add(new RvItemModelCategoryBig(newsList.get(0), isOnHomePage, listener));
 
         //SMALL ITEMS
 
@@ -70,7 +70,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 
 
         for (int i = 1; i < newsList.size(); i++) {
-            itemModels.add(new RvItemModelCategorySmall(newsList.get(i), isOnHomePage, listener, newsIdList));
+            itemModels.add(new RvItemModelCategorySmall(newsList.get(i), isOnHomePage, listener));
         }
 
     }
@@ -131,7 +131,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 
             if (i == 0) {
 
-                itemModels.add(new RvItemModelCategoryBig(news.get(0), false, listener, newsIdList));
+                itemModels.add(new RvItemModelCategoryBig(news.get(0), false, listener));
 
             } else {
 
@@ -143,7 +143,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 
                 }
 
-                itemModels.add(new RvItemModelCategorySmall(news.get(i), false, listener, newsIdList));
+                itemModels.add(new RvItemModelCategorySmall(news.get(i), false, listener));
 
             }
         }
@@ -170,7 +170,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 
         for (int i = 0; i < newsList.size(); i++) {
 
-            itemModels.add(new RvItemModelCategorySmall(newsList.get(i), isOnHomePage, listener, newsIdList));
+            itemModels.add(new RvItemModelCategorySmall(newsList.get(i), isOnHomePage, listener));
 
             if (i == 0 && adCounter < 5) {
 

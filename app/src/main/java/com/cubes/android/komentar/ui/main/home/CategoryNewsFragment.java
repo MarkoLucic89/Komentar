@@ -34,6 +34,8 @@ public class CategoryNewsFragment extends Fragment implements NewsListener {
     private int mCategoryId;
     private boolean mIsSubcategory;
 
+    private int[] newsIdList;
+
     private FragmentCategoryBinding binding;
 
     private CategoryAdapter categoryAdapter;
@@ -86,8 +88,8 @@ public class CategoryNewsFragment extends Fragment implements NewsListener {
 
         initRecyclerView();
 
-        binding.progressBar.setVisibility(View.VISIBLE);
-        binding.imageViewRefresh.setVisibility(View.GONE);
+        binding.swipeRefreshLayout.setRefreshing(true);
+
         loadNextPage();
 
         binding.imageViewRefresh.setOnClickListener(view1 -> {
@@ -112,7 +114,6 @@ public class CategoryNewsFragment extends Fragment implements NewsListener {
         super.onResume();
 
         if (binding.imageViewRefresh.getVisibility() == View.VISIBLE) {
-            binding.progressBar.setVisibility(View.VISIBLE);
             binding.imageViewRefresh.setVisibility(View.GONE);
             loadNextPage();
         }
@@ -136,11 +137,12 @@ public class CategoryNewsFragment extends Fragment implements NewsListener {
 
                 binding.recyclerView.setVisibility(View.VISIBLE);
                 binding.imageViewRefresh.setVisibility(View.GONE);
-                binding.progressBar.setVisibility(View.GONE);
 
                 if (nextPage == 1) {
 
                     categoryAdapter.updateList(newsList, hasMorePages);
+
+                    newsIdList = MyMethodsClass.initNewsIdList(newsList);
 
                     if (mIsSubcategory) {
 
@@ -171,7 +173,6 @@ public class CategoryNewsFragment extends Fragment implements NewsListener {
 
                 if (nextPage == 1) {
                     binding.recyclerView.setVisibility(View.GONE);
-                    binding.progressBar.setVisibility(View.GONE);
                     binding.imageViewRefresh.setVisibility(View.VISIBLE);
                 } else {
                     categoryAdapter.addRefresher();
@@ -184,7 +185,7 @@ public class CategoryNewsFragment extends Fragment implements NewsListener {
     }
 
     @Override
-    public void onNewsClicked(int newsId,  int[] newsIdList) {
+    public void onNewsClicked(int newsId) {
 
         Intent intent = new Intent(getContext(), DetailsActivity.class);
         intent.putExtra("news_id", newsId);

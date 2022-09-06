@@ -52,7 +52,7 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.TagViewHolder> {
                 adsCounter++;
             }
 
-            itemModels.add(new RvItemModelTag(newsList.get(i), listener, newsIdList));
+            itemModels.add(new RvItemModelTag(newsList.get(i), listener));
 
         }
 
@@ -133,7 +133,7 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.TagViewHolder> {
                 adsCounter++;
             }
 
-            itemModels.add(new RvItemModelTag(newsList.get(i), listener, newsIdList));
+            itemModels.add(new RvItemModelTag(newsList.get(i), listener));
 
         }
 

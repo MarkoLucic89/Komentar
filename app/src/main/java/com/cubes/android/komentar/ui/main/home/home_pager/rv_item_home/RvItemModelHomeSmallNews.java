@@ -1,6 +1,7 @@
 package com.cubes.android.komentar.ui.main.home.home_pager.rv_item_home;
 
 import android.graphics.Color;
+import android.util.Log;
 
 import com.cubes.android.komentar.R;
 import com.cubes.android.komentar.data.model.domain.News;
@@ -13,15 +14,19 @@ public class RvItemModelHomeSmallNews implements ItemModelHome {
 
     private News news;
     private NewsListener listener;
+    private int newsPosition;
 
-    private int[] newsIdList;
-
-    public RvItemModelHomeSmallNews(News news, NewsListener listener, int[] newsIdList) {
+    public RvItemModelHomeSmallNews(News news, NewsListener listener) {
 
         this.news = news;
         this.listener = listener;
-        this.newsIdList = newsIdList;
 
+    }
+
+    public RvItemModelHomeSmallNews(News news, NewsListener listener, int newsPosition) {
+        this.news = news;
+        this.listener = listener;
+        this.newsPosition = newsPosition;
     }
 
     @Override
@@ -40,7 +45,11 @@ public class RvItemModelHomeSmallNews implements ItemModelHome {
         binding.textViewCategory.setTextColor(Color.parseColor(news.category.color));
         binding.textViewTime.setText(getTime(news.createdAt));
 
-        holder.binding.getRoot().setOnClickListener(view -> listener.onNewsClicked(news.id, newsIdList));
+        holder.binding.getRoot().setOnClickListener(view -> {
+            listener.onNewsClicked(news.id, newsPosition);
+            Log.d("CATEGORY", "bind: POSITION  " + newsPosition);
+            Log.d("CATEGORY", "bind: TITLE  " + news.title);
+        });
 
     }
 

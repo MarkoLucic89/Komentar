@@ -31,8 +31,6 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.VideosView
 
     private int adsCounter = 0;
 
-    private int[] newsIdList;
-
     public VideosAdapter(NewsListener listener) {
         this.isOnHomePage = false;
         this.listener = listener;
@@ -43,10 +41,8 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.VideosView
         this.isOnHomePage = isOnHomePage;
         this.listener = listener;
 
-        newsIdList = MyMethodsClass.initNewsIdList(newsList);
-
         for (News news : newsList) {
-            itemModels.add(new RvItemModelVideos(news, listener, newsIdList));
+            itemModels.add(new RvItemModelVideos(news, listener));
         }
 
     }
@@ -58,8 +54,6 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.VideosView
 
         itemModels.clear();
 
-        newsIdList = MyMethodsClass.initNewsIdList(newsList);
-
         for (int i = 0; i < newsList.size(); i++) {
 
             if (i > 0 && i % 5 == 0 && adsCounter < 5) {
@@ -68,7 +62,7 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.VideosView
                 adsCounter++;
             }
 
-            itemModels.add(new RvItemModelVideos(newsList.get(i), listener, newsIdList));
+            itemModels.add(new RvItemModelVideos(newsList.get(i), listener));
         }
 
 //        if (hasNextPage) {
@@ -140,8 +134,6 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.VideosView
             itemModels.remove(lastIndex);
         }
 
-        newsIdList = MyMethodsClass.initNewsIdList(newsList);
-
         for (int i = 0; i < newsList.size(); i++) {
 
             if (i % 5 == 0 && adsCounter < 5) {
@@ -150,7 +142,7 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.VideosView
                 adsCounter++;
             }
 
-            itemModels.add(new RvItemModelVideos(newsList.get(i), listener, newsIdList));
+            itemModels.add(new RvItemModelVideos(newsList.get(i), listener));
 
         }
 

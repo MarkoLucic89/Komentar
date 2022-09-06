@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.cubes.android.komentar.data.DataRepository;
 import com.cubes.android.komentar.di.AppContainer;
@@ -17,6 +18,7 @@ import com.cubes.android.komentar.di.MyApplication;
 import com.cubes.android.komentar.data.model.domain.HomePageData;
 import com.cubes.android.komentar.databinding.FragmentHomePagerBinding;
 import com.cubes.android.komentar.ui.detail.DetailsActivity;
+import com.cubes.android.komentar.ui.main.home.home_pager.rv_item_home.ItemModelHome;
 import com.cubes.android.komentar.ui.main.latest.NewsListener;
 import com.cubes.android.komentar.ui.tools.MyMethodsClass;
 
@@ -65,11 +67,11 @@ public class HomePagerFragment extends Fragment implements NewsListener {
         sendHomePageRequest();
 
         binding.imageViewRefresh.setOnClickListener(view1 -> {
-            MyMethodsClass.startRefreshAnimation(binding.imageViewRefresh);
             sendHomePageRequest();
+            MyMethodsClass.startRefreshAnimation(binding.imageViewRefresh);
         });
 
-        binding.swipeRefreshLayout.setOnRefreshListener(() -> refreshListOnSwipe());
+        binding.swipeRefreshLayout.setOnRefreshListener(() -> sendHomePageRequest());
 
     }
 
@@ -111,14 +113,14 @@ public class HomePagerFragment extends Fragment implements NewsListener {
         isLoading = true;
 
         binding.imageViewRefresh.setVisibility(View.GONE);
-        binding.progressBar.setVisibility(View.VISIBLE);
+
+        binding.swipeRefreshLayout.setRefreshing(true);
 
         appContainer.dataRepository.getHomeNews(new DataRepository.HomeResponseListener() {
 
             @Override
             public void onResponse(HomePageData data) {
 
-                binding.progressBar.setVisibility(View.GONE);
                 binding.recyclerView.setVisibility(View.VISIBLE);
 
                 mNewsIdList = MyMethodsClass.initNewsIdListFromHomePage(data);
@@ -126,24 +128,44 @@ public class HomePagerFragment extends Fragment implements NewsListener {
                 adapter.updateList(data);
 
                 isLoading = false;
+
+                binding.swipeRefreshLayout.setRefreshing(false);
+
             }
 
             @Override
             public void onFailure(Throwable t) {
-                binding.progressBar.setVisibility(View.GONE);
                 binding.imageViewRefresh.setVisibility(View.VISIBLE);
                 binding.recyclerView.setVisibility(View.GONE);
 
                 isLoading = false;
+
+                binding.swipeRefreshLayout.setRefreshing(false);
+
             }
         });
 
     }
 
     private void initRecyclerView() {
+
         adapter = new HomePagerAdapter(this);
+
+        binding.recyclerView.setHasFixedSize(true);
+        binding.recyclerView.setItemAnimator(null);
+        binding.recyclerView.setItemViewCacheSize(50);
+
+//        binding.recyclerView.setViewCacheExtension(new RecyclerView.ViewCacheExtension() {
+//            @Nullable
+//            @Override
+//            public View getViewForPositionAndType(@NonNull RecyclerView.Recycler recycler, int position, int type) {
+//                return null;
+//            }
+//        });
+
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.recyclerView.setAdapter(adapter);
+
     }
 
     @Override
@@ -165,10 +187,21 @@ public class HomePagerFragment extends Fragment implements NewsListener {
 //    }
 
     @Override
-    public void onNewsClicked(int newsId, int[] newsIdList) {
+    public void onNewsClicked(int newsId) {
 
         Intent intent = new Intent(getContext(), DetailsActivity.class);
         intent.putExtra("news_id", newsId);
+        intent.putExtra("news_id_list", mNewsIdList);
+        startActivity(intent);
+
+    }
+
+    @Override
+    public void onNewsClicked(int newsId, int newsPosition) {
+
+        Intent intent = new Intent(getContext(), DetailsActivity.class);
+        intent.putExtra("news_id", newsId);
+        intent.putExtra("news_position", newsPosition);
         intent.putExtra("news_id_list", mNewsIdList);
         startActivity(intent);
 

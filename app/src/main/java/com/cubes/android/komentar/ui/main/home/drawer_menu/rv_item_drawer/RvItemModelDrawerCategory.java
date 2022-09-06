@@ -64,21 +64,37 @@ public class RvItemModelDrawerCategory implements ItemModelDrawer {
             binding.imageViewArrow.setVisibility(View.VISIBLE);
         }
 
+//        binding.getRoot().setOnClickListener(view -> {
+//
+//            if (mCategory.subcategories.isEmpty()) {
+//
+//                int categoryIndex = categories.indexOf(mCategory) + 2;
+//
+//                categoryClickListener.onCategoryClicked(categoryIndex);
+//
+//            } else {
+//
+//                isOpen = !isOpen;
+//
+//                arrowClickListener.onArrowClicked(this, mCategory, isOpen);
+//
+//            }
+//        });
+
         binding.getRoot().setOnClickListener(view -> {
 
-            if (mCategory.subcategories.isEmpty()) {
+            int categoryIndex = categories.indexOf(mCategory) + 2;
 
-                int categoryIndex = categories.indexOf(mCategory) + 2;
+            categoryClickListener.onCategoryClicked(categoryIndex);
 
-                categoryClickListener.onCategoryClicked(categoryIndex);
+        });
 
-            } else {
+        binding.imageViewArrow.setOnClickListener(view -> {
 
-                isOpen = !isOpen;
+            isOpen = !isOpen;
 
-                arrowClickListener.onArrowClicked(this, mCategory, isOpen);
+            arrowClickListener.onArrowClicked(this, mCategory, isOpen);
 
-            }
         });
 
     }

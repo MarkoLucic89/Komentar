@@ -319,7 +319,6 @@ public class CommentsActivity extends AppCompatActivity {
                 service.shutdown();
             }
 
-
             @Override
             public void onFailure(Throwable t) {
                 Toast.makeText(CommentsActivity.this, "Komentar nije izglasan, došlo je do greške.", Toast.LENGTH_SHORT).show();

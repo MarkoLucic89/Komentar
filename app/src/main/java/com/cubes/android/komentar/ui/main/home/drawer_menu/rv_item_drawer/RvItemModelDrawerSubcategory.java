@@ -47,7 +47,6 @@ public class RvItemModelDrawerSubcategory implements ItemModelDrawer {
 
         holder.itemView.setOnClickListener(view -> listener.onSubCategoryClicked(parentCategory.id, subcategory.id));
 
-
     }
 
 

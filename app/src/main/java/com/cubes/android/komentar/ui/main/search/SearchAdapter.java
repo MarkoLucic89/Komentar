@@ -52,7 +52,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
                 adsCounter++;
             }
 
-            itemModels.add(new RvItemModelSearch(newsList.get(i), listener, newsIdList));
+            itemModels.add(new RvItemModelSearch(newsList.get(i), listener));
 
         }
 
@@ -133,7 +133,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
                 adsCounter++;
             }
 
-            itemModels.add(new RvItemModelSearch(newsList.get(i), listener, newsIdList));
+            itemModels.add(new RvItemModelSearch(newsList.get(i), listener));
 
         }
 

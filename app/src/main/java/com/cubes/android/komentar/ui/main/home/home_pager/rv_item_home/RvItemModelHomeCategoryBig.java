@@ -16,13 +16,20 @@ public class RvItemModelHomeCategoryBig implements ItemModelHome {
     private boolean isOnHomePage;
     private NewsListener listener;
 
-    private int[] newsIdList;
+    private int newsPosition;
 
-    public RvItemModelHomeCategoryBig(News news, boolean isOnHomePage, NewsListener listener, int[] newsIdList) {
+    public RvItemModelHomeCategoryBig(News news, boolean isOnHomePage, NewsListener listener) {
         this.news = news;
         this.isOnHomePage = isOnHomePage;
         this.listener = listener;
-        this.newsIdList = newsIdList;
+    }
+
+    public RvItemModelHomeCategoryBig(News news, boolean isOnHomePage, NewsListener listener, int newsPosition) {
+        this.news = news;
+        this.isOnHomePage = isOnHomePage;
+        this.listener = listener;
+        this.newsPosition = newsPosition;
+
     }
 
     @Override
@@ -48,7 +55,7 @@ public class RvItemModelHomeCategoryBig implements ItemModelHome {
         binding.textViewCategory.setText(news.category.name);
         binding.textViewTime.setText(MyMethodsClass.convertTime(news.createdAt));
 
-        holder.binding.getRoot().setOnClickListener(view -> listener.onNewsClicked(news.id,  newsIdList));
+        holder.binding.getRoot().setOnClickListener(view -> listener.onNewsClicked(news.id, newsPosition));
 
     }
 

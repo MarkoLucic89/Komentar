@@ -47,7 +47,7 @@ public class HomeTabsAdapter extends RecyclerView.Adapter<HomeTabsAdapter.HomeTa
         holder.binding.textViewTitle.setText(news.title);
         holder.binding.textViewTime.setText(MyMethodsClass.convertTime(news.createdAt));
 
-        holder.binding.getRoot().setOnClickListener(view -> listener.onNewsClicked(news.id,  newsIdList));
+        holder.binding.getRoot().setOnClickListener(view -> listener.onNewsClicked(news.id));
 
     }
 

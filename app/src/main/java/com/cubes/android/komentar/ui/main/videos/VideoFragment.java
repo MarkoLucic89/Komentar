@@ -32,6 +32,8 @@ public class VideoFragment extends Fragment implements NewsListener {
 
     private DataRepository dataRepository;
 
+    private int[] newsIdList;
+
     public VideoFragment() {
         // Required empty public constructor
     }
@@ -65,7 +67,8 @@ public class VideoFragment extends Fragment implements NewsListener {
         initRecyclerView();
 
         binding.imageViewRefresh.setVisibility(View.GONE);
-        binding.progressBar.setVisibility(View.VISIBLE);
+
+        binding.swipeRefreshLayout.setRefreshing(true);
 
         loadNextPage();
 
@@ -76,12 +79,9 @@ public class VideoFragment extends Fragment implements NewsListener {
             loadNextPage();
         });
 
-        binding.swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                nextPage = 1;
-                loadNextPage();
-            }
+        binding.swipeRefreshLayout.setOnRefreshListener(() -> {
+            nextPage = 1;
+            loadNextPage();
         });
 
     }
@@ -112,8 +112,9 @@ public class VideoFragment extends Fragment implements NewsListener {
             public void onVideosResponse(ArrayList<News> newsList, boolean hasNextPage) {
 
                 binding.recyclerView.setVisibility(View.VISIBLE);
-                binding.progressBar.setVisibility(View.GONE);
                 binding.imageViewRefresh.setVisibility(View.GONE);
+
+                newsIdList = MyMethodsClass.initNewsIdList(newsList);
 
                 if (nextPage == 1) {
                     adapter.updateList(newsList, hasNextPage);
@@ -132,7 +133,6 @@ public class VideoFragment extends Fragment implements NewsListener {
                 if (nextPage == 1) {
                     binding.recyclerView.setVisibility(View.GONE);
                     binding.imageViewRefresh.setVisibility(View.VISIBLE);
-                    binding.progressBar.setVisibility(View.GONE);
                 } else {
                     adapter.addRefresher();
                 }
@@ -144,7 +144,7 @@ public class VideoFragment extends Fragment implements NewsListener {
     }
 
     @Override
-    public void onNewsClicked(int newsId, int[] newsIdList) {
+    public void onNewsClicked(int newsId) {
         Intent intent = new Intent(getContext(), DetailsActivity.class);
         intent.putExtra("news_id", newsId);
         intent.putExtra("news_id_list", newsIdList);

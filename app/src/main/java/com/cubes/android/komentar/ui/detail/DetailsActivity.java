@@ -12,6 +12,7 @@ public class DetailsActivity extends AppCompatActivity implements NewsDetailsFra
 
     private ActivityDetailsBinding binding;
     private int mNewsId;
+    private int mNewsPosition;
     private String mNewsUrl;
     private int[] mNewsIdList;
 
@@ -22,15 +23,21 @@ public class DetailsActivity extends AppCompatActivity implements NewsDetailsFra
         setContentView(binding.getRoot());
 
         mNewsId = getIntent().getIntExtra("news_id", -1);
+        mNewsPosition = getIntent().getIntExtra("news_position", -1);
         mNewsIdList = getIntent().getIntArrayExtra("news_id_list");
 
         ViewPagerAdapter adapter = new ViewPagerAdapter(this, mNewsIdList);
         binding.viewPager.setAdapter(adapter);
 
+        binding.viewPager.setOffscreenPageLimit(1);
+
         for (int i = 0; i < mNewsIdList.length; i++) {
             if (mNewsId == mNewsIdList[i]) {
-                binding.viewPager.setCurrentItem(i);
-                adapter.createFragment(i);
+                if (mNewsPosition == -1) {
+                    binding.viewPager.setCurrentItem(i, false);
+                } else {
+                    binding.viewPager.setCurrentItem(mNewsPosition, false);
+                }
                 break;
             }
         }

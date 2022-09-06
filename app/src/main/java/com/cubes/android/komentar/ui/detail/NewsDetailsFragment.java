@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,6 +52,8 @@ public class NewsDetailsFragment extends Fragment implements
         NewsDetailsTagsAdapter.TagListener,
         NewsListener {
 
+    private static final String TAG = "NewsDetailsFragment";
+
     private FragmentNewsDetailsBinding binding;
 
     private FirebaseAnalytics mFirebaseAnalytics;
@@ -59,6 +62,8 @@ public class NewsDetailsFragment extends Fragment implements
 
     private int mNewsId;
     private String mNewsUrl;
+
+    private int[] newsIdList;
 
     private DetailsListener listener;
 
@@ -119,11 +124,13 @@ public class NewsDetailsFragment extends Fragment implements
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        binding.progressBar.setVisibility(View.VISIBLE);
         binding.nestedScrollView.setVisibility(View.GONE);
 
-        getNewsDetails();
+        binding.nestedScrollView.fullScroll(View.FOCUS_DOWN);
+        binding.nestedScrollView.fullScroll(View.FOCUS_UP);
+        binding.nestedScrollView.setSmoothScrollingEnabled(true);
 
+        getNewsDetails();
 
     }
 
@@ -137,35 +144,38 @@ public class NewsDetailsFragment extends Fragment implements
     private void getNewsDetails() {
 
         binding.imageViewRefresh.setVisibility(View.GONE);
+        binding.swipeRefreshLayout.setRefreshing(true);
 
         dataRepository.getNewsDetails(mNewsId, new DataRepository.DetailResponseListener() {
             @Override
             public void onResponse(NewsDetails newsDetails) {
 
+
                 mNewsId = newsDetails.id;
                 mNewsUrl = newsDetails.url;
-
-                listener.onDetailsResponseListener(mNewsId, mNewsUrl);
 
                 Bundle bundle = new Bundle();
                 bundle.putString("Vest", newsDetails.title);
                 mFirebaseAnalytics.logEvent("android_komentar", bundle);
 
+                newsIdList = MyMethodsClass.initNewsIdList(newsDetails.relatedNews);
+
                 getCommentVotes(newsDetails.commentsTop);
 
-                updateList4(newsDetails);
+                updateList(newsDetails);
 
                 setListeners(newsDetails);
 
-                binding.swipeRefreshLayout.setRefreshing(false);
+                Log.d(TAG, "onResponse: " + newsDetails.title);
 
             }
 
             @Override
             public void onFailure(Throwable t) {
 
-                binding.progressBar.setVisibility(View.GONE);
                 binding.imageViewRefresh.setVisibility(View.VISIBLE);
+
+                binding.nestedScrollView.setVisibility(View.GONE);
 
                 binding.swipeRefreshLayout.setRefreshing(false);
 
@@ -182,229 +192,17 @@ public class NewsDetailsFragment extends Fragment implements
             getNewsDetails();
         });
 
-        binding.swipeRefreshLayout.setOnRefreshListener(() -> refreshNewsDetails());
+        binding.swipeRefreshLayout.setOnRefreshListener(() -> getNewsDetails());
 
     }
 
     private void updateList(NewsDetails newsDetails) {
 
-        AdRequest adRequest1 = new AdRequest.Builder().build();
-
-        binding.adView1.loadAd(adRequest1);
-        binding.adView1.setAdListener(new AdListener() {
-            @Override
-            public void onAdLoaded() {
-                super.onAdLoaded();
-
-                String url = "https://komentar.rs/wp-json/api/newswebview?id=" + newsDetails.id + "&version=2";
-
-                binding.webView.loadUrl(url);
-
-                binding.webView.getSettings().setRenderPriority(WebSettings.RenderPriority.HIGH);
-
-
-                binding.webView.setWebViewClient(new WebViewClient() {
-                    @Override
-                    public void onPageFinished(WebView view, String url) {
-
-
-                        AdRequest adRequest2 = new AdRequest.Builder().build();
-                        binding.adView2.loadAd(adRequest2);
-                        binding.adView2.setAdListener(new AdListener() {
-                            @Override
-                            public void onAdLoaded() {
-                                super.onAdLoaded();
-
-
-                                initTagAdapter(newsDetails.tags);
-
-                                binding.textViewTitleComments.setText("KOMENTARI (" + newsDetails.commentsCount + ")");
-
-                                initCommentsAdapter(newsDetails.commentsTop);
-
-                                AdRequest adRequest3 = new AdRequest.Builder().build();
-                                binding.adView3.loadAd(adRequest3);
-                                binding.adView3.setAdListener(new AdListener() {
-                                    @Override
-                                    public void onAdLoaded() {
-                                        super.onAdLoaded();
-
-                                        initRelatedNewsAdapter(newsDetails.relatedNews);
-
-                                        binding.progressBar.setVisibility(View.GONE);
-                                        binding.nestedScrollView.setVisibility(View.VISIBLE);
-                                    }
-                                });
-
-                            }
-                        });
-
-                    }
-                });
-
-            }
-        });
-
-
-    }
-
-    private void updateList2(NewsDetails newsDetails) {
-
-        AdRequest adRequest1 = new AdRequest.Builder().build();
-
-        binding.adView1.loadAd(adRequest1);
-        binding.adView1.setAdListener(new AdListener() {
-            @Override
-            public void onAdLoaded() {
-                super.onAdLoaded();
-
-
-                String url = "https://komentar.rs/wp-json/api/newswebview?id=" + newsDetails.id + "&version=2";
-
-                binding.webView.loadUrl(url);
-
-                binding.webView.getSettings().setRenderPriority(WebSettings.RenderPriority.HIGH);
-
-
-
-
-                binding.webView.setWebViewClient(new WebViewClient() {
-                    @Override
-                    public void onPageFinished(WebView view, String url) {
-
-
-                        AdRequest adRequest2 = new AdRequest.Builder().build();
-                        binding.adView2.loadAd(adRequest2);
-                        binding.adView2.setAdListener(new AdListener() {
-                            @Override
-                            public void onAdLoaded() {
-                                super.onAdLoaded();
-
-
-
-                            }
-                        });
-
-
-                        initTagAdapter(newsDetails.tags);
-
-                        binding.textViewTitleComments.setText("KOMENTARI (" + newsDetails.commentsCount + ")");
-
-                        initCommentsAdapter(newsDetails.commentsTop);
-
-                        AdRequest adRequest3 = new AdRequest.Builder().build();
-                        binding.adView3.loadAd(adRequest3);
-                        binding.adView3.setAdListener(new AdListener() {
-                            @Override
-                            public void onAdLoaded() {
-                                super.onAdLoaded();
-
-
-
-                            }
-                        });
-
-                        initRelatedNewsAdapter(newsDetails.relatedNews);
-
-
-                        binding.progressBar.setVisibility(View.GONE);
-                        binding.nestedScrollView.setVisibility(View.VISIBLE);
-
-                    }
-                });
-
-
-
-            }
-        });
-
-
-    }
-
-    private void updateList3(NewsDetails newsDetails) {
-
-        AdRequest adRequest1 = new AdRequest.Builder().build();
-
-        binding.adView1.loadAd(adRequest1);
-        binding.adView1.setAdListener(new AdListener() {
-            @Override
-            public void onAdLoaded() {
-                super.onAdLoaded();
-
-
-            }
-        });
-
-
         String url = "https://komentar.rs/wp-json/api/newswebview?id=" + newsDetails.id + "&version=2";
 
         binding.webView.loadUrl(url);
 
         binding.webView.getSettings().setRenderPriority(WebSettings.RenderPriority.HIGH);
-
-        AdRequest adRequest2 = new AdRequest.Builder().build();
-        binding.adView2.loadAd(adRequest2);
-        binding.adView2.setAdListener(new AdListener() {
-            @Override
-            public void onAdLoaded() {
-                super.onAdLoaded();
-
-
-
-            }
-        });
-
-
-        initTagAdapter(newsDetails.tags);
-
-        binding.textViewTitleComments.setText("KOMENTARI (" + newsDetails.commentsCount + ")");
-
-        initCommentsAdapter(newsDetails.commentsTop);
-
-        AdRequest adRequest3 = new AdRequest.Builder().build();
-        binding.adView3.loadAd(adRequest3);
-        binding.adView3.setAdListener(new AdListener() {
-            @Override
-            public void onAdLoaded() {
-                super.onAdLoaded();
-
-
-
-            }
-        });
-
-        initRelatedNewsAdapter(newsDetails.relatedNews);
-
-        binding.webView.setWebViewClient(new WebViewClient() {
-            @Override
-            public void onPageFinished(WebView view, String url) {
-
-                binding.progressBar.setVisibility(View.GONE);
-                binding.nestedScrollView.setVisibility(View.VISIBLE);
-
-            }
-        });
-
-
-
-
-
-    }
-
-    private void updateList4(NewsDetails newsDetails) {
-
-        binding.progressBar.setVisibility(View.VISIBLE);
-        binding.nestedScrollView.setVisibility(View.GONE);
-
-
-
-
-        String url = "https://komentar.rs/wp-json/api/newswebview?id=" + newsDetails.id + "&version=2";
-
-        binding.webView.loadUrl(url);
-
-        binding.webView.getSettings().setRenderPriority(WebSettings.RenderPriority.HIGH);
-
 
         binding.webView.setWebViewClient(new WebViewClient() {
             @Override
@@ -455,16 +253,11 @@ public class NewsDetailsFragment extends Fragment implements
 //                    }
 //                });
 
-                binding.progressBar.setVisibility(View.GONE);
                 binding.nestedScrollView.setVisibility(View.VISIBLE);
+                binding.swipeRefreshLayout.setRefreshing(false);
 
             }
         });
-
-
-
-
-
 
     }
 
@@ -489,13 +282,6 @@ public class NewsDetailsFragment extends Fragment implements
         binding.recyclerViewTags.setAdapter(new NewsDetailsTagsAdapter(this, tags));
 
     }
-
-    private void refreshNewsDetails() {
-
-        getNewsDetails();
-        binding.swipeRefreshLayout.setRefreshing(false);
-    }
-
 
     private void getCommentVotes(ArrayList<NewsComment> comments) {
 
@@ -679,6 +465,7 @@ public class NewsDetailsFragment extends Fragment implements
 
     @Override
     public void goToCommentsActivity(int newsId) {
+
         Intent intent = new Intent(getContext(), CommentsActivity.class);
         intent.putExtra("news_id", newsId);
         startActivity(intent);
@@ -693,7 +480,7 @@ public class NewsDetailsFragment extends Fragment implements
     }
 
     @Override
-    public void onNewsClicked(int newsId, int[] newsIdList) {
+    public void onNewsClicked(int newsId) {
 
         Intent intent = new Intent(getContext(), DetailsActivity.class);
         intent.putExtra("news_id", newsId);

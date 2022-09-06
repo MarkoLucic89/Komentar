@@ -22,6 +22,8 @@
                 android:id="@+id/nestedScrollView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:fillViewport="true"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"
                 android:gravity="center_horizontal">
 
                 <LinearLayout
@@ -250,15 +252,6 @@
             </androidx.core.widget.NestedScrollView>
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
-        <ProgressBar
-            android:id="@+id/progressBar"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="32dp"
-            android:indeterminateTint="@color/blue_light"
-            android:visibility="gone" />
 
         <ImageView
             android:id="@+id/imageViewRefresh"

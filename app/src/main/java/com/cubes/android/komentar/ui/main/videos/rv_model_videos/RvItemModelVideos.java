@@ -13,12 +13,9 @@ public class RvItemModelVideos implements ItemModelVideo {
     private News news;
     private NewsListener listener;
 
-    private int[] newsIdList;
-
-    public RvItemModelVideos(News news, NewsListener listener, int[] newsIdList) {
+    public RvItemModelVideos(News news, NewsListener listener) {
         this.news = news;
         this.listener = listener;
-        this.newsIdList = newsIdList;
     }
 
     @Override
@@ -36,7 +33,7 @@ public class RvItemModelVideos implements ItemModelVideo {
         binding.textViewCategory.setText(news.category.name);
         binding.textViewTime.setText(MyMethodsClass.convertTime(news.createdAt));
 
-        holder.binding.getRoot().setOnClickListener(view -> listener.onNewsClicked(news.id, newsIdList));
+        holder.binding.getRoot().setOnClickListener(view -> listener.onNewsClicked(news.id));
 
     }
 

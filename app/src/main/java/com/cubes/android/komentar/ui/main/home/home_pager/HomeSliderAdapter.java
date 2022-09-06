@@ -22,14 +22,13 @@ public class HomeSliderAdapter extends RecyclerView.Adapter<HomeSliderAdapter.Ho
 
     private NewsListener listener;
 
-    private int[] newsIdList;
+    private int newsPosition;
 
-    public HomeSliderAdapter(ArrayList<News> newsList, boolean showCategory, NewsListener listener) {
+    public HomeSliderAdapter(ArrayList<News> newsList, boolean showCategory, NewsListener listener, int newsPosition) {
         this.list = newsList;
         this.showCategory = showCategory;
         this.listener = listener;
-
-        this.newsIdList = MyMethodsClass.initNewsIdList(newsList);
+        this.newsPosition = newsPosition;
     }
 
     @NonNull
@@ -59,7 +58,7 @@ public class HomeSliderAdapter extends RecyclerView.Adapter<HomeSliderAdapter.Ho
         Picasso.get().load(news.image).into(holder.binding.imageView);
         holder.binding.textViewTitle.setText(news.title);
 
-        holder.binding.getRoot().setOnClickListener(view -> listener.onNewsClicked(news.id,  newsIdList));
+        holder.binding.getRoot().setOnClickListener(view -> listener.onNewsClicked(news.id, (position + newsPosition)));
 
     }
 

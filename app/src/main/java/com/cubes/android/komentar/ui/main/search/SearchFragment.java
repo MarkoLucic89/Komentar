@@ -39,6 +39,8 @@ public class SearchFragment extends Fragment implements NewsListener {
 
     private int nextPage = 1;
 
+    private int[] newsIdList;
+
     private DataRepository dataRepository;
 
     public SearchFragment() {
@@ -78,7 +80,6 @@ public class SearchFragment extends Fragment implements NewsListener {
 
         binding.imageViewSearch.setOnClickListener(view1 -> {
             adapter.clearList();
-            binding.progressBar.setVisibility(View.VISIBLE);
             searchListByTerm();
             hideKeyboard(getActivity());
         });
@@ -119,7 +120,6 @@ public class SearchFragment extends Fragment implements NewsListener {
 
             adapter.clearList();
 
-            binding.progressBar.setVisibility(View.GONE);
             return;
         }
 
@@ -150,6 +150,8 @@ public class SearchFragment extends Fragment implements NewsListener {
 
         Log.d(TAG, "loadNextPage: " + nextPage);
 
+        binding.swipeRefreshLayout.setRefreshing(true);
+
         dataRepository.searchNews(searchTerm, nextPage, new DataRepository.SearchResponseListener() {
 
 
@@ -157,7 +159,8 @@ public class SearchFragment extends Fragment implements NewsListener {
             public void onResponse(ArrayList<News> newsList, boolean hasMorePages) {
 
                 binding.recyclerView.setVisibility(View.VISIBLE);
-                binding.progressBar.setVisibility(View.GONE);
+
+                newsIdList = MyMethodsClass.initNewsIdList(newsList);
 
                 if (nextPage == 1) {
                     adapter.updateList(newsList, hasMorePages);
@@ -177,7 +180,6 @@ public class SearchFragment extends Fragment implements NewsListener {
                 if (nextPage == 1) {
                     binding.recyclerView.setVisibility(View.GONE);
                     binding.imageViewRefresh.setVisibility(View.VISIBLE);
-                    binding.progressBar.setVisibility(View.GONE);
                 } else {
                     adapter.addRefresher();
                 }
@@ -199,7 +201,7 @@ public class SearchFragment extends Fragment implements NewsListener {
     }
 
     @Override
-    public void onNewsClicked(int newsId, int[] newsIdList) {
+    public void onNewsClicked(int newsId) {
 
         Intent intent = new Intent(getContext(), DetailsActivity.class);
         intent.putExtra("news_id", newsId);

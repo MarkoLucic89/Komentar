@@ -15,13 +15,11 @@ public class RvItemModelCategorySmall implements ItemModelCategory {
     private News news;
     private boolean isOnHomePage;
     private NewsListener listener;
-    private int[] newsIdList;
 
-    public RvItemModelCategorySmall(News news, boolean isOnHomePage, NewsListener listener, int[] newsIdList) {
+    public RvItemModelCategorySmall(News news, boolean isOnHomePage, NewsListener listener) {
         this.news = news;
         this.isOnHomePage = isOnHomePage;
         this.listener = listener;
-        this.newsIdList = newsIdList;
     }
 
     @Override
@@ -47,7 +45,7 @@ public class RvItemModelCategorySmall implements ItemModelCategory {
         binding.textViewCategory.setText(news.category.name);
         binding.textViewTime.setText(MyMethodsClass.convertTime(news.createdAt));
 
-        holder.binding.getRoot().setOnClickListener(view -> listener.onNewsClicked(news.id, newsIdList));
+        holder.binding.getRoot().setOnClickListener(view -> listener.onNewsClicked(news.id));
 
     }
 

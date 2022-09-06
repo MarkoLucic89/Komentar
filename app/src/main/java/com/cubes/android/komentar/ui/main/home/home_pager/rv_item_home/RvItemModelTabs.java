@@ -16,23 +16,25 @@ import java.util.ArrayList;
 
 public class RvItemModelTabs implements ItemModelHome {
 
-    public ArrayList<News> latest;
-    public ArrayList<News> mostRead;
-    public ArrayList<News> mostComment;
-    public int modelIndex;
+    private ArrayList<News> latest;
+    private ArrayList<News> mostRead;
+    private ArrayList<News> mostComment;
+    private int modelIndex;
+    private int newsPosition;
 
     public int tabPosition = 0;
     public HomePagerAdapter homePagerAdapter;
     public HomeTabsAdapter homeTabsAdapter;
     public NewsListener listener;
 
-    public RvItemModelTabs(HomePageData data, HomePagerAdapter adapter, int modelIndex, NewsListener listener) {
+    public RvItemModelTabs(HomePageData data, HomePagerAdapter adapter, int modelIndex, NewsListener listener, int newsPosition) {
         this.latest = data.latest;
         this.mostRead = data.mostRead;
         this.mostComment = data.mostCommented;
 
         this.homePagerAdapter = adapter;
         this.modelIndex = modelIndex;
+        this.newsPosition = newsPosition;
 
         this.listener = listener;
     }
