@@ -23,18 +23,18 @@ public class RvItemModelHomeAd implements ItemModelHome {
         RvItemAdBinding binding = (RvItemAdBinding) holder.binding;
 
 
-        binding.adView.setVisibility(View.GONE);
+//        binding.adView.setVisibility(View.GONE);
 
         AdRequest adRequest = new AdRequest.Builder().build();
         binding.adView.loadAd(adRequest);
 
-        binding.adView.setAdListener(new AdListener() {
-            @Override
-            public void onAdLoaded() {
-                super.onAdLoaded();
-
-                binding.adView.setVisibility(View.VISIBLE);
-            }
-        });
+//        binding.adView.setAdListener(new AdListener() {
+//            @Override
+//            public void onAdLoaded() {
+//                super.onAdLoaded();
+//
+//                binding.adView.setVisibility(View.VISIBLE);
+//            }
+//        });
     }
 }

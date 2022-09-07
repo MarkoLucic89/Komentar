@@ -70,26 +70,6 @@ public class NewsListActivity extends AppCompatActivity {
     private void setListeners() {
 
 
-//        binding.bottomNavigationView.setOnItemSelectedListener(item -> {
-//
-//            switch (item.getItemId()) {
-//                case R.id.menuHome:
-//                    replaceFragment(HomeFragment.newInstance());
-//                    break;
-//                case R.id.menuLatest:
-//                    replaceFragment(LatestNewsFragment.newInstance());
-//                    break;
-//                case R.id.menuVideo:
-//                    replaceFragment(VideoFragment.newInstance());
-//                    break;
-//                case R.id.menuSearch:
-//                    replaceFragment(SearchFragment.newInstance());
-//                    break;
-//            }
-//
-//            return true;
-//        });
-
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
 
             Fragment fragment = null;
@@ -118,9 +98,4 @@ public class NewsListActivity extends AppCompatActivity {
         });
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-//        binding = null;
-    }
 }

@@ -36,6 +36,10 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+/*
+        TRENUTNO SE NE KORISTI!!!
+ */
+
 public class DetailsFragment extends Fragment implements
         CommentsAdapter.CommentsListener,
         NewsDetailsTagsAdapter.TagListener,
@@ -433,19 +437,7 @@ public class DetailsFragment extends Fragment implements
         intent.putExtra("news_id", newsId);
         intent.putExtra("news_id_list", newsIdList);
         getContext().startActivity(intent);
-        getActivity().finish();
 
     }
 
-    @Override
-    public void onNewsClicked(int newsId, int newsPosition) {
-
-        Intent intent = new Intent(getContext(), DetailsActivity.class);
-        intent.putExtra("news_id", newsId);
-        intent.putExtra("news_position", newsPosition);
-        intent.putExtra("news_id_list", newsIdList);
-        getContext().startActivity(intent);
-        getActivity().finish();
-
-    }
 }

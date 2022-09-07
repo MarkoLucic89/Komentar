@@ -4,8 +4,6 @@ import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 
-import androidx.cardview.widget.CardView;
-
 import com.cubes.android.komentar.data.model.domain.HomePageData;
 import com.cubes.android.komentar.data.model.domain.News;
 
@@ -71,9 +69,7 @@ public class MyMethodsClass {
 //        }
         for (int i = 0; i < data.category.size(); i++) {
             if (!data.category.get(i).title.equalsIgnoreCase("SPORT")) {
-                for (int j = 0; j < 5; j++) {
-                    newsList.add(data.category.get(i).news.get(j));
-                }
+                newsList.addAll(data.category.get(i).news);
             }
         }
         return MyMethodsClass.initNewsIdList(newsList);
@@ -85,13 +81,8 @@ public class MyMethodsClass {
         }
     }
 
-    public static void startProgressBarAnimation(CardView progressBar) {
-
-        progressBar.animate().scaleX(2f).scaleY(2f).alpha(0f).setDuration(1000).withEndAction(() -> {
-            progressBar.setScaleX(1f);
-            progressBar.setScaleY(1f);
-            progressBar.setAlpha(1f);
-        });
-
+    public static void startArrowFadeAnimation(ImageView imageView) {
+        imageView.setAlpha(1f);
+        imageView.postDelayed(() -> imageView.animate().alpha(0f).setDuration(1000), 2000);
     }
 }

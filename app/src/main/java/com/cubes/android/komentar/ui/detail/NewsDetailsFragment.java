@@ -2,10 +2,12 @@ package com.cubes.android.komentar.ui.detail;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -37,7 +39,6 @@ import com.cubes.android.komentar.ui.post_comment.PostCommentActivity;
 import com.cubes.android.komentar.ui.tag.TagActivity;
 import com.cubes.android.komentar.ui.tools.MyMethodsClass;
 import com.google.android.flexbox.FlexboxLayoutManager;
-import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
@@ -126,11 +127,19 @@ public class NewsDetailsFragment extends Fragment implements
 
         binding.nestedScrollView.setVisibility(View.GONE);
 
-        binding.nestedScrollView.fullScroll(View.FOCUS_DOWN);
-        binding.nestedScrollView.fullScroll(View.FOCUS_UP);
-        binding.nestedScrollView.setSmoothScrollingEnabled(true);
+//        binding.nestedScrollView.fullScroll(View.FOCUS_DOWN);
+//        binding.nestedScrollView.fullScroll(View.FOCUS_UP);
+//        binding.nestedScrollView.setSmoothScrollingEnabled(true);
 
         getNewsDetails();
+
+//        binding.nestedScrollView.setOnScrollChangeListener((View.OnScrollChangeListener) (view1, i, i1, i2, i3) -> {
+//            int length = binding.nestedScrollView.getChildAt(0).getHeight() - binding.nestedScrollView.getHeight();
+//
+//            binding.progressBarScrollIndicator.setMax(length);
+//            binding.progressBarScrollIndicator.setProgress(i1);
+//        });
+
 
     }
 
@@ -160,13 +169,15 @@ public class NewsDetailsFragment extends Fragment implements
 
                 newsIdList = MyMethodsClass.initNewsIdList(newsDetails.relatedNews);
 
-                getCommentVotes(newsDetails.commentsTop);
+//                getCommentVotes(newsDetails.commentsTop);
 
                 updateList(newsDetails);
 
                 setListeners(newsDetails);
 
                 Log.d(TAG, "onResponse: " + newsDetails.title);
+
+                binding.swipeRefreshLayout.setRefreshing(false);
 
             }
 
@@ -202,7 +213,7 @@ public class NewsDetailsFragment extends Fragment implements
 
         binding.webView.loadUrl(url);
 
-        binding.webView.getSettings().setRenderPriority(WebSettings.RenderPriority.HIGH);
+//        binding.webView.getSettings().setRenderPriority(WebSettings.RenderPriority.HIGH);
 
         binding.webView.setWebViewClient(new WebViewClient() {
             @Override
@@ -211,27 +222,9 @@ public class NewsDetailsFragment extends Fragment implements
                 AdRequest adRequest1 = new AdRequest.Builder().build();
 
                 binding.adView1.loadAd(adRequest1);
-//        binding.adView1.setAdListener(new AdListener() {
-//            @Override
-//            public void onAdLoaded() {
-//                super.onAdLoaded();
-//
-//            }
-//        });
-
 
                 AdRequest adRequest2 = new AdRequest.Builder().build();
                 binding.adView2.loadAd(adRequest2);
-//                binding.adView2.setAdListener(new AdListener() {
-//                    @Override
-//                    public void onAdLoaded() {
-//                        super.onAdLoaded();
-//
-//
-//
-//                    }
-//                });
-
 
                 initTagAdapter(newsDetails.tags);
 
@@ -243,15 +236,6 @@ public class NewsDetailsFragment extends Fragment implements
 
                 AdRequest adRequest3 = new AdRequest.Builder().build();
                 binding.adView3.loadAd(adRequest3);
-//                binding.adView3.setAdListener(new AdListener() {
-//                    @Override
-//                    public void onAdLoaded() {
-//                        super.onAdLoaded();
-//
-//
-//
-//                    }
-//                });
 
                 binding.nestedScrollView.setVisibility(View.VISIBLE);
                 binding.swipeRefreshLayout.setRefreshing(false);
@@ -260,7 +244,6 @@ public class NewsDetailsFragment extends Fragment implements
         });
 
     }
-
 
 
     private void initRelatedNewsAdapter(ArrayList<News> relatedNews) {
@@ -306,7 +289,7 @@ public class NewsDetailsFragment extends Fragment implements
         service.execute(() -> {
 
             //doInBackgroundThread
-            ArrayList votes = (ArrayList) SharedPrefs.readListFromPref(getActivity());
+            ArrayList<NewsCommentVote> votes = (ArrayList<NewsCommentVote>) SharedPrefs.readListFromPref(getActivity());
 
             if (votes != null) {
                 mVotes.addAll(votes);
@@ -486,7 +469,6 @@ public class NewsDetailsFragment extends Fragment implements
         intent.putExtra("news_id", newsId);
         intent.putExtra("news_id_list", newsIdList);
         getContext().startActivity(intent);
-        getActivity().finish();
 
     }
 

@@ -13,17 +13,9 @@ public class RvItemModelHomeVideos implements ItemModelHome {
     private News news;
     private NewsListener listener;
 
-    private int newsPosition;
-
     public RvItemModelHomeVideos(News news, NewsListener listener) {
         this.news = news;
         this.listener = listener;
-    }
-
-    public RvItemModelHomeVideos(News news, NewsListener listener, int newsPosition) {
-        this.news = news;
-        this.listener = listener;
-        this.newsPosition = newsPosition;
     }
 
     @Override
@@ -41,7 +33,7 @@ public class RvItemModelHomeVideos implements ItemModelHome {
         binding.textViewCategory.setText(news.category.name);
         binding.textViewTime.setText(MyMethodsClass.convertTime(news.createdAt));
 
-        holder.binding.getRoot().setOnClickListener(view -> listener.onNewsClicked(news.id, newsPosition));
+        holder.binding.getRoot().setOnClickListener(view -> listener.onNewsClicked(news.id));
 
     }
 

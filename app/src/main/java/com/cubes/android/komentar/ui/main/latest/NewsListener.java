@@ -10,10 +10,6 @@ public interface NewsListener {
 
     }
 
-    default void onNewsClicked(int newsId, int newsPosition) {
-
-    }
-
     default void loadNextPage() {
 
     }

@@ -138,11 +138,12 @@ public class CategoryNewsFragment extends Fragment implements NewsListener {
                 binding.recyclerView.setVisibility(View.VISIBLE);
                 binding.imageViewRefresh.setVisibility(View.GONE);
 
+                newsIdList = MyMethodsClass.initNewsIdList(newsList);
+
                 if (nextPage == 1) {
 
                     categoryAdapter.updateList(newsList, hasMorePages);
 
-                    newsIdList = MyMethodsClass.initNewsIdList(newsList);
 
                     if (mIsSubcategory) {
 

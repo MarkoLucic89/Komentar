@@ -14,7 +14,6 @@ public class RvItemModelHomeSmallNews implements ItemModelHome {
 
     private News news;
     private NewsListener listener;
-    private int newsPosition;
 
     public RvItemModelHomeSmallNews(News news, NewsListener listener) {
 
@@ -23,11 +22,6 @@ public class RvItemModelHomeSmallNews implements ItemModelHome {
 
     }
 
-    public RvItemModelHomeSmallNews(News news, NewsListener listener, int newsPosition) {
-        this.news = news;
-        this.listener = listener;
-        this.newsPosition = newsPosition;
-    }
 
     @Override
     public int getType() {
@@ -45,11 +39,7 @@ public class RvItemModelHomeSmallNews implements ItemModelHome {
         binding.textViewCategory.setTextColor(Color.parseColor(news.category.color));
         binding.textViewTime.setText(getTime(news.createdAt));
 
-        holder.binding.getRoot().setOnClickListener(view -> {
-            listener.onNewsClicked(news.id, newsPosition);
-            Log.d("CATEGORY", "bind: POSITION  " + newsPosition);
-            Log.d("CATEGORY", "bind: TITLE  " + news.title);
-        });
+        holder.binding.getRoot().setOnClickListener(view -> listener.onNewsClicked(news.id));
 
     }
 

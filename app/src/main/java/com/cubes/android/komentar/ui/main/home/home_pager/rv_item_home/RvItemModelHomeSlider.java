@@ -22,7 +22,6 @@ public class RvItemModelHomeSlider implements ItemModelHome{
     public ArrayList<News> newsList;
     public SnapHelper snapHelper;
     private boolean isEditorsChoice;
-    private int newsPosition;
 
     private NewsListener listener;
 
@@ -31,14 +30,6 @@ public class RvItemModelHomeSlider implements ItemModelHome{
         this.snapHelper = new PagerSnapHelper();
         this.isEditorsChoice = showCategory;
         this.listener = listener;
-    }
-
-    public RvItemModelHomeSlider(ArrayList<News> newsList, boolean showCategory, NewsListener listener, int newsPosition) {
-        this.newsList = newsList;
-        this.snapHelper = new PagerSnapHelper();
-        this.isEditorsChoice = showCategory;
-        this.listener = listener;
-        this.newsPosition = newsPosition;
     }
 
     @Override
@@ -69,7 +60,7 @@ public class RvItemModelHomeSlider implements ItemModelHome{
 
         snapHelper.attachToRecyclerView(binding.viewPager);
 
-        binding.viewPager.setAdapter(new HomeSliderAdapter(newsList, isEditorsChoice, listener, newsPosition));
+        binding.viewPager.setAdapter(new HomeSliderAdapter(newsList, isEditorsChoice, listener));
 
         binding.progressBar.attachToRecyclerView(binding.viewPager, snapHelper);
 

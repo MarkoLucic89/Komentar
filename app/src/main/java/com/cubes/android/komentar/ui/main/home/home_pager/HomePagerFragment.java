@@ -151,9 +151,9 @@ public class HomePagerFragment extends Fragment implements NewsListener {
 
         adapter = new HomePagerAdapter(this);
 
-        binding.recyclerView.setHasFixedSize(true);
-        binding.recyclerView.setItemAnimator(null);
-        binding.recyclerView.setItemViewCacheSize(50);
+//        binding.recyclerView.setHasFixedSize(true);
+//        binding.recyclerView.setItemAnimator(null);
+//        binding.recyclerView.setItemViewCacheSize(50);
 
 //        binding.recyclerView.setViewCacheExtension(new RecyclerView.ViewCacheExtension() {
 //            @Nullable
@@ -191,17 +191,6 @@ public class HomePagerFragment extends Fragment implements NewsListener {
 
         Intent intent = new Intent(getContext(), DetailsActivity.class);
         intent.putExtra("news_id", newsId);
-        intent.putExtra("news_id_list", mNewsIdList);
-        startActivity(intent);
-
-    }
-
-    @Override
-    public void onNewsClicked(int newsId, int newsPosition) {
-
-        Intent intent = new Intent(getContext(), DetailsActivity.class);
-        intent.putExtra("news_id", newsId);
-        intent.putExtra("news_position", newsPosition);
         intent.putExtra("news_id_list", mNewsIdList);
         startActivity(intent);
 

@@ -40,8 +40,6 @@ public class HomeFragment extends Fragment implements OnCategoryClickListener, R
 
     private DataRepository dataRepository;
 
-    private boolean isLoading;
-
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -76,7 +74,6 @@ public class HomeFragment extends Fragment implements OnCategoryClickListener, R
 
         binding.tabLayout.setVisibility(View.INVISIBLE);
         binding.viewPager.setVisibility(View.INVISIBLE);
-//        binding.progressBar.setVisibility(View.VISIBLE);
 
         initDrawerRecyclerView();
 
@@ -99,11 +96,6 @@ public class HomeFragment extends Fragment implements OnCategoryClickListener, R
 
     private void getAllCategories() {
 
-        if (isLoading) {
-            return;
-        }
-
-        isLoading = true;
 
         dataRepository.getAllCategories(new DataRepository.CategoriesResponseListener() {
             @Override
@@ -118,8 +110,6 @@ public class HomeFragment extends Fragment implements OnCategoryClickListener, R
                 adapter.updateList(categories);
                 initViewPager(categories);
 
-                isLoading = false;
-
             }
 
             @Override
@@ -128,8 +118,6 @@ public class HomeFragment extends Fragment implements OnCategoryClickListener, R
                 binding.linearLayoutHome.setVisibility(View.GONE);
                 binding.imageViewRefresh.setVisibility(View.VISIBLE);
 
-                isLoading = false;
-
             }
         });
     }
@@ -137,13 +125,10 @@ public class HomeFragment extends Fragment implements OnCategoryClickListener, R
 
     private void initViewPager(ArrayList<Category> categories) {
 
-        if (getActivity() == null) {
-            return;
-        }
-
         pagerAdapter = new CategoriesPagerAdapter(getActivity(), categories);
         binding.viewPager.setAdapter(pagerAdapter);
-        binding.viewPager.setOffscreenPageLimit(1);
+
+//        binding.viewPager.setOffscreenPageLimit(1);
 
         new TabLayoutMediator(
                 binding.tabLayout,
@@ -166,7 +151,7 @@ public class HomeFragment extends Fragment implements OnCategoryClickListener, R
 
     @Override
     public void onCategoryClicked(int categoryIndex) {
-        binding.viewPager.setCurrentItem(categoryIndex, false);
+        binding.viewPager.setCurrentItem(categoryIndex);
         binding.getRoot().closeDrawer(GravityCompat.END);
     }
 

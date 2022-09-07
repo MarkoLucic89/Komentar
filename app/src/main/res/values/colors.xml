@@ -13,6 +13,7 @@
 
 
     <color name="blue_dark">#143E6C</color>
+    <color name="blue_dark_transparent">#90143E6C</color>
     <color name="blue_dark2">#0F2039</color>
     <color name="blue_light">#1C73BD</color>
     <color name="blue_text">#00378F</color>

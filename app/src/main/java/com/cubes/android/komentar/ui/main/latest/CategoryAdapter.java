@@ -33,21 +33,9 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 
     private int adCounter = 0;
 
-    private int[] newsIdList;
-
-    //CategoriesNewsFragment
-
     public CategoryAdapter(NewsListener listener) {
         isOnHomePage = false;
         this.listener = listener;
-    }
-
-    //HomePageFragment
-
-    public CategoryAdapter(ArrayList<News> newsList, boolean isOnHomePage, NewsListener listener) {
-        this.isOnHomePage = isOnHomePage;
-        this.listener = listener;
-        initList(newsList);
     }
 
     private void initList(ArrayList<News> newsList) {
@@ -55,8 +43,6 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         if (newsList.isEmpty()) {
             return;
         }
-
-        newsIdList = MyMethodsClass.initNewsIdList(newsList);
 
         //BIG ITEM
 
@@ -125,8 +111,6 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 
         itemModels.clear();
 
-        newsIdList = MyMethodsClass.initNewsIdList(news);
-
         for (int i = 0; i < news.size(); i++) {
 
             if (i == 0) {
@@ -166,8 +150,6 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
             itemModels.remove(lastIndex);
         }
 
-        newsIdList = MyMethodsClass.initNewsIdList(newsList);
-
         for (int i = 0; i < newsList.size(); i++) {
 
             itemModels.add(new RvItemModelCategorySmall(newsList.get(i), isOnHomePage, listener));
@@ -190,8 +172,8 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         }
 
 //        notifyItemRangeChanged(lastIndex, itemModels.size());
-        notifyItemRangeInserted(lastIndex + 1, newsList.size());
-//        notifyDataSetChanged();
+//        notifyItemRangeInserted(lastIndex + 1, newsList.size());
+        notifyDataSetChanged();
     }
 
     public void addRefresher() {

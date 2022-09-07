@@ -36,8 +36,6 @@ public class HomePagerAdapter extends RecyclerView.Adapter<HomePagerAdapter.Home
 
     private NewsListener listener;
 
-    private int newsPosition = 0;
-
     public HomePagerAdapter(NewsListener listener) {
         this.listener = listener;
     }
@@ -47,9 +45,7 @@ public class HomePagerAdapter extends RecyclerView.Adapter<HomePagerAdapter.Home
         list.clear();
 
         //SLIDER
-        addSlider("SLIDER", data, newsPosition);
-
-        newsPosition += (data.slider.size() - 1);
+        addSlider("SLIDER", data);
 
         //AD 1
         if (!data.slider.isEmpty()) {
@@ -58,17 +54,11 @@ public class HomePagerAdapter extends RecyclerView.Adapter<HomePagerAdapter.Home
 
         //TOP NEWS
         for (News news : data.top) {
-            newsPosition++;
-            list.add(new RvItemModelHomeSmallNews(news, listener, newsPosition));
+            list.add(new RvItemModelHomeSmallNews(news, listener));
         }
 
         //TABS
-        list.add(new RvItemModelTabs(data, this, list.size(), listener, newsPosition));
-
-        newsPosition += (data.latest.size());
-        newsPosition += (data.mostRead.size());
-        newsPosition += (data.mostCommented.size());
-
+        list.add(new RvItemModelTabs(data, this, list.size(), listener));
 
         //SPORT CATEGORY BOX
         for (HomePageData.CategoryBox categoryBox : data.category) {
@@ -98,9 +88,7 @@ public class HomePagerAdapter extends RecyclerView.Adapter<HomePagerAdapter.Home
 
             list.add(new RvItemModelHomeAd());
 
-            addSlider("EDITORS CHOICE", data, newsPosition);
-
-            newsPosition += (data.editorsChoice.size() - 1);
+            addSlider("EDITORS CHOICE", data);
 
         }
 
@@ -116,9 +104,7 @@ public class HomePagerAdapter extends RecyclerView.Adapter<HomePagerAdapter.Home
 
             for (News news : data.videos) {
 
-                newsPosition++;
-
-                list.add(new RvItemModelHomeVideos(news, listener, newsPosition));
+                list.add(new RvItemModelHomeVideos(news, listener));
             }
         }
 
@@ -141,38 +127,30 @@ public class HomePagerAdapter extends RecyclerView.Adapter<HomePagerAdapter.Home
 
         list.add(new RvItemModelCategoryTitle(categoryBox.title, categoryBox.color));
 
-        newsPosition++;
+        list.add(new RvItemModelHomeCategoryBig(categoryBox.news.get(0), true, listener));
 
-        list.add(new RvItemModelHomeCategoryBig(categoryBox.news.get(0), true, listener, newsPosition));
-
-        for (int i = 1; i < categoryBox.news.size(); i++) {
+        for (int i = 1; i < 5; i++) {
 
             //trenutno je size 5 zbog testiranja
 
-            if (i < 5) {
-
-                newsPosition++;
-
-                list.add(new RvItemModelHomeSmallNews(categoryBox.news.get(i), listener, newsPosition));
-            }
-
+            list.add(new RvItemModelHomeSmallNews(categoryBox.news.get(i), listener));
 
         }
 
     }
 
-    private void addSlider(String title, HomePageData data, int newsPosition) {
+    private void addSlider(String title, HomePageData data) {
 
         if (title.equalsIgnoreCase("SLIDER")) {
 
             if (data.slider != null && !data.slider.isEmpty()) {
-                list.add(new RvItemModelHomeSlider(data.slider, false, listener, newsPosition));
+                list.add(new RvItemModelHomeSlider(data.slider, false, listener));
             }
 
         } else if (title.equalsIgnoreCase("EDITORS CHOICE")) {
 
             if (data.editorsChoice != null && !data.editorsChoice.isEmpty()) {
-                list.add(new RvItemModelHomeSlider(data.editorsChoice, true, listener, newsPosition));
+                list.add(new RvItemModelHomeSlider(data.editorsChoice, true, listener));
             }
 
         }

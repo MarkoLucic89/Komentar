@@ -82,6 +82,8 @@ public class LatestNewsFragment extends Fragment implements NewsListener {
 
     private void refreshAdapter() {
 
+        binding.swipeRefreshLayout.setRefreshing(true);
+
         nextPage = 1;
 
         loadNextPage();
@@ -108,8 +110,6 @@ public class LatestNewsFragment extends Fragment implements NewsListener {
 
     @Override
     public void loadNextPage() {
-
-        binding.swipeRefreshLayout.setRefreshing(true);
 
         dataRepository.getLatestNews(nextPage, new DataRepository.LatestResponseListener() {
 
