@@ -21,9 +21,13 @@ public class NewsDetailsRelatedNewsAdapter extends RecyclerView.Adapter<NewsDeta
     private ArrayList<News> newsList;
     private NewsListener listener;
 
+    private int[] newsIdList;
+
     public NewsDetailsRelatedNewsAdapter(ArrayList<News> newsList, NewsListener listener) {
         this.newsList = newsList;
         this.listener = listener;
+
+        this.newsIdList = MyMethodsClass.initNewsIdList(newsList);
     }
 
     @NonNull
@@ -50,7 +54,7 @@ public class NewsDetailsRelatedNewsAdapter extends RecyclerView.Adapter<NewsDeta
         binding.textViewCategory.setText(news.category.name);
         binding.textViewTime.setText(MyMethodsClass.convertTime(news.createdAt));
 
-        holder.binding.getRoot().setOnClickListener(view -> listener.onNewsClicked(news.id));
+        holder.binding.getRoot().setOnClickListener(view -> listener.onNewsClicked(news.id, newsIdList));
 
 
     }

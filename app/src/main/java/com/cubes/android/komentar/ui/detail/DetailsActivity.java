@@ -4,9 +4,12 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager.widget.ViewPager;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.cubes.android.komentar.databinding.ActivityDetailsBinding;
 import com.cubes.android.komentar.ui.comments.CommentsActivity;
+import com.cubes.android.komentar.ui.tools.MyMethodsClass;
 
 public class DetailsActivity extends AppCompatActivity implements NewsDetailsFragment.DetailsListener {
 
@@ -27,6 +30,8 @@ public class DetailsActivity extends AppCompatActivity implements NewsDetailsFra
         ViewPagerAdapter adapter = new ViewPagerAdapter(this, mNewsIdList);
         binding.viewPager.setAdapter(adapter);
 
+//        binding.viewPager.setOffscreenPageLimit(1);
+
         for (int i = 0; i < mNewsIdList.length; i++) {
             if (mNewsId == mNewsIdList[i]) {
                 binding.viewPager.setCurrentItem(i);
@@ -36,6 +41,14 @@ public class DetailsActivity extends AppCompatActivity implements NewsDetailsFra
 
         setClickListeners();
 
+        binding.viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                super.onPageScrolled(position, positionOffset, positionOffsetPixels);
+                MyMethodsClass.startArrowFadeAnimation(binding.imageViewArrowLeft);
+                MyMethodsClass.startArrowFadeAnimation(binding.imageViewArrowRight);
+            }
+        });
     }
 
     private void setClickListeners() {
@@ -61,11 +74,6 @@ public class DetailsActivity extends AppCompatActivity implements NewsDetailsFra
         });
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        binding = null;
-    }
 
     @Override
     public void onDetailsResponseListener(int newsId, String newsUrl) {

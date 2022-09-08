@@ -31,6 +31,8 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.VideosView
 
     private int adsCounter = 0;
 
+    private int[] newsIdList;
+
     public VideosAdapter(NewsListener listener) {
         this.isOnHomePage = false;
         this.listener = listener;
@@ -41,14 +43,18 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.VideosView
         this.isOnHomePage = isOnHomePage;
         this.listener = listener;
 
+        this.newsIdList = MyMethodsClass.initNewsIdList(newsList);
+
         for (News news : newsList) {
-            itemModels.add(new RvItemModelVideos(news, listener));
+            itemModels.add(new RvItemModelVideos(news, listener, newsIdList));
         }
 
     }
 
 
     public void updateList(ArrayList<News> newsList,  boolean hasNextPage) {
+
+        this.newsIdList = MyMethodsClass.initNewsIdList(newsList);
 
         adsCounter = 0;
 
@@ -62,7 +68,7 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.VideosView
                 adsCounter++;
             }
 
-            itemModels.add(new RvItemModelVideos(newsList.get(i), listener));
+            itemModels.add(new RvItemModelVideos(newsList.get(i), listener, newsIdList));
         }
 
 //        if (hasNextPage) {
@@ -125,6 +131,8 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.VideosView
 
     public void addNextPage(ArrayList<News> newsList,  boolean hasNextPage) {
 
+        this.newsIdList = MyMethodsClass.initNewsIdList(newsList);
+
         int lastIndex;
 
         if (itemModels.isEmpty()) {
@@ -142,7 +150,7 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.VideosView
                 adsCounter++;
             }
 
-            itemModels.add(new RvItemModelVideos(newsList.get(i), listener));
+            itemModels.add(new RvItemModelVideos(newsList.get(i), listener, newsIdList));
 
         }
 
@@ -154,9 +162,7 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.VideosView
             itemModels.add(new RvItemModelVideoLoading(listener));
         }
 
-//        notifyItemRangeChanged(lastIndex, itemModels.size());
         notifyItemRangeInserted(lastIndex + 1, newsList.size());
-//        notifyDataSetChanged();
     }
 
     public void addRefresher() {

@@ -151,9 +151,7 @@ public class HomePagerFragment extends Fragment implements NewsListener {
 
         adapter = new HomePagerAdapter(this);
 
-//        binding.recyclerView.setHasFixedSize(true);
-//        binding.recyclerView.setItemAnimator(null);
-//        binding.recyclerView.setItemViewCacheSize(50);
+        binding.recyclerView.setItemViewCacheSize(50);
 
 //        binding.recyclerView.setViewCacheExtension(new RecyclerView.ViewCacheExtension() {
 //            @Nullable

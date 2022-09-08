@@ -16,9 +16,13 @@ public class RvItemModelTag implements ItemModelTag {
     private News news;
     private NewsListener listener;
 
-    public RvItemModelTag(News news, NewsListener listener) {
+    private int[] newsIdList;
+
+    public RvItemModelTag(News news, NewsListener listener, int[] newsIdList) {
         this.news = news;
         this.listener = listener;
+
+        this.newsIdList = newsIdList;
     }
 
     @Override
@@ -37,7 +41,7 @@ public class RvItemModelTag implements ItemModelTag {
         binding.textViewCategory.setText(news.category.name);
         binding.textViewTime.setText(MyMethodsClass.convertTime(news.createdAt));
 
-        binding.getRoot().setOnClickListener(view -> listener.onNewsClicked(news.id));
+        binding.getRoot().setOnClickListener(view -> listener.onNewsClicked(news.id, newsIdList));
 
 
     }

@@ -186,7 +186,7 @@ public class CategoryNewsFragment extends Fragment implements NewsListener {
     }
 
     @Override
-    public void onNewsClicked(int newsId) {
+    public void onNewsClicked(int newsId, int[] newsIdList) {
 
         Intent intent = new Intent(getContext(), DetailsActivity.class);
         intent.putExtra("news_id", newsId);

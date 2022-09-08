@@ -22,6 +22,7 @@ import com.google.android.gms.ads.initialization.OnInitializationCompleteListene
 public class NewsListActivity extends AppCompatActivity {
 
     private ActivityNewsListBinding binding;
+    private HomeFragment homeFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,11 +30,18 @@ public class NewsListActivity extends AppCompatActivity {
         binding = ActivityNewsListBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        replaceFragment(HomeFragment.newInstance());
+        homeFragment = HomeFragment.newInstance();
+
+        replaceFragment(homeFragment);
         setListeners();
 
         addStickyAd();
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        homeFragment.onBackPressed();
     }
 
     private void addStickyAd() {

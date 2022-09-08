@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:id="@+id/drawerLayout"
     tools:context=".ui.main.home.HomeFragment">
 
     <FrameLayout
@@ -20,6 +21,13 @@
             android:translationZ="90dp"
             android:visibility="gone"
             app:tint="@color/blue_dark" />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:visibility="gone" />
 
         <LinearLayout
             android:id="@+id/linearLayoutHome"
@@ -59,15 +67,6 @@
                 app:tabTextColor="@color/grey_light">
 
             </com.google.android.material.tabs.TabLayout>
-
-            <ProgressBar
-                android:id="@+id/progressBar"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="32dp"
-                android:visibility="gone" />
-
 
             <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/viewPager"

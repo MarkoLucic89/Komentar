@@ -2,15 +2,7 @@ package com.cubes.android.komentar.ui.detail;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
@@ -21,6 +13,11 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.cubes.android.komentar.data.DataRepository;
 import com.cubes.android.komentar.data.model.domain.News;
@@ -63,8 +60,6 @@ public class NewsDetailsFragment extends Fragment implements
 
     private int mNewsId;
     private String mNewsUrl;
-
-    private int[] newsIdList;
 
     private DetailsListener listener;
 
@@ -127,20 +122,9 @@ public class NewsDetailsFragment extends Fragment implements
 
         binding.nestedScrollView.setVisibility(View.GONE);
 
-//        binding.nestedScrollView.fullScroll(View.FOCUS_DOWN);
-//        binding.nestedScrollView.fullScroll(View.FOCUS_UP);
 //        binding.nestedScrollView.setSmoothScrollingEnabled(true);
 
         getNewsDetails();
-
-//        binding.nestedScrollView.setOnScrollChangeListener((View.OnScrollChangeListener) (view1, i, i1, i2, i3) -> {
-//            int length = binding.nestedScrollView.getChildAt(0).getHeight() - binding.nestedScrollView.getHeight();
-//
-//            binding.progressBarScrollIndicator.setMax(length);
-//            binding.progressBarScrollIndicator.setProgress(i1);
-//        });
-
-
     }
 
     @Override
@@ -167,8 +151,6 @@ public class NewsDetailsFragment extends Fragment implements
                 bundle.putString("Vest", newsDetails.title);
                 mFirebaseAnalytics.logEvent("android_komentar", bundle);
 
-                newsIdList = MyMethodsClass.initNewsIdList(newsDetails.relatedNews);
-
 //                getCommentVotes(newsDetails.commentsTop);
 
                 updateList(newsDetails);
@@ -176,8 +158,6 @@ public class NewsDetailsFragment extends Fragment implements
                 setListeners(newsDetails);
 
                 Log.d(TAG, "onResponse: " + newsDetails.title);
-
-                binding.swipeRefreshLayout.setRefreshing(false);
 
             }
 
@@ -213,7 +193,7 @@ public class NewsDetailsFragment extends Fragment implements
 
         binding.webView.loadUrl(url);
 
-//        binding.webView.getSettings().setRenderPriority(WebSettings.RenderPriority.HIGH);
+        binding.webView.getSettings().setRenderPriority(WebSettings.RenderPriority.HIGH);
 
         binding.webView.setWebViewClient(new WebViewClient() {
             @Override
@@ -229,10 +209,15 @@ public class NewsDetailsFragment extends Fragment implements
                 initTagAdapter(newsDetails.tags);
 
                 binding.textViewTitleComments.setText("KOMENTARI (" + newsDetails.commentsCount + ")");
+                binding.buttonAllComments.setText("SVI KOMENTARI (" + newsDetails.commentsCount + ")");
+
+
+                if (newsDetails.commentsCount == 0) {
+                    binding.buttonAllComments.setVisibility(View.GONE);
+                }
 
                 initCommentsAdapter(newsDetails.commentsTop);
                 initRelatedNewsAdapter(newsDetails.relatedNews);
-
 
                 AdRequest adRequest3 = new AdRequest.Builder().build();
                 binding.adView3.loadAd(adRequest3);
@@ -463,7 +448,7 @@ public class NewsDetailsFragment extends Fragment implements
     }
 
     @Override
-    public void onNewsClicked(int newsId) {
+    public void onNewsClicked(int newsId, int[] newsIdList) {
 
         Intent intent = new Intent(getContext(), DetailsActivity.class);
         intent.putExtra("news_id", newsId);
@@ -471,6 +456,4 @@ public class NewsDetailsFragment extends Fragment implements
         getContext().startActivity(intent);
 
     }
-
-
 }

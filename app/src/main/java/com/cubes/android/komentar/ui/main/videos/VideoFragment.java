@@ -32,8 +32,6 @@ public class VideoFragment extends Fragment implements NewsListener {
 
     private DataRepository dataRepository;
 
-    private int[] newsIdList;
-
     public VideoFragment() {
         // Required empty public constructor
     }
@@ -114,8 +112,6 @@ public class VideoFragment extends Fragment implements NewsListener {
                 binding.recyclerView.setVisibility(View.VISIBLE);
                 binding.imageViewRefresh.setVisibility(View.GONE);
 
-                newsIdList = MyMethodsClass.initNewsIdList(newsList);
-
                 if (nextPage == 1) {
                     adapter.updateList(newsList, hasNextPage);
                 } else {
@@ -143,15 +139,16 @@ public class VideoFragment extends Fragment implements NewsListener {
         });
     }
 
+
     @Override
-    public void onNewsClicked(int newsId) {
+    public void onNewsClicked(int newsId, int[] newsIdList) {
         Intent intent = new Intent(getContext(), DetailsActivity.class);
         intent.putExtra("news_id", newsId);
         intent.putExtra("news_id_list", newsIdList);
         getContext().startActivity(intent);
     }
 
-//    @Override
+    //    @Override
 //    public void onDestroy() {
 //        super.onDestroy();
 //        if (binding != null) {

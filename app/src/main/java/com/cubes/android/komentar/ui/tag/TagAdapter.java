@@ -52,7 +52,7 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.TagViewHolder> {
                 adsCounter++;
             }
 
-            itemModels.add(new RvItemModelTag(newsList.get(i), listener));
+            itemModels.add(new RvItemModelTag(newsList.get(i), listener, newsIdList));
 
         }
 
@@ -133,11 +133,9 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.TagViewHolder> {
                 adsCounter++;
             }
 
-            itemModels.add(new RvItemModelTag(newsList.get(i), listener));
+            itemModels.add(new RvItemModelTag(newsList.get(i), listener, newsIdList));
 
         }
-
-
 
 //        if (response.data.pagination.has_more_pages) {
 //            itemModels.add(new RvItemModelSearchLoading(listener));
@@ -147,10 +145,7 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.TagViewHolder> {
             itemModels.add(new RvItemModelTagLoading(listener));
         }
 
-        notifyItemRangeChanged(lastIndex, itemModels.size());
-//        notifyItemRangeInserted((lastIndex + 1), response.news.size());
-
-//        notifyDataSetChanged();
+        notifyItemRangeInserted((lastIndex + 1), newsList.size());
     }
 
     public void addRefresher() {

@@ -147,7 +147,7 @@ public class TagActivity extends AppCompatActivity implements NewsListener {
     }
 
     @Override
-    public void onNewsClicked(int newsId) {
+    public void onNewsClicked(int newsId, int[] newsIdList) {
 
         Intent intent = new Intent(this, DetailsActivity.class);
         intent.putExtra("news_id", newsId);

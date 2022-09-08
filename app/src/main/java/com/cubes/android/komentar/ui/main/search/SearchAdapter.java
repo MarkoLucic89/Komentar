@@ -52,7 +52,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
                 adsCounter++;
             }
 
-            itemModels.add(new RvItemModelSearch(newsList.get(i), listener));
+            itemModels.add(new RvItemModelSearch(newsList.get(i), listener, newsIdList));
 
         }
 
@@ -133,7 +133,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
                 adsCounter++;
             }
 
-            itemModels.add(new RvItemModelSearch(newsList.get(i), listener));
+            itemModels.add(new RvItemModelSearch(newsList.get(i), listener, newsIdList));
 
         }
 
@@ -145,10 +145,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
             itemModels.add(new RvItemModelSearchLoading(listener));
         }
 
-//        notifyItemRangeChanged(lastIndex, itemModels.size());
         notifyItemRangeInserted((lastIndex + 1), newsList.size());
-
-//        notifyDataSetChanged();
     }
 
     public void clearList() {

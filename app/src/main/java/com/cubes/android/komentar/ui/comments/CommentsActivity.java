@@ -50,6 +50,8 @@ public class CommentsActivity extends AppCompatActivity {
 
         binding.recyclerViewComments.setVisibility(View.GONE);
 
+        binding.swipeRefreshLayout.setRefreshing(true);
+
         getComments();
 
         binding.swipeRefreshLayout.setOnRefreshListener(() -> refreshList());
@@ -82,7 +84,6 @@ public class CommentsActivity extends AppCompatActivity {
                 binding.textView.setVisibility(View.GONE);
                 binding.recyclerViewComments.setVisibility(View.GONE);
                 binding.imageViewRefresh.setVisibility(View.VISIBLE);
-                binding.progressBar.setVisibility(View.GONE);
 
                 binding.swipeRefreshLayout.setRefreshing(false);
 
@@ -93,7 +94,6 @@ public class CommentsActivity extends AppCompatActivity {
     private void getComments() {
 
         binding.imageViewRefresh.setVisibility(View.GONE);
-        binding.progressBar.setVisibility(View.VISIBLE);
 
         dataRepository.getComments(news_id, new DataRepository.CommentsResponseListener() {
 
@@ -103,7 +103,6 @@ public class CommentsActivity extends AppCompatActivity {
                 binding.textView.setVisibility(View.GONE);
                 binding.recyclerViewComments.setVisibility(View.VISIBLE);
                 binding.imageViewRefresh.setVisibility(View.GONE);
-                binding.progressBar.setVisibility(View.GONE);
 
                 if (comments.isEmpty()) {
                     binding.textView.setVisibility(View.VISIBLE);
@@ -120,7 +119,6 @@ public class CommentsActivity extends AppCompatActivity {
                 binding.textView.setVisibility(View.GONE);
                 binding.recyclerViewComments.setVisibility(View.GONE);
                 binding.imageViewRefresh.setVisibility(View.VISIBLE);
-                binding.progressBar.setVisibility(View.GONE);
 
                 binding.swipeRefreshLayout.setRefreshing(false);
 

@@ -31,8 +31,6 @@ public class LatestNewsFragment extends Fragment implements NewsListener {
 
     private DataRepository dataRepository;
 
-    private int[] newsIdList;
-
     public LatestNewsFragment() {
         // Required empty public constructor
     }
@@ -105,6 +103,9 @@ public class LatestNewsFragment extends Fragment implements NewsListener {
 
         categoryAdapter = new CategoryAdapter(this);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        binding.recyclerView.setItemViewCacheSize(30);
+
         binding.recyclerView.setAdapter(categoryAdapter);
     }
 
@@ -118,8 +119,6 @@ public class LatestNewsFragment extends Fragment implements NewsListener {
 
                 binding.recyclerView.setVisibility(View.VISIBLE);
                 binding.imageViewRefresh.setVisibility(View.GONE);
-
-                newsIdList = MyMethodsClass.initNewsIdList(newsList);
 
                 if (nextPage == 1) {
                     categoryAdapter.updateList(newsList, hasMorePages);
@@ -151,16 +150,14 @@ public class LatestNewsFragment extends Fragment implements NewsListener {
     }
 
     @Override
-    public void onNewsClicked(int newsId) {
-
+    public void onNewsClicked(int newsId, int[] newsIdList) {
         Intent intent = new Intent(getContext(), DetailsActivity.class);
         intent.putExtra("news_id", newsId);
         intent.putExtra("news_id_list", newsIdList);
         getContext().startActivity(intent);
-
     }
 
-//    @Override
+    //    @Override
 //    public void onDestroy() {
 //        super.onDestroy();
 //        binding = null;

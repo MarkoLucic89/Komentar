@@ -1,5 +1,6 @@
 package com.cubes.android.komentar.ui.main.home;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -19,6 +20,7 @@ import com.cubes.android.komentar.data.source.local.SharedPrefs;
 import com.cubes.android.komentar.databinding.FragmentHomeBinding;
 import com.cubes.android.komentar.di.AppContainer;
 import com.cubes.android.komentar.di.MyApplication;
+import com.cubes.android.komentar.ui.main.NewsListActivity;
 import com.cubes.android.komentar.ui.main.home.drawer_menu.DrawerAdapter;
 import com.cubes.android.komentar.ui.main.home.drawer_menu.OnCategoryClickListener;
 import com.cubes.android.komentar.ui.main.home.drawer_menu.rv_item_drawer.RvItemModelDrawerOther;
@@ -30,7 +32,10 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 
-public class HomeFragment extends Fragment implements OnCategoryClickListener, RvItemModelDrawerOther.OnPushNotificationListener {
+public class HomeFragment extends Fragment implements
+        OnCategoryClickListener,
+        RvItemModelDrawerOther.OnPushNotificationListener
+{
 
     private FragmentHomeBinding binding;
 
@@ -43,7 +48,6 @@ public class HomeFragment extends Fragment implements OnCategoryClickListener, R
     public HomeFragment() {
         // Required empty public constructor
     }
-
 
     public static HomeFragment newInstance() {
         HomeFragment fragment = new HomeFragment();
@@ -72,9 +76,6 @@ public class HomeFragment extends Fragment implements OnCategoryClickListener, R
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        binding.tabLayout.setVisibility(View.INVISIBLE);
-        binding.viewPager.setVisibility(View.INVISIBLE);
-
         initDrawerRecyclerView();
 
         getAllCategories();
@@ -96,6 +97,9 @@ public class HomeFragment extends Fragment implements OnCategoryClickListener, R
 
     private void getAllCategories() {
 
+        binding.progressBar.setVisibility(View.VISIBLE);
+        binding.linearLayoutHome.setVisibility(View.GONE);
+
 
         dataRepository.getAllCategories(new DataRepository.CategoriesResponseListener() {
             @Override
@@ -103,8 +107,6 @@ public class HomeFragment extends Fragment implements OnCategoryClickListener, R
 
                 binding.imageViewRefresh.setVisibility(View.GONE);
                 binding.linearLayoutHome.setVisibility(View.VISIBLE);
-                binding.tabLayout.setVisibility(View.VISIBLE);
-                binding.viewPager.setVisibility(View.VISIBLE);
                 binding.progressBar.setVisibility(View.GONE);
 
                 adapter.updateList(categories);
@@ -127,8 +129,6 @@ public class HomeFragment extends Fragment implements OnCategoryClickListener, R
 
         pagerAdapter = new CategoriesPagerAdapter(getActivity(), categories);
         binding.viewPager.setAdapter(pagerAdapter);
-
-//        binding.viewPager.setOffscreenPageLimit(1);
 
         new TabLayoutMediator(
                 binding.tabLayout,
@@ -173,6 +173,7 @@ public class HomeFragment extends Fragment implements OnCategoryClickListener, R
 
     @Override
     public void onPushNotification(boolean isOn) {
+
         Toast.makeText(getContext(), "NOTIFICATIONS ON: " + isOn, Toast.LENGTH_SHORT).show();
 
 //        SharedPrefs.getInstance(getActivity()).setNotificationStatus(isOn);
@@ -185,5 +186,13 @@ public class HomeFragment extends Fragment implements OnCategoryClickListener, R
             FirebaseMessaging.getInstance().unsubscribeFromTopic("main");
         }
 
+    }
+
+    public void onBackPressed() {
+        if (this.binding.drawerLayout.isDrawerOpen(GravityCompat.END)) {
+            binding.drawerLayout.closeDrawer(GravityCompat.END);
+        } else {
+            getActivity().finish();
+        }
     }
 }

@@ -15,9 +15,12 @@ public class RvItemModelSearch implements ItemModelSearch {
     private News news;
     private NewsListener listener;
 
-    public RvItemModelSearch(News news, NewsListener listener) {
+    private int[] newsIdList;
+
+    public RvItemModelSearch(News news, NewsListener listener, int[] newsIdList) {
         this.news = news;
         this.listener = listener;
+        this.newsIdList = newsIdList;
     }
 
     @Override
@@ -35,7 +38,7 @@ public class RvItemModelSearch implements ItemModelSearch {
         binding.textViewCategory.setText(news.category.name);
         binding.textViewTime.setText(MyMethodsClass.convertTime(news.createdAt));
 
-        binding.getRoot().setOnClickListener(view -> listener.onNewsClicked(news.id));
+        binding.getRoot().setOnClickListener(view -> listener.onNewsClicked(news.id, newsIdList));
 
     }
 

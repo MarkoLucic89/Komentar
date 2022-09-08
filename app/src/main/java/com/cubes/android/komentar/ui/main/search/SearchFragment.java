@@ -39,8 +39,6 @@ public class SearchFragment extends Fragment implements NewsListener {
 
     private int nextPage = 1;
 
-    private int[] newsIdList;
-
     private DataRepository dataRepository;
 
     public SearchFragment() {
@@ -110,6 +108,8 @@ public class SearchFragment extends Fragment implements NewsListener {
 
     private void searchListByTerm() {
 
+        binding.swipeRefreshLayout.setRefreshing(true);
+
         nextPage = 1;
 
         searchTerm = binding.editTextSearch.getText().toString().trim();
@@ -150,8 +150,6 @@ public class SearchFragment extends Fragment implements NewsListener {
 
         Log.d(TAG, "loadNextPage: " + nextPage);
 
-        binding.swipeRefreshLayout.setRefreshing(true);
-
         dataRepository.searchNews(searchTerm, nextPage, new DataRepository.SearchResponseListener() {
 
 
@@ -159,8 +157,6 @@ public class SearchFragment extends Fragment implements NewsListener {
             public void onResponse(ArrayList<News> newsList, boolean hasMorePages) {
 
                 binding.recyclerView.setVisibility(View.VISIBLE);
-
-                newsIdList = MyMethodsClass.initNewsIdList(newsList);
 
                 if (nextPage == 1) {
                     adapter.updateList(newsList, hasMorePages);
@@ -201,7 +197,7 @@ public class SearchFragment extends Fragment implements NewsListener {
     }
 
     @Override
-    public void onNewsClicked(int newsId) {
+    public void onNewsClicked(int newsId, int[] newsIdList) {
 
         Intent intent = new Intent(getContext(), DetailsActivity.class);
         intent.putExtra("news_id", newsId);
@@ -210,7 +206,7 @@ public class SearchFragment extends Fragment implements NewsListener {
 
     }
 
-//    @Override
+    //    @Override
 //    public void onDestroy() {
 //        super.onDestroy();
 //        binding = null;
