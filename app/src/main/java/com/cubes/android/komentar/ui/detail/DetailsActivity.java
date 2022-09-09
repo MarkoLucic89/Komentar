@@ -2,6 +2,8 @@ package com.cubes.android.komentar.ui.detail;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
@@ -45,8 +47,11 @@ public class DetailsActivity extends AppCompatActivity implements NewsDetailsFra
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                 super.onPageScrolled(position, positionOffset, positionOffsetPixels);
-                MyMethodsClass.startArrowFadeAnimation(binding.imageViewArrowLeft);
-                MyMethodsClass.startArrowFadeAnimation(binding.imageViewArrowRight);
+
+                    MyMethodsClass.startArrowFadeAnimation(binding.imageViewArrowLeft);
+
+                    MyMethodsClass.startArrowFadeAnimation(binding.imageViewArrowRight);
+
             }
         });
     }
@@ -72,6 +77,7 @@ public class DetailsActivity extends AppCompatActivity implements NewsDetailsFra
             intent.putExtra("news_id", mNewsId);
             startActivity(intent);
         });
+
     }
 
 

@@ -67,6 +67,8 @@ public class NewsDetailsFragment extends Fragment implements
 
     private DataRepository dataRepository;
 
+    private CommentsAdapter commentsAdapter;
+
     public interface DetailsListener {
 
         void onDetailsResponseListener(int newsId, String newsUrl);
@@ -151,8 +153,6 @@ public class NewsDetailsFragment extends Fragment implements
                 bundle.putString("Vest", newsDetails.title);
                 mFirebaseAnalytics.logEvent("android_komentar", bundle);
 
-//                getCommentVotes(newsDetails.commentsTop);
-
                 updateList(newsDetails);
 
                 setListeners(newsDetails);
@@ -216,7 +216,36 @@ public class NewsDetailsFragment extends Fragment implements
                     binding.buttonAllComments.setVisibility(View.GONE);
                 }
 
+                if (newsDetails.commentsTop != null && !newsDetails.commentsTop.isEmpty()) {
+                    getCommentVotes(newsDetails.commentsTop);
+                }
+
                 initCommentsAdapter(newsDetails.commentsTop);
+
+                /*
+                ZA TESTIRANJE KOMENTARA
+                 */
+
+//                dataRepository.getComments(newsDetails.id, new DataRepository.CommentsResponseListener() {
+//                    @Override
+//                    public void onResponse(ArrayList<NewsComment> response) {
+//
+//                        ArrayList<NewsComment> comments = response;
+//
+//                        if (comments != null && !comments.isEmpty()) {
+//                            getCommentVotes(comments);
+//                        }
+//
+//                        initCommentsAdapter(comments);
+//
+//                    }
+//
+//                    @Override
+//                    public void onFailure(Throwable t) {
+//
+//                    }
+//                });
+
                 initRelatedNewsAdapter(newsDetails.relatedNews);
 
                 AdRequest adRequest3 = new AdRequest.Builder().build();
@@ -240,7 +269,8 @@ public class NewsDetailsFragment extends Fragment implements
 
     private void initCommentsAdapter(ArrayList<NewsComment> commentsTop) {
         binding.recyclerViewComments.setLayoutManager(new LinearLayoutManager(getContext()));
-        binding.recyclerViewComments.setAdapter(new CommentsAdapter(this, commentsTop));
+        commentsAdapter = new CommentsAdapter(this, commentsTop);
+        binding.recyclerViewComments.setAdapter(commentsAdapter);
     }
 
     private void initTagAdapter(ArrayList<NewsTag> tags) {
@@ -281,7 +311,9 @@ public class NewsDetailsFragment extends Fragment implements
             }
 
             //onPostExecute
-            handler.post(() -> checkVotedComments(comments, mVotes));
+            handler.post(() -> {
+                checkVotedComments(comments, mVotes);
+            });
 
         });
 
@@ -301,6 +333,8 @@ public class NewsDetailsFragment extends Fragment implements
 
             }
         }
+
+        commentsAdapter.updateList(comments);
 
     }
 
@@ -356,7 +390,7 @@ public class NewsDetailsFragment extends Fragment implements
                     SharedPrefs.writeListInPref(getActivity(), mVotes);
 
                     //onPostExecute
-//                    handler.post(() -> adapter.commentLiked(id, vote));
+                    handler.post(() -> commentsAdapter.commentLiked(id, vote));
 
                 });
 
@@ -407,7 +441,7 @@ public class NewsDetailsFragment extends Fragment implements
                     SharedPrefs.writeListInPref(getActivity(), mVotes);
 
                     //onPostExecute
-//                    handler.post(() -> adapter.commentDisliked(id, vote));
+                    handler.post(() -> commentsAdapter.commentDisliked(id, vote));
 
                 });
 

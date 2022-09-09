@@ -121,7 +121,7 @@ public class LatestNewsFragment extends Fragment implements NewsListener {
                 binding.imageViewRefresh.setVisibility(View.GONE);
 
                 if (nextPage == 1) {
-                    categoryAdapter.updateList(newsList, hasMorePages);
+                    categoryAdapter.initList(newsList, hasMorePages);
                 } else {
                     categoryAdapter.addNextPage(newsList, hasMorePages);
                 }

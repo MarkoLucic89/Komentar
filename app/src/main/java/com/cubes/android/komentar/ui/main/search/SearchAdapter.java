@@ -35,7 +35,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
         this.listener = listener;
     }
 
-    public void updateList(ArrayList<News> newsList, boolean hasMorePages) {
+    public void initList(ArrayList<News> newsList, boolean hasMorePages) {
 
         adsCounter = 0;
 
@@ -112,6 +112,12 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
     }
 
     public void addNextPage(ArrayList<News> newsList, boolean hasMorePages) {
+
+        if (newsList.isEmpty()) {
+            itemModels.remove(itemModels.size() - 1);
+            notifyItemRemoved(itemModels.size());
+            return;
+        }
 
         int lastIndex;
 

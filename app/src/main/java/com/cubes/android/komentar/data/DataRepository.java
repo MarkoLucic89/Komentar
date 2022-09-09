@@ -127,7 +127,8 @@ public class DataRepository {
                 if (response.body() != null
                         && response.isSuccessful()
                         && response.body().data != null
-                        && !response.body().data.news.isEmpty()) {
+                        && response.body().data.news != null
+                ) {
 
                     ArrayList<News> videoNews = mapNewsFromResponse(response.body().data.news);
 
@@ -163,7 +164,8 @@ public class DataRepository {
                 if (response.body() != null
                         && response.isSuccessful()
                         && response.body().data != null
-                        && !response.body().data.news.isEmpty()) {
+                        && response.body().data.news != null
+                ) {
 
                     ArrayList<News> latestNews = mapNewsFromResponse(response.body().data.news);
 
@@ -201,7 +203,8 @@ public class DataRepository {
                 if (response.body() != null
                         && response.isSuccessful()
                         && response.body().data != null
-                        && !response.body().data.news.isEmpty()) {
+                        && response.body().data.news != null
+                ) {
 
                     ArrayList<News> categoryNews = mapNewsFromResponse(response.body().data.news);
 
@@ -235,7 +238,9 @@ public class DataRepository {
 
                 if (response.body() != null
                         && response.isSuccessful()
-                        && response.body().data != null) {
+                        && response.body().data != null
+                        && response.body().data.news != null
+                ) {
 
                     ArrayList<News> searchNews = mapNewsFromResponse(response.body().data.news);
 
@@ -413,7 +418,8 @@ public class DataRepository {
                 if (response.body() != null
                         && response.isSuccessful()
                         && response.body().data != null
-                        && !response.body().data.news.isEmpty()) {
+                        && response.body().data.news != null
+                ) {
 
                     ArrayList<News> tagNews = mapNewsFromResponse(response.body().data.news);
 

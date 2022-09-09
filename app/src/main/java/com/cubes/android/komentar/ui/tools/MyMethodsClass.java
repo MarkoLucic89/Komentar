@@ -1,8 +1,11 @@
 package com.cubes.android.komentar.ui.tools;
 
+import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
+
+import androidx.room.ColumnInfo;
 
 import com.cubes.android.komentar.data.model.domain.HomePageData;
 import com.cubes.android.komentar.data.model.domain.News;
@@ -83,6 +86,8 @@ public class MyMethodsClass {
 
     public static void startArrowFadeAnimation(ImageView imageView) {
         imageView.setAlpha(1f);
-        imageView.postDelayed(() -> imageView.animate().alpha(0f).setDuration(1000), 2000);
+        imageView.postDelayed(() -> {
+            imageView.animate().alpha(0f).setDuration(1000);
+        }, 2000);
     }
 }

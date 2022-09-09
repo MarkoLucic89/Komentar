@@ -40,32 +40,6 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         this.listener = listener;
     }
 
-    private void initList(ArrayList<News> newsList) {
-
-        if (newsList.isEmpty()) {
-            return;
-        }
-
-        newsIdList = MyMethodsClass.initNewsIdList(newsList);
-
-        //BIG ITEM
-
-        itemModels.add(new RvItemModelCategoryBig(newsList.get(0), isOnHomePage, listener, newsIdList));
-
-        //SMALL ITEMS
-
-        if (newsList.size() <= 1) {
-            return;
-        }
-
-
-        for (int i = 1; i < newsList.size(); i++) {
-            itemModels.add(new RvItemModelCategorySmall(newsList.get(i), isOnHomePage, listener, newsIdList));
-        }
-
-    }
-
-
     @NonNull
     @Override
 
@@ -109,7 +83,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
     }
 
 
-    public void updateList(ArrayList<News> newsList, boolean hasMorePages) {
+    public void initList(ArrayList<News> newsList, boolean hasMorePages) {
 
         adCounter = 0;
 
@@ -149,11 +123,21 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 
     public void addNextPage(ArrayList<News> newsList, boolean hasMorePages) {
 
+        if (newsList.isEmpty()) {
+
+            itemModels.remove(itemModels.size() - 1);
+            notifyItemRemoved(itemModels.size());
+            return;
+
+        }
+
         int lastIndex = 0;
 
         if (!itemModels.isEmpty()) {
+
             lastIndex = itemModels.size() - 1;
             itemModels.remove(lastIndex);
+
         }
 
         newsIdList = MyMethodsClass.initNewsIdList(newsList);
@@ -194,7 +178,6 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         itemModels.add(new RvItemModelCategoryRefresh(listener));
 
         notifyItemChanged(itemModels.size() - 1);
-
 
     }
 

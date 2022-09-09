@@ -27,8 +27,6 @@ public class TagActivity extends AppCompatActivity implements NewsListener {
     private int nextPage = 1;
     private TagAdapter adapter;
 
-    private int[] newsIdList;
-
     private DataRepository dataRepository;
 
     @Override
@@ -49,13 +47,20 @@ public class TagActivity extends AppCompatActivity implements NewsListener {
 
         initRecyclerView();
 
+        binding.swipeRefreshLayout.setRefreshing(true);
+
         loadNextPage();
 
         binding.textViewTitle.setText(tagTitle);
 
         binding.imageViewBack.setOnClickListener(view -> finish());
 
-        binding.imageViewRefresh.setOnClickListener(view -> loadNextPage());
+        binding.imageViewRefresh.setOnClickListener(view -> {
+
+            binding.swipeRefreshLayout.setRefreshing(true);
+
+            loadNextPage();
+        });
 
         binding.swipeRefreshLayout.setOnRefreshListener(this::refreshAdapter);
 
@@ -106,8 +111,6 @@ public class TagActivity extends AppCompatActivity implements NewsListener {
     @Override
     public void loadNextPage() {
 
-        binding.swipeRefreshLayout.setRefreshing(true);
-
         dataRepository.getNewsForTag(tagId, nextPage, new DataRepository.TagResponseListener() {
 
             @Override
@@ -115,8 +118,6 @@ public class TagActivity extends AppCompatActivity implements NewsListener {
 
                 binding.recyclerView.setVisibility(View.VISIBLE);
                 binding.imageViewRefresh.setVisibility(View.GONE);
-
-                newsIdList = MyMethodsClass.initNewsIdList(newsList);
 
                 if (nextPage == 1) {
                     adapter.updateList(newsList, hasMorePages);
@@ -166,10 +167,10 @@ public class TagActivity extends AppCompatActivity implements NewsListener {
 
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        binding = null;
-        dataRepository = null;
-    }
+//    @Override
+//    protected void onDestroy() {
+//        super.onDestroy();
+//        binding = null;
+//        dataRepository = null;
+//    }
 }

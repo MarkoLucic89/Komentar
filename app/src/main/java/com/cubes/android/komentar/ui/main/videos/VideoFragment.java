@@ -10,7 +10,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.cubes.android.komentar.data.DataRepository;
 import com.cubes.android.komentar.di.AppContainer;
@@ -113,7 +112,7 @@ public class VideoFragment extends Fragment implements NewsListener {
                 binding.imageViewRefresh.setVisibility(View.GONE);
 
                 if (nextPage == 1) {
-                    adapter.updateList(newsList, hasNextPage);
+                    adapter.initList(newsList, hasNextPage);
                 } else {
                     adapter.addNextPage(newsList, hasNextPage);
                 }

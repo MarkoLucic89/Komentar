@@ -159,7 +159,7 @@ public class SearchFragment extends Fragment implements NewsListener {
                 binding.recyclerView.setVisibility(View.VISIBLE);
 
                 if (nextPage == 1) {
-                    adapter.updateList(newsList, hasMorePages);
+                    adapter.initList(newsList, hasMorePages);
                 } else {
                     adapter.addNextPage(newsList, hasMorePages);
                 }

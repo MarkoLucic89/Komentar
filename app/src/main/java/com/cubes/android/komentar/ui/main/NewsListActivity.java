@@ -7,6 +7,7 @@ import com.cubes.android.komentar.databinding.ActivityNewsListBinding;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 import com.cubes.android.komentar.R;
 import com.cubes.android.komentar.ui.main.home.HomeFragment;
@@ -33,6 +34,7 @@ public class NewsListActivity extends AppCompatActivity {
         homeFragment = HomeFragment.newInstance();
 
         replaceFragment(homeFragment);
+
         setListeners();
 
         addStickyAd();
@@ -41,7 +43,10 @@ public class NewsListActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        homeFragment.onBackPressed();
+        if (homeFragment.onBackPressed()) {
+            finish();
+        }
+
     }
 
     private void addStickyAd() {
@@ -80,30 +85,30 @@ public class NewsListActivity extends AppCompatActivity {
 
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
 
-            Fragment fragment = null;
-
             switch (item.getItemId()) {
                 case R.id.menuHome:
-                    fragment = HomeFragment.newInstance();
-                    break;
+                    homeFragment = HomeFragment.newInstance();
+                    replaceFragment(homeFragment);
+                    return true;
                 case R.id.menuLatest:
-                    fragment = LatestNewsFragment.newInstance();
-                    break;
+                    replaceFragment(LatestNewsFragment.newInstance());
+                    return true;
                 case R.id.menuVideo:
-                    fragment = VideoFragment.newInstance();
-                    break;
+                    replaceFragment(VideoFragment.newInstance());
+                    return true;
                 case R.id.menuSearch:
-                    fragment = SearchFragment.newInstance();
-                    break;
+                    replaceFragment(SearchFragment.newInstance());
+                    return true;
+                default:
+                    return false;
             }
 
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.fragmentContainer, fragment)
-                    .commit();
-
-            return true;
         });
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        homeFragment = null;
+    }
 }

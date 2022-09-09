@@ -113,6 +113,14 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.TagViewHolder> {
 
     public void addNextPage(ArrayList<News> newsList, boolean hasMorePages) {
 
+        if (newsList.isEmpty()) {
+
+            itemModels.remove(itemModels.size() - 1);
+            notifyItemRemoved(itemModels.size());
+            return;
+
+        }
+
         int lastIndex;
 
         if (itemModels.isEmpty()) {

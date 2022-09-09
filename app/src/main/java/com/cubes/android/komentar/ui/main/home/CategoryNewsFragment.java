@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.cubes.android.komentar.data.DataRepository;
 import com.cubes.android.komentar.di.AppContainer;
 import com.cubes.android.komentar.di.MyApplication;
-import com.cubes.android.komentar.data.model.domain.Category;
 import com.cubes.android.komentar.data.model.domain.News;
 import com.cubes.android.komentar.databinding.FragmentCategoryBinding;
 import com.cubes.android.komentar.ui.detail.DetailsActivity;
@@ -142,7 +141,7 @@ public class CategoryNewsFragment extends Fragment implements NewsListener {
 
                 if (nextPage == 1) {
 
-                    categoryAdapter.updateList(newsList, hasMorePages);
+                    categoryAdapter.initList(newsList, hasMorePages);
 
 
                     if (mIsSubcategory) {
@@ -195,12 +194,12 @@ public class CategoryNewsFragment extends Fragment implements NewsListener {
 
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-
-        binding = null;
-        dataRepository = null;
-
-    }
+//    @Override
+//    public void onDestroy() {
+//        super.onDestroy();
+//
+//        binding = null;
+//        dataRepository = null;
+//
+//    }
 }

@@ -20,7 +20,6 @@ import com.cubes.android.komentar.data.source.local.SharedPrefs;
 import com.cubes.android.komentar.databinding.FragmentHomeBinding;
 import com.cubes.android.komentar.di.AppContainer;
 import com.cubes.android.komentar.di.MyApplication;
-import com.cubes.android.komentar.ui.main.NewsListActivity;
 import com.cubes.android.komentar.ui.main.home.drawer_menu.DrawerAdapter;
 import com.cubes.android.komentar.ui.main.home.drawer_menu.OnCategoryClickListener;
 import com.cubes.android.komentar.ui.main.home.drawer_menu.rv_item_drawer.RvItemModelDrawerOther;
@@ -29,7 +28,6 @@ import com.google.android.material.tabs.TabLayoutMediator;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 
 public class HomeFragment extends Fragment implements
@@ -124,7 +122,6 @@ public class HomeFragment extends Fragment implements
         });
     }
 
-
     private void initViewPager(ArrayList<Category> categories) {
 
         pagerAdapter = new CategoriesPagerAdapter(getActivity(), categories);
@@ -188,11 +185,12 @@ public class HomeFragment extends Fragment implements
 
     }
 
-    public void onBackPressed() {
+    public boolean onBackPressed() {
         if (this.binding.drawerLayout.isDrawerOpen(GravityCompat.END)) {
             binding.drawerLayout.closeDrawer(GravityCompat.END);
+            return false;
         } else {
-            getActivity().finish();
+            return true;
         }
     }
 }
