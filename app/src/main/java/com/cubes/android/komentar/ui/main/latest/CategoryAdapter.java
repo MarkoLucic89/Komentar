@@ -21,6 +21,7 @@ import com.cubes.android.komentar.ui.main.latest.rv_model_category.RvItemModelCa
 import com.cubes.android.komentar.ui.main.latest.rv_model_category.RvItemModelCategorySmall;
 import com.cubes.android.komentar.ui.main.latest.rv_model_category.RvItemModelHomeAd;
 import com.cubes.android.komentar.ui.tools.MyMethodsClass;
+import com.google.android.gms.ads.AdRequest;
 
 
 import java.util.ArrayList;
@@ -58,6 +59,8 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
             binding = RvItemRefreshBinding.inflate(inflater, parent, false);
         } else if (viewType == R.layout.rv_item_ad) {
             binding = RvItemAdBinding.inflate(inflater, parent, false);
+            AdRequest adRequest = new AdRequest.Builder().build();
+            ((RvItemAdBinding) binding).adView.loadAd(adRequest);
         } else {
             binding = null;
         }

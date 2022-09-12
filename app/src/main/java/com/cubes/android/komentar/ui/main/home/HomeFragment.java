@@ -1,6 +1,5 @@
 package com.cubes.android.komentar.ui.main.home;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -159,6 +158,8 @@ public class HomeFragment extends Fragment implements
         intent.putExtra("subcategory_id", subcategoryId);
         getContext().startActivity(intent);
     }
+
+
 
     @Override
     public void onDestroy() {

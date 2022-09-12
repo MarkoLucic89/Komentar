@@ -62,6 +62,9 @@
         <entry key="app/src/main/res/drawable/background_button_dislike.xml" value="0.235" />
         <entry key="app/src/main/res/drawable/background_button_like.xml" value="0.235" />
         <entry key="app/src/main/res/drawable/background_gradient.xml" value="0.235" />
+        <entry key="app/src/main/res/drawable/background_item_menu.xml" value="0.2325" />
+        <entry key="app/src/main/res/drawable/background_item_menu_close.xml" value="0.2325" />
+        <entry key="app/src/main/res/drawable/background_item_menu_videos.xml" value="0.2325" />
         <entry key="app/src/main/res/drawable/background_pager_arrow.xml" value="0.235" />
         <entry key="app/src/main/res/drawable/background_search.xml" value="0.2195" />
         <entry key="app/src/main/res/drawable/background_tag.xml" value="0.235" />
@@ -71,6 +74,7 @@
         <entry key="app/src/main/res/drawable/ic_home_menu.xml" value="0.2325" />
         <entry key="app/src/main/res/drawable/ic_launcher_komentarrs_background.xml" value="0.2175" />
         <entry key="app/src/main/res/drawable/ic_left_arrow.xml" value="0.2325" />
+        <entry key="app/src/main/res/drawable/ic_menu.xml" value="0.1275" />
         <entry key="app/src/main/res/drawable/ic_right_arrow.xml" value="0.2325" />
         <entry key="app/src/main/res/layout/activity_category.xml" value="0.3703125" />
         <entry key="app/src/main/res/layout/activity_comments.xml" value="0.3703125" />

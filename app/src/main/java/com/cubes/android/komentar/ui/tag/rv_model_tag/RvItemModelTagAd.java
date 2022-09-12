@@ -18,8 +18,8 @@ public class RvItemModelTagAd implements ItemModelTag {
 
         RvItemAdBinding binding = (RvItemAdBinding) holder.binding;
 
-        AdRequest adRequest = new AdRequest.Builder().build();
-        binding.adView.loadAd(adRequest);
+//        AdRequest adRequest = new AdRequest.Builder().build();
+//        binding.adView.loadAd(adRequest);
 
     }
 }

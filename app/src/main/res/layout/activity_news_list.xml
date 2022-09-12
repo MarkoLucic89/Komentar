@@ -41,7 +41,6 @@
         android:layout_height="wrap_content"
         android:background="@color/blue_dark"
         app:labelVisibilityMode="labeled"
-
         app:itemIconTint="@color/white"
         app:itemTextColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"

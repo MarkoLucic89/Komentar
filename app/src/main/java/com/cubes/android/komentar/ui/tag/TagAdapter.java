@@ -21,6 +21,7 @@ import com.cubes.android.komentar.ui.tag.rv_model_tag.RvItemModelTagAd;
 import com.cubes.android.komentar.ui.tag.rv_model_tag.RvItemModelTagLoading;
 import com.cubes.android.komentar.ui.tag.rv_model_tag.RvItemModelTagRefresh;
 import com.cubes.android.komentar.ui.tools.MyMethodsClass;
+import com.google.android.gms.ads.AdRequest;
 
 import java.util.ArrayList;
 
@@ -88,6 +89,8 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.TagViewHolder> {
                 break;
             case R.layout.rv_item_ad:
                 binding = RvItemAdBinding.inflate(inflater, parent, false);
+                AdRequest adRequest = new AdRequest.Builder().build();
+                ((RvItemAdBinding) binding).adView.loadAd(adRequest);
                 break;
             default:
                 binding = null;

@@ -27,6 +27,7 @@ import com.cubes.android.komentar.ui.main.home.home_pager.rv_item_home.RvItemMod
 import com.cubes.android.komentar.ui.main.home.home_pager.rv_item_home.RvItemModelHomeVideos;
 import com.cubes.android.komentar.ui.main.home.home_pager.rv_item_home.RvItemModelTabs;
 import com.cubes.android.komentar.ui.main.latest.NewsListener;
+import com.google.android.gms.ads.AdRequest;
 
 import java.util.ArrayList;
 
@@ -188,6 +189,8 @@ public class HomePagerAdapter extends RecyclerView.Adapter<HomePagerAdapter.Home
                 break;
             case R.layout.rv_item_ad:
                 binding = RvItemAdBinding.inflate(inflater, parent, false);
+                AdRequest adRequest = new AdRequest.Builder().build();
+                ((RvItemAdBinding) binding).adView.loadAd(adRequest);
                 break;
             default:
                 binding = null;

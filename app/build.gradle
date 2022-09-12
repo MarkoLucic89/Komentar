@@ -69,12 +69,15 @@ dependencies {
     //flexBox
     implementation 'com.google.android.flexbox:flexbox:3.0.0'
 
+    //yoyo animation
+    implementation 'com.daimajia.androidanimations:library:2.4@aar'
+
     //firebase
     implementation 'com.google.firebase:firebase-bom:30.4.1'
     implementation 'com.google.firebase:firebase-analytics:21.1.1'
     implementation 'com.google.firebase:firebase-crashlytics:18.2.13'
     implementation 'com.google.firebase:firebase-messaging:23.0.8'
-    implementation 'com.google.android.gms:play-services-ads:21.1.0'
+    implementation 'com.google.android.gms:play-services-ads:21.2.0'
 
 
 

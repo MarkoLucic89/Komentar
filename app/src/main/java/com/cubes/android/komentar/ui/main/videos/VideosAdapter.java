@@ -20,6 +20,7 @@ import com.cubes.android.komentar.ui.main.videos.rv_model_videos.RvItemModelVide
 import com.cubes.android.komentar.ui.main.videos.rv_model_videos.RvItemModelVideoRefresh;
 import com.cubes.android.komentar.ui.main.videos.rv_model_videos.RvItemModelVideos;
 import com.cubes.android.komentar.ui.tools.MyMethodsClass;
+import com.google.android.gms.ads.AdRequest;
 
 import java.util.ArrayList;
 
@@ -70,6 +71,8 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.VideosView
                 break;
             case R.layout.rv_item_ad:
                 binding = com.cubes.android.komentar.databinding.RvItemAdBinding.inflate(inflater, parent, false);
+                AdRequest adRequest = new AdRequest.Builder().build();
+                ((com.cubes.android.komentar.databinding.RvItemAdBinding) binding).adView.loadAd(adRequest);
                 break;
             default:
                 binding = null;

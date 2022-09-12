@@ -19,6 +19,7 @@ import com.cubes.android.komentar.ui.main.search.rv_model_search.RvItemModelSear
 import com.cubes.android.komentar.ui.main.search.rv_model_search.RvItemModelSearchLoading;
 import com.cubes.android.komentar.ui.main.search.rv_model_search.RvItemModelSearchRefresh;
 import com.cubes.android.komentar.ui.tools.MyMethodsClass;
+import com.google.android.gms.ads.AdRequest;
 
 import java.util.ArrayList;
 
@@ -88,6 +89,8 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
                 break;
             case R.layout.rv_item_ad:
                 binding = com.cubes.android.komentar.databinding.RvItemAdBinding.inflate(inflater, parent, false);
+                AdRequest adRequest = new AdRequest.Builder().build();
+                ((com.cubes.android.komentar.databinding.RvItemAdBinding) binding).adView.loadAd(adRequest);
                 break;
             default:
                 binding = null;

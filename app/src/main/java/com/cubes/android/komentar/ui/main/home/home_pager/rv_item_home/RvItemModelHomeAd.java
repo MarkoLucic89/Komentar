@@ -18,8 +18,8 @@ public class RvItemModelHomeAd implements ItemModelHome {
 
         RvItemAdBinding binding = (RvItemAdBinding) holder.binding;
 
-        AdRequest adRequest = new AdRequest.Builder().build();
-        binding.adView.loadAd(adRequest);
+//        AdRequest adRequest = new AdRequest.Builder().build();
+//        binding.adView.loadAd(adRequest);
 
     }
 }

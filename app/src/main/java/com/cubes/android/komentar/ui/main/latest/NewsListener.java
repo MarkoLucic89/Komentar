@@ -15,6 +15,18 @@ public interface NewsListener {
 
     }
 
+    default void onNewsMenuShareClicked(int newsId, String url) {
+
+    }
+
+    default void onNewsMenuCommentsClicked(int newsId) {
+
+    }
+
+    default void onNewsMenuFavoritesClicked(int newsId) {
+
+    }
+
     default void loadNextPage() {
 
     }
