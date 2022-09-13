@@ -10,8 +10,8 @@ public class AppContainer {
 
     private LocalDataSource localDataSource;
     private RemoteDataSource remoteDataSource;
-    private NewsDatabase room;
 
+    public NewsDatabase room;
     public DataRepository dataRepository;
 
     public AppContainer(Context context) {

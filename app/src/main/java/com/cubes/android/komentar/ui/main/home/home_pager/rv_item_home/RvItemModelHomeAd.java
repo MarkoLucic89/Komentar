@@ -16,8 +16,8 @@ public class RvItemModelHomeAd implements ItemModelHome {
     @Override
     public void bind(HomePagerAdapter.HomeViewHolder holder) {
 
-        RvItemAdBinding binding = (RvItemAdBinding) holder.binding;
-
+//        RvItemAdBinding binding = (RvItemAdBinding) holder.binding;
+//
 //        AdRequest adRequest = new AdRequest.Builder().build();
 //        binding.adView.loadAd(adRequest);
 

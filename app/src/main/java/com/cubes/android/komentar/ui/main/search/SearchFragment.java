@@ -22,6 +22,7 @@ import com.cubes.android.komentar.di.AppContainer;
 import com.cubes.android.komentar.di.MyApplication;
 import com.cubes.android.komentar.data.model.domain.News;
 import com.cubes.android.komentar.databinding.FragmentSearchBinding;
+import com.cubes.android.komentar.ui.comments.CommentsActivity;
 import com.cubes.android.komentar.ui.detail.DetailsActivity;
 import com.cubes.android.komentar.ui.main.latest.NewsListener;
 import com.cubes.android.komentar.ui.tools.MyMethodsClass;
@@ -203,6 +204,31 @@ public class SearchFragment extends Fragment implements NewsListener {
         intent.putExtra("news_id", newsId);
         intent.putExtra("news_id_list", newsIdList);
         getContext().startActivity(intent);
+
+    }
+
+
+    @Override
+    public void onNewsMenuCommentsClicked(int newsId) {
+        Intent intent = new Intent(getActivity(), CommentsActivity.class);
+        intent.putExtra("news_id", newsId);
+        getContext().startActivity(intent);
+    }
+
+    @Override
+    public void onNewsMenuShareClicked(String url) {
+
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, url);
+        sendIntent.setType("text/plain");
+
+        Intent shareIntent = Intent.createChooser(sendIntent, null);
+        startActivity(shareIntent);
+    }
+
+    @Override
+    public void onNewsMenuFavoritesClicked(News news) {
 
     }
 

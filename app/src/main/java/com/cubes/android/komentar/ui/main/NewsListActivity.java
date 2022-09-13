@@ -22,6 +22,8 @@ import com.google.android.gms.ads.initialization.OnInitializationCompleteListene
 
 public class NewsListActivity extends AppCompatActivity {
 
+    private boolean isFirstTimeBackClicked = true;
+
     private ActivityNewsListBinding binding;
     private HomeFragment homeFragment;
 
@@ -43,8 +45,14 @@ public class NewsListActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+
         if (homeFragment.onBackPressed()) {
-            finish();
+            if (isFirstTimeBackClicked) {
+                isFirstTimeBackClicked = false;
+                Toast.makeText(this, "Pritisnite ponovo da biste izašli iz aplikacije", Toast.LENGTH_SHORT).show();
+            } else {
+                finish();
+            }
         }
 
     }

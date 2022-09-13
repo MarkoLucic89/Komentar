@@ -16,8 +16,8 @@ public class RvItemModelSearchAd implements ItemModelSearch {
     @Override
     public void bind(SearchAdapter.SearchViewHolder holder) {
 
-        RvItemAdBinding binding = (RvItemAdBinding) holder.binding;
-
+//        RvItemAdBinding binding = (RvItemAdBinding) holder.binding;
+//
 //        AdRequest adRequest = new AdRequest.Builder().build();
 //        binding.adView.loadAd(adRequest);
 

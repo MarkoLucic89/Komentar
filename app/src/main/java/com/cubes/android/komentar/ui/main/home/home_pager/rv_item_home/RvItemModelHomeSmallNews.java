@@ -59,6 +59,24 @@ public class RvItemModelHomeSmallNews implements ItemModelHome {
             animateMenuVisibility(isMenuOpen, binding);
         });
 
+        binding.imageViewComments.setOnClickListener(view -> {
+            isMenuOpen = !isMenuOpen;
+            animateMenuVisibility(isMenuOpen, binding);
+            listener.onNewsMenuCommentsClicked(news.id);
+        });
+
+        binding.imageViewShare.setOnClickListener(view -> {
+            isMenuOpen = !isMenuOpen;
+            animateMenuVisibility(isMenuOpen, binding);
+            listener.onNewsMenuShareClicked(news.url);
+        });
+
+        binding.imageViewFavorites.setOnClickListener(view -> {
+            isMenuOpen = !isMenuOpen;
+            animateMenuVisibility(isMenuOpen, binding);
+            listener.onNewsMenuFavoritesClicked(news);
+        });
+
     }
 
     private String getTime(String created_at) {

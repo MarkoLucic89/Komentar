@@ -59,6 +59,24 @@ public class RvItemModelSearch implements ItemModelSearch {
             animateMenuVisibility(isMenuOpen, binding);
         });
 
+        binding.imageViewComments.setOnClickListener(view -> {
+            isMenuOpen = !isMenuOpen;
+            animateMenuVisibility(isMenuOpen, binding);
+            listener.onNewsMenuCommentsClicked(news.id);
+        });
+
+        binding.imageViewShare.setOnClickListener(view -> {
+            isMenuOpen = !isMenuOpen;
+            animateMenuVisibility(isMenuOpen, binding);
+            listener.onNewsMenuShareClicked(news.url);
+        });
+
+        binding.imageViewFavorites.setOnClickListener(view -> {
+            isMenuOpen = !isMenuOpen;
+            animateMenuVisibility(isMenuOpen, binding);
+            listener.onNewsMenuFavoritesClicked(news);
+        });
+
     }
 
 

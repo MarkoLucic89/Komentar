@@ -9,6 +9,7 @@ import androidx.viewbinding.ViewBinding;
 
 import com.cubes.android.komentar.R;
 import com.cubes.android.komentar.data.model.domain.News;
+import com.cubes.android.komentar.databinding.RvItemAdBinding;
 import com.cubes.android.komentar.databinding.RvItemCategorySmallBinding;
 import com.cubes.android.komentar.databinding.RvItemLoadingBinding;
 import com.cubes.android.komentar.databinding.RvItemRefreshBinding;
@@ -88,9 +89,9 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
                 binding = RvItemRefreshBinding.inflate(inflater, parent, false);
                 break;
             case R.layout.rv_item_ad:
-                binding = com.cubes.android.komentar.databinding.RvItemAdBinding.inflate(inflater, parent, false);
+                binding = RvItemAdBinding.inflate(inflater, parent, false);
                 AdRequest adRequest = new AdRequest.Builder().build();
-                ((com.cubes.android.komentar.databinding.RvItemAdBinding) binding).adView.loadAd(adRequest);
+                ((RvItemAdBinding) binding).adView.loadAd(adRequest);
                 break;
             default:
                 binding = null;

@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.cubes.android.komentar.data.DataRepository;
 import com.cubes.android.komentar.data.model.domain.News;
+import com.cubes.android.komentar.data.source.local.database.dao.NewsCommentsVoteDao;
 import com.cubes.android.komentar.databinding.FragmentLatestNewsBinding;
 import com.cubes.android.komentar.di.AppContainer;
 import com.cubes.android.komentar.di.MyApplication;
@@ -32,6 +33,8 @@ public class LatestNewsFragment extends Fragment implements NewsListener {
 
     private DataRepository dataRepository;
 
+    private NewsCommentsVoteDao commentsVoteDao;
+
     public LatestNewsFragment() {
         // Required empty public constructor
     }
@@ -47,6 +50,7 @@ public class LatestNewsFragment extends Fragment implements NewsListener {
 
         AppContainer appContainer = ((MyApplication) getActivity().getApplication()).appContainer;
         dataRepository = appContainer.dataRepository;
+        commentsVoteDao = appContainer.room.voteDao();
     }
 
     @Override
@@ -163,6 +167,23 @@ public class LatestNewsFragment extends Fragment implements NewsListener {
         Intent intent = new Intent(getActivity(), CommentsActivity.class);
         intent.putExtra("news_id", newsId);
         getContext().startActivity(intent);
+    }
+
+    @Override
+    public void onNewsMenuShareClicked(String url) {
+
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, url);
+        sendIntent.setType("text/plain");
+
+        Intent shareIntent = Intent.createChooser(sendIntent, null);
+        startActivity(shareIntent);
+    }
+
+    @Override
+    public void onNewsMenuFavoritesClicked(News news) {
+
     }
 
     //    @Override

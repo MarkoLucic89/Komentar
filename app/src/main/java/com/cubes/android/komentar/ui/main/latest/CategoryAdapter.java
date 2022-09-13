@@ -23,7 +23,6 @@ import com.cubes.android.komentar.ui.main.latest.rv_model_category.RvItemModelHo
 import com.cubes.android.komentar.ui.tools.MyMethodsClass;
 import com.google.android.gms.ads.AdRequest;
 
-
 import java.util.ArrayList;
 
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder> {

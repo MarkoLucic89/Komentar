@@ -1,6 +1,8 @@
 package com.cubes.android.komentar.ui.main.latest;
 
 
+import com.cubes.android.komentar.data.model.domain.News;
+
 public interface NewsListener {
 
     //metode su default jer ne koristim svaku na svakom mestu gde implementiram interface
@@ -15,7 +17,7 @@ public interface NewsListener {
 
     }
 
-    default void onNewsMenuShareClicked(int newsId, String url) {
+    default void onNewsMenuShareClicked(String url) {
 
     }
 
@@ -23,7 +25,7 @@ public interface NewsListener {
 
     }
 
-    default void onNewsMenuFavoritesClicked(int newsId) {
+    default void onNewsMenuFavoritesClicked(News news) {
 
     }
 

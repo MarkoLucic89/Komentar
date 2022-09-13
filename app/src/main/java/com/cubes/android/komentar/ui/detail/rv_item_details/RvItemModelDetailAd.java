@@ -16,10 +16,10 @@ public class RvItemModelDetailAd implements ItemModelDetails {
     @Override
     public void bind(NewsDetailsAdapter.NewsDetailsViewHolder  holder) {
 
-        RvItemAdBinding binding = (RvItemAdBinding) holder.binding;
-
-        AdRequest adRequest = new AdRequest.Builder().build();
-        binding.adView.loadAd(adRequest);
+//        RvItemAdBinding binding = (RvItemAdBinding) holder.binding;
+//
+//        AdRequest adRequest = new AdRequest.Builder().build();
+//        binding.adView.loadAd(adRequest);
 
     }
 }

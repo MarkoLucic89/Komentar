@@ -15,8 +15,8 @@ public class RvItemModelHomeAd implements ItemModelCategory {
     @Override
     public void bind(CategoryAdapter.CategoryViewHolder  holder) {
 
-        RvItemAdBinding binding = (RvItemAdBinding) holder.binding;
-
+//        RvItemAdBinding binding = (RvItemAdBinding) holder.binding;
+//
 //        AdRequest adRequest = new AdRequest.Builder().build();
 //        binding.adView.loadAd(adRequest);
 
