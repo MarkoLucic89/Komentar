@@ -2,9 +2,12 @@ package com.cubes.android.komentar.ui.main.home;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -12,6 +15,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.cubes.android.komentar.data.DataRepository;
+import com.cubes.android.komentar.data.source.local.database.dao.NewsBookmarksDao;
 import com.cubes.android.komentar.di.AppContainer;
 import com.cubes.android.komentar.di.MyApplication;
 import com.cubes.android.komentar.data.model.domain.News;
@@ -24,17 +28,17 @@ import com.cubes.android.komentar.ui.tools.MyMethodsClass;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.util.ArrayList;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 
 public class CategoryNewsFragment extends Fragment implements NewsListener {
 
     private static final String ARG_CATEGORY_ID = "category_id";
-    private static final String ARG_IS_SUBCATEGORY= "is_subcategpry";
+    private static final String ARG_IS_SUBCATEGORY = "is_subcategpry";
 
     private int mCategoryId;
     private boolean mIsSubcategory;
-
-    private int[] newsIdList;
 
     private FragmentCategoryBinding binding;
 
@@ -45,6 +49,10 @@ public class CategoryNewsFragment extends Fragment implements NewsListener {
     private FirebaseAnalytics mFirebaseAnalytics;
 
     private DataRepository dataRepository;
+
+    private NewsBookmarksDao bookmarksDao;
+
+    private ArrayList<News> bookmarks = new ArrayList<>();
 
     public CategoryNewsFragment() {
         // Required empty public constructor
@@ -73,6 +81,8 @@ public class CategoryNewsFragment extends Fragment implements NewsListener {
         AppContainer appContainer = ((MyApplication) getActivity().getApplication()).appContainer;
         dataRepository = appContainer.dataRepository;
 
+        bookmarksDao = appContainer.room.bookmarksDao();
+
     }
 
     @Override
@@ -90,7 +100,7 @@ public class CategoryNewsFragment extends Fragment implements NewsListener {
 
         binding.swipeRefreshLayout.setRefreshing(true);
 
-        loadNextPage();
+        initList();
 
         binding.imageViewRefresh.setOnClickListener(view1 -> {
 
@@ -100,13 +110,79 @@ public class CategoryNewsFragment extends Fragment implements NewsListener {
 
         });
 
-        binding.swipeRefreshLayout.setOnRefreshListener(() -> refreshAdapter());
+        binding.swipeRefreshLayout.setOnRefreshListener(this::initList);
 
     }
 
-    private void refreshAdapter() {
+    private void initList() {
+
         nextPage = 1;
-        loadNextPage();
+
+        dataRepository.getNewsForCategory(mCategoryId, nextPage, new DataRepository.CategoryNewsResponseListener() {
+
+            @Override
+            public void onResponse(ArrayList<News> newsList, boolean hasMorePages) {
+
+                binding.recyclerView.setVisibility(View.VISIBLE);
+                binding.imageViewRefresh.setVisibility(View.GONE);
+
+                //Room
+                ExecutorService service = Executors.newSingleThreadExecutor();
+                Handler handler = new Handler(Looper.getMainLooper());
+                service.execute(() -> {
+
+                    //doInBackgroundThread
+                    bookmarks.clear();
+                    bookmarks.addAll(bookmarksDao.getBookmarkNews());
+
+                    //onPostExecute
+                    handler.post(() -> {
+
+                        MyMethodsClass.checkBookmarks(newsList, bookmarks);
+
+                        categoryAdapter.initList(newsList, hasMorePages);
+
+                        if (mIsSubcategory) {
+
+                            Bundle bundle = new Bundle();
+                            bundle.putString("Potkategorije", newsList.get(0).categoryName);
+                            mFirebaseAnalytics.logEvent("android_komentar", bundle);
+
+                        } else {
+
+                            Bundle bundle = new Bundle();
+                            bundle.putString("Kategorije", newsList.get(0).categoryName);
+                            mFirebaseAnalytics.logEvent("android_komentar", bundle);
+
+                        }
+
+                        nextPage++;
+
+                        binding.swipeRefreshLayout.setRefreshing(false);
+
+                    });
+
+                });
+
+                service.shutdown();
+
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+
+                if (nextPage == 1) {
+                    binding.recyclerView.setVisibility(View.GONE);
+                    binding.imageViewRefresh.setVisibility(View.VISIBLE);
+                } else {
+                    categoryAdapter.addRefresher();
+                }
+
+                binding.swipeRefreshLayout.setRefreshing(false);
+
+            }
+        });
+
     }
 
     @Override
@@ -138,30 +214,9 @@ public class CategoryNewsFragment extends Fragment implements NewsListener {
                 binding.recyclerView.setVisibility(View.VISIBLE);
                 binding.imageViewRefresh.setVisibility(View.GONE);
 
-                newsIdList = MyMethodsClass.initNewsIdList(newsList);
+                MyMethodsClass.checkBookmarks(newsList, bookmarks);
 
-                if (nextPage == 1) {
-
-                    categoryAdapter.initList(newsList, hasMorePages);
-
-
-                    if (mIsSubcategory) {
-
-                        Bundle bundle = new Bundle();
-                        bundle.putString("Potkategorije", newsList.get(0).category.name);
-                        mFirebaseAnalytics.logEvent("android_komentar", bundle);
-
-                    } else {
-
-                        Bundle bundle = new Bundle();
-                        bundle.putString("Kategorije", newsList.get(0).category.name);
-                        mFirebaseAnalytics.logEvent("android_komentar", bundle);
-
-                    }
-
-                } else {
-                    categoryAdapter.addNextPage(newsList, hasMorePages);
-                }
+                categoryAdapter.addNextPage(newsList, hasMorePages);
 
                 nextPage++;
 
@@ -218,6 +273,30 @@ public class CategoryNewsFragment extends Fragment implements NewsListener {
     @Override
     public void onNewsMenuFavoritesClicked(News news) {
 
+        //Room
+        ExecutorService service = Executors.newSingleThreadExecutor();
+        Handler handler = new Handler(Looper.getMainLooper());
+        service.execute(() -> {
+
+            //doInBackgroundThread
+            if (news.isInBookmarks) {
+                bookmarksDao.delete(news);
+            } else {
+                bookmarksDao.insert(news);
+            }
+
+            //onPostExecute
+            if (news.isInBookmarks) {
+                handler.post(() -> Toast.makeText(getContext(), "Vest je uspešno uklonjena iz arhive", Toast.LENGTH_SHORT).show());
+                news.isInBookmarks = false;
+            } else {
+                handler.post(() -> Toast.makeText(getContext(), "Vest je uspešno sačuvana u arhivu", Toast.LENGTH_SHORT).show());
+                news.isInBookmarks = true;
+            }
+
+        });
+
+        service.shutdown();
     }
 
 //    @Override

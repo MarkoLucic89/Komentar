@@ -1,4 +1,4 @@
-package com.cubes.android.komentar.ui.main.search.rv_model_search;
+package com.cubes.android.komentar.ui.main.bookmarks.rv_model_search;
 
 
 import android.view.View;
@@ -6,15 +6,15 @@ import android.view.View;
 import com.cubes.android.komentar.R;
 import com.cubes.android.komentar.data.model.domain.News;
 import com.cubes.android.komentar.databinding.RvItemCategorySmallBinding;
+import com.cubes.android.komentar.ui.main.bookmarks.BookmarksAdapter;
 import com.cubes.android.komentar.ui.main.latest.NewsListener;
-import com.cubes.android.komentar.ui.main.search.SearchAdapter;
 import com.cubes.android.komentar.ui.tools.MyMethodsClass;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.squareup.picasso.Picasso;
 
 
-public class RvItemModelSearch implements ItemModelSearch {
+public class RvItemModelBookmarks implements ItemModelBookmarks {
 
     private News news;
     private NewsListener listener;
@@ -24,7 +24,7 @@ public class RvItemModelSearch implements ItemModelSearch {
     private boolean isMenuOpen = false;
 
 
-    public RvItemModelSearch(News news, NewsListener listener, int[] newsIdList) {
+    public RvItemModelBookmarks(News news, NewsListener listener, int[] newsIdList) {
         this.news = news;
         this.listener = listener;
         this.newsIdList = newsIdList;
@@ -36,17 +36,13 @@ public class RvItemModelSearch implements ItemModelSearch {
     }
 
     @Override
-    public void bind(SearchAdapter.SearchViewHolder holder) {
+    public void bind(BookmarksAdapter.BookmarkViewHolder holder) {
 
         RvItemCategorySmallBinding binding = (RvItemCategorySmallBinding) holder.binding;
 
-        if (news.isInBookmarks) {
-            binding.imageViewFavorites.setImageResource(R.drawable.ic_bookmark);
-        } else {
-            binding.imageViewFavorites.setImageResource(R.drawable.ic_bookmark_border);
-        }
-
         setMenuVisibility(isMenuOpen, binding);
+
+        binding.imageViewFavorites.setImageResource(R.drawable.ic_bookmark);
 
         Picasso.get().load(news.image).into(binding.imageView);
         binding.textViewTitle.setText(news.title);
@@ -81,13 +77,6 @@ public class RvItemModelSearch implements ItemModelSearch {
             isMenuOpen = !isMenuOpen;
             animateMenuVisibility(isMenuOpen, binding);
             listener.onNewsMenuFavoritesClicked(news);
-
-            if (!news.isInBookmarks) {
-                binding.imageViewFavorites.setImageResource(R.drawable.ic_bookmark);
-            } else {
-                binding.imageViewFavorites.setImageResource(R.drawable.ic_bookmark_border);
-            }
-
         });
 
     }

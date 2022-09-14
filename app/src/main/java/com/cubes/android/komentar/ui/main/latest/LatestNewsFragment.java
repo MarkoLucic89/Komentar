@@ -2,9 +2,12 @@ package com.cubes.android.komentar.ui.main.latest;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -13,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.cubes.android.komentar.data.DataRepository;
 import com.cubes.android.komentar.data.model.domain.News;
+import com.cubes.android.komentar.data.source.local.database.dao.NewsBookmarksDao;
 import com.cubes.android.komentar.data.source.local.database.dao.NewsCommentsVoteDao;
 import com.cubes.android.komentar.databinding.FragmentLatestNewsBinding;
 import com.cubes.android.komentar.di.AppContainer;
@@ -22,6 +26,8 @@ import com.cubes.android.komentar.ui.detail.DetailsActivity;
 import com.cubes.android.komentar.ui.tools.MyMethodsClass;
 
 import java.util.ArrayList;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class LatestNewsFragment extends Fragment implements NewsListener {
 
@@ -33,7 +39,9 @@ public class LatestNewsFragment extends Fragment implements NewsListener {
 
     private DataRepository dataRepository;
 
-    private NewsCommentsVoteDao commentsVoteDao;
+    private NewsBookmarksDao bookmarksDao;
+
+    private ArrayList<News> bookmarks = new ArrayList<>();
 
     public LatestNewsFragment() {
         // Required empty public constructor
@@ -50,7 +58,7 @@ public class LatestNewsFragment extends Fragment implements NewsListener {
 
         AppContainer appContainer = ((MyApplication) getActivity().getApplication()).appContainer;
         dataRepository = appContainer.dataRepository;
-        commentsVoteDao = appContainer.room.voteDao();
+        bookmarksDao = appContainer.room.bookmarksDao();
     }
 
     @Override
@@ -69,7 +77,9 @@ public class LatestNewsFragment extends Fragment implements NewsListener {
 
         binding.imageViewRefresh.setVisibility(View.GONE);
 
-        refreshAdapter();
+        binding.swipeRefreshLayout.setRefreshing(true);
+
+        initList();
 
         binding.imageViewRefresh.setOnClickListener(view1 -> {
 
@@ -79,17 +89,7 @@ public class LatestNewsFragment extends Fragment implements NewsListener {
 
         });
 
-        binding.swipeRefreshLayout.setOnRefreshListener(() -> refreshAdapter());
-
-    }
-
-    private void refreshAdapter() {
-
-        binding.swipeRefreshLayout.setRefreshing(true);
-
-        nextPage = 1;
-
-        loadNextPage();
+        binding.swipeRefreshLayout.setOnRefreshListener(this::initList);
 
     }
 
@@ -109,10 +109,71 @@ public class LatestNewsFragment extends Fragment implements NewsListener {
         categoryAdapter = new CategoryAdapter(this);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-//        binding.recyclerView.setItemViewCacheSize(30);
-
         binding.recyclerView.setAdapter(categoryAdapter);
     }
+
+    public void initList() {
+
+        nextPage = 1;
+
+        dataRepository.getLatestNews(nextPage, new DataRepository.LatestResponseListener() {
+
+            @Override
+            public void onResponse(ArrayList<News> newsList, boolean hasMorePages) {
+
+                binding.recyclerView.setVisibility(View.VISIBLE);
+                binding.imageViewRefresh.setVisibility(View.GONE);
+
+                //Room
+                ExecutorService service = Executors.newSingleThreadExecutor();
+                Handler handler = new Handler(Looper.getMainLooper());
+                service.execute(() -> {
+
+                    //doInBackgroundThread
+                    bookmarks.clear();
+                    bookmarks.addAll(bookmarksDao.getBookmarkNews());
+
+                    //onPostExecute
+                    handler.post(() -> {
+
+                        MyMethodsClass.checkBookmarks(newsList, bookmarks);
+
+                        if (nextPage == 1) {
+                            categoryAdapter.initList(newsList, hasMorePages);
+                        } else {
+                            categoryAdapter.addNextPage(newsList, hasMorePages);
+                        }
+
+                        nextPage++;
+
+                        binding.swipeRefreshLayout.setRefreshing(false);
+
+                    });
+
+                });
+
+                service.shutdown();
+
+
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+
+                if (nextPage == 1) {
+                    binding.recyclerView.setVisibility(View.GONE);
+                    binding.imageViewRefresh.setVisibility(View.VISIBLE);
+                } else {
+                    categoryAdapter.addRefresher();
+                }
+
+                binding.swipeRefreshLayout.setRefreshing(false);
+
+            }
+        });
+
+    }
+
 
     @Override
     public void loadNextPage() {
@@ -124,6 +185,8 @@ public class LatestNewsFragment extends Fragment implements NewsListener {
 
                 binding.recyclerView.setVisibility(View.VISIBLE);
                 binding.imageViewRefresh.setVisibility(View.GONE);
+
+                MyMethodsClass.checkBookmarks(newsList, bookmarks);
 
                 if (nextPage == 1) {
                     categoryAdapter.initList(newsList, hasMorePages);
@@ -184,6 +247,30 @@ public class LatestNewsFragment extends Fragment implements NewsListener {
     @Override
     public void onNewsMenuFavoritesClicked(News news) {
 
+        //Room
+        ExecutorService service = Executors.newSingleThreadExecutor();
+        Handler handler = new Handler(Looper.getMainLooper());
+        service.execute(() -> {
+
+            //doInBackgroundThread
+            if (news.isInBookmarks) {
+                bookmarksDao.delete(news);
+            } else {
+                bookmarksDao.insert(news);
+            }
+
+            //onPostExecute
+            if (news.isInBookmarks) {
+                handler.post(() -> Toast.makeText(getContext(), "Vest je uspešno uklonjena iz arhive", Toast.LENGTH_SHORT).show());
+                news.isInBookmarks = false;
+            } else {
+                handler.post(() -> Toast.makeText(getContext(), "Vest je uspešno sačuvana u arhivu", Toast.LENGTH_SHORT).show());
+                news.isInBookmarks = true;
+            }
+
+        });
+
+        service.shutdown();
     }
 
     //    @Override

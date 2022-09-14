@@ -6,15 +6,19 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
+import com.cubes.android.komentar.data.model.domain.News;
 import com.cubes.android.komentar.data.model.domain.NewsCommentVote;
+import com.cubes.android.komentar.data.source.local.database.dao.NewsBookmarksDao;
 import com.cubes.android.komentar.data.source.local.database.dao.NewsCommentsVoteDao;
 
-@Database(entities = NewsCommentVote.class, version = 1)
+@Database(entities = {NewsCommentVote.class, News.class}, version = 2)
 public abstract class NewsDatabase extends RoomDatabase {
 
     private static NewsDatabase instance;
 
     public abstract NewsCommentsVoteDao voteDao();
+
+    public abstract NewsBookmarksDao bookmarksDao();
 
     public static NewsDatabase getInstance(Context context) {
 

@@ -36,6 +36,12 @@ public class RvItemModelHomeCategoryBig implements ItemModelHome {
 
         RvItemCategoryBigBinding binding = (RvItemCategoryBigBinding) holder.binding;
 
+        if (news.isInBookmarks) {
+            binding.imageViewFavorites.setImageResource(R.drawable.ic_bookmark);
+        } else {
+            binding.imageViewFavorites.setImageResource(R.drawable.ic_bookmark_border);
+        }
+
         setMenuVisibility(isMenuOpen, binding);
 
         if (isOnHomePage) {
@@ -48,7 +54,7 @@ public class RvItemModelHomeCategoryBig implements ItemModelHome {
 
         Picasso.get().load(news.image).into(binding.imageView);
         binding.textViewTitle.setText(news.title);
-        binding.textViewCategory.setText(news.category.name);
+        binding.textViewCategory.setText(news.categoryName);
         binding.textViewTime.setText(MyMethodsClass.convertTime(news.createdAt));
 
         holder.binding.getRoot().setOnClickListener(view -> listener.onNewsClicked(news.id));
@@ -79,6 +85,13 @@ public class RvItemModelHomeCategoryBig implements ItemModelHome {
             isMenuOpen = !isMenuOpen;
             animateMenuVisibility(isMenuOpen, binding);
             listener.onNewsMenuFavoritesClicked(news);
+
+            if (!news.isInBookmarks) {
+                binding.imageViewFavorites.setImageResource(R.drawable.ic_bookmark);
+            } else {
+                binding.imageViewFavorites.setImageResource(R.drawable.ic_bookmark_border);
+            }
+
         });
 
     }

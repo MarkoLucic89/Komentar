@@ -90,4 +90,14 @@ public class MyMethodsClass {
             imageView.animate().alpha(0f).setDuration(1000);
         }, 2000);
     }
+
+    public static void checkBookmarks(ArrayList<News> newsList, ArrayList<News> bookmarks) {
+        for (News bookmark : bookmarks) {
+            for (News news : newsList) {
+                if (news.id == bookmark.id) {
+                    news.isInBookmarks = true;
+                }
+            }
+        }
+    }
 }

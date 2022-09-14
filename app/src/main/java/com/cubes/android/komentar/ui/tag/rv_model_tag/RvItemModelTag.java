@@ -40,12 +40,18 @@ public class RvItemModelTag implements ItemModelTag {
 
         RvItemCategorySmallBinding binding = (RvItemCategorySmallBinding) holder.binding;
 
+        if (news.isInBookmarks) {
+            binding.imageViewFavorites.setImageResource(R.drawable.ic_bookmark);
+        } else {
+            binding.imageViewFavorites.setImageResource(R.drawable.ic_bookmark_border);
+        }
+
         setMenuVisibility(isMenuOpen, binding);
 
         Picasso.get().load(news.image).into(binding.imageView);
         binding.textViewTitle.setText(news.title);
-        binding.textViewCategory.setTextColor(Color.parseColor(news.category.color));
-        binding.textViewCategory.setText(news.category.name);
+        binding.textViewCategory.setTextColor(Color.parseColor(news.categoryColor));
+        binding.textViewCategory.setText(news.categoryName);
         binding.textViewTime.setText(MyMethodsClass.convertTime(news.createdAt));
 
         binding.getRoot().setOnClickListener(view -> listener.onNewsClicked(news.id, newsIdList));
@@ -76,6 +82,12 @@ public class RvItemModelTag implements ItemModelTag {
             isMenuOpen = !isMenuOpen;
             animateMenuVisibility(isMenuOpen, binding);
             listener.onNewsMenuFavoritesClicked(news);
+
+            if (!news.isInBookmarks) {
+                binding.imageViewFavorites.setImageResource(R.drawable.ic_bookmark);
+            } else {
+                binding.imageViewFavorites.setImageResource(R.drawable.ic_bookmark_border);
+            }
         });
 
     }

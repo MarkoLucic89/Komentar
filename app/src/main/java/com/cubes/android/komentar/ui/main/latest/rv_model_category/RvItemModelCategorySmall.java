@@ -39,6 +39,12 @@ public class RvItemModelCategorySmall implements ItemModelCategory {
 
         RvItemCategorySmallBinding binding = (RvItemCategorySmallBinding) holder.binding;
 
+        if (news.isInBookmarks) {
+            binding.imageViewFavorites.setImageResource(R.drawable.ic_bookmark);
+        } else {
+            binding.imageViewFavorites.setImageResource(R.drawable.ic_bookmark_border);
+        }
+
         setMenuVisibility(isMenuOpen, binding);
 
         if (isOnHomePage) {
@@ -51,7 +57,13 @@ public class RvItemModelCategorySmall implements ItemModelCategory {
 
         Picasso.get().load(news.image).into(binding.imageView);
         binding.textViewTitle.setText(news.title);
-        binding.textViewCategory.setText(news.category.name);
+
+        if (news.categoryName != null) {
+            binding.textViewCategory.setText(news.categoryName);
+        } else {
+            binding.textViewCategory.setVisibility(View.GONE);
+        }
+
         binding.textViewTime.setText(MyMethodsClass.convertTime(news.createdAt));
 
         binding.getRoot().setOnClickListener(view -> listener.onNewsClicked(news.id, newsIdList));
@@ -82,6 +94,13 @@ public class RvItemModelCategorySmall implements ItemModelCategory {
             isMenuOpen = !isMenuOpen;
             animateMenuVisibility(isMenuOpen, binding);
             listener.onNewsMenuFavoritesClicked(news);
+
+            if (!news.isInBookmarks) {
+                binding.imageViewFavorites.setImageResource(R.drawable.ic_bookmark);
+            } else {
+                binding.imageViewFavorites.setImageResource(R.drawable.ic_bookmark_border);
+            }
+
         });
 
     }

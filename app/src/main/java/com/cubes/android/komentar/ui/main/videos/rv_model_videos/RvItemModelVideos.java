@@ -37,11 +37,17 @@ public class RvItemModelVideos implements ItemModelVideo {
 
         RvItemVideosBinding binding = (RvItemVideosBinding) holder.binding;
 
+        if (news.isInBookmarks) {
+            binding.imageViewFavorites.setImageResource(R.drawable.ic_bookmark);
+        } else {
+            binding.imageViewFavorites.setImageResource(R.drawable.ic_bookmark_border);
+        }
+
         setMenuVisibility(isMenuOpen, binding);
 
         Picasso.get().load(news.image).into(binding.imageViewPicture);
         binding.textViewTitle.setText(news.title);
-        binding.textViewCategory.setText(news.category.name);
+        binding.textViewCategory.setText(news.categoryName);
         binding.textViewTime.setText(MyMethodsClass.convertTime(news.createdAt));
 
         holder.binding.getRoot().setOnClickListener(view -> listener.onNewsClicked(news.id, newsIdList));
@@ -72,6 +78,14 @@ public class RvItemModelVideos implements ItemModelVideo {
             isMenuOpen = !isMenuOpen;
             animateMenuVisibility(isMenuOpen, binding);
             listener.onNewsMenuFavoritesClicked(news);
+
+
+            if (!news.isInBookmarks) {
+                binding.imageViewFavorites.setImageResource(R.drawable.ic_bookmark);
+            } else {
+                binding.imageViewFavorites.setImageResource(R.drawable.ic_bookmark_border);
+            }
+
         });
 
     }

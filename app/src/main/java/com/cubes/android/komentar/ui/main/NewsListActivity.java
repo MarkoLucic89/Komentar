@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.cubes.android.komentar.R;
+import com.cubes.android.komentar.ui.main.bookmarks.BookmarksFragment;
 import com.cubes.android.komentar.ui.main.home.HomeFragment;
 import com.cubes.android.komentar.ui.main.latest.LatestNewsFragment;
 import com.cubes.android.komentar.ui.main.search.SearchFragment;
@@ -100,6 +101,9 @@ public class NewsListActivity extends AppCompatActivity {
                     return true;
                 case R.id.menuLatest:
                     replaceFragment(LatestNewsFragment.newInstance());
+                    return true;
+                case R.id.menuBookmarks:
+                    replaceFragment(BookmarksFragment.newInstance());
                     return true;
                 case R.id.menuVideo:
                     replaceFragment(VideoFragment.newInstance());

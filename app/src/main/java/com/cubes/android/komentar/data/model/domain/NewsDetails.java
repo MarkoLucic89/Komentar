@@ -5,6 +5,7 @@ import java.util.ArrayList;
 public class NewsDetails {
 
     public int id;
+    public String image;
     public String title;
     public String url;
     public ArrayList<NewsTag> tags;
@@ -12,5 +13,7 @@ public class NewsDetails {
     public boolean commentEnabled;
     public int commentsCount;
     public ArrayList<News> relatedNews;
+    public String createdAt;
+    public Category category;
 
 }

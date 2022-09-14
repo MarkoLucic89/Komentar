@@ -12,6 +12,11 @@
         android:icon="@drawable/ic_new" />
 
     <item
+        android:id="@+id/menuBookmarks"
+        android:title="@string/bookmarks"
+        android:icon="@drawable/ic_bookmark_border" />
+
+    <item
         android:id="@+id/menuVideo"
         android:title="@string/menu_video"
         android:icon="@drawable/ic_video" />

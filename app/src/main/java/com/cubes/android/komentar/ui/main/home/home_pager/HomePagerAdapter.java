@@ -27,6 +27,7 @@ import com.cubes.android.komentar.ui.main.home.home_pager.rv_item_home.RvItemMod
 import com.cubes.android.komentar.ui.main.home.home_pager.rv_item_home.RvItemModelHomeVideos;
 import com.cubes.android.komentar.ui.main.home.home_pager.rv_item_home.RvItemModelTabs;
 import com.cubes.android.komentar.ui.main.latest.NewsListener;
+import com.cubes.android.komentar.ui.tools.MyMethodsClass;
 import com.google.android.gms.ads.AdRequest;
 
 import java.util.ArrayList;
@@ -41,7 +42,7 @@ public class HomePagerAdapter extends RecyclerView.Adapter<HomePagerAdapter.Home
         this.listener = listener;
     }
 
-    public void updateList(HomePageData data) {
+    public void updateList(HomePageData data, ArrayList<News> bookmarks) {
 
         list.clear();
 
@@ -54,6 +55,9 @@ public class HomePagerAdapter extends RecyclerView.Adapter<HomePagerAdapter.Home
         }
 
         //TOP NEWS
+
+        MyMethodsClass.checkBookmarks(data.top, bookmarks);
+
         for (News news : data.top) {
             list.add(new RvItemModelHomeSmallNews(news, listener));
         }
@@ -63,6 +67,8 @@ public class HomePagerAdapter extends RecyclerView.Adapter<HomePagerAdapter.Home
 
         //SPORT CATEGORY BOX
         for (HomePageData.CategoryBox categoryBox : data.category) {
+
+            MyMethodsClass.checkBookmarks(categoryBox.news, bookmarks);
 
             if (categoryBox.title.equalsIgnoreCase("SPORT")) {
 
@@ -100,6 +106,8 @@ public class HomePagerAdapter extends RecyclerView.Adapter<HomePagerAdapter.Home
 
         //VIDEO
         if (!data.videos.isEmpty()) {
+
+            MyMethodsClass.checkBookmarks(data.videos, bookmarks);
 
             list.add(new RvItemModelCategoryTitle("Video", "#FE0000"));
 

@@ -58,13 +58,15 @@ public class DataRepository {
             News news = new News();
 
             news.id = newsItemApi.id;
-            news.title = newsItemApi.title;
             news.image = newsItemApi.image;
             news.title = newsItemApi.title;
             news.createdAt = newsItemApi.created_at;
             news.url = newsItemApi.url;
 
-            news.category = mapCategoryFromResponse(newsItemApi.category);
+//            news.category = mapCategoryFromResponse(newsItemApi.category);
+
+            news.categoryName = newsItemApi.category.name;
+            news.categoryColor = newsItemApi.category.color;
 
             newsList.add(news);
 
@@ -349,7 +351,6 @@ public class DataRepository {
                     listener.onResponse(newsDetails);
 
                 }
-
             }
 
             @Override
@@ -366,8 +367,13 @@ public class DataRepository {
         NewsDetails newsDetails = new NewsDetails();
 
         newsDetails.id = newsDetailsApi.id;
+        newsDetails.image = newsDetailsApi.image;
         newsDetails.title = newsDetailsApi.title;
         newsDetails.url = newsDetailsApi.url;
+        newsDetails.createdAt = newsDetailsApi.created_at;
+
+        newsDetails.category = mapCategoryFromResponse(newsDetailsApi.category);
+
         newsDetails.tags = mapTagsFromResponse(newsDetailsApi.tags);
         newsDetails.commentsTop = mapCommentsFromResponse(newsDetailsApi.comments_top_n);
 

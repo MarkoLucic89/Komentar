@@ -26,6 +26,7 @@ import com.cubes.android.komentar.data.model.domain.NewsCommentVote;
 import com.cubes.android.komentar.data.model.domain.NewsDetails;
 import com.cubes.android.komentar.data.model.domain.NewsTag;
 import com.cubes.android.komentar.data.source.local.SharedPrefs;
+import com.cubes.android.komentar.data.source.local.database.dao.NewsBookmarksDao;
 import com.cubes.android.komentar.databinding.FragmentNewsDetailsBinding;
 import com.cubes.android.komentar.di.AppContainer;
 import com.cubes.android.komentar.di.MyApplication;
@@ -69,9 +70,16 @@ public class NewsDetailsFragment extends Fragment implements
 
     private CommentsAdapter commentsAdapter;
 
+    private NewsBookmarksDao bookmarksDao;
+
+    private ArrayList<News> bookmarks = new ArrayList<>();
+
+    private News mTempNews = null;
+
+
     public interface DetailsListener {
 
-        void onDetailsResponseListener(int newsId, String newsUrl);
+        void onDetailsResponseListener(int newsId, String newsUrl, News bookmark);
 
     }
 
@@ -108,6 +116,8 @@ public class NewsDetailsFragment extends Fragment implements
         AppContainer appContainer = ((MyApplication) getActivity().getApplication()).appContainer;
         dataRepository = appContainer.dataRepository;
 
+        bookmarksDao = appContainer.room.bookmarksDao();
+
     }
 
     @Override
@@ -133,7 +143,9 @@ public class NewsDetailsFragment extends Fragment implements
     public void onResume() {
         super.onResume();
 
-        listener.onDetailsResponseListener(mNewsId, mNewsUrl);
+        if (mTempNews != null) {
+            listener.onDetailsResponseListener(mNewsId, mNewsUrl, mTempNews);
+        }
     }
 
     private void getNewsDetails() {
@@ -148,16 +160,44 @@ public class NewsDetailsFragment extends Fragment implements
 
                 mNewsId = newsDetails.id;
                 mNewsUrl = newsDetails.url;
+                mTempNews = initNewsObject(newsDetails);
 
                 Bundle bundle = new Bundle();
                 bundle.putString("Vest", newsDetails.title);
                 mFirebaseAnalytics.logEvent("android_komentar", bundle);
 
-                updateList(newsDetails);
+                //Room
+                ExecutorService service = Executors.newSingleThreadExecutor();
+                Handler handler = new Handler(Looper.getMainLooper());
+                service.execute(() -> {
 
-                setListeners(newsDetails);
+                    //doInBackgroundThread
+                    bookmarks.clear();
+                    bookmarks.addAll(bookmarksDao.getBookmarkNews());
 
-                Log.d(TAG, "onResponse: " + newsDetails.title);
+                    //onPostExecute
+                    handler.post(() -> {
+
+                        for (News news : bookmarks) {
+                            if (news.id == newsDetails.id) {
+                                mTempNews.isInBookmarks = true;
+                                break;
+                            }
+                        }
+
+                        service.shutdown();
+
+                        updateList(newsDetails);
+
+                        setListeners(newsDetails);
+
+                        Log.d(TAG, "onResponse: " + newsDetails.title);
+
+                    });
+
+                });
+
+                service.shutdown();
 
             }
 
@@ -172,6 +212,18 @@ public class NewsDetailsFragment extends Fragment implements
 
             }
         });
+    }
+
+    private News initNewsObject(NewsDetails newsDetails) {
+        News news = new News();
+        news.id = newsDetails.id;
+        news.image = newsDetails.image;
+        news.categoryName = newsDetails.category.name;
+        news.categoryColor = newsDetails.category.color;
+        news.title = newsDetails.title;
+        news.createdAt = newsDetails.createdAt;
+        news.url = newsDetails.url;
+        return news;
     }
 
     private void setListeners(NewsDetails newsDetails) {
@@ -210,7 +262,6 @@ public class NewsDetailsFragment extends Fragment implements
 
                 binding.textViewTitleComments.setText("KOMENTARI (" + newsDetails.commentsCount + ")");
                 binding.buttonAllComments.setText("SVI KOMENTARI (" + newsDetails.commentsCount + ")");
-
 
                 if (newsDetails.commentsCount == 0) {
                     binding.buttonAllComments.setVisibility(View.GONE);
@@ -253,6 +304,8 @@ public class NewsDetailsFragment extends Fragment implements
 
                 binding.nestedScrollView.setVisibility(View.VISIBLE);
                 binding.swipeRefreshLayout.setRefreshing(false);
+
+                listener.onDetailsResponseListener(mNewsId, mNewsUrl, mTempNews);
 
             }
         });

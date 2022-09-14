@@ -49,6 +49,17 @@
                 app:layout_constraintEnd_toStartOf="@id/imageViewMessages"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <ImageView
+                android:id="@+id/imageViewBookmark"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:padding="8dp"
+                android:src="@drawable/ic_bookmark_border"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/imageViewShare"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/white" />
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -78,8 +89,6 @@
         android:layout_marginEnd="8dp"
         android:src="@drawable/ic_arrow_right"
         android:translationZ="90dp" />
-
-
 
 
 </FrameLayout>

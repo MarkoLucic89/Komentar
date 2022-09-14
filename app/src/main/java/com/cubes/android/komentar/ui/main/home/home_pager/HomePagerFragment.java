@@ -2,9 +2,12 @@ package com.cubes.android.komentar.ui.main.home.home_pager;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.cubes.android.komentar.data.DataRepository;
 import com.cubes.android.komentar.data.model.domain.News;
+import com.cubes.android.komentar.data.source.local.database.dao.NewsBookmarksDao;
 import com.cubes.android.komentar.di.AppContainer;
 import com.cubes.android.komentar.di.MyApplication;
 import com.cubes.android.komentar.data.model.domain.HomePageData;
@@ -23,6 +27,10 @@ import com.cubes.android.komentar.ui.detail.DetailsActivity;
 import com.cubes.android.komentar.ui.main.home.home_pager.rv_item_home.ItemModelHome;
 import com.cubes.android.komentar.ui.main.latest.NewsListener;
 import com.cubes.android.komentar.ui.tools.MyMethodsClass;
+
+import java.util.ArrayList;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class HomePagerFragment extends Fragment implements NewsListener {
 
@@ -34,6 +42,11 @@ public class HomePagerFragment extends Fragment implements NewsListener {
     private boolean isLoading;
 
     private int[] mNewsIdList;
+
+    private NewsBookmarksDao bookmarksDao;
+
+    private ArrayList<News> bookmarks = new ArrayList<>();
+
 
     public HomePagerFragment() {
         // Required empty public constructor
@@ -50,6 +63,7 @@ public class HomePagerFragment extends Fragment implements NewsListener {
 
         appContainer = ((MyApplication) getActivity().getApplication()).appContainer;
 
+        bookmarksDao = appContainer.room.bookmarksDao();
     }
 
     @Override
@@ -77,35 +91,6 @@ public class HomePagerFragment extends Fragment implements NewsListener {
 
     }
 
-    private void refreshListOnSwipe() {
-
-        appContainer.dataRepository.getHomeNews(new DataRepository.HomeResponseListener() {
-
-            @Override
-            public void onResponse(HomePageData data) {
-
-                binding.recyclerView.setVisibility(View.VISIBLE);
-                binding.imageViewRefresh.setVisibility(View.GONE);
-
-                adapter.updateList(data);
-
-                binding.swipeRefreshLayout.setRefreshing(false);
-
-            }
-
-            @Override
-            public void onFailure(Throwable t) {
-
-                binding.recyclerView.setVisibility(View.GONE);
-                binding.imageViewRefresh.setVisibility(View.VISIBLE);
-
-                binding.swipeRefreshLayout.setRefreshing(false);
-
-            }
-        });
-
-    }
-
     private void sendHomePageRequest() {
 
         if (isLoading) {
@@ -127,11 +112,28 @@ public class HomePagerFragment extends Fragment implements NewsListener {
 
                 mNewsIdList = MyMethodsClass.initNewsIdListFromHomePage(data);
 
-                adapter.updateList(data);
+                //Room
+                ExecutorService service = Executors.newSingleThreadExecutor();
+                Handler handler = new Handler(Looper.getMainLooper());
+                service.execute(() -> {
 
-                isLoading = false;
+                    //doInBackgroundThread
+                    bookmarks.clear();
+                    bookmarks.addAll(bookmarksDao.getBookmarkNews());
 
-                binding.swipeRefreshLayout.setRefreshing(false);
+                    //onPostExecute
+                    handler.post(() -> {
+
+                        adapter.updateList(data, bookmarks);
+
+                        isLoading = false;
+
+                        binding.swipeRefreshLayout.setRefreshing(false);
+                    });
+
+                });
+
+                service.shutdown();
 
             }
 
@@ -171,11 +173,7 @@ public class HomePagerFragment extends Fragment implements NewsListener {
     @Override
     public void onResume() {
         super.onResume();
-
-        if (binding.imageViewRefresh.getVisibility() == View.VISIBLE) {
-            sendHomePageRequest();
-        }
-
+         sendHomePageRequest();
     }
 
 //    @Override
@@ -219,6 +217,30 @@ public class HomePagerFragment extends Fragment implements NewsListener {
     @Override
     public void onNewsMenuFavoritesClicked(News news) {
 
+        //Room
+        ExecutorService service = Executors.newSingleThreadExecutor();
+        Handler handler = new Handler(Looper.getMainLooper());
+        service.execute(() -> {
+
+            //doInBackgroundThread
+            if (news.isInBookmarks) {
+                bookmarksDao.delete(news);
+            } else {
+                bookmarksDao.insert(news);
+            }
+
+            //onPostExecute
+            if (news.isInBookmarks) {
+                handler.post(() -> Toast.makeText(getContext(), "Vest je uspešno uklonjena iz arhive", Toast.LENGTH_SHORT).show());
+                news.isInBookmarks = false;
+            } else {
+                handler.post(() -> Toast.makeText(getContext(), "Vest je uspešno sačuvana u arhivu", Toast.LENGTH_SHORT).show());
+                news.isInBookmarks = true;
+            }
+
+        });
+
+        service.shutdown();
     }
 
 }

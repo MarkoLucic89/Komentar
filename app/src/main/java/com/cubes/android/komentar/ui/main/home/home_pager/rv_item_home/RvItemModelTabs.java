@@ -11,6 +11,7 @@ import com.cubes.android.komentar.databinding.RvItemHomeTabsBinding;
 import com.cubes.android.komentar.ui.main.home.home_pager.HomePagerAdapter;
 import com.cubes.android.komentar.ui.main.home.home_pager.HomeTabsAdapter;
 import com.cubes.android.komentar.ui.main.latest.NewsListener;
+import com.cubes.android.komentar.ui.tools.MyMethodsClass;
 
 import java.util.ArrayList;
 

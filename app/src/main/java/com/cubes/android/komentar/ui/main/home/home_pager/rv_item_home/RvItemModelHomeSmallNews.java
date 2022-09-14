@@ -38,13 +38,18 @@ public class RvItemModelHomeSmallNews implements ItemModelHome {
 
         RvItemCategorySmallBinding binding = (RvItemCategorySmallBinding) holder.binding;
 
-        setMenuVisibility(isMenuOpen, binding);
+        if (news.isInBookmarks) {
+            binding.imageViewFavorites.setImageResource(R.drawable.ic_bookmark);
+        } else {
+            binding.imageViewFavorites.setImageResource(R.drawable.ic_bookmark_border);
+        }
 
+        setMenuVisibility(isMenuOpen, binding);
 
         Picasso.get().load(news.image).into(binding.imageView);
         binding.textViewTitle.setText(news.title);
-        binding.textViewCategory.setText(news.category.name);
-        binding.textViewCategory.setTextColor(Color.parseColor(news.category.color));
+        binding.textViewCategory.setText(news.categoryName);
+        binding.textViewCategory.setTextColor(Color.parseColor(news.categoryColor));
         binding.textViewTime.setText(getTime(news.createdAt));
 
         holder.binding.getRoot().setOnClickListener(view -> listener.onNewsClicked(news.id));
@@ -75,6 +80,13 @@ public class RvItemModelHomeSmallNews implements ItemModelHome {
             isMenuOpen = !isMenuOpen;
             animateMenuVisibility(isMenuOpen, binding);
             listener.onNewsMenuFavoritesClicked(news);
+
+            if (!news.isInBookmarks) {
+                binding.imageViewFavorites.setImageResource(R.drawable.ic_bookmark);
+            } else {
+                binding.imageViewFavorites.setImageResource(R.drawable.ic_bookmark_border);
+            }
+
         });
 
     }
