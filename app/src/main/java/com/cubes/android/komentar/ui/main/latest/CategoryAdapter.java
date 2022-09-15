@@ -42,7 +42,6 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 
     @NonNull
     @Override
-
     public CategoryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
         ViewBinding binding;
@@ -168,6 +167,52 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 //        notifyItemRangeChanged(lastIndex, itemModels.size());
         notifyItemRangeInserted(lastIndex + 1, newsList.size());
 //        notifyDataSetChanged();
+    }
+
+    public void refreshNextPage(ArrayList<News> newsList, boolean hasMorePages) {
+
+        if (newsList.isEmpty()) {
+
+            itemModels.remove(itemModels.size() - 1);
+            notifyItemRemoved(itemModels.size());
+            return;
+
+        }
+
+        int lastIndex = 0;
+
+        if (!itemModels.isEmpty()) {
+
+            lastIndex = itemModels.size() - 1;
+            itemModels.remove(lastIndex);
+
+        }
+
+        newsIdList = MyMethodsClass.initNewsIdList(newsList);
+
+        for (int i = 0; i < newsList.size(); i++) {
+
+            itemModels.add(new RvItemModelCategorySmall(newsList.get(i), isOnHomePage, listener, newsIdList));
+
+            if (i == 0 && adCounter < 5) {
+
+                itemModels.add(new RvItemModelHomeAd());
+
+                adCounter++;
+
+            }
+        }
+
+//        if (hasMorePages) {
+//            itemModels.add(new RvItemModelCategoryLoading(listener));
+//        }
+
+        if (newsList.size() == 20) {
+            itemModels.add(new RvItemModelCategoryLoading(listener));
+        }
+
+        notifyDataSetChanged();
+
     }
 
     public void addRefresher() {

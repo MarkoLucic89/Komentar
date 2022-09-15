@@ -101,7 +101,6 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.VideosView
     }
 
 
-
     public void initList(ArrayList<News> newsList, boolean hasNextPage) {
 
         this.newsIdList = MyMethodsClass.initNewsIdList(newsList);
@@ -133,7 +132,7 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.VideosView
 
     }
 
-    public void addNextPage(ArrayList<News> newsList,  boolean hasNextPage) {
+    public void addNextPage(ArrayList<News> newsList, boolean hasNextPage) {
 
         if (newsList.isEmpty()) {
 
@@ -177,6 +176,50 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.VideosView
         notifyItemRangeInserted(lastIndex + 1, newsList.size());
     }
 
+
+    public void refreshPage(ArrayList<News> newsList, boolean hasNextPage) {
+
+        if (newsList.isEmpty()) {
+
+            itemModels.remove(itemModels.size() - 1);
+            notifyItemRemoved(itemModels.size());
+            return;
+
+        }
+
+        this.newsIdList = MyMethodsClass.initNewsIdList(newsList);
+
+        int lastIndex;
+
+        if (itemModels.isEmpty()) {
+            lastIndex = 0;
+        } else {
+            lastIndex = itemModels.size() - 1;
+            itemModels.remove(lastIndex);
+        }
+
+        for (int i = 0; i < newsList.size(); i++) {
+
+            if (i % 5 == 0 && adsCounter < 5) {
+
+                itemModels.add(new RvItemModelVideoAd());
+                adsCounter++;
+            }
+
+            itemModels.add(new RvItemModelVideos(newsList.get(i), listener, newsIdList));
+
+        }
+
+//        if (hasNextPage) {
+//            itemModels.add(new RvItemModelVideoLoading(listener));
+//        }
+
+        if (newsList.size() == 20) {
+            itemModels.add(new RvItemModelVideoLoading(listener));
+        }
+
+        notifyDataSetChanged();
+    }
 
     public void addRefresher() {
 

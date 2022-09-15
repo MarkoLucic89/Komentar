@@ -37,6 +37,12 @@ public class RvItemModelDetailsSmallNews implements ItemModelDetails {
 
         RvItemCategorySmallBinding binding = (RvItemCategorySmallBinding) holder.binding;
 
+        if (news.isInBookmarks) {
+            binding.imageViewFavorites.setImageResource(R.drawable.ic_bookmark);
+        } else {
+            binding.imageViewFavorites.setImageResource(R.drawable.ic_bookmark_border);
+        }
+
         setMenuVisibility(isMenuOpen, binding);
 
         if (isOnHomePage) {
@@ -54,6 +60,8 @@ public class RvItemModelDetailsSmallNews implements ItemModelDetails {
 
         holder.binding.getRoot().setOnClickListener(view -> listener.onNewsClicked(news.id));
 
+        binding.viewMenu.setOnClickListener(view -> {});
+
         binding.imageViewMenu.setOnClickListener(view -> {
             isMenuOpen = !isMenuOpen;
             animateMenuVisibility(isMenuOpen, binding);
@@ -62,6 +70,33 @@ public class RvItemModelDetailsSmallNews implements ItemModelDetails {
         binding.imageViewClose.setOnClickListener(view -> {
             isMenuOpen = !isMenuOpen;
             animateMenuVisibility(isMenuOpen, binding);
+        });
+
+        binding.imageViewComments.setOnClickListener(view -> {
+            isMenuOpen = !isMenuOpen;
+            animateMenuVisibility(isMenuOpen, binding);
+            listener.onNewsMenuCommentsClicked(news.id);
+        });
+
+        binding.imageViewShare.setOnClickListener(view -> {
+            isMenuOpen = !isMenuOpen;
+            animateMenuVisibility(isMenuOpen, binding);
+            listener.onNewsMenuShareClicked(news.url);
+        });
+
+        binding.imageViewFavorites.setOnClickListener(view -> {
+
+            isMenuOpen = !isMenuOpen;
+            animateMenuVisibility(isMenuOpen, binding);
+
+            listener.onNewsMenuFavoritesClicked(news);
+
+            if (!news.isInBookmarks) {
+                binding.imageViewFavorites.setImageResource(R.drawable.ic_bookmark);
+            } else {
+                binding.imageViewFavorites.setImageResource(R.drawable.ic_bookmark_border);
+            }
+
         });
 
     }

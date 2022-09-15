@@ -37,7 +37,7 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.TagViewHolder> {
         this.listener = listener;
     }
 
-    public void updateList(ArrayList<News> newsList, boolean hasMorePages) {
+    public void initList(ArrayList<News> newsList, boolean hasMorePages) {
 
         adsCounter = 0;
 
@@ -157,6 +157,51 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.TagViewHolder> {
         }
 
         notifyItemRangeInserted((lastIndex + 1), newsList.size());
+    }
+
+    public void refreshList(ArrayList<News> newsList, boolean hasMorePages) {
+
+        if (newsList.isEmpty()) {
+
+            itemModels.remove(itemModels.size() - 1);
+            notifyItemRemoved(itemModels.size());
+            return;
+
+        }
+
+        int lastIndex;
+
+        if (itemModels.isEmpty()) {
+            lastIndex = 0;
+        } else {
+            lastIndex = itemModels.size() - 1;
+            itemModels.remove(lastIndex);
+        }
+
+        newsIdList = MyMethodsClass.initNewsIdList(newsList);
+
+
+        for (int i = 0; i < newsList.size(); i++) {
+
+            if (i % 5 == 0 && adsCounter < 5) {
+
+                itemModels.add(new RvItemModelTagAd());
+                adsCounter++;
+            }
+
+            itemModels.add(new RvItemModelTag(newsList.get(i), listener, newsIdList));
+
+        }
+
+//        if (response.data.pagination.has_more_pages) {
+//            itemModels.add(new RvItemModelSearchLoading(listener));
+//        }
+
+        if (newsList.size() == 20) {
+            itemModels.add(new RvItemModelTagLoading(listener));
+        }
+
+        notifyDataSetChanged();
     }
 
     public void addRefresher() {

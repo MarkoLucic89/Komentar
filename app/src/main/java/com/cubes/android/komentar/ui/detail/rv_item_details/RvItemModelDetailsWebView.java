@@ -1,5 +1,6 @@
 package com.cubes.android.komentar.ui.detail.rv_item_details;
 
+import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import com.cubes.android.komentar.R;
@@ -9,12 +10,15 @@ import com.cubes.android.komentar.ui.detail.NewsDetailsAdapter;
 
 public class RvItemModelDetailsWebView implements ItemModelDetails {
 
-    public String url;
-    public int newsId;
+    private String url;
+    private int newsId;
+    private NewsDetailsAdapter.WebViewListener webViewListener;
 
-    public RvItemModelDetailsWebView(String url, int newsId) {
+
+    public RvItemModelDetailsWebView(String url, int newsId, NewsDetailsAdapter.WebViewListener webViewListener) {
         this.url = url;
         this.newsId = newsId;
+        this.webViewListener = webViewListener;
     }
 
     @Override
@@ -27,10 +31,15 @@ public class RvItemModelDetailsWebView implements ItemModelDetails {
 
         RvItemDetailsWebViewBinding binding = (RvItemDetailsWebViewBinding) holder.binding;
 
-        binding.webView.setWebViewClient(new WebViewClient());
-//        binding.webView.loadUrl(url);
-
         String url = DataContainer.BASE_URL + "/api/newswebview?id=" + newsId + "&version=2";
         binding.webView.loadUrl(url);
+
+        binding.webView.setWebViewClient(new WebViewClient() {
+            @Override
+            public void onPageCommitVisible(WebView view, String url) {
+                super.onPageCommitVisible(view, url);
+                webViewListener.onWebViewLoaded();
+            }
+        });
     }
 }

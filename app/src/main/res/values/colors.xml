@@ -15,12 +15,13 @@
 
     <color name="blue_dark">#143E6C</color>
     <color name="blue_dark_transparent">#20143E6C</color>
+    <color name="blue_dark_transparent2">#70143E6C</color>
     <color name="blue_dark2">#0F2039</color>
     <color name="blue_light">#1C73BD</color>
     <color name="blue_text">#00378F</color>
     <color name="grey_light">#9DA4AE</color>
     <color name="grey_light_transparent">#309DA4AE</color>
-    <color name="grey_text">#A6A6A6</color>
+    <color name="grey_text">#C1C1C1</color>
     <color name="grey_transparent">#20143E6C</color>
     <color name="grey_tag">#EDF1F2</color>
     <color name="grey_dark">#C2C2C2</color>

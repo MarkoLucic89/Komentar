@@ -70,6 +70,8 @@
         <entry key="app/src/main/res/drawable/background_tag.xml" value="0.235" />
         <entry key="app/src/main/res/drawable/background_vote.xml" value="0.235" />
         <entry key="app/src/main/res/drawable/foreground_gradient.xml" value="0.2325" />
+        <entry key="app/src/main/res/drawable/ic_arrow_back.xml" value="0.195" />
+        <entry key="app/src/main/res/drawable/ic_arrow_forward.xml" value="0.195" />
         <entry key="app/src/main/res/drawable/ic_arrow_left.xml" value="0.1275" />
         <entry key="app/src/main/res/drawable/ic_arrow_right.xml" value="0.1275" />
         <entry key="app/src/main/res/drawable/ic_bookmark.xml" value="0.13" />

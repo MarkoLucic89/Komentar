@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,10 +17,12 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.cubes.android.komentar.data.DataRepository;
+import com.cubes.android.komentar.data.model.domain.News;
 import com.cubes.android.komentar.data.model.domain.NewsComment;
 import com.cubes.android.komentar.data.model.domain.NewsCommentVote;
 import com.cubes.android.komentar.data.model.domain.NewsDetails;
 import com.cubes.android.komentar.data.source.local.SharedPrefs;
+import com.cubes.android.komentar.data.source.local.database.dao.NewsBookmarksDao;
 import com.cubes.android.komentar.databinding.FragmentDetailsBinding;
 import com.cubes.android.komentar.di.AppContainer;
 import com.cubes.android.komentar.di.MyApplication;
@@ -43,7 +46,8 @@ import java.util.concurrent.Executors;
 public class DetailsFragment extends Fragment implements
         CommentsAdapter.CommentsListener,
         NewsDetailsTagsAdapter.TagListener,
-        NewsListener {
+        NewsListener,
+        NewsDetailsAdapter.WebViewListener {
 
     private FragmentDetailsBinding binding;
 
@@ -64,9 +68,22 @@ public class DetailsFragment extends Fragment implements
 
     private DataRepository dataRepository;
 
+
+    private NewsBookmarksDao bookmarksDao;
+
+    private ArrayList<News> bookmarks = new ArrayList<>();
+
+    private News mTempNews = null;
+
+    @Override
+    public void onWebViewLoaded() {
+        binding.recyclerView.setVisibility(View.VISIBLE);
+        binding.swipeRefreshLayout.setRefreshing(false);
+    }
+
     public interface DetailsListener {
 
-        void onDetailsResponseListener(int newsId, String newsUrl);
+        void onDetailsResponseListener(int newsId, String newsUrl, News tempNews);
 
     }
 
@@ -103,6 +120,8 @@ public class DetailsFragment extends Fragment implements
         AppContainer appContainer = ((MyApplication) getActivity().getApplication()).appContainer;
         dataRepository = appContainer.dataRepository;
 
+        bookmarksDao = appContainer.room.bookmarksDao();
+
     }
 
     @Override
@@ -116,7 +135,6 @@ public class DetailsFragment extends Fragment implements
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        binding.progressBar.setVisibility(View.VISIBLE);
 
         initRecyclerView();
 
@@ -130,6 +148,21 @@ public class DetailsFragment extends Fragment implements
         binding.swipeRefreshLayout.setOnRefreshListener(() -> refreshNewsDetails());
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if (binding.imageViewRefresh.getVisibility() == View.VISIBLE) {
+            getNewsDetails();
+        } else {
+            if (mTempNews != null) {
+                listener.onDetailsResponseListener(mNewsId, mNewsUrl, mTempNews);
+            }
+        }
+
+    }
+
+
     private void refreshNewsDetails() {
 
         dataRepository.getNewsDetails(mNewsId, new DataRepository.DetailResponseListener() {
@@ -138,8 +171,9 @@ public class DetailsFragment extends Fragment implements
 
                 mNewsId = newsDetails.id;
                 mNewsUrl = newsDetails.url;
+                mTempNews = initNewsObject(newsDetails);
 
-                listener.onDetailsResponseListener(mNewsId, mNewsUrl);
+                listener.onDetailsResponseListener(mNewsId, mNewsUrl, mTempNews);
 
                 getCommentVotes(newsDetails.commentsTop);
 
@@ -164,69 +198,70 @@ public class DetailsFragment extends Fragment implements
         });
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        if (binding.imageViewRefresh.getVisibility() == View.VISIBLE) {
-            getNewsDetails();
-        } else {
-            listener.onDetailsResponseListener(mNewsId, mNewsUrl);
-        }
-
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        this.listener = null;
-        binding = null;
-        dataRepository = null;
-    }
-
-
     private void initRecyclerView() {
-        adapter = new NewsDetailsAdapter(this, this, this);
+        adapter = new NewsDetailsAdapter(this, this, this, this);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.recyclerView.setAdapter(adapter);
     }
 
     private void getNewsDetails() {
 
+        binding.swipeRefreshLayout.setRefreshing(true);
         binding.imageViewRefresh.setVisibility(View.GONE);
+        binding.recyclerView.setVisibility(View.GONE);
 
         dataRepository.getNewsDetails(mNewsId, new DataRepository.DetailResponseListener() {
             @Override
             public void onResponse(NewsDetails newsDetails) {
 
-                binding.progressBar.setVisibility(View.GONE);
-                binding.imageViewRefresh.setVisibility(View.GONE);
-                binding.recyclerView.setVisibility(View.VISIBLE);
-
                 mNewsId = newsDetails.id;
                 mNewsUrl = newsDetails.url;
+                mTempNews = initNewsObject(newsDetails);
 
                 newsIdList = MyMethodsClass.initNewsIdList(newsDetails.relatedNews);
 
-                listener.onDetailsResponseListener(mNewsId, mNewsUrl);
+                //Room
+                ExecutorService service = Executors.newSingleThreadExecutor();
+                Handler handler = new Handler(Looper.getMainLooper());
+                service.execute(() -> {
 
-                Bundle bundle = new Bundle();
-                bundle.putString("news_title", newsDetails.title);
-                mFirebaseAnalytics.logEvent("news", bundle);
+                    //doInBackgroundThread
+                    bookmarks.clear();
+                    bookmarks.addAll(bookmarksDao.getBookmarkNews());
 
+                    //onPostExecute
+                    handler.post(() -> {
 
-                getCommentVotes(newsDetails.commentsTop);
+                        for (News news : bookmarks) {
+                            if (news.id == newsDetails.id) {
+                                mTempNews.isInBookmarks = true;
+                                break;
+                            }
+                        }
 
-                adapter.updateList(newsDetails);
+                        listener.onDetailsResponseListener(mNewsId, mNewsUrl, mTempNews);
 
-                binding.swipeRefreshLayout.setRefreshing(false);
+                        Bundle bundle = new Bundle();
+                        bundle.putString("news_title", newsDetails.title);
+                        mFirebaseAnalytics.logEvent("news", bundle);
+
+                        getCommentVotes(newsDetails.commentsTop);
+
+                        MyMethodsClass.checkBookmarks(newsDetails.relatedNews, bookmarks);
+
+                        adapter.updateList(newsDetails);
+
+                    });
+
+                });
+
+                service.shutdown();
 
             }
 
             @Override
             public void onFailure(Throwable t) {
 
-                binding.progressBar.setVisibility(View.GONE);
                 binding.imageViewRefresh.setVisibility(View.VISIBLE);
 
                 binding.swipeRefreshLayout.setRefreshing(false);
@@ -256,6 +291,10 @@ public class DetailsFragment extends Fragment implements
         ExecutorService service = Executors.newSingleThreadExecutor();
         Handler handler = new Handler(Looper.getMainLooper());
         service.execute(() -> {
+
+            if (getActivity() == null) {
+                return;
+            }
 
             //doInBackgroundThread
             ArrayList votes = (ArrayList) SharedPrefs.readListFromPref(getActivity());
@@ -440,4 +479,73 @@ public class DetailsFragment extends Fragment implements
 
     }
 
+
+    @Override
+    public void onNewsMenuFavoritesClicked(News news) {
+
+        //Room
+        ExecutorService service = Executors.newSingleThreadExecutor();
+        Handler handler = new Handler(Looper.getMainLooper());
+        service.execute(() -> {
+
+            //doInBackgroundThread
+            if (news.isInBookmarks) {
+                bookmarksDao.delete(news);
+            } else {
+                bookmarksDao.insert(news);
+            }
+
+            //onPostExecute
+            if (news.isInBookmarks) {
+                handler.post(() -> Toast.makeText(getContext(), "Vest je uspešno uklonjena iz arhive", Toast.LENGTH_SHORT).show());
+                news.isInBookmarks = false;
+            } else {
+                handler.post(() -> Toast.makeText(getContext(), "Vest je uspešno sačuvana u arhivu", Toast.LENGTH_SHORT).show());
+                news.isInBookmarks = true;
+            }
+
+        });
+
+        service.shutdown();
+    }
+
+    //    @Override
+//    public void onDestroy() {
+//        super.onDestroy();
+//        this.listener = null;
+//        binding = null;
+//        dataRepository = null;
+//    }
+
+    @Override
+    public void onNewsMenuCommentsClicked(int newsId) {
+        Intent intent = new Intent(getActivity(), CommentsActivity.class);
+        intent.putExtra("news_id", newsId);
+        getContext().startActivity(intent);
+    }
+
+    @Override
+    public void onNewsMenuShareClicked(String url) {
+
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, url);
+        sendIntent.setType("text/plain");
+
+        Intent shareIntent = Intent.createChooser(sendIntent, null);
+        startActivity(shareIntent);
+    }
+
+
+    private News initNewsObject(NewsDetails newsDetails) {
+        News news = new News();
+        news.id = newsDetails.id;
+        news.image = newsDetails.image;
+        news.categoryName = newsDetails.category.name;
+        news.categoryColor = newsDetails.category.color;
+        news.title = newsDetails.title;
+        news.createdAt = newsDetails.createdAt;
+        news.url = newsDetails.url;
+        return news;
+    }
 }

@@ -55,6 +55,8 @@ public class RvItemModelSearch implements ItemModelSearch {
 
         binding.getRoot().setOnClickListener(view -> listener.onNewsClicked(news.id, newsIdList));
 
+        binding.viewMenu.setOnClickListener(view -> {});
+
         binding.imageViewMenu.setOnClickListener(view -> {
             isMenuOpen = !isMenuOpen;
             animateMenuVisibility(isMenuOpen, binding);

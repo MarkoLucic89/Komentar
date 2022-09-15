@@ -82,23 +82,32 @@ public class VideoFragment extends Fragment implements NewsListener {
 
         binding.swipeRefreshLayout.setRefreshing(true);
 
-        initList();
+        //Room
+        ExecutorService service = Executors.newSingleThreadExecutor();
+        Handler handler = new Handler(Looper.getMainLooper());
+        service.execute(() -> {
+
+            //doInBackgroundThread
+            bookmarks.clear();
+            bookmarks.addAll(bookmarksDao.getBookmarkNews());
+
+            //onPostExecute
+            handler.post(this::initList);
+
+        });
+
+        service.shutdown();
 
         binding.imageViewRefresh.setOnClickListener(view1 -> {
 
             MyMethodsClass.startRefreshAnimation(binding.imageViewRefresh);
 
-            loadNextPage();
+            initList();
+
         });
 
         binding.swipeRefreshLayout.setOnRefreshListener(this::initList);
 
-    }
-
-    private void initRecyclerView() {
-        adapter = new VideosAdapter(this);
-        binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        binding.recyclerView.setAdapter(adapter);
     }
 
 
@@ -116,6 +125,12 @@ public class VideoFragment extends Fragment implements NewsListener {
 
     }
 
+    private void initRecyclerView() {
+        adapter = new VideosAdapter(this);
+        binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        binding.recyclerView.setAdapter(adapter);
+    }
+
     public void initList() {
 
         nextPage = 1;
@@ -128,31 +143,14 @@ public class VideoFragment extends Fragment implements NewsListener {
                 binding.recyclerView.setVisibility(View.VISIBLE);
                 binding.imageViewRefresh.setVisibility(View.GONE);
 
-                //Room
-                ExecutorService service = Executors.newSingleThreadExecutor();
-                Handler handler = new Handler(Looper.getMainLooper());
-                service.execute(() -> {
+                MyMethodsClass.checkBookmarks(newsList, bookmarks);
 
-                    //doInBackgroundThread
-                    bookmarks.clear();
-                    bookmarks.addAll(bookmarksDao.getBookmarkNews());
+                adapter.initList(newsList, hasNextPage);
 
-                    //onPostExecute
-                    handler.post(() -> {
+                nextPage++;
 
-                        MyMethodsClass.checkBookmarks(newsList, bookmarks);
+                binding.swipeRefreshLayout.setRefreshing(false);
 
-                        adapter.initList(newsList, hasNextPage);
-
-                        nextPage++;
-
-                        binding.swipeRefreshLayout.setRefreshing(false);
-
-                    });
-
-                });
-
-                service.shutdown();
             }
 
             @Override
@@ -206,6 +204,44 @@ public class VideoFragment extends Fragment implements NewsListener {
 
             }
         });
+
+    }
+
+    @Override
+    public void refreshPage() {
+
+        dataRepository.getVideos(nextPage, new DataRepository.VideosResponseListener() {
+
+            @Override
+            public void onVideosResponse(ArrayList<News> newsList, boolean hasNextPage) {
+
+                binding.recyclerView.setVisibility(View.VISIBLE);
+                binding.imageViewRefresh.setVisibility(View.GONE);
+
+                MyMethodsClass.checkBookmarks(newsList, bookmarks);
+
+                adapter.refreshPage(newsList, hasNextPage);
+
+                nextPage++;
+
+                binding.swipeRefreshLayout.setRefreshing(false);
+            }
+
+            @Override
+            public void onVideosFailure(Throwable t) {
+
+                if (nextPage == 1) {
+                    binding.recyclerView.setVisibility(View.GONE);
+                    binding.imageViewRefresh.setVisibility(View.VISIBLE);
+                } else {
+                    adapter.addRefresher();
+                }
+
+                binding.swipeRefreshLayout.setRefreshing(false);
+
+            }
+        });
+
     }
 
     @Override

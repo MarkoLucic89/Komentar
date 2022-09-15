@@ -23,7 +23,7 @@ public class RvItemModelTagRefresh implements ItemModelTag {
         RvItemRefreshBinding binding = (RvItemRefreshBinding) holder.binding;
 
         binding.getRoot().setOnClickListener(view -> {
-            listener.loadNextPage();
+            listener.refreshPage();
         });
     }
 

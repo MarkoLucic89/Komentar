@@ -185,8 +185,6 @@ public class NewsDetailsFragment extends Fragment implements
                             }
                         }
 
-                        service.shutdown();
-
                         updateList(newsDetails);
 
                         setListeners(newsDetails);
@@ -245,7 +243,7 @@ public class NewsDetailsFragment extends Fragment implements
 
         binding.webView.loadUrl(url);
 
-        binding.webView.getSettings().setRenderPriority(WebSettings.RenderPriority.HIGH);
+//        binding.webView.getSettings().setRenderPriority(WebSettings.RenderPriority.HIGH);
 
         binding.webView.setWebViewClient(new WebViewClient() {
             @Override
@@ -296,6 +294,8 @@ public class NewsDetailsFragment extends Fragment implements
 //
 //                    }
 //                });
+
+                MyMethodsClass.checkBookmarks(newsDetails.relatedNews, bookmarks);
 
                 initRelatedNewsAdapter(newsDetails.relatedNews);
 
@@ -542,5 +542,53 @@ public class NewsDetailsFragment extends Fragment implements
         intent.putExtra("news_id_list", newsIdList);
         getContext().startActivity(intent);
 
+    }
+
+    @Override
+    public void onNewsMenuCommentsClicked(int newsId) {
+        Intent intent = new Intent(getActivity(), CommentsActivity.class);
+        intent.putExtra("news_id", newsId);
+        getContext().startActivity(intent);
+    }
+
+    @Override
+    public void onNewsMenuShareClicked(String url) {
+
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, url);
+        sendIntent.setType("text/plain");
+
+        Intent shareIntent = Intent.createChooser(sendIntent, null);
+        startActivity(shareIntent);
+    }
+
+    @Override
+    public void onNewsMenuFavoritesClicked(News news) {
+
+        //Room
+        ExecutorService service = Executors.newSingleThreadExecutor();
+        Handler handler = new Handler(Looper.getMainLooper());
+        service.execute(() -> {
+
+            //doInBackgroundThread
+            if (news.isInBookmarks) {
+                bookmarksDao.delete(news);
+            } else {
+                bookmarksDao.insert(news);
+            }
+
+            //onPostExecute
+            if (news.isInBookmarks) {
+                handler.post(() -> Toast.makeText(getContext(), "Vest je uspešno uklonjena iz arhive", Toast.LENGTH_SHORT).show());
+                news.isInBookmarks = false;
+            } else {
+                handler.post(() -> Toast.makeText(getContext(), "Vest je uspešno sačuvana u arhivu", Toast.LENGTH_SHORT).show());
+                news.isInBookmarks = true;
+            }
+
+        });
+
+        service.shutdown();
     }
 }

@@ -71,6 +71,7 @@ public class CategoryNewsFragment extends Fragment implements NewsListener {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         if (getArguments() != null) {
             mCategoryId = getArguments().getInt(ARG_CATEGORY_ID);
             mIsSubcategory = getArguments().getBoolean(ARG_IS_SUBCATEGORY);
@@ -100,7 +101,22 @@ public class CategoryNewsFragment extends Fragment implements NewsListener {
 
         binding.swipeRefreshLayout.setRefreshing(true);
 
-        initList();
+        //Room
+        ExecutorService service = Executors.newSingleThreadExecutor();
+        Handler handler = new Handler(Looper.getMainLooper());
+        service.execute(() -> {
+
+            //doInBackgroundThread
+            bookmarks.clear();
+            bookmarks.addAll(bookmarksDao.getBookmarkNews());
+
+            //onPostExecute
+            handler.post(this::initList);
+
+        });
+
+        service.shutdown();
+
 
         binding.imageViewRefresh.setOnClickListener(view1 -> {
 
@@ -112,6 +128,24 @@ public class CategoryNewsFragment extends Fragment implements NewsListener {
 
         binding.swipeRefreshLayout.setOnRefreshListener(this::initList);
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if (binding.imageViewRefresh.getVisibility() == View.VISIBLE) {
+            binding.imageViewRefresh.setVisibility(View.GONE);
+            initList();
+        }
+
+    }
+
+    private void initRecyclerView() {
+
+        categoryAdapter = new CategoryAdapter(this);
+        binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        binding.recyclerView.setAdapter(categoryAdapter);
     }
 
     private void initList() {
@@ -126,45 +160,28 @@ public class CategoryNewsFragment extends Fragment implements NewsListener {
                 binding.recyclerView.setVisibility(View.VISIBLE);
                 binding.imageViewRefresh.setVisibility(View.GONE);
 
-                //Room
-                ExecutorService service = Executors.newSingleThreadExecutor();
-                Handler handler = new Handler(Looper.getMainLooper());
-                service.execute(() -> {
 
-                    //doInBackgroundThread
-                    bookmarks.clear();
-                    bookmarks.addAll(bookmarksDao.getBookmarkNews());
+                MyMethodsClass.checkBookmarks(newsList, bookmarks);
 
-                    //onPostExecute
-                    handler.post(() -> {
+                categoryAdapter.initList(newsList, hasMorePages);
 
-                        MyMethodsClass.checkBookmarks(newsList, bookmarks);
+                if (mIsSubcategory) {
 
-                        categoryAdapter.initList(newsList, hasMorePages);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("Potkategorije", newsList.get(0).categoryName);
+                    mFirebaseAnalytics.logEvent("android_komentar", bundle);
 
-                        if (mIsSubcategory) {
+                } else {
 
-                            Bundle bundle = new Bundle();
-                            bundle.putString("Potkategorije", newsList.get(0).categoryName);
-                            mFirebaseAnalytics.logEvent("android_komentar", bundle);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("Kategorije", newsList.get(0).categoryName);
+                    mFirebaseAnalytics.logEvent("android_komentar", bundle);
 
-                        } else {
+                }
 
-                            Bundle bundle = new Bundle();
-                            bundle.putString("Kategorije", newsList.get(0).categoryName);
-                            mFirebaseAnalytics.logEvent("android_komentar", bundle);
+                nextPage++;
 
-                        }
-
-                        nextPage++;
-
-                        binding.swipeRefreshLayout.setRefreshing(false);
-
-                    });
-
-                });
-
-                service.shutdown();
+                binding.swipeRefreshLayout.setRefreshing(false);
 
             }
 
@@ -183,24 +200,6 @@ public class CategoryNewsFragment extends Fragment implements NewsListener {
             }
         });
 
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        if (binding.imageViewRefresh.getVisibility() == View.VISIBLE) {
-            binding.imageViewRefresh.setVisibility(View.GONE);
-            loadNextPage();
-        }
-
-    }
-
-    private void initRecyclerView() {
-
-        categoryAdapter = new CategoryAdapter(this);
-        binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        binding.recyclerView.setAdapter(categoryAdapter);
     }
 
     @Override
@@ -238,6 +237,44 @@ public class CategoryNewsFragment extends Fragment implements NewsListener {
 
             }
         });
+    }
+
+    @Override
+    public void refreshPage() {
+
+        dataRepository.getNewsForCategory(mCategoryId, nextPage, new DataRepository.CategoryNewsResponseListener() {
+
+            @Override
+            public void onResponse(ArrayList<News> newsList, boolean hasMorePages) {
+
+                binding.recyclerView.setVisibility(View.VISIBLE);
+                binding.imageViewRefresh.setVisibility(View.GONE);
+
+                MyMethodsClass.checkBookmarks(newsList, bookmarks);
+
+                categoryAdapter.refreshNextPage(newsList, hasMorePages);
+
+                nextPage++;
+
+                binding.swipeRefreshLayout.setRefreshing(false);
+
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+
+                if (nextPage == 1) {
+                    binding.recyclerView.setVisibility(View.GONE);
+                    binding.imageViewRefresh.setVisibility(View.VISIBLE);
+                } else {
+                    categoryAdapter.addRefresher();
+                }
+
+                binding.swipeRefreshLayout.setRefreshing(false);
+
+            }
+        });
+
     }
 
     @Override

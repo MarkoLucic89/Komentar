@@ -23,10 +23,7 @@ public class RvItemModelCategoryRefresh implements ItemModelCategory {
 
         RvItemRefreshBinding binding = (RvItemRefreshBinding) holder.binding;
 
-        binding.getRoot().setOnClickListener(view -> {
-            listener.loadNextPage();
-        });
-
+        binding.getRoot().setOnClickListener(view -> listener.refreshPage());
 
     }
 }

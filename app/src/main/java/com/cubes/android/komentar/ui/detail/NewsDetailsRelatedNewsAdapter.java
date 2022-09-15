@@ -54,6 +54,12 @@ public class NewsDetailsRelatedNewsAdapter extends RecyclerView.Adapter<NewsDeta
 
         RvItemCategorySmallBinding binding = (RvItemCategorySmallBinding) holder.binding;
 
+        if (news.isInBookmarks) {
+            binding.imageViewFavorites.setImageResource(R.drawable.ic_bookmark);
+        } else {
+            binding.imageViewFavorites.setImageResource(R.drawable.ic_bookmark_border);
+        }
+
         setMenuVisibility(isMenuOpen, binding);
 
         Picasso.get().load(news.image).into(binding.imageView);
@@ -66,6 +72,7 @@ public class NewsDetailsRelatedNewsAdapter extends RecyclerView.Adapter<NewsDeta
         binding.imageViewMenu.setOnClickListener(view -> {
             isMenuOpen = !isMenuOpen;
             animateMenuVisibility(isMenuOpen, binding);
+
         });
 
         binding.imageViewClose.setOnClickListener(view -> {
@@ -73,9 +80,22 @@ public class NewsDetailsRelatedNewsAdapter extends RecyclerView.Adapter<NewsDeta
             animateMenuVisibility(isMenuOpen, binding);
         });
 
+        binding.imageViewFavorites.setOnClickListener(view -> {
+
+            isMenuOpen = !isMenuOpen;
+            animateMenuVisibility(isMenuOpen, binding);
+
+            listener.onNewsMenuFavoritesClicked(news);
+
+            if (!news.isInBookmarks) {
+                binding.imageViewFavorites.setImageResource(R.drawable.ic_bookmark);
+            } else {
+                binding.imageViewFavorites.setImageResource(R.drawable.ic_bookmark_border);
+            }
+
+        });
+
     }
-
-
 
     private void setMenuVisibility(boolean isMenuOpen, RvItemCategorySmallBinding binding) {
         if (isMenuOpen) {

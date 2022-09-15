@@ -12,6 +12,8 @@ import androidx.annotation.Nullable;
 import androidx.core.view.GravityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.cubes.android.komentar.data.DataRepository;
 import com.cubes.android.komentar.data.model.domain.Category;
@@ -26,7 +28,9 @@ import com.cubes.android.komentar.ui.subcategories.SubcategoriesActivity;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.google.firebase.messaging.FirebaseMessaging;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Objects;
 
 
 public class HomeFragment extends Fragment implements
@@ -79,6 +83,7 @@ public class HomeFragment extends Fragment implements
 
         binding.imageViewDrawerMenu.setOnClickListener(view1 -> binding.getRoot().openDrawer(GravityCompat.END));
 
+        reduceDragSensitivity(2);
     }
 
     private void initDrawerRecyclerView() {
@@ -123,6 +128,10 @@ public class HomeFragment extends Fragment implements
 
     private void initViewPager(ArrayList<Category> categories) {
 
+        if (getActivity() == null) {
+            return;
+        }
+
         pagerAdapter = new CategoriesPagerAdapter(getActivity(), categories);
         binding.viewPager.setAdapter(pagerAdapter);
 
@@ -144,7 +153,6 @@ public class HomeFragment extends Fragment implements
 
     }
 
-
     @Override
     public void onCategoryClicked(int categoryIndex) {
         binding.viewPager.setCurrentItem(categoryIndex);
@@ -158,8 +166,6 @@ public class HomeFragment extends Fragment implements
         intent.putExtra("subcategory_id", subcategoryId);
         getContext().startActivity(intent);
     }
-
-
 
     @Override
     public void onDestroy() {
@@ -192,6 +198,20 @@ public class HomeFragment extends Fragment implements
             return false;
         } else {
             return true;
+        }
+    }
+
+    private void reduceDragSensitivity(int sensitivity) {
+        try {
+            Field ff = ViewPager2.class.getDeclaredField("mRecyclerView");
+            ff.setAccessible(true);
+            RecyclerView recyclerView = (RecyclerView) ff.get(binding.viewPager);
+            Field touchSlopField = RecyclerView.class.getDeclaredField("mTouchSlop");
+            touchSlopField.setAccessible(true);
+            int touchSlop = (int) touchSlopField.get(recyclerView);
+            touchSlopField.set(recyclerView, touchSlop * sensitivity);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
         }
     }
 }

@@ -59,6 +59,8 @@ public class RvItemModelHomeCategoryBig implements ItemModelHome {
 
         holder.binding.getRoot().setOnClickListener(view -> listener.onNewsClicked(news.id));
 
+        binding.viewMenu.setOnClickListener(view -> {});
+
         binding.imageViewMenu.setOnClickListener(view -> {
             isMenuOpen = !isMenuOpen;
             animateMenuVisibility(isMenuOpen, binding);

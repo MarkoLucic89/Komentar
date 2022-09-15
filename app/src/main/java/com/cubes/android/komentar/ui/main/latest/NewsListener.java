@@ -33,4 +33,8 @@ public interface NewsListener {
 
     }
 
+    default void refreshPage() {
+
+    }
+
 }

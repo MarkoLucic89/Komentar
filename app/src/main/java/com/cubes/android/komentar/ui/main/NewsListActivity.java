@@ -2,6 +2,8 @@ package com.cubes.android.komentar.ui.main;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.cubes.android.komentar.databinding.ActivityNewsListBinding;
 
@@ -20,6 +22,8 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+
+import java.lang.reflect.Field;
 
 public class NewsListActivity extends AppCompatActivity {
 
@@ -48,11 +52,18 @@ public class NewsListActivity extends AppCompatActivity {
     public void onBackPressed() {
 
         if (homeFragment.onBackPressed()) {
+
             if (isFirstTimeBackClicked) {
+
                 isFirstTimeBackClicked = false;
                 Toast.makeText(this, "Pritisnite ponovo da biste izašli iz aplikacije", Toast.LENGTH_SHORT).show();
+
+                binding.getRoot().postDelayed(() -> isFirstTimeBackClicked = true, 5000);
+
             } else {
+
                 finish();
+
             }
         }
 
@@ -123,4 +134,5 @@ public class NewsListActivity extends AppCompatActivity {
         super.onDestroy();
         homeFragment = null;
     }
+
 }

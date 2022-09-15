@@ -62,7 +62,22 @@ public class TagActivity extends AppCompatActivity implements NewsListener {
 
         binding.swipeRefreshLayout.setRefreshing(true);
 
-        initList();
+        //Room
+        ExecutorService service = Executors.newSingleThreadExecutor();
+        Handler handler = new Handler(Looper.getMainLooper());
+        service.execute(() -> {
+
+            //doInBackgroundThread
+            bookmarks.clear();
+            bookmarks.addAll(bookmarksDao.getBookmarkNews());
+
+            //onPostExecute
+            handler.post(this::initList);
+
+        });
+
+        service.shutdown();
+
 
         binding.textViewTitle.setText(tagTitle);
 
@@ -73,6 +88,7 @@ public class TagActivity extends AppCompatActivity implements NewsListener {
             binding.swipeRefreshLayout.setRefreshing(true);
 
             loadNextPage();
+
         });
 
         binding.swipeRefreshLayout.setOnRefreshListener(this::initList);
@@ -91,31 +107,13 @@ public class TagActivity extends AppCompatActivity implements NewsListener {
                 binding.recyclerView.setVisibility(View.VISIBLE);
                 binding.imageViewRefresh.setVisibility(View.GONE);
 
-                //Room
-                ExecutorService service = Executors.newSingleThreadExecutor();
-                Handler handler = new Handler(Looper.getMainLooper());
-                service.execute(() -> {
+                MyMethodsClass.checkBookmarks(newsList, bookmarks);
 
-                    //doInBackgroundThread
-                    bookmarks.clear();
-                    bookmarks.addAll(bookmarksDao.getBookmarkNews());
+                adapter.initList(newsList, hasMorePages);
 
-                    //onPostExecute
-                    handler.post(() -> {
+                nextPage++;
 
-                        MyMethodsClass.checkBookmarks(newsList, bookmarks);
-
-                        adapter.updateList(newsList, hasMorePages);
-
-                        nextPage++;
-
-                        binding.swipeRefreshLayout.setRefreshing(false);
-
-                    });
-
-                });
-
-                service.shutdown();
+                binding.swipeRefreshLayout.setRefreshing(false);
 
             }
 
@@ -153,10 +151,53 @@ public class TagActivity extends AppCompatActivity implements NewsListener {
                 binding.recyclerView.setVisibility(View.VISIBLE);
                 binding.imageViewRefresh.setVisibility(View.GONE);
 
+                MyMethodsClass.checkBookmarks(newsList, bookmarks);
+
                 if (nextPage == 1) {
-                    adapter.updateList(newsList, hasMorePages);
+                    adapter.initList(newsList, hasMorePages);
                 } else {
                     adapter.addNextPage(newsList, hasMorePages);
+                }
+
+                nextPage++;
+
+                binding.swipeRefreshLayout.setRefreshing(false);
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+
+                if (nextPage == 1) {
+                    binding.recyclerView.setVisibility(View.GONE);
+                    binding.imageViewRefresh.setVisibility(View.VISIBLE);
+                } else {
+                    adapter.addRefresher();
+                }
+
+                binding.swipeRefreshLayout.setRefreshing(false);
+
+            }
+        });
+
+    }
+
+    @Override
+    public void refreshPage() {
+
+        dataRepository.getNewsForTag(tagId, nextPage, new DataRepository.TagResponseListener() {
+
+            @Override
+            public void onResponse(ArrayList<News> newsList, boolean hasMorePages) {
+
+                binding.recyclerView.setVisibility(View.VISIBLE);
+                binding.imageViewRefresh.setVisibility(View.GONE);
+
+                MyMethodsClass.checkBookmarks(newsList, bookmarks);
+
+                if (nextPage == 1) {
+                    adapter.initList(newsList, hasMorePages);
+                } else {
+                    adapter.refreshList(newsList, hasMorePages);
                 }
 
                 nextPage++;

@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -20,10 +21,11 @@ import com.cubes.android.komentar.di.MyApplication;
 import com.cubes.android.komentar.ui.comments.CommentsActivity;
 import com.cubes.android.komentar.ui.tools.MyMethodsClass;
 
+import java.lang.reflect.Field;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class DetailsActivity extends AppCompatActivity implements NewsDetailsFragment.DetailsListener {
+public class DetailsActivity extends AppCompatActivity implements DetailsFragment.DetailsListener {
 
     private ActivityDetailsBinding binding;
     private int mNewsId;
@@ -71,6 +73,8 @@ public class DetailsActivity extends AppCompatActivity implements NewsDetailsFra
 
             }
         });
+
+        reduceDragSensitivity(1);
     }
 
     private void setClickListeners() {
@@ -137,6 +141,7 @@ public class DetailsActivity extends AppCompatActivity implements NewsDetailsFra
     }
 
 
+
     @Override
     public void onDetailsResponseListener(int newsId, String newsUrl, News tempNews) {
 
@@ -148,6 +153,20 @@ public class DetailsActivity extends AppCompatActivity implements NewsDetailsFra
             binding.imageViewBookmark.setImageResource(R.drawable.ic_bookmark);
         } else {
             binding.imageViewBookmark.setImageResource(R.drawable.ic_bookmark_border);
+        }
+    }
+
+    private void reduceDragSensitivity(int sensitivity) {
+        try {
+            Field ff = ViewPager2.class.getDeclaredField("mRecyclerView");
+            ff.setAccessible(true);
+            RecyclerView recyclerView = (RecyclerView) ff.get(binding.viewPager);
+            Field touchSlopField = RecyclerView.class.getDeclaredField("mTouchSlop");
+            touchSlopField.setAccessible(true);
+            int touchSlop = (int) touchSlopField.get(recyclerView);
+            touchSlopField.set(recyclerView, touchSlop * sensitivity);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
         }
     }
 }

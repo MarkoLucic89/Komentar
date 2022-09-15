@@ -32,6 +32,7 @@ import com.cubes.android.komentar.ui.detail.rv_item_details.RvItemModelDetailsSm
 import com.cubes.android.komentar.ui.detail.rv_item_details.RvItemModelDetailsTags;
 import com.cubes.android.komentar.ui.detail.rv_item_details.RvItemModelDetailsWebView;
 import com.cubes.android.komentar.ui.main.latest.NewsListener;
+import com.google.android.gms.ads.AdRequest;
 
 import java.util.ArrayList;
 
@@ -41,17 +42,24 @@ public class NewsDetailsAdapter extends RecyclerView.Adapter<NewsDetailsAdapter.
     private CommentsAdapter.CommentsListener commentsListener;
     private NewsDetailsTagsAdapter.TagListener tagListener;
     private NewsListener newsListener;
+    private WebViewListener webViewListener;
+
+    public interface WebViewListener {
+        void onWebViewLoaded();
+    }
 
     public NewsDetailsAdapter(Context context) {
         this.commentsListener = (CommentsAdapter.CommentsListener) context;
         this.tagListener = (NewsDetailsTagsAdapter.TagListener) context;
         this.newsListener = (NewsListener) context;
+        this.webViewListener = (WebViewListener) context;
     }
 
-    public NewsDetailsAdapter(CommentsAdapter.CommentsListener commentsListener, NewsDetailsTagsAdapter.TagListener tagListener, NewsListener newsListener) {
+    public NewsDetailsAdapter(CommentsAdapter.CommentsListener commentsListener, NewsDetailsTagsAdapter.TagListener tagListener, NewsListener newsListener, WebViewListener webViewListener) {
         this.commentsListener = commentsListener;
         this.tagListener = tagListener;
         this.newsListener = newsListener;
+        this.webViewListener = webViewListener;
     }
 
     public void updateList(NewsDetails newsDetails) {
@@ -65,7 +73,7 @@ public class NewsDetailsAdapter extends RecyclerView.Adapter<NewsDetailsAdapter.
         list.add(new RvItemModelDetailAd());
 
         //WEB VIEW
-        list.add(new RvItemModelDetailsWebView(newsDetails.url, newsDetails.id));
+        list.add(new RvItemModelDetailsWebView(newsDetails.url, newsDetails.id, webViewListener));
 
         //AD 2
         list.add(new RvItemModelDetailAd());
@@ -144,6 +152,8 @@ public class NewsDetailsAdapter extends RecyclerView.Adapter<NewsDetailsAdapter.
                 break;
             case R.layout.rv_item_ad:
                 binding = RvItemAdBinding.inflate(inflater, parent, false);
+                AdRequest adRequest = new AdRequest.Builder().build();
+                ((RvItemAdBinding) binding).adView.loadAd(adRequest);
                 break;
             default:
                 binding = null;

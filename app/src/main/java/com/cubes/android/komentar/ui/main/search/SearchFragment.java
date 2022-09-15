@@ -89,6 +89,24 @@ public class SearchFragment extends Fragment implements NewsListener {
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.recyclerView.setAdapter(adapter);
 
+        binding.swipeRefreshLayout.setRefreshing(true);
+
+        //Room
+        ExecutorService service = Executors.newSingleThreadExecutor();
+        Handler handler = new Handler(Looper.getMainLooper());
+        service.execute(() -> {
+
+            //doInBackgroundThread
+            bookmarks.clear();
+            bookmarks.addAll(bookmarksDao.getBookmarkNews());
+
+            //onPostExecute
+            handler.post(() -> binding.swipeRefreshLayout.setRefreshing(false));
+
+        });
+
+        service.shutdown();
+
         binding.imageViewSearch.setOnClickListener(view1 -> {
             adapter.clearList();
             searchListByTerm();
@@ -113,7 +131,7 @@ public class SearchFragment extends Fragment implements NewsListener {
             binding.imageViewRefresh.setVisibility(View.GONE);
 
             MyMethodsClass.startRefreshAnimation(binding.imageViewRefresh);
-            searchListByTerm();
+            refreshPage();
         });
 
         binding.swipeRefreshLayout.setOnRefreshListener(this::searchListByTerm);
@@ -140,21 +158,7 @@ public class SearchFragment extends Fragment implements NewsListener {
         bundle.putString("Pretraga", searchTerm);
         FirebaseAnalytics.getInstance(getContext()).logEvent("android_komentar", bundle);
 
-        //Room
-        ExecutorService service = Executors.newSingleThreadExecutor();
-        Handler handler = new Handler(Looper.getMainLooper());
-        service.execute(() -> {
-
-            //doInBackgroundThread
-            bookmarks.clear();
-            bookmarks.addAll(bookmarksDao.getBookmarkNews());
-
-            //onPostExecute
-            handler.post(this::loadNextPage);
-
-        });
-
-        service.shutdown();
+        loadNextPage();
 
     }
 
@@ -190,6 +194,49 @@ public class SearchFragment extends Fragment implements NewsListener {
                     adapter.initList(newsList, hasMorePages);
                 } else {
                     adapter.addNextPage(newsList, hasMorePages);
+                }
+
+                nextPage++;
+
+                binding.swipeRefreshLayout.setRefreshing(false);
+
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+
+                if (nextPage == 1) {
+                    binding.recyclerView.setVisibility(View.GONE);
+                    binding.imageViewRefresh.setVisibility(View.VISIBLE);
+                } else {
+                    adapter.addRefresher();
+                }
+
+                binding.swipeRefreshLayout.setRefreshing(false);
+
+            }
+        });
+
+    }
+
+    @Override
+    public void refreshPage() {
+
+        Log.d(TAG, "loadNextPage: " + nextPage);
+
+        dataRepository.searchNews(searchTerm, nextPage, new DataRepository.SearchResponseListener() {
+
+            @Override
+            public void onResponse(ArrayList<News> newsList, boolean hasMorePages) {
+
+                binding.recyclerView.setVisibility(View.VISIBLE);
+
+                MyMethodsClass.checkBookmarks(newsList, bookmarks);
+
+                if (nextPage == 1) {
+                    adapter.initList(newsList, hasMorePages);
+                } else {
+                    adapter.refreshPage(newsList, hasMorePages);
                 }
 
                 nextPage++;

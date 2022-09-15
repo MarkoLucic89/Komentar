@@ -17,7 +17,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.cubes.android.komentar.data.DataRepository;
 import com.cubes.android.komentar.data.model.domain.News;
 import com.cubes.android.komentar.data.source.local.database.dao.NewsBookmarksDao;
-import com.cubes.android.komentar.data.source.local.database.dao.NewsCommentsVoteDao;
 import com.cubes.android.komentar.databinding.FragmentLatestNewsBinding;
 import com.cubes.android.komentar.di.AppContainer;
 import com.cubes.android.komentar.di.MyApplication;
@@ -79,13 +78,29 @@ public class LatestNewsFragment extends Fragment implements NewsListener {
 
         binding.swipeRefreshLayout.setRefreshing(true);
 
-        initList();
+
+        //Room
+        ExecutorService service = Executors.newSingleThreadExecutor();
+        Handler handler = new Handler(Looper.getMainLooper());
+        service.execute(() -> {
+
+            //doInBackgroundThread
+            bookmarks.clear();
+            bookmarks.addAll(bookmarksDao.getBookmarkNews());
+
+            //onPostExecute
+            handler.post(this::initList);
+
+        });
+
+        service.shutdown();
+
 
         binding.imageViewRefresh.setOnClickListener(view1 -> {
 
             MyMethodsClass.startRefreshAnimation(binding.imageViewRefresh);
 
-            loadNextPage();
+            initList();
 
         });
 
@@ -99,7 +114,7 @@ public class LatestNewsFragment extends Fragment implements NewsListener {
 
         if (binding.imageViewRefresh.getVisibility() == View.VISIBLE) {
             binding.imageViewRefresh.setVisibility(View.GONE);
-            loadNextPage();
+            refreshPage();
         }
 
     }
@@ -124,36 +139,17 @@ public class LatestNewsFragment extends Fragment implements NewsListener {
                 binding.recyclerView.setVisibility(View.VISIBLE);
                 binding.imageViewRefresh.setVisibility(View.GONE);
 
-                //Room
-                ExecutorService service = Executors.newSingleThreadExecutor();
-                Handler handler = new Handler(Looper.getMainLooper());
-                service.execute(() -> {
+                MyMethodsClass.checkBookmarks(newsList, bookmarks);
 
-                    //doInBackgroundThread
-                    bookmarks.clear();
-                    bookmarks.addAll(bookmarksDao.getBookmarkNews());
+                if (nextPage == 1) {
+                    categoryAdapter.initList(newsList, hasMorePages);
+                } else {
+                    categoryAdapter.addNextPage(newsList, hasMorePages);
+                }
 
-                    //onPostExecute
-                    handler.post(() -> {
+                nextPage++;
 
-                        MyMethodsClass.checkBookmarks(newsList, bookmarks);
-
-                        if (nextPage == 1) {
-                            categoryAdapter.initList(newsList, hasMorePages);
-                        } else {
-                            categoryAdapter.addNextPage(newsList, hasMorePages);
-                        }
-
-                        nextPage++;
-
-                        binding.swipeRefreshLayout.setRefreshing(false);
-
-                    });
-
-                });
-
-                service.shutdown();
-
+                binding.swipeRefreshLayout.setRefreshing(false);
 
             }
 
@@ -173,7 +169,6 @@ public class LatestNewsFragment extends Fragment implements NewsListener {
         });
 
     }
-
 
     @Override
     public void loadNextPage() {
@@ -216,6 +211,50 @@ public class LatestNewsFragment extends Fragment implements NewsListener {
         });
 
     }
+
+    @Override
+    public void refreshPage() {
+
+        dataRepository.getLatestNews(nextPage, new DataRepository.LatestResponseListener() {
+
+            @Override
+            public void onResponse(ArrayList<News> newsList, boolean hasMorePages) {
+
+                binding.recyclerView.setVisibility(View.VISIBLE);
+                binding.imageViewRefresh.setVisibility(View.GONE);
+
+                MyMethodsClass.checkBookmarks(newsList, bookmarks);
+
+                if (nextPage == 1) {
+                    categoryAdapter.initList(newsList, hasMorePages);
+                } else {
+                    categoryAdapter.refreshNextPage(newsList, hasMorePages);
+                }
+
+                nextPage++;
+
+                binding.swipeRefreshLayout.setRefreshing(false);
+
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+
+                if (nextPage == 1) {
+                    binding.recyclerView.setVisibility(View.GONE);
+                    binding.imageViewRefresh.setVisibility(View.VISIBLE);
+                } else {
+                    categoryAdapter.addRefresher();
+                }
+
+                binding.swipeRefreshLayout.setRefreshing(false);
+
+            }
+        });
+
+
+    }
+
 
     @Override
     public void onNewsClicked(int newsId, int[] newsIdList) {

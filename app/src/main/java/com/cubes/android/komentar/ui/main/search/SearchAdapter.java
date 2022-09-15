@@ -158,6 +158,49 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
         notifyItemRangeInserted((lastIndex + 1), newsList.size());
     }
 
+    public void refreshPage(ArrayList<News> newsList, boolean hasMorePages) {
+
+        if (newsList.isEmpty()) {
+            itemModels.remove(itemModels.size() - 1);
+            notifyItemRemoved(itemModels.size());
+            return;
+        }
+
+        int lastIndex;
+
+        if (itemModels.isEmpty()) {
+            lastIndex = 0;
+        } else {
+            lastIndex = itemModels.size() - 1;
+            itemModels.remove(lastIndex);
+        }
+
+        newsIdList = MyMethodsClass.initNewsIdList(newsList);
+
+
+        for (int i = 0; i < newsList.size(); i++) {
+
+            if (i % 5 == 0 && adsCounter < 5) {
+
+                itemModels.add(new RvItemModelSearchAd());
+                adsCounter++;
+            }
+
+            itemModels.add(new RvItemModelSearch(newsList.get(i), listener, newsIdList));
+
+        }
+
+//        if (response.data.pagination.has_more_pages) {
+//            itemModels.add(new RvItemModelSearchLoading(listener));
+//        }
+
+        if (newsList.size() == 20) {
+            itemModels.add(new RvItemModelSearchLoading(listener));
+        }
+
+        notifyDataSetChanged();
+    }
+
     public void clearList() {
         itemModels.clear();
         notifyDataSetChanged();

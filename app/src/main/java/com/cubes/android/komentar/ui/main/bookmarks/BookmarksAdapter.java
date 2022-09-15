@@ -27,7 +27,7 @@ public class BookmarksAdapter extends RecyclerView.Adapter<BookmarksAdapter.Book
 
     private int[] newsIdList;
 
-    private int adsCounter = 0;
+//    private int adsCounter = 0;
 
     public BookmarksAdapter(NewsListener listener) {
         this.listener = listener;
@@ -35,7 +35,7 @@ public class BookmarksAdapter extends RecyclerView.Adapter<BookmarksAdapter.Book
 
     public void initList(ArrayList<News> newsList) {
 
-        adsCounter = 0;
+//        adsCounter = 0;
 
         itemModels.clear();
 
@@ -44,11 +44,11 @@ public class BookmarksAdapter extends RecyclerView.Adapter<BookmarksAdapter.Book
 
         for (int i = 0; i < newsList.size(); i++) {
 
-            if (i > 0 && i % 5 == 0 && adsCounter < 5) {
-
-                itemModels.add(new RvItemModelBookmarksAd());
-                adsCounter++;
-            }
+//            if (i > 0 && i % 5 == 0 && adsCounter < 5) {
+//
+//                itemModels.add(new RvItemModelBookmarksAd());
+//                adsCounter++;
+//            }
 
             itemModels.add(new RvItemModelBookmarks(newsList.get(i), listener, newsIdList));
 

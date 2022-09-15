@@ -42,6 +42,7 @@ public class SharedPrefs {
     }
 
     public static List<NewsCommentVote> readListFromPref(Activity activity) {
+
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(activity);
         String jsonString = pref.getString(LIST_KEY, "");
 

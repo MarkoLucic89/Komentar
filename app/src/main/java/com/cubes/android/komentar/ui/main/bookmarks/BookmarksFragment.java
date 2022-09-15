@@ -6,7 +6,9 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Handler;
 import android.os.Looper;
@@ -28,6 +30,7 @@ import com.cubes.android.komentar.ui.main.latest.CategoryAdapter;
 import com.cubes.android.komentar.ui.main.latest.NewsListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -91,7 +94,7 @@ public class BookmarksFragment extends Fragment implements NewsListener {
         service.execute(() -> {
 
             //doInBackgroundThread
-             bookmarkNews = (ArrayList<News>) bookmarksDao.getBookmarkNews();
+            bookmarkNews = (ArrayList<News>) bookmarksDao.getBookmarkNews();
 
             //onPostExecute
             handler.post(() -> {
@@ -107,6 +110,9 @@ public class BookmarksFragment extends Fragment implements NewsListener {
 
         service.shutdown();
 
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(itemTouchHelperCallback);
+        itemTouchHelper.attachToRecyclerView(binding.recyclerView);
+
     }
 
     @Override
@@ -120,6 +126,32 @@ public class BookmarksFragment extends Fragment implements NewsListener {
         binding.swipeRefreshLayout.setRefreshing(false);
 
     }
+
+    private ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new ItemTouchHelper.SimpleCallback(
+            ItemTouchHelper.UP |
+                    ItemTouchHelper.DOWN,
+            ItemTouchHelper.LEFT |
+                    ItemTouchHelper.RIGHT
+    ) {
+        @Override
+        public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+
+            Collections.swap(bookmarkNews, viewHolder.getAdapterPosition(), target.getAdapterPosition());
+
+            adapter.notifyItemMoved(viewHolder.getAdapterPosition(), target.getAdapterPosition());
+
+            return false;
+        }
+
+        @Override
+        public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+
+            onNewsMenuFavoritesClicked(bookmarkNews.get(viewHolder.getAdapterPosition()));
+
+            adapter.notifyItemRemoved(viewHolder.getAdapterPosition());
+
+        }
+    };
 
     @Override
     public void onNewsClicked(int newsId, int[] newsIdList) {

@@ -155,16 +155,6 @@ public class HomePagerFragment extends Fragment implements NewsListener {
 
         adapter = new HomePagerAdapter(this);
 
-//        binding.recyclerView.setItemViewCacheSize(50);
-
-//        binding.recyclerView.setViewCacheExtension(new RecyclerView.ViewCacheExtension() {
-//            @Nullable
-//            @Override
-//            public View getViewForPositionAndType(@NonNull RecyclerView.Recycler recycler, int position, int type) {
-//                return null;
-//            }
-//        });
-
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.recyclerView.setAdapter(adapter);
 
