@@ -20,7 +20,8 @@
     <string name="menu_most_read">Najčitanije</string>
     <string name="menu_most_commented">Komentari</string>
     <string name="text_loading_news">Učitavanje vesti</string>
-    <string name="text_list_is_empty">Lista komentara je prazna.</string>
+    <string name="text_list_of_comments_is_empty">Lista komentara je prazna.</string>
+    <string name="text_list_of_news_is_empty">Lista vesti je prazna.</string>
     <string name="text_comments">Komentari:</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -29,5 +30,10 @@
 
     <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
     <string name="bookmarks">Sačuvane</string>
+    <string name="clear_all">Obriši sve</string>
+    <string name="bookmarks_title">Sačuvane vesti</string>
+    <string name="bookmarks_message">Da li ste sigurni da želite da obrišete sve sačuvane vesti?</string>
+    <string name="bookmarks_delete_all">Obriši sve</string>
+    <string name="bookmarks_cancel">Odustani</string>
 
 </resources>

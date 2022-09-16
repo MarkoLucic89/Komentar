@@ -97,6 +97,11 @@ public class BookmarksAdapter extends RecyclerView.Adapter<BookmarksAdapter.Book
         return itemModels.get(position).getType();
     }
 
+    public void clearList() {
+        itemModels.clear();
+        notifyDataSetChanged();
+    }
+
 
     public static class BookmarkViewHolder extends RecyclerView.ViewHolder {
 

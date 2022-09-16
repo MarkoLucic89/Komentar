@@ -7,7 +7,7 @@
     android:orientation="vertical"
     tools:context=".ui.tag.TagActivity">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/blue_dark">
@@ -17,10 +17,8 @@
             android:layout_width="45dp"
             android:layout_height="45dp"
             android:padding="8dp"
-            android:src="@drawable/ic_back"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_gravity="start"
+            android:src="@drawable/ic_back" />
 
         <TextView
             android:id="@+id/text_view_title"
@@ -31,12 +29,9 @@
             android:textColor="@color/white"
             android:textSize="18sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_gravity="center"/>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </FrameLayout>
 
     <FrameLayout
         android:layout_width="match_parent"

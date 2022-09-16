@@ -134,6 +134,8 @@ public class SearchFragment extends Fragment implements NewsListener {
             refreshPage();
         });
 
+        binding.imageViewBack.setOnClickListener(view1 -> getActivity().onBackPressed());
+
         binding.swipeRefreshLayout.setOnRefreshListener(this::searchListByTerm);
     }
 

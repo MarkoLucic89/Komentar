@@ -2,8 +2,6 @@ package com.cubes.android.komentar.ui.main;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager2.widget.ViewPager2;
 
 import com.cubes.android.komentar.databinding.ActivityNewsListBinding;
 
@@ -19,18 +17,14 @@ import com.cubes.android.komentar.ui.main.search.SearchFragment;
 import com.cubes.android.komentar.ui.main.videos.VideoFragment;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.MobileAds;
-import com.google.android.gms.ads.initialization.InitializationStatus;
-import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 
-import java.lang.reflect.Field;
-
-public class NewsListActivity extends AppCompatActivity {
+public class NewsListActivity extends AppCompatActivity{
 
     private boolean isFirstTimeBackClicked = true;
 
     private ActivityNewsListBinding binding;
     private HomeFragment homeFragment;
+    private BookmarksFragment bookmarkFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,6 +108,7 @@ public class NewsListActivity extends AppCompatActivity {
                     replaceFragment(LatestNewsFragment.newInstance());
                     return true;
                 case R.id.menuBookmarks:
+                    bookmarkFragment = BookmarksFragment.newInstance();
                     replaceFragment(BookmarksFragment.newInstance());
                     return true;
                 case R.id.menuVideo:
@@ -133,6 +128,7 @@ public class NewsListActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         homeFragment = null;
+        bookmarkFragment = null;
     }
 
 }

@@ -21,4 +21,7 @@ public interface NewsBookmarksDao {
 
     @Delete()
     void delete(News news);
+
+    @Query("DELETE FROM news")
+    public void clearBookmarkList();
 }

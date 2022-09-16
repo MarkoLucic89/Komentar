@@ -18,7 +18,6 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.cubes.android.komentar.R;
-import com.cubes.android.komentar.data.DataRepository;
 import com.cubes.android.komentar.data.model.domain.News;
 import com.cubes.android.komentar.data.source.local.database.dao.NewsBookmarksDao;
 import com.cubes.android.komentar.databinding.FragmentBookmarksBinding;
@@ -26,12 +25,10 @@ import com.cubes.android.komentar.di.AppContainer;
 import com.cubes.android.komentar.di.MyApplication;
 import com.cubes.android.komentar.ui.comments.CommentsActivity;
 import com.cubes.android.komentar.ui.detail.DetailsActivity;
-import com.cubes.android.komentar.ui.main.latest.CategoryAdapter;
 import com.cubes.android.komentar.ui.main.latest.NewsListener;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -48,7 +45,6 @@ public class BookmarksFragment extends Fragment implements NewsListener {
     public BookmarksFragment() {
         // Required empty public constructor
     }
-
 
     public static BookmarksFragment newInstance() {
         return new BookmarksFragment();
@@ -76,6 +72,8 @@ public class BookmarksFragment extends Fragment implements NewsListener {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        binding.dialogBookmarks.setVisibility(View.GONE);
+
         adapter = new BookmarksAdapter(this);
 
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -99,12 +97,13 @@ public class BookmarksFragment extends Fragment implements NewsListener {
             //onPostExecute
             handler.post(() -> {
 
+                updateUiIsEmptyList(bookmarkNews);
+
                 adapter.initList(bookmarkNews);
 
                 binding.swipeRefreshLayout.setRefreshing(false);
 
             });
-
 
         });
 
@@ -113,6 +112,28 @@ public class BookmarksFragment extends Fragment implements NewsListener {
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(itemTouchHelperCallback);
         itemTouchHelper.attachToRecyclerView(binding.recyclerView);
 
+        binding.imageViewBack.setOnClickListener(view1 -> getActivity().onBackPressed());
+
+        binding.textViewClearAll.setOnClickListener(view1 -> binding.dialogBookmarks.setVisibility(View.VISIBLE));
+
+        binding.textViewDeleteAll.setOnClickListener(view1 -> deleteAllFavorites());
+
+        binding.imageViewClose.setOnClickListener(view1 -> binding.dialogBookmarks.setVisibility(View.GONE));
+
+        binding.textViewCancel.setOnClickListener(view1 -> binding.dialogBookmarks.setVisibility(View.GONE));
+
+    }
+
+    private void updateUiIsEmptyList(ArrayList<News> bookmarkNews) {
+        if (bookmarkNews.isEmpty()) {
+            binding.textViewListIsEmpty.setVisibility(View.VISIBLE);
+            binding.textViewClearAll.setEnabled(false);
+            binding.textViewClearAll.setTextColor(getContext().getResources().getColor(R.color.grey_text));
+        } else {
+            binding.textViewListIsEmpty.setVisibility(View.GONE);
+            binding.textViewClearAll.setEnabled(true);
+            binding.textViewClearAll.setTextColor(getContext().getResources().getColor(R.color.white));
+        }
     }
 
     @Override
@@ -196,6 +217,7 @@ public class BookmarksFragment extends Fragment implements NewsListener {
                 bookmarkNews.remove(news);
                 adapter.initList(bookmarkNews);
                 Toast.makeText(getContext(), "Vest je uspešno uklonjena", Toast.LENGTH_SHORT).show();
+                updateUiIsEmptyList(bookmarkNews);
             });
 
         });
@@ -203,4 +225,28 @@ public class BookmarksFragment extends Fragment implements NewsListener {
         service.shutdown();
     }
 
+    public void deleteAllFavorites() {
+
+        binding.dialogBookmarks.setVisibility(View.GONE);
+
+        //Room
+        ExecutorService service = Executors.newSingleThreadExecutor();
+        Handler handler = new Handler(Looper.getMainLooper());
+        service.execute(() -> {
+
+            //doInBackgroundThread
+            bookmarksDao.clearBookmarkList();
+
+            //onPostExecute
+            handler.post(() -> {
+
+                adapter.clearList();
+                bookmarkNews.clear();
+                updateUiIsEmptyList(bookmarkNews);
+            });
+
+        });
+
+        service.shutdown();
+    }
 }

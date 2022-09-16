@@ -84,6 +84,10 @@ public class HomeFragment extends Fragment implements
         binding.imageViewDrawerMenu.setOnClickListener(view1 -> binding.getRoot().openDrawer(GravityCompat.END));
 
         reduceDragSensitivity(2);
+
+        binding.imageViewRefresh.setOnClickListener(view1 -> {
+            getAllCategories();
+        });
     }
 
     private void initDrawerRecyclerView() {
@@ -101,13 +105,13 @@ public class HomeFragment extends Fragment implements
 
         binding.progressBar.setVisibility(View.VISIBLE);
         binding.linearLayoutHome.setVisibility(View.GONE);
+        binding.imageViewRefresh.setVisibility(View.GONE);
 
 
         dataRepository.getAllCategories(new DataRepository.CategoriesResponseListener() {
             @Override
             public void onResponse(ArrayList<Category> categories) {
 
-                binding.imageViewRefresh.setVisibility(View.GONE);
                 binding.linearLayoutHome.setVisibility(View.VISIBLE);
                 binding.progressBar.setVisibility(View.GONE);
 

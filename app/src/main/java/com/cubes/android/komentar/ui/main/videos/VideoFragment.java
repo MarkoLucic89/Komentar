@@ -108,6 +108,8 @@ public class VideoFragment extends Fragment implements NewsListener {
 
         binding.swipeRefreshLayout.setOnRefreshListener(this::initList);
 
+        binding.imageViewBack.setOnClickListener(view1 -> getActivity().onBackPressed());
+
     }
 
 

@@ -104,6 +104,8 @@ public class LatestNewsFragment extends Fragment implements NewsListener {
 
         });
 
+        binding.imageViewBack.setOnClickListener(view1 -> getActivity().onBackPressed());
+
         binding.swipeRefreshLayout.setOnRefreshListener(this::initList);
 
     }
