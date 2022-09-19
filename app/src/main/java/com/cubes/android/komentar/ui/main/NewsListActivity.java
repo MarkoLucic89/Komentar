@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.cubes.android.komentar.R;
+import com.cubes.android.komentar.ui.main.bookmarks.BookmarkDialogFragment;
 import com.cubes.android.komentar.ui.main.bookmarks.BookmarksFragment;
 import com.cubes.android.komentar.ui.main.home.HomeFragment;
 import com.cubes.android.komentar.ui.main.latest.LatestNewsFragment;
@@ -18,7 +19,7 @@ import com.cubes.android.komentar.ui.main.videos.VideoFragment;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 
-public class NewsListActivity extends AppCompatActivity{
+public class NewsListActivity extends AppCompatActivity implements BookmarkDialogFragment.DeleteAllBookmarksListener {
 
     private boolean isFirstTimeBackClicked = true;
 
@@ -109,7 +110,7 @@ public class NewsListActivity extends AppCompatActivity{
                     return true;
                 case R.id.menuBookmarks:
                     bookmarkFragment = BookmarksFragment.newInstance();
-                    replaceFragment(BookmarksFragment.newInstance());
+                    replaceFragment(bookmarkFragment);
                     return true;
                 case R.id.menuVideo:
                     replaceFragment(VideoFragment.newInstance());
@@ -127,8 +128,12 @@ public class NewsListActivity extends AppCompatActivity{
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        homeFragment = null;
-        bookmarkFragment = null;
+//        homeFragment = null;
+//        bookmarkFragment = null;
     }
 
+    @Override
+    public void onDeleteALlBookmarks() {
+        bookmarkFragment.deleteAllFavorites();
+    }
 }

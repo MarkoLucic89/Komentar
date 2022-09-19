@@ -104,8 +104,6 @@ public class LatestNewsFragment extends Fragment implements NewsListener {
 
         });
 
-        binding.imageViewBack.setOnClickListener(view1 -> getActivity().onBackPressed());
-
         binding.swipeRefreshLayout.setOnRefreshListener(this::initList);
 
     }
@@ -119,6 +117,12 @@ public class LatestNewsFragment extends Fragment implements NewsListener {
             refreshPage();
         }
 
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        categoryAdapter.closeAllMenus();
     }
 
     private void initRecyclerView() {
@@ -312,6 +316,11 @@ public class LatestNewsFragment extends Fragment implements NewsListener {
         });
 
         service.shutdown();
+    }
+
+    @Override
+    public void closeOtherMenus() {
+        categoryAdapter.closeAllMenus();
     }
 
     //    @Override

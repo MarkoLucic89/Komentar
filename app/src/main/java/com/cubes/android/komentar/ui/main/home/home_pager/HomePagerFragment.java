@@ -166,7 +166,13 @@ public class HomePagerFragment extends Fragment implements NewsListener {
          sendHomePageRequest();
     }
 
-//    @Override
+    @Override
+    public void onPause() {
+        super.onPause();
+
+    }
+
+    //    @Override
 //    public void onDestroy() {
 //        super.onDestroy();
 //        binding = null;
@@ -231,6 +237,12 @@ public class HomePagerFragment extends Fragment implements NewsListener {
         });
 
         service.shutdown();
+    }
+
+
+    @Override
+    public void closeOtherMenus() {
+        adapter.closeAllMenus();
     }
 
 }

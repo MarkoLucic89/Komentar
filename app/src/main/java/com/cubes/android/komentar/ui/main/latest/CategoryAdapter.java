@@ -215,6 +215,12 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 
     }
 
+    public void closeAllMenus() {
+        for (ItemModelCategory itemModelCategory : itemModels) {
+            itemModelCategory.closeMenu();
+        }
+    }
+
     public void addRefresher() {
 
         if (itemModels.isEmpty()) {

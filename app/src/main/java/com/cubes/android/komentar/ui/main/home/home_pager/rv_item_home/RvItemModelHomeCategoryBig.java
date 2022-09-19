@@ -20,6 +20,8 @@ public class RvItemModelHomeCategoryBig implements ItemModelHome {
 
     private boolean isMenuOpen = false;
 
+    private RvItemCategoryBigBinding binding;
+
     public RvItemModelHomeCategoryBig(News news, boolean isOnHomePage, NewsListener listener) {
         this.news = news;
         this.isOnHomePage = isOnHomePage;
@@ -34,7 +36,7 @@ public class RvItemModelHomeCategoryBig implements ItemModelHome {
     @Override
     public void bind(HomePagerAdapter.HomeViewHolder holder) {
 
-        RvItemCategoryBigBinding binding = (RvItemCategoryBigBinding) holder.binding;
+        binding = (RvItemCategoryBigBinding) holder.binding;
 
         if (news.isInBookmarks) {
             binding.imageViewFavorites.setImageResource(R.drawable.ic_bookmark);
@@ -57,11 +59,20 @@ public class RvItemModelHomeCategoryBig implements ItemModelHome {
         binding.textViewCategory.setText(news.categoryName);
         binding.textViewTime.setText(MyMethodsClass.convertTime(news.createdAt));
 
-        holder.binding.getRoot().setOnClickListener(view -> listener.onNewsClicked(news.id));
+        holder.binding.getRoot().setOnClickListener(view -> {
 
-        binding.viewMenu.setOnClickListener(view -> {});
+            listener.closeOtherMenus();
+
+            listener.onNewsClicked(news.id);
+        });
+
+        binding.viewMenu.setOnClickListener(view -> {
+        });
 
         binding.imageViewMenu.setOnClickListener(view -> {
+
+            listener.closeOtherMenus();
+
             isMenuOpen = !isMenuOpen;
             animateMenuVisibility(isMenuOpen, binding);
         });
@@ -124,6 +135,16 @@ public class RvItemModelHomeCategoryBig implements ItemModelHome {
             YoYo.with(Techniques.SlideOutRight).duration(300).playOn(binding.viewMenu);
             binding.layoutRoot.setBackgroundColor(binding.getRoot().getContext().getResources().getColor(R.color.white));
 
+        }
+
+    }
+
+    @Override
+    public void closeMenu() {
+
+        if (isMenuOpen) {
+            isMenuOpen = false;
+            animateMenuVisibility(false, binding);
         }
 
     }

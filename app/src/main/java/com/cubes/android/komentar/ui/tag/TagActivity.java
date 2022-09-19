@@ -95,6 +95,22 @@ public class TagActivity extends AppCompatActivity implements NewsListener {
 
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if (binding.imageViewRefresh.getVisibility() == View.VISIBLE) {
+            loadNextPage();
+        }
+
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        adapter.closeAllMenus();
+    }
+
     private void initList() {
 
         nextPage = 1;
@@ -281,14 +297,10 @@ public class TagActivity extends AppCompatActivity implements NewsListener {
         service.shutdown();
     }
 
+
     @Override
-    public void onResume() {
-        super.onResume();
-
-        if (binding.imageViewRefresh.getVisibility() == View.VISIBLE) {
-            loadNextPage();
-        }
-
+    public void closeOtherMenus() {
+        adapter.closeAllMenus();
     }
 
 //    @Override

@@ -11,10 +11,10 @@ import com.cubes.android.komentar.R;
 import com.cubes.android.komentar.data.model.domain.News;
 import com.cubes.android.komentar.databinding.RvItemAdBinding;
 import com.cubes.android.komentar.databinding.RvItemCategorySmallBinding;
-import com.cubes.android.komentar.ui.main.bookmarks.rv_model_search.ItemModelBookmarks;
-import com.cubes.android.komentar.ui.main.bookmarks.rv_model_search.RvItemModelBookmarks;
-import com.cubes.android.komentar.ui.main.bookmarks.rv_model_search.RvItemModelBookmarksAd;
+import com.cubes.android.komentar.ui.main.bookmarks.rv_model_bookmark.ItemModelBookmarks;
+import com.cubes.android.komentar.ui.main.bookmarks.rv_model_bookmark.RvItemModelBookmarks;
 import com.cubes.android.komentar.ui.main.latest.NewsListener;
+import com.cubes.android.komentar.ui.main.latest.rv_model_category.ItemModelCategory;
 import com.cubes.android.komentar.ui.tools.MyMethodsClass;
 import com.google.android.gms.ads.AdRequest;
 
@@ -100,6 +100,12 @@ public class BookmarksAdapter extends RecyclerView.Adapter<BookmarksAdapter.Book
     public void clearList() {
         itemModels.clear();
         notifyDataSetChanged();
+    }
+
+    public void closeAllMenus() {
+        for (ItemModelBookmarks itemModelBookmarks : itemModels) {
+            itemModelBookmarks.closeMenu();
+        }
     }
 
 

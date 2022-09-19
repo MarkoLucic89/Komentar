@@ -8,5 +8,7 @@ public interface ItemModelCategory {
 
     void bind(CategoryAdapter.CategoryViewHolder holder);
 
+    default void closeMenu() {
 
+    }
 }

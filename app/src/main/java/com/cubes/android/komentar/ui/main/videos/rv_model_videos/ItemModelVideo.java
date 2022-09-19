@@ -9,4 +9,8 @@ public interface ItemModelVideo {
 
     void bind(VideosAdapter.VideosViewHolder holder);
 
+    default void closeMenu() {
+
+    }
+
 }

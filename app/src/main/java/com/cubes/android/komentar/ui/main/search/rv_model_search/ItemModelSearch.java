@@ -8,4 +8,8 @@ public interface ItemModelSearch {
 
     void bind(SearchAdapter.SearchViewHolder holder);
 
+    default void closeMenu() {
+
+    }
+
 }

@@ -7,4 +7,8 @@ public interface ItemModelHome {
     int getType();
 
     void bind(HomePagerAdapter.HomeViewHolder holder);
+
+    default void closeMenu() {
+
+    }
 }

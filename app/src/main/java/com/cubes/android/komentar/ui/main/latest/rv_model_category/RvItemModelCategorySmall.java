@@ -22,6 +22,8 @@ public class RvItemModelCategorySmall implements ItemModelCategory {
 
     private int[] newsIdList;
 
+    private RvItemCategorySmallBinding binding;
+
     public RvItemModelCategorySmall(News news, boolean isOnHomePage, NewsListener listener, int[] newsIdList) {
         this.news = news;
         this.isOnHomePage = isOnHomePage;
@@ -37,7 +39,7 @@ public class RvItemModelCategorySmall implements ItemModelCategory {
     @Override
     public void bind(CategoryAdapter.CategoryViewHolder holder) {
 
-        RvItemCategorySmallBinding binding = (RvItemCategorySmallBinding) holder.binding;
+         binding = (RvItemCategorySmallBinding) holder.binding;
 
         if (news.isInBookmarks) {
             binding.imageViewFavorites.setImageResource(R.drawable.ic_bookmark);
@@ -66,11 +68,15 @@ public class RvItemModelCategorySmall implements ItemModelCategory {
 
         binding.textViewTime.setText(MyMethodsClass.convertTime(news.createdAt));
 
-        binding.getRoot().setOnClickListener(view -> listener.onNewsClicked(news.id, newsIdList));
+        binding.getRoot().setOnClickListener(view -> {
+            closeMenu();
+            listener.onNewsClicked(news.id, newsIdList);
+        });
 
         binding.viewMenu.setOnClickListener(view -> {});
 
         binding.imageViewMenu.setOnClickListener(view -> {
+            listener.closeOtherMenus();
             isMenuOpen = !isMenuOpen;
             animateMenuVisibility(isMenuOpen, binding);
         });
@@ -104,6 +110,16 @@ public class RvItemModelCategorySmall implements ItemModelCategory {
             }
 
         });
+
+    }
+
+    @Override
+    public void closeMenu() {
+
+        if (isMenuOpen) {
+            isMenuOpen = !isMenuOpen;
+            animateMenuVisibility(isMenuOpen, binding);
+        }
 
     }
 

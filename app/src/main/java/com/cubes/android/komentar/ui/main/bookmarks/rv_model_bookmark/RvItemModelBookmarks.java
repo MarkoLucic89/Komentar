@@ -1,4 +1,4 @@
-package com.cubes.android.komentar.ui.main.bookmarks.rv_model_search;
+package com.cubes.android.komentar.ui.main.bookmarks.rv_model_bookmark;
 
 
 import android.view.View;
@@ -23,6 +23,8 @@ public class RvItemModelBookmarks implements ItemModelBookmarks {
 
     private boolean isMenuOpen = false;
 
+    private RvItemCategorySmallBinding binding;
+
 
     public RvItemModelBookmarks(News news, NewsListener listener, int[] newsIdList) {
         this.news = news;
@@ -38,7 +40,7 @@ public class RvItemModelBookmarks implements ItemModelBookmarks {
     @Override
     public void bind(BookmarksAdapter.BookmarkViewHolder holder) {
 
-        RvItemCategorySmallBinding binding = (RvItemCategorySmallBinding) holder.binding;
+        binding = (RvItemCategorySmallBinding) holder.binding;
 
         setMenuVisibility(isMenuOpen, binding);
 
@@ -49,11 +51,23 @@ public class RvItemModelBookmarks implements ItemModelBookmarks {
         binding.textViewCategory.setText(news.categoryName);
         binding.textViewTime.setText(MyMethodsClass.convertTime(news.createdAt));
 
-        binding.getRoot().setOnClickListener(view -> listener.onNewsClicked(news.id, newsIdList));
+        binding.getRoot().setOnClickListener(view -> {
+
+            closeMenu();
+
+            listener.onNewsClicked(news.id, newsIdList);
+        });
 
         binding.imageViewMenu.setOnClickListener(view -> {
+
+            listener.closeOtherMenus();
+
             isMenuOpen = !isMenuOpen;
             animateMenuVisibility(isMenuOpen, binding);
+        });
+
+        binding.viewMenu.setOnClickListener(view -> {
+
         });
 
         binding.imageViewClose.setOnClickListener(view -> {
@@ -80,7 +94,6 @@ public class RvItemModelBookmarks implements ItemModelBookmarks {
         });
 
     }
-
 
 
     private void setMenuVisibility(boolean isMenuOpen, RvItemCategorySmallBinding binding) {
@@ -113,5 +126,13 @@ public class RvItemModelBookmarks implements ItemModelBookmarks {
 
     }
 
+    @Override
+    public void closeMenu() {
 
+        if (isMenuOpen) {
+            isMenuOpen = !isMenuOpen;
+            animateMenuVisibility(isMenuOpen, binding);
+        }
+
+    }
 }

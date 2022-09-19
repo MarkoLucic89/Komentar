@@ -37,4 +37,8 @@ public interface NewsListener {
 
     }
 
+    default void closeOtherMenus() {
+
+    }
+
 }

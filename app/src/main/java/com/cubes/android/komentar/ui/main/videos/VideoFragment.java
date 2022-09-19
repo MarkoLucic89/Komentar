@@ -108,8 +108,6 @@ public class VideoFragment extends Fragment implements NewsListener {
 
         binding.swipeRefreshLayout.setOnRefreshListener(this::initList);
 
-        binding.imageViewBack.setOnClickListener(view1 -> getActivity().onBackPressed());
-
     }
 
 
@@ -125,6 +123,12 @@ public class VideoFragment extends Fragment implements NewsListener {
             }
         }
 
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        adapter.closeAllMenus();
     }
 
     private void initRecyclerView() {
@@ -300,6 +304,12 @@ public class VideoFragment extends Fragment implements NewsListener {
         });
 
         service.shutdown();
+    }
+
+
+    @Override
+    public void closeOtherMenus() {
+        adapter.closeAllMenus();
     }
 
     //    @Override

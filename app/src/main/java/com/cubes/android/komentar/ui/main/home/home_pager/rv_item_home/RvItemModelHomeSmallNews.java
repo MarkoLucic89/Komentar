@@ -20,6 +20,8 @@ public class RvItemModelHomeSmallNews implements ItemModelHome {
 
     private boolean isMenuOpen = false;
 
+    private RvItemCategorySmallBinding binding;
+
     public RvItemModelHomeSmallNews(News news, NewsListener listener) {
 
         this.news = news;
@@ -36,7 +38,7 @@ public class RvItemModelHomeSmallNews implements ItemModelHome {
     @Override
     public void bind(HomePagerAdapter.HomeViewHolder holder) {
 
-        RvItemCategorySmallBinding binding = (RvItemCategorySmallBinding) holder.binding;
+        binding = (RvItemCategorySmallBinding) holder.binding;
 
         if (news.isInBookmarks) {
             binding.imageViewFavorites.setImageResource(R.drawable.ic_bookmark);
@@ -52,11 +54,20 @@ public class RvItemModelHomeSmallNews implements ItemModelHome {
         binding.textViewCategory.setTextColor(Color.parseColor(news.categoryColor));
         binding.textViewTime.setText(getTime(news.createdAt));
 
-        holder.binding.getRoot().setOnClickListener(view -> listener.onNewsClicked(news.id));
+        holder.binding.getRoot().setOnClickListener(view -> {
 
-        binding.viewMenu.setOnClickListener(view -> {});
+            listener.closeOtherMenus();
+
+            listener.onNewsClicked(news.id);
+        });
+
+        binding.viewMenu.setOnClickListener(view -> {
+        });
 
         binding.imageViewMenu.setOnClickListener(view -> {
+
+            listener.closeOtherMenus();
+
             isMenuOpen = !isMenuOpen;
             animateMenuVisibility(isMenuOpen, binding);
         });
@@ -127,6 +138,18 @@ public class RvItemModelHomeSmallNews implements ItemModelHome {
         }
 
     }
+
+
+    @Override
+    public void closeMenu() {
+
+        if (isMenuOpen) {
+            isMenuOpen = false;
+            animateMenuVisibility(false, binding);
+        }
+
+    }
+
 }
 
 

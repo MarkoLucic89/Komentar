@@ -19,6 +19,8 @@ public class RvItemModelHomeVideos implements ItemModelHome {
 
     private boolean isMenuOpen = false;
 
+    private RvItemVideosBinding binding;
+
     public RvItemModelHomeVideos(News news, NewsListener listener) {
         this.news = news;
         this.listener = listener;
@@ -32,7 +34,7 @@ public class RvItemModelHomeVideos implements ItemModelHome {
     @Override
     public void bind(HomePagerAdapter.HomeViewHolder holder) {
 
-        RvItemVideosBinding binding = (RvItemVideosBinding) holder.binding;
+        binding = (RvItemVideosBinding) holder.binding;
 
 
         if (news.isInBookmarks) {
@@ -48,11 +50,20 @@ public class RvItemModelHomeVideos implements ItemModelHome {
         binding.textViewCategory.setText(news.categoryName);
         binding.textViewTime.setText(MyMethodsClass.convertTime(news.createdAt));
 
-        holder.binding.getRoot().setOnClickListener(view -> listener.onNewsClicked(news.id));
+        binding.getRoot().setOnClickListener(view -> {
 
-        binding.viewMenu.setOnClickListener(view -> {});
+            listener.closeOtherMenus();
+
+            listener.onNewsClicked(news.id);
+        });
+
+        binding.viewMenu.setOnClickListener(view -> {
+        });
 
         binding.imageViewMenu.setOnClickListener(view -> {
+
+            listener.closeOtherMenus();
+
             isMenuOpen = !isMenuOpen;
             animateMenuVisibility(isMenuOpen, binding);
         });
@@ -90,7 +101,6 @@ public class RvItemModelHomeVideos implements ItemModelHome {
 
     }
 
-
     private void setMenuVisibility(boolean isMenuOpen, RvItemVideosBinding binding) {
         if (isMenuOpen) {
             binding.imageViewMenu.setVisibility(View.GONE);
@@ -117,5 +127,14 @@ public class RvItemModelHomeVideos implements ItemModelHome {
 
     }
 
+    @Override
+    public void closeMenu() {
+
+        if (isMenuOpen) {
+            isMenuOpen = false;
+            animateMenuVisibility(false, binding);
+        }
+
+    }
 
 }

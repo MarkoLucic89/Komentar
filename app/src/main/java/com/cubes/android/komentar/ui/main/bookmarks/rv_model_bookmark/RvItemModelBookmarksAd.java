@@ -1,4 +1,4 @@
-package com.cubes.android.komentar.ui.main.bookmarks.rv_model_search;
+package com.cubes.android.komentar.ui.main.bookmarks.rv_model_bookmark;
 
 import com.cubes.android.komentar.R;
 import com.cubes.android.komentar.ui.main.bookmarks.BookmarksAdapter;

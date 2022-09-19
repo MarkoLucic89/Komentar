@@ -27,6 +27,7 @@ import com.cubes.android.komentar.ui.main.home.home_pager.rv_item_home.RvItemMod
 import com.cubes.android.komentar.ui.main.home.home_pager.rv_item_home.RvItemModelHomeVideos;
 import com.cubes.android.komentar.ui.main.home.home_pager.rv_item_home.RvItemModelTabs;
 import com.cubes.android.komentar.ui.main.latest.NewsListener;
+import com.cubes.android.komentar.ui.main.search.rv_model_search.ItemModelSearch;
 import com.cubes.android.komentar.ui.tools.MyMethodsClass;
 import com.google.android.gms.ads.AdRequest;
 
@@ -215,6 +216,13 @@ public class HomePagerAdapter extends RecyclerView.Adapter<HomePagerAdapter.Home
     @Override
     public int getItemCount() {
         return list.size();
+    }
+
+
+    public void closeAllMenus() {
+        for (ItemModelHome itemModelHome : list) {
+            itemModelHome.closeMenu();
+        }
     }
 
     @Override

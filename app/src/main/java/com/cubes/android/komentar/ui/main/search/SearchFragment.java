@@ -134,8 +134,6 @@ public class SearchFragment extends Fragment implements NewsListener {
             refreshPage();
         });
 
-        binding.imageViewBack.setOnClickListener(view1 -> getActivity().onBackPressed());
-
         binding.swipeRefreshLayout.setOnRefreshListener(this::searchListByTerm);
     }
 
@@ -177,6 +175,13 @@ public class SearchFragment extends Fragment implements NewsListener {
         }
 
     }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        adapter.closeAllMenus();
+    }
+
 
     @Override
     public void loadNextPage() {
@@ -330,6 +335,11 @@ public class SearchFragment extends Fragment implements NewsListener {
         });
 
         service.shutdown();
+    }
+
+    @Override
+    public void closeOtherMenus() {
+        adapter.closeAllMenus();
     }
 
     //    @Override

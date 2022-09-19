@@ -14,6 +14,7 @@ import com.cubes.android.komentar.databinding.RvItemCategorySmallBinding;
 import com.cubes.android.komentar.databinding.RvItemLoadingBinding;
 import com.cubes.android.komentar.databinding.RvItemRefreshBinding;
 import com.cubes.android.komentar.ui.main.latest.NewsListener;
+import com.cubes.android.komentar.ui.main.latest.rv_model_category.ItemModelCategory;
 import com.cubes.android.komentar.ui.main.search.rv_model_search.ItemModelSearch;
 import com.cubes.android.komentar.ui.main.search.rv_model_search.RvItemModelSearch;
 import com.cubes.android.komentar.ui.main.search.rv_model_search.RvItemModelSearchAd;
@@ -217,6 +218,12 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
 
         notifyItemChanged(itemModels.size() - 1);
 
+    }
+
+    public void closeAllMenus() {
+        for (ItemModelSearch itemModelSearch : itemModels) {
+            itemModelSearch.closeMenu();
+        }
     }
 
 

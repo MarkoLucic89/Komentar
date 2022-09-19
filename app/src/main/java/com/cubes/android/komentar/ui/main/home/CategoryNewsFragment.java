@@ -141,6 +141,13 @@ public class CategoryNewsFragment extends Fragment implements NewsListener {
 
     }
 
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        categoryAdapter.closeAllMenus();
+    }
+
     private void initRecyclerView() {
 
         categoryAdapter = new CategoryAdapter(this);
@@ -336,7 +343,12 @@ public class CategoryNewsFragment extends Fragment implements NewsListener {
         service.shutdown();
     }
 
-//    @Override
+    @Override
+    public void closeOtherMenus() {
+        categoryAdapter.closeAllMenus();
+    }
+
+    //    @Override
 //    public void onDestroy() {
 //        super.onDestroy();
 //

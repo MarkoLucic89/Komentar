@@ -2,20 +2,20 @@ package com.cubes.android.komentar.ui.main.bookmarks;
 
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.ItemTouchHelper;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.os.Handler;
 import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.cubes.android.komentar.R;
 import com.cubes.android.komentar.data.model.domain.News;
@@ -72,8 +72,6 @@ public class BookmarksFragment extends Fragment implements NewsListener {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        binding.dialogBookmarks.setVisibility(View.GONE);
-
         adapter = new BookmarksAdapter(this);
 
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -112,16 +110,31 @@ public class BookmarksFragment extends Fragment implements NewsListener {
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(itemTouchHelperCallback);
         itemTouchHelper.attachToRecyclerView(binding.recyclerView);
 
-        binding.imageViewBack.setOnClickListener(view1 -> getActivity().onBackPressed());
+        binding.textViewClearAll.setOnClickListener(view1 -> {
 
-        binding.textViewClearAll.setOnClickListener(view1 -> binding.dialogBookmarks.setVisibility(View.VISIBLE));
+//            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+//
+//            builder.setTitle(getContext().getResources().getString(R.string.bookmarks_title));
+//            builder.setMessage(getContext().getResources().getString(R.string.bookmarks_message));
+//            builder.setPositiveButton(getContext().getResources().getString(R.string.clear_all), (dialogInterface, i) -> {
+//                deleteAllFavorites();
+//            });
+//            builder.setNegativeButton(getContext().getResources().getString(R.string.bookmarks_cancel), (dialogInterface, i) -> {
+//
+//            });
+//            builder.create().show();
 
-        binding.textViewDeleteAll.setOnClickListener(view1 -> deleteAllFavorites());
+            BookmarkDialogFragment bookmarkDialogFragment = new BookmarkDialogFragment();
+            bookmarkDialogFragment.show(getActivity().getSupportFragmentManager(), null);
 
-        binding.imageViewClose.setOnClickListener(view1 -> binding.dialogBookmarks.setVisibility(View.GONE));
+        });
 
-        binding.textViewCancel.setOnClickListener(view1 -> binding.dialogBookmarks.setVisibility(View.GONE));
+    }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        adapter.closeAllMenus();
     }
 
     private void updateUiIsEmptyList(ArrayList<News> bookmarkNews) {
@@ -227,7 +240,6 @@ public class BookmarksFragment extends Fragment implements NewsListener {
 
     public void deleteAllFavorites() {
 
-        binding.dialogBookmarks.setVisibility(View.GONE);
 
         //Room
         ExecutorService service = Executors.newSingleThreadExecutor();
@@ -248,5 +260,10 @@ public class BookmarksFragment extends Fragment implements NewsListener {
         });
 
         service.shutdown();
+    }
+
+    @Override
+    public void closeOtherMenus() {
+        adapter.closeAllMenus();
     }
 }

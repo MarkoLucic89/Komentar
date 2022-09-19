@@ -2,6 +2,8 @@ package com.cubes.android.komentar.ui.main.latest.rv_model_category;
 
 import android.view.View;
 
+import androidx.viewbinding.ViewBinding;
+
 import com.cubes.android.komentar.R;
 import com.cubes.android.komentar.data.model.domain.News;
 import com.cubes.android.komentar.databinding.RvItemCategoryBigBinding;
@@ -22,6 +24,8 @@ public class RvItemModelCategoryBig implements ItemModelCategory {
 
     private boolean isMenuOpen = false;
 
+    private RvItemCategoryBigBinding binding;
+
     public RvItemModelCategoryBig(News news, boolean isOnHomePage, NewsListener listener, int[] newsIdList) {
         this.news = news;
         this.isOnHomePage = isOnHomePage;
@@ -37,7 +41,7 @@ public class RvItemModelCategoryBig implements ItemModelCategory {
     @Override
     public void bind(CategoryAdapter.CategoryViewHolder holder) {
 
-        RvItemCategoryBigBinding binding = (RvItemCategoryBigBinding) holder.binding;
+        binding = (RvItemCategoryBigBinding) holder.binding;
 
         if (news.isInBookmarks) {
             binding.imageViewFavorites.setImageResource(R.drawable.ic_bookmark);
@@ -69,6 +73,7 @@ public class RvItemModelCategoryBig implements ItemModelCategory {
         binding.viewMenu.setOnClickListener(view -> {});
 
         binding.imageViewMenu.setOnClickListener(view -> {
+            listener.closeOtherMenus();
             isMenuOpen = !isMenuOpen;
             animateMenuVisibility(isMenuOpen, binding);
         });
@@ -102,6 +107,16 @@ public class RvItemModelCategoryBig implements ItemModelCategory {
             }
 
         });
+
+    }
+
+    @Override
+    public void closeMenu() {
+
+        if (isMenuOpen) {
+            isMenuOpen = false;
+            animateMenuVisibility(isMenuOpen, binding);
+        }
 
     }
 

@@ -8,4 +8,8 @@ public interface ItemModelTag {
 
     void bind(TagAdapter.TagViewHolder holder);
 
+    default void closeMenu() {
+
+    }
+
 }

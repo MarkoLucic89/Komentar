@@ -23,6 +23,8 @@ public class RvItemModelSearch implements ItemModelSearch {
 
     private boolean isMenuOpen = false;
 
+    private RvItemCategorySmallBinding binding;
+
 
     public RvItemModelSearch(News news, NewsListener listener, int[] newsIdList) {
         this.news = news;
@@ -38,7 +40,7 @@ public class RvItemModelSearch implements ItemModelSearch {
     @Override
     public void bind(SearchAdapter.SearchViewHolder holder) {
 
-        RvItemCategorySmallBinding binding = (RvItemCategorySmallBinding) holder.binding;
+        binding = (RvItemCategorySmallBinding) holder.binding;
 
         if (news.isInBookmarks) {
             binding.imageViewFavorites.setImageResource(R.drawable.ic_bookmark);
@@ -55,9 +57,13 @@ public class RvItemModelSearch implements ItemModelSearch {
 
         binding.getRoot().setOnClickListener(view -> listener.onNewsClicked(news.id, newsIdList));
 
-        binding.viewMenu.setOnClickListener(view -> {});
+        binding.viewMenu.setOnClickListener(view -> {
+        });
 
         binding.imageViewMenu.setOnClickListener(view -> {
+
+            listener.closeOtherMenus();
+
             isMenuOpen = !isMenuOpen;
             animateMenuVisibility(isMenuOpen, binding);
         });
@@ -95,7 +101,6 @@ public class RvItemModelSearch implements ItemModelSearch {
     }
 
 
-
     private void setMenuVisibility(boolean isMenuOpen, RvItemCategorySmallBinding binding) {
         if (isMenuOpen) {
             binding.imageViewMenu.setVisibility(View.GONE);
@@ -126,5 +131,14 @@ public class RvItemModelSearch implements ItemModelSearch {
 
     }
 
+    @Override
+    public void closeMenu() {
+
+        if (isMenuOpen) {
+            isMenuOpen = !isMenuOpen;
+            animateMenuVisibility(isMenuOpen, binding);
+        }
+
+    }
 
 }

@@ -23,6 +23,8 @@ public class RvItemModelTag implements ItemModelTag {
 
     private boolean isMenuOpen = false;
 
+    private RvItemCategorySmallBinding binding;
+
     public RvItemModelTag(News news, NewsListener listener, int[] newsIdList) {
         this.news = news;
         this.listener = listener;
@@ -38,7 +40,7 @@ public class RvItemModelTag implements ItemModelTag {
     @Override
     public void bind(TagAdapter.TagViewHolder holder) {
 
-        RvItemCategorySmallBinding binding = (RvItemCategorySmallBinding) holder.binding;
+        binding = (RvItemCategorySmallBinding) holder.binding;
 
         if (news.isInBookmarks) {
             binding.imageViewFavorites.setImageResource(R.drawable.ic_bookmark);
@@ -56,9 +58,13 @@ public class RvItemModelTag implements ItemModelTag {
 
         binding.getRoot().setOnClickListener(view -> listener.onNewsClicked(news.id, newsIdList));
 
-        binding.viewMenu.setOnClickListener(view -> {});
+        binding.viewMenu.setOnClickListener(view -> {
+        });
 
         binding.imageViewMenu.setOnClickListener(view -> {
+
+            listener.closeOtherMenus();
+
             isMenuOpen = !isMenuOpen;
             animateMenuVisibility(isMenuOpen, binding);
         });
@@ -121,6 +127,16 @@ public class RvItemModelTag implements ItemModelTag {
             YoYo.with(Techniques.SlideOutRight).duration(300).playOn(binding.viewMenu);
             binding.layoutRoot.setBackgroundColor(binding.getRoot().getContext().getResources().getColor(R.color.white));
 
+        }
+
+    }
+
+    @Override
+    public void closeMenu() {
+
+        if (isMenuOpen) {
+            isMenuOpen = false;
+            animateMenuVisibility(false, binding);
         }
 
     }

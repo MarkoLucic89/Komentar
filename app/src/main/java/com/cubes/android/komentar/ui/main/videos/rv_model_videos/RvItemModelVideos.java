@@ -21,6 +21,9 @@ public class RvItemModelVideos implements ItemModelVideo {
 
     private boolean isMenuOpen = false;
 
+    private RvItemVideosBinding binding;
+
+
     public RvItemModelVideos(News news, NewsListener listener, int[] newsIdList) {
         this.news = news;
         this.listener = listener;
@@ -35,7 +38,7 @@ public class RvItemModelVideos implements ItemModelVideo {
     @Override
     public void bind(VideosAdapter.VideosViewHolder holder) {
 
-        RvItemVideosBinding binding = (RvItemVideosBinding) holder.binding;
+        binding = (RvItemVideosBinding) holder.binding;
 
         if (news.isInBookmarks) {
             binding.imageViewFavorites.setImageResource(R.drawable.ic_bookmark);
@@ -52,9 +55,13 @@ public class RvItemModelVideos implements ItemModelVideo {
 
         holder.binding.getRoot().setOnClickListener(view -> listener.onNewsClicked(news.id, newsIdList));
 
-        binding.viewMenu.setOnClickListener(view -> {});
+        binding.viewMenu.setOnClickListener(view -> {
+        });
 
         binding.imageViewMenu.setOnClickListener(view -> {
+
+            listener.closeOtherMenus();
+
             isMenuOpen = !isMenuOpen;
             animateMenuVisibility(isMenuOpen, binding);
         });
@@ -116,6 +123,22 @@ public class RvItemModelVideos implements ItemModelVideo {
             YoYo.with(Techniques.SlideOutRight).duration(300).playOn(binding.viewMenu);
 
         }
+
+    }
+
+    @Override
+    public void closeMenu() {
+
+        if (binding == null) {
+            return;
+        }
+
+        if (isMenuOpen) {
+            isMenuOpen = false;
+            animateMenuVisibility(isMenuOpen, binding);
+
+        }
+
 
     }
 

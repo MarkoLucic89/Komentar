@@ -14,6 +14,7 @@ import com.cubes.android.komentar.databinding.RvItemLoadingVideosBinding;
 import com.cubes.android.komentar.databinding.RvItemRefreshVideosBinding;
 import com.cubes.android.komentar.databinding.RvItemVideosBinding;
 import com.cubes.android.komentar.ui.main.latest.NewsListener;
+import com.cubes.android.komentar.ui.main.latest.rv_model_category.ItemModelCategory;
 import com.cubes.android.komentar.ui.main.videos.rv_model_videos.ItemModelVideo;
 import com.cubes.android.komentar.ui.main.videos.rv_model_videos.RvItemModelVideoAd;
 import com.cubes.android.komentar.ui.main.videos.rv_model_videos.RvItemModelVideoLoading;
@@ -232,6 +233,13 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.VideosView
 
         notifyItemChanged(itemModels.size() - 1);
 
+    }
+
+
+    public void closeAllMenus() {
+        for (ItemModelVideo itemModelVideo : itemModels) {
+            itemModelVideo.closeMenu();
+        }
     }
 
     public class VideosViewHolder extends RecyclerView.ViewHolder {

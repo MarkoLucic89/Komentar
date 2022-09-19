@@ -15,6 +15,7 @@ import com.cubes.android.komentar.databinding.RvItemCategorySmallBinding;
 import com.cubes.android.komentar.databinding.RvItemLoadingBinding;
 import com.cubes.android.komentar.databinding.RvItemRefreshBinding;
 import com.cubes.android.komentar.ui.main.latest.NewsListener;
+import com.cubes.android.komentar.ui.main.latest.rv_model_category.ItemModelCategory;
 import com.cubes.android.komentar.ui.tag.rv_model_tag.ItemModelTag;
 import com.cubes.android.komentar.ui.tag.rv_model_tag.RvItemModelTag;
 import com.cubes.android.komentar.ui.tag.rv_model_tag.RvItemModelTagAd;
@@ -215,6 +216,12 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.TagViewHolder> {
 
         notifyItemChanged(itemModels.size() - 1);
 
+    }
+
+    public void closeAllMenus() {
+        for (ItemModelTag itemModelTag : itemModels) {
+            itemModelTag.closeMenu();
+        }
     }
 
 
