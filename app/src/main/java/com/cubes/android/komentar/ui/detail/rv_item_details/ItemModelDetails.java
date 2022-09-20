@@ -19,4 +19,8 @@ public interface ItemModelDetails {
     default void updateDislikeUi(){
 
     };
+
+    default void closeMenu() {
+
+    }
 }

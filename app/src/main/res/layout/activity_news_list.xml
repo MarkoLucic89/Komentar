@@ -14,7 +14,28 @@
         app:layout_constraintBottom_toTopOf="@id/bottomNavigationView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+    </FrameLayout>
+
+
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/shimmerLayout"
+        android:layout_width="320dp"
+        android:layout_height="100dp"
+        android:layout_marginBottom="8dp"
+        android:translationZ="90dp"
+        ads:layout_constraintBottom_toTopOf="@id/bottomNavigationView"
+        ads:layout_constraintEnd_toEndOf="parent"
+        ads:layout_constraintStart_toStartOf="parent">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/grey_tag"
+            android:translationZ="90dp" />
+
+    </com.facebook.shimmer.ShimmerFrameLayout>
 
     <com.google.android.gms.ads.AdView
         android:id="@+id/adViewSticky"
@@ -23,27 +44,28 @@
         android:layout_margin="8dp"
         ads:adSize="LARGE_BANNER"
         ads:adUnitId="@string/banner_ad_unit_id"
-        app:layout_constraintBottom_toTopOf="@id/bottomNavigationView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        ads:layout_constraintBottom_toTopOf="@id/bottomNavigationView"
+        ads:layout_constraintEnd_toEndOf="parent"
+        ads:layout_constraintStart_toStartOf="parent" />
 
     <ImageView
         android:id="@+id/imageViewClose"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:src="@drawable/ic_close"
-        app:layout_constraintEnd_toEndOf="@id/adViewSticky"
-        app:layout_constraintTop_toTopOf="@id/adViewSticky" />
+        android:padding="8dp"
+        ads:layout_constraintTop_toTopOf="@id/adViewSticky"
+        ads:layout_constraintEnd_toEndOf="@id/adViewSticky" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@color/blue_dark"
-        app:labelVisibilityMode="labeled"
+        ads:itemRippleColor="@color/grey_text"
         app:itemIconTint="@color/bottom_navigation_view_item_color"
         app:itemTextColor="@color/bottom_navigation_view_item_color"
-        ads:itemRippleColor="@color/grey_text"
+        app:labelVisibilityMode="labeled"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -35,5 +35,7 @@
     <string name="bookmarks_message">Da li ste sigurni da želite da obrišete sve sačuvane vesti?</string>
     <string name="bookmarks_delete_all">Obriši sve</string>
     <string name="bookmarks_cancel">Odustani</string>
+    <string name="horoscope">Horoskop</string>
+    <string name="weather">Vremenska prognoza</string>
 
 </resources>

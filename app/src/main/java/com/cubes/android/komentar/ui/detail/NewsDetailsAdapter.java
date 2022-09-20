@@ -2,6 +2,7 @@ package com.cubes.android.komentar.ui.detail;
 
 import android.content.Context;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -32,6 +33,8 @@ import com.cubes.android.komentar.ui.detail.rv_item_details.RvItemModelDetailsSm
 import com.cubes.android.komentar.ui.detail.rv_item_details.RvItemModelDetailsTags;
 import com.cubes.android.komentar.ui.detail.rv_item_details.RvItemModelDetailsWebView;
 import com.cubes.android.komentar.ui.main.latest.NewsListener;
+import com.cubes.android.komentar.ui.main.latest.rv_model_category.ItemModelCategory;
+import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 
 import java.util.ArrayList;
@@ -151,9 +154,28 @@ public class NewsDetailsAdapter extends RecyclerView.Adapter<NewsDetailsAdapter.
                 binding = RvItemCategorySmallBinding.inflate(inflater, parent, false);
                 break;
             case R.layout.rv_item_ad:
+
                 binding = RvItemAdBinding.inflate(inflater, parent, false);
+
+                ((RvItemAdBinding) binding).shimmerLayout.setVisibility(View.VISIBLE);
+                ((RvItemAdBinding) binding).shimmerLayout.startLayoutAnimation();
+                ((RvItemAdBinding) binding).adView.setVisibility(View.GONE);
+
                 AdRequest adRequest = new AdRequest.Builder().build();
                 ((RvItemAdBinding) binding).adView.loadAd(adRequest);
+
+                ((RvItemAdBinding) binding).adView.setAdListener(new AdListener() {
+                    @Override
+                    public void onAdLoaded() {
+                        super.onAdLoaded();
+
+                        ((RvItemAdBinding) binding).shimmerLayout.stopShimmer();
+                        ((RvItemAdBinding) binding).shimmerLayout.setVisibility(View.GONE);
+                        ((RvItemAdBinding) binding).adView.setVisibility(View.VISIBLE);
+
+                    }
+                });
+
                 break;
             default:
                 binding = null;
@@ -206,6 +228,13 @@ public class NewsDetailsAdapter extends RecyclerView.Adapter<NewsDetailsAdapter.
         }
 
     }
+
+    public void closeAllMenus() {
+        for (ItemModelDetails itemModelDetails : list) {
+            itemModelDetails.closeMenu();
+        }
+    }
+
 
     public class NewsDetailsViewHolder extends RecyclerView.ViewHolder {
 

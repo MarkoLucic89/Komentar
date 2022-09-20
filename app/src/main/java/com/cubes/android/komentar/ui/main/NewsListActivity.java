@@ -68,6 +68,8 @@ public class NewsListActivity extends AppCompatActivity implements BookmarkDialo
 
         binding.imageViewClose.setVisibility(View.GONE);
         binding.adViewSticky.setVisibility(View.GONE);
+        binding.shimmerLayout.setVisibility(View.VISIBLE);
+        binding.shimmerLayout.startLayoutAnimation();
 
         AdRequest adRequest = new AdRequest.Builder().build();
         binding.adViewSticky.loadAd(adRequest);
@@ -78,6 +80,8 @@ public class NewsListActivity extends AppCompatActivity implements BookmarkDialo
 
                 binding.imageViewClose.setVisibility(View.VISIBLE);
                 binding.adViewSticky.setVisibility(View.VISIBLE);
+                binding.shimmerLayout.stopShimmer();
+                binding.shimmerLayout.setVisibility(View.GONE);
             }
         });
 

@@ -5,10 +5,12 @@ import com.cubes.android.komentar.data.model.domain.NewsCommentVote;
 import com.cubes.android.komentar.data.source.remote.networking.response.CategoriesResponseModel;
 import com.cubes.android.komentar.data.source.remote.networking.response.CommentsResponseModel;
 import com.cubes.android.komentar.data.source.remote.networking.response.HomePageResponseModel;
+import com.cubes.android.komentar.data.source.remote.networking.response.HoroscopeResponseModel;
 import com.cubes.android.komentar.data.source.remote.networking.response.NewsResponseModel;
 import com.cubes.android.komentar.data.source.remote.networking.response.CategoryResponseModel;
 import com.cubes.android.komentar.data.source.remote.networking.response.NewsDetailsResponseModel;
 import com.cubes.android.komentar.data.source.remote.networking.response.TagResponseModel;
+import com.cubes.android.komentar.data.source.remote.networking.response.WeatherResponseModel;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -71,6 +73,12 @@ public interface NewsService {
     Call<CommentsResponseModel> getComments(
             @Query("id") int id
     );
+
+    @GET("api/horoscope")
+    Call<HoroscopeResponseModel> getHoroscope();
+
+    @GET("api/weather")
+    Call<WeatherResponseModel> getWeather();
 
     @POST("api/commentinsert")
     Call<NewsCommentInsertApi> postComment(@Body NewsCommentInsertApi newsCommentInsert);

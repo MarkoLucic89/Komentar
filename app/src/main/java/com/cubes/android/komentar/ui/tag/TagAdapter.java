@@ -1,6 +1,7 @@
 package com.cubes.android.komentar.ui.tag;
 
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -22,6 +23,7 @@ import com.cubes.android.komentar.ui.tag.rv_model_tag.RvItemModelTagAd;
 import com.cubes.android.komentar.ui.tag.rv_model_tag.RvItemModelTagLoading;
 import com.cubes.android.komentar.ui.tag.rv_model_tag.RvItemModelTagRefresh;
 import com.cubes.android.komentar.ui.tools.MyMethodsClass;
+import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 
 import java.util.ArrayList;
@@ -89,9 +91,28 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.TagViewHolder> {
                 binding = RvItemRefreshBinding.inflate(inflater, parent, false);
                 break;
             case R.layout.rv_item_ad:
+
                 binding = RvItemAdBinding.inflate(inflater, parent, false);
+
+                ((RvItemAdBinding) binding).shimmerLayout.setVisibility(View.VISIBLE);
+                ((RvItemAdBinding) binding).shimmerLayout.startLayoutAnimation();
+                ((RvItemAdBinding) binding).adView.setVisibility(View.GONE);
+
                 AdRequest adRequest = new AdRequest.Builder().build();
                 ((RvItemAdBinding) binding).adView.loadAd(adRequest);
+
+                ((RvItemAdBinding) binding).adView.setAdListener(new AdListener() {
+                    @Override
+                    public void onAdLoaded() {
+                        super.onAdLoaded();
+
+                        ((RvItemAdBinding) binding).shimmerLayout.stopShimmer();
+                        ((RvItemAdBinding) binding).shimmerLayout.setVisibility(View.GONE);
+                        ((RvItemAdBinding) binding).adView.setVisibility(View.VISIBLE);
+
+                    }
+                });
+
                 break;
             default:
                 binding = null;

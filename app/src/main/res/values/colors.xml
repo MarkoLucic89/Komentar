@@ -18,6 +18,7 @@
     <color name="blue_dark_transparent2">#70143E6C</color>
     <color name="blue_dark2">#0F2039</color>
     <color name="blue_light">#1C73BD</color>
+    <color name="blue_light_transparent">#501C73BD</color>
     <color name="blue_text">#00378F</color>
     <color name="grey_light">#9DA4AE</color>
     <color name="grey_light_transparent">#309DA4AE</color>

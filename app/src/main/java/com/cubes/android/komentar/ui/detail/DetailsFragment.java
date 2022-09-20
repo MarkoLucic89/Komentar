@@ -548,4 +548,10 @@ public class DetailsFragment extends Fragment implements
         news.url = newsDetails.url;
         return news;
     }
+
+
+    @Override
+    public void closeOtherMenus() {
+        adapter.closeAllMenus();
+    }
 }

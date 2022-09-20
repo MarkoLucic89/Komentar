@@ -1,6 +1,7 @@
 package com.cubes.android.komentar.ui.main.latest;
 
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -21,6 +22,7 @@ import com.cubes.android.komentar.ui.main.latest.rv_model_category.RvItemModelCa
 import com.cubes.android.komentar.ui.main.latest.rv_model_category.RvItemModelCategorySmall;
 import com.cubes.android.komentar.ui.main.latest.rv_model_category.RvItemModelHomeAd;
 import com.cubes.android.komentar.ui.tools.MyMethodsClass;
+import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 
 import java.util.ArrayList;
@@ -56,9 +58,28 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         } else if (viewType == R.layout.rv_item_refresh) {
             binding = RvItemRefreshBinding.inflate(inflater, parent, false);
         } else if (viewType == R.layout.rv_item_ad) {
+
             binding = RvItemAdBinding.inflate(inflater, parent, false);
+
+            ((RvItemAdBinding) binding).shimmerLayout.setVisibility(View.VISIBLE);
+            ((RvItemAdBinding) binding).shimmerLayout.startLayoutAnimation();
+            ((RvItemAdBinding) binding).adView.setVisibility(View.GONE);
+
             AdRequest adRequest = new AdRequest.Builder().build();
             ((RvItemAdBinding) binding).adView.loadAd(adRequest);
+
+            ((RvItemAdBinding) binding).adView.setAdListener(new AdListener() {
+                @Override
+                public void onAdLoaded() {
+                    super.onAdLoaded();
+
+                    ((RvItemAdBinding) binding).shimmerLayout.stopShimmer();
+                    ((RvItemAdBinding) binding).shimmerLayout.setVisibility(View.GONE);
+                    ((RvItemAdBinding) binding).adView.setVisibility(View.VISIBLE);
+
+                }
+            });
+
         } else {
             binding = null;
         }

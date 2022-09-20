@@ -4,6 +4,8 @@ package com.cubes.android.komentar.data;
 import android.util.Log;
 
 import com.cubes.android.komentar.data.source.remote.networking.NewsService;
+import com.cubes.android.komentar.data.source.remote.networking.response.HoroscopeResponseModel;
+import com.cubes.android.komentar.data.source.remote.networking.response.WeatherResponseModel;
 import com.cubes.android.komentar.di.LocalDataSource;
 import com.cubes.android.komentar.di.RemoteDataSource;
 import com.cubes.android.komentar.data.model.CategoryApi;
@@ -408,6 +410,75 @@ public class DataRepository {
 
         return newsTags;
     }
+
+    public interface HoroscopeResponseListener {
+
+        void onResponse(HoroscopeResponseModel.HoroscopeDataResponseModel horoscope);
+
+        void onFailure(Throwable t);
+
+    }
+
+    public void getHoroscope(HoroscopeResponseListener listener) {
+
+        api.getHoroscope().enqueue(new Callback<HoroscopeResponseModel>() {
+            @Override
+            public void onResponse(Call<HoroscopeResponseModel> call, Response<HoroscopeResponseModel> response) {
+                if (response.body() != null
+                        && response.isSuccessful()
+                        && response.body().data != null
+                ) {
+
+                    listener.onResponse(response.body().data);
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<HoroscopeResponseModel> call, Throwable t) {
+
+                listener.onFailure(t);
+
+            }
+        });
+    }
+
+
+    public interface WeatherResponseListener {
+
+        void onResponse(WeatherResponseModel.WeatherResponseDataModel data);
+
+        void onFailure(Throwable t);
+
+    }
+
+    public void getWeather(WeatherResponseListener listener) {
+
+        api.getWeather().enqueue(new Callback<WeatherResponseModel>() {
+            @Override
+            public void onResponse(Call<WeatherResponseModel> call, Response<WeatherResponseModel> response) {
+
+                if (response.body() != null
+                        && response.isSuccessful()
+                        && response.body().data != null
+                ) {
+
+                    listener.onResponse(response.body().data);
+
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<WeatherResponseModel> call, Throwable t) {
+
+                listener.onFailure(t);
+
+            }
+        });
+
+    }
+
 
     public interface TagResponseListener {
         void onResponse(ArrayList<News> newsList, boolean hasMorePages);
