@@ -38,6 +38,8 @@ public class TagActivity extends AppCompatActivity implements NewsListener {
 
     private NewsBookmarksDao bookmarksDao;
 
+    private int mTempNewsId;
+
     private ArrayList<News> bookmarks = new ArrayList<>();
 
     @Override
@@ -50,6 +52,8 @@ public class TagActivity extends AppCompatActivity implements NewsListener {
         dataRepository = appContainer.dataRepository;
 
         bookmarksDao = appContainer.room.bookmarksDao();
+
+        mTempNewsId = -1;
 
         tagId = getIntent().getIntExtra("tag_id", -1);
         String tagTitle = getIntent().getStringExtra("tag_title");
@@ -101,6 +105,23 @@ public class TagActivity extends AppCompatActivity implements NewsListener {
 
         if (binding.imageViewRefresh.getVisibility() == View.VISIBLE) {
             loadNextPage();
+        } else if (mTempNewsId != -1) {
+
+            //Room
+            ExecutorService service = Executors.newSingleThreadExecutor();
+            Handler handler = new Handler(Looper.getMainLooper());
+            service.execute(() -> {
+
+                //doInBackgroundThread
+                News bookmark = bookmarksDao.getBookmarkForId(mTempNewsId);
+
+                //onPostExecute
+                handler.post(() -> adapter.updateBookmarks(mTempNewsId, bookmark));
+
+            });
+
+            service.shutdown();
+
         }
 
     }
@@ -240,6 +261,8 @@ public class TagActivity extends AppCompatActivity implements NewsListener {
 
     @Override
     public void onNewsClicked(int newsId, int[] newsIdList) {
+
+        mTempNewsId = newsId;
 
         Intent intent = new Intent(this, DetailsActivity.class);
         intent.putExtra("news_id", newsId);

@@ -255,6 +255,21 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 
     }
 
+    public void updateBookmarks(int mTempNewsId, News bookmark) {
+
+        for (ItemModelCategory model : itemModels) {
+            if (model.getNews() != null && model.getNews().id == mTempNewsId) {
+                if (bookmark == null) {
+                    model.getNews().isInBookmarks = false;
+                } else {
+                    model.getNews().isInBookmarks = true;
+                }
+            }
+        }
+
+        notifyDataSetChanged();
+    }
+
     public class CategoryViewHolder extends RecyclerView.ViewHolder {
 
         public ViewBinding binding;

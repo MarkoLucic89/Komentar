@@ -28,6 +28,7 @@ import com.cubes.android.komentar.ui.main.home.home_pager.rv_item_home.RvItemMod
 import com.cubes.android.komentar.ui.main.home.home_pager.rv_item_home.RvItemModelHomeVideos;
 import com.cubes.android.komentar.ui.main.home.home_pager.rv_item_home.RvItemModelTabs;
 import com.cubes.android.komentar.ui.main.latest.NewsListener;
+import com.cubes.android.komentar.ui.main.latest.rv_model_category.ItemModelCategory;
 import com.cubes.android.komentar.ui.main.search.rv_model_search.ItemModelSearch;
 import com.cubes.android.komentar.ui.tools.MyMethodsClass;
 import com.google.android.gms.ads.AdListener;
@@ -244,6 +245,21 @@ public class HomePagerAdapter extends RecyclerView.Adapter<HomePagerAdapter.Home
         for (ItemModelHome itemModelHome : list) {
             itemModelHome.closeMenu();
         }
+    }
+
+    public void updateBookmarks(int mTempNewsId, News bookmark) {
+
+        for (ItemModelHome model : list) {
+            if (model.getNews() != null && model.getNews().id == mTempNewsId) {
+                if (bookmark == null) {
+                    model.getNews().isInBookmarks = false;
+                } else {
+                    model.getNews().isInBookmarks = true;
+                }
+            }
+        }
+
+        notifyDataSetChanged();
     }
 
     @Override

@@ -52,6 +52,7 @@ public class SearchFragment extends Fragment implements NewsListener {
 
     private ArrayList<News> bookmarks = new ArrayList<>();
 
+    private int mTempNewsId;
 
     public SearchFragment() {
         // Required empty public constructor
@@ -69,6 +70,8 @@ public class SearchFragment extends Fragment implements NewsListener {
         AppContainer appContainer = ((MyApplication) getActivity().getApplication()).appContainer;
         dataRepository = appContainer.dataRepository;
         bookmarksDao = appContainer.room.bookmarksDao();
+
+        mTempNewsId = -1;
     }
 
     @Override
@@ -172,6 +175,23 @@ public class SearchFragment extends Fragment implements NewsListener {
             binding.imageViewRefresh.setVisibility(View.GONE);
 
             searchListByTerm();
+        } else if (mTempNewsId != -1) {
+
+            //Room
+            ExecutorService service = Executors.newSingleThreadExecutor();
+            Handler handler = new Handler(Looper.getMainLooper());
+            service.execute(() -> {
+
+                //doInBackgroundThread
+                News bookmark = bookmarksDao.getBookmarkForId(mTempNewsId);
+
+                //onPostExecute
+                handler.post(() -> adapter.updateBookmarks(mTempNewsId, bookmark));
+
+            });
+
+            service.shutdown();
+
         }
 
     }
@@ -280,6 +300,8 @@ public class SearchFragment extends Fragment implements NewsListener {
 
     @Override
     public void onNewsClicked(int newsId, int[] newsIdList) {
+
+        mTempNewsId = newsId;
 
         Intent intent = new Intent(getContext(), DetailsActivity.class);
         intent.putExtra("news_id", newsId);

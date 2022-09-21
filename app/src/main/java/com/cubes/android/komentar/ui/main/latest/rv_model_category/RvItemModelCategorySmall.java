@@ -37,6 +37,11 @@ public class RvItemModelCategorySmall implements ItemModelCategory {
     }
 
     @Override
+    public News getNews() {
+        return news;
+    }
+
+    @Override
     public void bind(CategoryAdapter.CategoryViewHolder holder) {
 
          binding = (RvItemCategorySmallBinding) holder.binding;

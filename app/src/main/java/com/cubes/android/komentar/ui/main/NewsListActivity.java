@@ -66,7 +66,6 @@ public class NewsListActivity extends AppCompatActivity implements BookmarkDialo
 
     private void addStickyAd() {
 
-        binding.imageViewClose.setVisibility(View.GONE);
         binding.adViewSticky.setVisibility(View.GONE);
         binding.shimmerLayout.setVisibility(View.VISIBLE);
         binding.shimmerLayout.startLayoutAnimation();
@@ -78,7 +77,6 @@ public class NewsListActivity extends AppCompatActivity implements BookmarkDialo
             public void onAdLoaded() {
                 super.onAdLoaded();
 
-                binding.imageViewClose.setVisibility(View.VISIBLE);
                 binding.adViewSticky.setVisibility(View.VISIBLE);
                 binding.shimmerLayout.stopShimmer();
                 binding.shimmerLayout.setVisibility(View.GONE);
@@ -129,12 +127,12 @@ public class NewsListActivity extends AppCompatActivity implements BookmarkDialo
         });
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
+//    @Override
+//    protected void onDestroy() {
+//        super.onDestroy();
 //        homeFragment = null;
 //        bookmarkFragment = null;
-    }
+//    }
 
     @Override
     public void onDeleteALlBookmarks() {

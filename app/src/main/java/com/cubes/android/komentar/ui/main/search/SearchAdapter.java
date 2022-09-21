@@ -21,6 +21,7 @@ import com.cubes.android.komentar.ui.main.search.rv_model_search.RvItemModelSear
 import com.cubes.android.komentar.ui.main.search.rv_model_search.RvItemModelSearchAd;
 import com.cubes.android.komentar.ui.main.search.rv_model_search.RvItemModelSearchLoading;
 import com.cubes.android.komentar.ui.main.search.rv_model_search.RvItemModelSearchRefresh;
+import com.cubes.android.komentar.ui.main.videos.rv_model_videos.ItemModelVideo;
 import com.cubes.android.komentar.ui.tools.MyMethodsClass;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
@@ -247,6 +248,21 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
         }
     }
 
+
+    public void updateBookmarks(int mTempNewsId, News bookmark) {
+
+        for (ItemModelSearch model : itemModels) {
+            if (model.getNews() != null && model.getNews().id == mTempNewsId) {
+                if (bookmark == null) {
+                    model.getNews().isInBookmarks = false;
+                } else {
+                    model.getNews().isInBookmarks = true;
+                }
+            }
+        }
+
+        notifyDataSetChanged();
+    }
 
     public class SearchViewHolder extends RecyclerView.ViewHolder {
 

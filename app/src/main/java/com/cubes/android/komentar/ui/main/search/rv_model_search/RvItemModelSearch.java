@@ -38,6 +38,11 @@ public class RvItemModelSearch implements ItemModelSearch {
     }
 
     @Override
+    public News getNews() {
+        return news;
+    }
+
+    @Override
     public void bind(SearchAdapter.SearchViewHolder holder) {
 
         binding = (RvItemCategorySmallBinding) holder.binding;

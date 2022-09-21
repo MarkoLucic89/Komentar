@@ -36,6 +36,11 @@ public class RvItemModelVideos implements ItemModelVideo {
     }
 
     @Override
+    public News getNews() {
+        return news;
+    }
+
+    @Override
     public void bind(VideosAdapter.VideosViewHolder holder) {
 
         binding = (RvItemVideosBinding) holder.binding;

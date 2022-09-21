@@ -36,6 +36,11 @@ public class RvItemModelHomeSmallNews implements ItemModelHome {
     }
 
     @Override
+    public News getNews() {
+        return news;
+    }
+
+    @Override
     public void bind(HomePagerAdapter.HomeViewHolder holder) {
 
         binding = (RvItemCategorySmallBinding) holder.binding;

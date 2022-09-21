@@ -39,6 +39,11 @@ public class RvItemModelCategoryBig implements ItemModelCategory {
     }
 
     @Override
+    public News getNews() {
+        return news;
+    }
+
+    @Override
     public void bind(CategoryAdapter.CategoryViewHolder holder) {
 
         binding = (RvItemCategoryBigBinding) holder.binding;

@@ -54,6 +54,8 @@ public class CategoryNewsFragment extends Fragment implements NewsListener {
 
     private ArrayList<News> bookmarks = new ArrayList<>();
 
+    private int mTempNewsId;
+
     public CategoryNewsFragment() {
         // Required empty public constructor
     }
@@ -83,6 +85,8 @@ public class CategoryNewsFragment extends Fragment implements NewsListener {
         dataRepository = appContainer.dataRepository;
 
         bookmarksDao = appContainer.room.bookmarksDao();
+
+        mTempNewsId = -1;
 
     }
 
@@ -137,6 +141,23 @@ public class CategoryNewsFragment extends Fragment implements NewsListener {
         if (binding.imageViewRefresh.getVisibility() == View.VISIBLE) {
             binding.imageViewRefresh.setVisibility(View.GONE);
             initList();
+        } else if (mTempNewsId != -1) {
+
+            //Room
+            ExecutorService service = Executors.newSingleThreadExecutor();
+            Handler handler = new Handler(Looper.getMainLooper());
+            service.execute(() -> {
+
+                //doInBackgroundThread
+                News bookmark = bookmarksDao.getBookmarkForId(mTempNewsId);
+
+                //onPostExecute
+                handler.post(() -> categoryAdapter.updateBookmarks(mTempNewsId, bookmark));
+
+            });
+
+            service.shutdown();
+
         }
 
     }
@@ -286,6 +307,8 @@ public class CategoryNewsFragment extends Fragment implements NewsListener {
 
     @Override
     public void onNewsClicked(int newsId, int[] newsIdList) {
+
+        mTempNewsId = newsId;
 
         Intent intent = new Intent(getContext(), DetailsActivity.class);
         intent.putExtra("news_id", newsId);

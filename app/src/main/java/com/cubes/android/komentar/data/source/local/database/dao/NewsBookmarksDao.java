@@ -19,6 +19,9 @@ public interface NewsBookmarksDao {
     @Query("SELECT * FROM news")
     List<News> getBookmarkNews();
 
+    @Query("SELECT * FROM news WHERE id = :newsId")
+    News getBookmarkForId(int newsId);
+
     @Delete()
     void delete(News news);
 

@@ -38,6 +38,11 @@ public class RvItemModelTag implements ItemModelTag {
     }
 
     @Override
+    public News getNews() {
+        return news;
+    }
+
+    @Override
     public void bind(TagAdapter.TagViewHolder holder) {
 
         binding = (RvItemCategorySmallBinding) holder.binding;

@@ -32,6 +32,11 @@ public class RvItemModelHomeVideos implements ItemModelHome {
     }
 
     @Override
+    public News getNews() {
+        return news;
+    }
+
+    @Override
     public void bind(HomePagerAdapter.HomeViewHolder holder) {
 
         binding = (RvItemVideosBinding) holder.binding;
@@ -89,7 +94,6 @@ public class RvItemModelHomeVideos implements ItemModelHome {
             isMenuOpen = !isMenuOpen;
             animateMenuVisibility(isMenuOpen, binding);
             listener.onNewsMenuFavoritesClicked(news);
-
 
             if (!news.isInBookmarks) {
                 binding.imageViewFavorites.setImageResource(R.drawable.ic_bookmark);

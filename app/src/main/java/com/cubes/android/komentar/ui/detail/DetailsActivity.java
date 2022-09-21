@@ -20,6 +20,8 @@ import com.cubes.android.komentar.di.AppContainer;
 import com.cubes.android.komentar.di.MyApplication;
 import com.cubes.android.komentar.ui.comments.CommentsActivity;
 import com.cubes.android.komentar.ui.tools.MyMethodsClass;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
 
 import java.lang.reflect.Field;
 import java.util.concurrent.ExecutorService;
@@ -52,6 +54,8 @@ public class DetailsActivity extends AppCompatActivity implements DetailsFragmen
         binding.viewPager.setAdapter(adapter);
 
 //        binding.viewPager.setOffscreenPageLimit(1);
+
+//        addStickyAd();
 
         for (int i = 0; i < mNewsIdList.length; i++) {
             if (mNewsId == mNewsIdList[i]) {
@@ -140,7 +144,28 @@ public class DetailsActivity extends AppCompatActivity implements DetailsFragmen
 
     }
 
-
+//    private void addStickyAd() {
+//
+//        binding.adViewSticky.setVisibility(View.GONE);
+//        binding.shimmerLayout.setVisibility(View.VISIBLE);
+//        binding.shimmerLayout.startLayoutAnimation();
+//
+//        AdRequest adRequest = new AdRequest.Builder().build();
+//        binding.adViewSticky.loadAd(adRequest);
+//        binding.adViewSticky.setAdListener(new AdListener() {
+//            @Override
+//            public void onAdLoaded() {
+//                super.onAdLoaded();
+//
+//                binding.adViewSticky.setVisibility(View.VISIBLE);
+//                binding.shimmerLayout.stopShimmer();
+//                binding.shimmerLayout.setVisibility(View.GONE);
+//            }
+//        });
+//
+//
+//        binding.imageViewClose.setOnClickListener(view -> binding.frameLayoutSticky.setVisibility(View.GONE));
+//    }
 
     @Override
     public void onDetailsResponseListener(int newsId, String newsUrl, News tempNews) {

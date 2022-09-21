@@ -1,5 +1,6 @@
 package com.cubes.android.komentar.ui.main.search.rv_model_search;
 
+import com.cubes.android.komentar.data.model.domain.News;
 import com.cubes.android.komentar.ui.main.search.SearchAdapter;
 
 public interface ItemModelSearch {
@@ -10,6 +11,10 @@ public interface ItemModelSearch {
 
     default void closeMenu() {
 
+    }
+
+    default News getNews() {
+        return null;
     }
 
 }

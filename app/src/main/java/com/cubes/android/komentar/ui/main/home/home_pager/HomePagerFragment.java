@@ -47,6 +47,7 @@ public class HomePagerFragment extends Fragment implements NewsListener {
 
     private ArrayList<News> bookmarks = new ArrayList<>();
 
+    private int mTempNewsId;
 
     public HomePagerFragment() {
         // Required empty public constructor
@@ -64,6 +65,8 @@ public class HomePagerFragment extends Fragment implements NewsListener {
         appContainer = ((MyApplication) getActivity().getApplication()).appContainer;
 
         bookmarksDao = appContainer.room.bookmarksDao();
+
+        mTempNewsId = -1;
     }
 
     @Override
@@ -89,6 +92,31 @@ public class HomePagerFragment extends Fragment implements NewsListener {
 
         binding.swipeRefreshLayout.setOnRefreshListener(() -> sendHomePageRequest());
 
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if (mTempNewsId != -1) {
+
+            //Room
+            ExecutorService service = Executors.newSingleThreadExecutor();
+            Handler handler = new Handler(Looper.getMainLooper());
+            service.execute(() -> {
+
+                //doInBackgroundThread
+                News bookmark = bookmarksDao.getBookmarkForId(mTempNewsId);
+
+                //onPostExecute
+                handler.post(() -> adapter.updateBookmarks(mTempNewsId, bookmark));
+
+            });
+
+            service.shutdown();
+
+        }
     }
 
     private void sendHomePageRequest() {
@@ -160,17 +188,6 @@ public class HomePagerFragment extends Fragment implements NewsListener {
 
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-         sendHomePageRequest();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-
-    }
 
     //    @Override
 //    public void onDestroy() {
@@ -182,6 +199,8 @@ public class HomePagerFragment extends Fragment implements NewsListener {
 
     @Override
     public void onNewsClicked(int newsId) {
+
+        mTempNewsId = newsId;
 
         Intent intent = new Intent(getContext(), DetailsActivity.class);
         intent.putExtra("news_id", newsId);
@@ -227,11 +246,19 @@ public class HomePagerFragment extends Fragment implements NewsListener {
 
             //onPostExecute
             if (news.isInBookmarks) {
-                handler.post(() -> Toast.makeText(getContext(), "Vest je uspešno uklonjena iz arhive", Toast.LENGTH_SHORT).show());
-                news.isInBookmarks = false;
+                handler.post(() -> {
+                    Toast.makeText(getContext(), "Vest je uspešno uklonjena iz arhive", Toast.LENGTH_SHORT).show();
+                    news.isInBookmarks = false;
+                    adapter.updateBookmarks(news.id, null);
+                });
+
             } else {
-                handler.post(() -> Toast.makeText(getContext(), "Vest je uspešno sačuvana u arhivu", Toast.LENGTH_SHORT).show());
-                news.isInBookmarks = true;
+                handler.post(() -> {
+                    Toast.makeText(getContext(), "Vest je uspešno sačuvana u arhivu", Toast.LENGTH_SHORT).show();
+                    news.isInBookmarks = true;
+                    adapter.updateBookmarks(news.id, news);
+                });
+
             }
 
         });

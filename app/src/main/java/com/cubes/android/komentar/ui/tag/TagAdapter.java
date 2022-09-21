@@ -136,6 +136,21 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.TagViewHolder> {
         return itemModels.get(position).getType();
     }
 
+    public void updateBookmarks(int mTempNewsId, News bookmark) {
+
+        for (ItemModelTag model : itemModels) {
+            if (model.getNews() != null && model.getNews().id == mTempNewsId) {
+                if (bookmark == null) {
+                    model.getNews().isInBookmarks = false;
+                } else {
+                    model.getNews().isInBookmarks = true;
+                }
+            }
+        }
+
+        notifyDataSetChanged();
+    }
+
     public void addNextPage(ArrayList<News> newsList, boolean hasMorePages) {
 
         if (newsList.isEmpty()) {

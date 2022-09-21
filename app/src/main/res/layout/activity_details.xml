@@ -69,7 +69,6 @@
             android:layout_height="match_parent"
             android:layout_weight="@integer/material_motion_duration_long_1" />
 
-
     </LinearLayout>
 
     <ImageView
@@ -90,5 +89,43 @@
         android:src="@drawable/ic_arrow_right"
         android:translationZ="90dp" />
 
+<!--    <FrameLayout-->
+<!--        android:id="@+id/frameLayoutSticky"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_marginBottom="8dp"-->
+<!--        android:layout_gravity="bottom|center_horizontal"-->
+<!--        android:layout_height="wrap_content">-->
+
+
+<!--        <com.facebook.shimmer.ShimmerFrameLayout-->
+<!--            android:id="@+id/shimmerLayout"-->
+<!--            android:layout_width="320dp"-->
+<!--            android:layout_height="100dp"-->
+<!--            android:translationZ="90dp">-->
+
+<!--            <View-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:background="@color/grey_tag"-->
+<!--                android:translationZ="90dp" />-->
+
+<!--        </com.facebook.shimmer.ShimmerFrameLayout>-->
+
+<!--        <com.google.android.gms.ads.AdView xmlns:ads="http://schemas.android.com/apk/res-auto"-->
+<!--            android:id="@+id/adViewSticky"-->
+<!--            android:layout_width="320dp"-->
+<!--            android:layout_height="100dp"-->
+<!--            ads:adSize="LARGE_BANNER"-->
+<!--            ads:adUnitId="@string/banner_ad_unit_id" />-->
+
+<!--        <ImageView-->
+<!--            android:id="@+id/imageViewClose"-->
+<!--            android:layout_width="40dp"-->
+<!--            android:layout_height="40dp"-->
+<!--            android:src="@drawable/ic_close"-->
+<!--            android:padding="8dp"-->
+<!--            android:layout_gravity="top|end"/>-->
+
+<!--    </FrameLayout>-->
 
 </FrameLayout>
