@@ -1,8 +1,12 @@
 package com.cubes.android.komentar.ui.tools;
 
+import android.os.Handler;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
 import android.view.animation.RotateAnimation;
+import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 
 import androidx.room.ColumnInfo;
@@ -99,5 +103,30 @@ public class MyMethodsClass {
                 }
             }
         }
+    }
+
+    public static void animationSwipe(View view, float from, float to) {
+        AnimationSet animationSet = new AnimationSet(true);
+
+        AlphaAnimation alpha = new AlphaAnimation(1.0f, 0f);
+        alpha.setDuration(2000);
+
+        TranslateAnimation translateAnimation1 = new TranslateAnimation(to, from, 100, 100);
+        translateAnimation1.setDuration(500);
+        TranslateAnimation translateAnimationBack = new TranslateAnimation(from, to, 100, 100);
+        translateAnimationBack.setStartOffset(500);
+        translateAnimationBack.setDuration(500);
+        TranslateAnimation translateAnimation2 = new TranslateAnimation(to, from, 100, 100);
+        translateAnimation2.setStartOffset(1000);
+        translateAnimation2.setDuration(500);
+
+        animationSet.addAnimation(alpha);
+        animationSet.addAnimation(translateAnimation1);
+        animationSet.addAnimation(translateAnimationBack);
+        animationSet.addAnimation(translateAnimation2);
+
+        view.startAnimation(animationSet);
+
+        new Handler().postDelayed(() -> view.setVisibility(View.GONE), 2000);
     }
 }

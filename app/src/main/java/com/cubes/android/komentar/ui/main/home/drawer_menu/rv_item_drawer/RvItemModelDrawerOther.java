@@ -66,7 +66,14 @@ public class RvItemModelDrawerOther implements ItemModelDrawer {
                 binding.switchPushNotifications.setVisibility(View.GONE);
                 binding.viewEmptySpace.setVisibility(View.GONE);
 
-                binding.getRoot().setOnClickListener(view -> goToActivity(title.toUpperCase().trim(), view));
+                binding.getRoot().setOnClickListener(view -> {
+//                    goToActivity(title.toUpperCase().trim(), view);
+
+                    String url = "http://www.vipsistem.rs/kursna-lista.php";
+
+                    Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                    binding.getRoot().getContext().startActivity(myIntent);
+                });
 
                 break;
             case "HOROSKOP":

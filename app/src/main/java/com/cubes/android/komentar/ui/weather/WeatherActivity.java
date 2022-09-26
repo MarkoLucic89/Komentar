@@ -10,6 +10,7 @@ import com.cubes.android.komentar.data.source.remote.networking.response.Weather
 import com.cubes.android.komentar.databinding.ActivityWeatherBinding;
 import com.cubes.android.komentar.di.AppContainer;
 import com.cubes.android.komentar.di.MyApplication;
+import com.cubes.android.komentar.ui.tools.MyMethodsClass;
 import com.squareup.picasso.Picasso;
 
 public class WeatherActivity extends AppCompatActivity {
@@ -29,9 +30,27 @@ public class WeatherActivity extends AppCompatActivity {
         AppContainer appContainer = ((MyApplication) getApplication()).appContainer;
         dataRepository = appContainer.dataRepository;
 
+        sendRequest();
+
+        binding.imageViewBack.setOnClickListener(view -> finish());
+
+        binding.imageViewRefresh.setOnClickListener(view -> {
+            MyMethodsClass.startRefreshAnimation(binding.imageViewRefresh);
+            sendRequest();
+        });
+    }
+
+    private void sendRequest() {
+
+
+        binding.cardViewRoot.setVisibility(View.GONE);
+
         dataRepository.getWeather(new DataRepository.WeatherResponseListener() {
             @Override
             public void onResponse(WeatherResponseModel.WeatherResponseDataModel data) {
+
+                binding.cardViewRoot.setVisibility(View.VISIBLE);
+                binding.imageViewRefresh.setVisibility(View.GONE);
 
                 binding.textViewName.setText(data.name);
                 Picasso.get().load(data.icon_url).into(binding.imageView);
@@ -66,11 +85,10 @@ public class WeatherActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Throwable t) {
-
+                binding.cardViewRoot.setVisibility(View.GONE);
+                binding.imageViewRefresh.setVisibility(View.VISIBLE);
             }
         });
-
-        binding.imageViewBack.setOnClickListener(view -> finish());
 
     }
 

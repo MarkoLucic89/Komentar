@@ -35,6 +35,7 @@
     </FrameLayout>
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/cardViewRoot"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:cardCornerRadius="8dp"
@@ -96,5 +97,13 @@
 
     </androidx.cardview.widget.CardView>
 
+    <ImageView
+        android:id="@+id/imageViewRefresh"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:layout_margin="16dp"
+        android:src="@drawable/ic_refresh"
+        android:visibility="gone" />
 
 </LinearLayout>
