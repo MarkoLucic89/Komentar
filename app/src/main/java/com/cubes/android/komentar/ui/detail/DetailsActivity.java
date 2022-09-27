@@ -59,26 +59,17 @@ public class DetailsActivity extends AppCompatActivity implements DetailsFragmen
 
         for (int i = 0; i < mNewsIdList.length; i++) {
             if (mNewsId == mNewsIdList[i]) {
-                binding.viewPager.setCurrentItem(i);
+                binding.viewPager.setCurrentItem(i, false);
                 break;
             }
         }
 
         setClickListeners();
 
-        binding.viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                super.onPageScrolled(position, positionOffset, positionOffsetPixels);
+        MyMethodsClass.startArrowFadeAnimation(binding.imageViewArrowLeft);
+        MyMethodsClass.startArrowFadeAnimation(binding.imageViewArrowRight);
 
-                    MyMethodsClass.startArrowFadeAnimation(binding.imageViewArrowLeft);
-
-                    MyMethodsClass.startArrowFadeAnimation(binding.imageViewArrowRight);
-
-            }
-        });
-
-        reduceDragSensitivity(1);
+//        reduceDragSensitivity(1);
     }
 
     private void setClickListeners() {

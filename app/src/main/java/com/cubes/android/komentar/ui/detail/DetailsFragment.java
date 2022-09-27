@@ -2,6 +2,7 @@ package com.cubes.android.komentar.ui.detail;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -13,8 +14,10 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.cubes.android.komentar.data.DataRepository;
 import com.cubes.android.komentar.data.model.domain.News;
@@ -75,6 +78,8 @@ public class DetailsFragment extends Fragment implements
 
     private News mTempNews = null;
 
+    private int mTempNewsId = -1;
+
     @Override
     public void onWebViewLoaded() {
         binding.recyclerView.setVisibility(View.VISIBLE);
@@ -111,6 +116,7 @@ public class DetailsFragment extends Fragment implements
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         if (getArguments() != null) {
             mNewsId = getArguments().getInt(NEWS_ID);
         }
@@ -131,10 +137,10 @@ public class DetailsFragment extends Fragment implements
         return binding.getRoot();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
 
         initRecyclerView();
 
@@ -146,6 +152,8 @@ public class DetailsFragment extends Fragment implements
         });
 
         binding.swipeRefreshLayout.setOnRefreshListener(() -> refreshNewsDetails());
+
+
     }
 
     @Override
@@ -157,11 +165,25 @@ public class DetailsFragment extends Fragment implements
         } else {
             if (mTempNews != null) {
                 listener.onDetailsResponseListener(mNewsId, mNewsUrl, mTempNews);
+
+                //Room
+                ExecutorService service = Executors.newSingleThreadExecutor();
+                Handler handler = new Handler(Looper.getMainLooper());
+                service.execute(() -> {
+
+                    //doInBackgroundThread
+                    News bookmark = bookmarksDao.getBookmarkForId(mTempNewsId);
+
+                    //onPostExecute
+                    handler.post(() -> adapter.updateBookmarks(mTempNewsId, bookmark));
+
+                });
+
+                service.shutdown();
             }
         }
 
     }
-
 
     private void refreshNewsDetails() {
 
@@ -200,7 +222,8 @@ public class DetailsFragment extends Fragment implements
 
     private void initRecyclerView() {
         adapter = new NewsDetailsAdapter(this, this, this, this);
-        binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        binding.recyclerView.setLayoutManager(linearLayoutManager);
         binding.recyclerView.setAdapter(adapter);
     }
 
@@ -471,6 +494,8 @@ public class DetailsFragment extends Fragment implements
 
     @Override
     public void onNewsClicked(int newsId) {
+
+        mTempNewsId = newsId;
 
         Intent intent = new Intent(getContext(), DetailsActivity.class);
         intent.putExtra("news_id", newsId);

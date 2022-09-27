@@ -5,7 +5,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SnapHelper;
 import androidx.viewbinding.ViewBinding;
 
 import com.cubes.android.komentar.R;
@@ -33,6 +35,7 @@ import com.cubes.android.komentar.ui.main.search.rv_model_search.ItemModelSearch
 import com.cubes.android.komentar.ui.tools.MyMethodsClass;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 
@@ -179,7 +182,19 @@ public class HomePagerAdapter extends RecyclerView.Adapter<HomePagerAdapter.Home
 
         switch (viewType) {
             case R.layout.rv_item_home_slider:
+
                 binding = RvItemHomeSliderBinding.inflate(inflater, parent, false);
+//
+//                ((RvItemHomeSliderBinding)binding).viewPager.setOnFlingListener(null);
+//
+//                SnapHelper snapHelper = new PagerSnapHelper();
+//
+//                snapHelper.attachToRecyclerView(((RvItemHomeSliderBinding)binding).viewPager);
+//
+//                ((RvItemHomeSliderBinding)binding).viewPager.setAdapter(new HomeSliderAdapter(false, listener));
+//
+//                ((RvItemHomeSliderBinding)binding).progressBar.attachToRecyclerView(((RvItemHomeSliderBinding)binding).viewPager, snapHelper);
+
                 break;
             case R.layout.rv_item_category_small:
                 binding = RvItemCategorySmallBinding.inflate(inflater, parent, false);
@@ -250,16 +265,22 @@ public class HomePagerAdapter extends RecyclerView.Adapter<HomePagerAdapter.Home
     public void updateBookmarks(int mTempNewsId, News bookmark) {
 
         for (ItemModelHome model : list) {
+
+
             if (model.getNews() != null && model.getNews().id == mTempNewsId) {
+
                 if (bookmark == null) {
                     model.getNews().isInBookmarks = false;
                 } else {
                     model.getNews().isInBookmarks = true;
                 }
+
+                notifyItemChanged(list.indexOf(model));
+
             }
         }
 
-        notifyDataSetChanged();
+//        notifyDataSetChanged();
     }
 
     @Override

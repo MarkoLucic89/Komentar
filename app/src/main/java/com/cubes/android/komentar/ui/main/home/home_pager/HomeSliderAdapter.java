@@ -29,6 +29,16 @@ public class HomeSliderAdapter extends RecyclerView.Adapter<HomeSliderAdapter.Ho
         this.listener = listener;
     }
 
+    public HomeSliderAdapter(boolean b, NewsListener listener) {
+        this.showCategory = showCategory;
+        this.listener = listener;
+    }
+
+    public void updateList(ArrayList<News> newsArrayList) {
+        this.list = newsArrayList;
+        notifyDataSetChanged();
+    }
+
     @NonNull
     @Override
     public HomeSliderViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

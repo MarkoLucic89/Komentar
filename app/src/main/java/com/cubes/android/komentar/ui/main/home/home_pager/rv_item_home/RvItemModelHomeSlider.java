@@ -17,10 +17,10 @@ import com.cubes.android.komentar.ui.main.latest.NewsListener;
 
 import java.util.ArrayList;
 
-public class RvItemModelHomeSlider implements ItemModelHome{
+public class RvItemModelHomeSlider implements ItemModelHome {
 
     public ArrayList<News> newsList;
-    public SnapHelper snapHelper;
+    public PagerSnapHelper snapHelper;
     private boolean isEditorsChoice;
 
     private NewsListener listener;
@@ -56,13 +56,12 @@ public class RvItemModelHomeSlider implements ItemModelHome{
                 false
         ));
 
-        binding.viewPager.setOnFlingListener(null);
-
-        snapHelper.attachToRecyclerView(binding.viewPager);
-
         binding.viewPager.setAdapter(new HomeSliderAdapter(newsList, isEditorsChoice, listener));
 
-        binding.progressBar.attachToRecyclerView(binding.viewPager, snapHelper);
+        if (binding.viewPager.getOnFlingListener() == null) {
+            snapHelper.attachToRecyclerView(binding.viewPager);
+            binding.progressBar.attachToRecyclerView(binding.viewPager, snapHelper);
+        }
 
     }
 }

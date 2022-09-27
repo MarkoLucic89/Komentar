@@ -182,7 +182,6 @@ public class HomePagerFragment extends Fragment implements NewsListener {
     private void initRecyclerView() {
 
         adapter = new HomePagerAdapter(this);
-
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.recyclerView.setAdapter(adapter);
 

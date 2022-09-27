@@ -1,5 +1,6 @@
 package com.cubes.android.komentar.ui.detail.rv_item_details;
 
+import com.cubes.android.komentar.data.model.domain.News;
 import com.cubes.android.komentar.ui.detail.NewsDetailsAdapter;
 
 public interface ItemModelDetails {
@@ -14,13 +15,17 @@ public interface ItemModelDetails {
 
     default void updateLikeUi(){
 
-    };
+    }
 
     default void updateDislikeUi(){
 
-    };
+    }
 
     default void closeMenu() {
 
+    }
+
+    default News getNews() {
+        return null;
     }
 }

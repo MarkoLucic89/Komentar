@@ -82,35 +82,10 @@ public class BookmarksFragment extends Fragment implements NewsListener {
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.recyclerView.setAdapter(adapter);
 
-        binding.swipeRefreshLayout.setRefreshing(true);
-
         binding.swipeRefreshLayout.setOnRefreshListener(() -> {
             adapter.notifyDataSetChanged();
             binding.swipeRefreshLayout.setRefreshing(false);
         });
-
-        //Room
-        ExecutorService service = Executors.newSingleThreadExecutor();
-        Handler handler = new Handler(Looper.getMainLooper());
-        service.execute(() -> {
-
-            //doInBackgroundThread
-            bookmarkNews = (ArrayList<News>) bookmarksDao.getBookmarkNews();
-
-            //onPostExecute
-            handler.post(() -> {
-
-                updateUiIsEmptyList(bookmarkNews);
-
-                adapter.initList(bookmarkNews);
-
-                binding.swipeRefreshLayout.setRefreshing(false);
-
-            });
-
-        });
-
-        service.shutdown();
 
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(itemTouchHelperCallback);
         itemTouchHelper.attachToRecyclerView(binding.recyclerView);
@@ -138,6 +113,35 @@ public class BookmarksFragment extends Fragment implements NewsListener {
 
     }
 
+    private void getBookmarks() {
+
+        binding.swipeRefreshLayout.setRefreshing(true);
+
+        //Room
+        ExecutorService service = Executors.newSingleThreadExecutor();
+        Handler handler = new Handler(Looper.getMainLooper());
+        service.execute(() -> {
+
+            //doInBackgroundThread
+            bookmarkNews = (ArrayList<News>) bookmarksDao.getBookmarkNews();
+
+            //onPostExecute
+            handler.post(() -> {
+
+                updateUiIsEmptyList(bookmarkNews);
+
+                adapter.initList(bookmarkNews);
+
+                binding.swipeRefreshLayout.setRefreshing(false);
+
+            });
+
+        });
+
+        service.shutdown();
+
+    }
+
     @Override
     public void onPause() {
         super.onPause();
@@ -159,13 +163,7 @@ public class BookmarksFragment extends Fragment implements NewsListener {
     @Override
     public void onResume() {
         super.onResume();
-
-        binding.swipeRefreshLayout.setRefreshing(true);
-
-        adapter.notifyDataSetChanged();
-
-        binding.swipeRefreshLayout.setRefreshing(false);
-
+        getBookmarks();
     }
 
     private News deletedNews = null;
@@ -196,7 +194,6 @@ public class BookmarksFragment extends Fragment implements NewsListener {
         }
 
     };
-
 
 
     @Override

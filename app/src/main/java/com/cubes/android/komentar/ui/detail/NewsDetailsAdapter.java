@@ -1,6 +1,7 @@
 package com.cubes.android.komentar.ui.detail;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +35,7 @@ import com.cubes.android.komentar.ui.detail.rv_item_details.RvItemModelDetailsTa
 import com.cubes.android.komentar.ui.detail.rv_item_details.RvItemModelDetailsWebView;
 import com.cubes.android.komentar.ui.main.latest.NewsListener;
 import com.cubes.android.komentar.ui.main.latest.rv_model_category.ItemModelCategory;
+import com.cubes.android.komentar.ui.tools.MyMethodsClass;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 
@@ -46,6 +48,8 @@ public class NewsDetailsAdapter extends RecyclerView.Adapter<NewsDetailsAdapter.
     private NewsDetailsTagsAdapter.TagListener tagListener;
     private NewsListener newsListener;
     private WebViewListener webViewListener;
+
+
 
     public interface WebViewListener {
         void onWebViewLoaded();
@@ -233,6 +237,28 @@ public class NewsDetailsAdapter extends RecyclerView.Adapter<NewsDetailsAdapter.
         for (ItemModelDetails itemModelDetails : list) {
             itemModelDetails.closeMenu();
         }
+    }
+
+    public void updateBookmarks(int mNewsId, News bookmark) {
+
+        for (ItemModelDetails model : list) {
+
+            if (model.getNews() != null && model.getNews().id == mNewsId) {
+
+                if (bookmark == null) {
+                    model.getNews().isInBookmarks = false;
+                } else {
+                    model.getNews().isInBookmarks = true;
+                }
+
+                notifyItemChanged(list.indexOf(model));
+
+                Log.d("DETAIL", "updateBookmarks: " + model.getNews().isInBookmarks);
+
+            }
+
+        }
+
     }
 
 
