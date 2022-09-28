@@ -42,6 +42,8 @@ public class LatestNewsFragment extends Fragment implements NewsListener {
 
     private ArrayList<News> bookmarks = new ArrayList<>();
 
+    private ArrayList<News> mNewsList = new ArrayList<>();
+
     private int mTempNewsId = -1;
 
     public LatestNewsFragment() {
@@ -130,10 +132,13 @@ public class LatestNewsFragment extends Fragment implements NewsListener {
             service.execute(() -> {
 
                 //doInBackgroundThread
-                News bookmark = bookmarksDao.getBookmarkForId(mTempNewsId);
+                ArrayList<News> bookmarks = (ArrayList<News>) bookmarksDao.getBookmarkNews();
 
                 //onPostExecute
-                handler.post(() -> categoryAdapter.updateBookmarks(mTempNewsId, bookmark));
+                handler.post(() -> {
+                    MyMethodsClass.checkBookmarks(mNewsList, bookmarks);
+                    categoryAdapter.initList(mNewsList, true);
+                });
 
             });
 
@@ -168,6 +173,8 @@ public class LatestNewsFragment extends Fragment implements NewsListener {
 
                 binding.recyclerView.setVisibility(View.VISIBLE);
                 binding.imageViewRefresh.setVisibility(View.GONE);
+
+                mNewsList.addAll(newsList);
 
                 MyMethodsClass.checkBookmarks(newsList, bookmarks);
 
@@ -210,6 +217,8 @@ public class LatestNewsFragment extends Fragment implements NewsListener {
 
                 binding.recyclerView.setVisibility(View.VISIBLE);
                 binding.imageViewRefresh.setVisibility(View.GONE);
+
+                mNewsList.addAll(newsList);
 
                 MyMethodsClass.checkBookmarks(newsList, bookmarks);
 

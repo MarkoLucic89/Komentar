@@ -134,7 +134,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
             }
         }
 
-        if (newsList.size() == 20) {
+        if (newsList.size() >= 20) {
 
             itemModels.add(new RvItemModelCategoryLoading(listener));
 

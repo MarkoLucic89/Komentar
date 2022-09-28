@@ -52,6 +52,8 @@ public class SearchFragment extends Fragment implements NewsListener {
 
     private ArrayList<News> bookmarks = new ArrayList<>();
 
+    private ArrayList<News> mNewsList = new ArrayList<>();
+
     private int mTempNewsId;
 
     public SearchFragment() {
@@ -146,6 +148,8 @@ public class SearchFragment extends Fragment implements NewsListener {
 
         nextPage = 1;
 
+        mNewsList.clear();
+
         searchTerm = binding.editTextSearch.getText().toString().trim();
 
         if (searchTerm.equals("")) {
@@ -175,6 +179,7 @@ public class SearchFragment extends Fragment implements NewsListener {
             binding.imageViewRefresh.setVisibility(View.GONE);
 
             searchListByTerm();
+
         } else if (mTempNewsId != -1) {
 
             //Room
@@ -183,10 +188,13 @@ public class SearchFragment extends Fragment implements NewsListener {
             service.execute(() -> {
 
                 //doInBackgroundThread
-                News bookmark = bookmarksDao.getBookmarkForId(mTempNewsId);
+                ArrayList<News> bookmarks = (ArrayList<News>) bookmarksDao.getBookmarkNews();
 
                 //onPostExecute
-                handler.post(() -> adapter.updateBookmarks(mTempNewsId, bookmark));
+                handler.post(() -> {
+                    MyMethodsClass.checkBookmarks(mNewsList, bookmarks);
+                    adapter.initList(mNewsList, true);
+                });
 
             });
 
@@ -214,6 +222,8 @@ public class SearchFragment extends Fragment implements NewsListener {
             public void onResponse(ArrayList<News> newsList, boolean hasMorePages) {
 
                 binding.recyclerView.setVisibility(View.VISIBLE);
+
+                mNewsList.addAll(newsList);
 
                 MyMethodsClass.checkBookmarks(newsList, bookmarks);
 

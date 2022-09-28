@@ -217,7 +217,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
 //            itemModels.add(new RvItemModelSearchLoading(listener));
 //        }
 
-        if (newsList.size() == 20) {
+        if (newsList.size() >= 20) {
             itemModels.add(new RvItemModelSearchLoading(listener));
         }
 

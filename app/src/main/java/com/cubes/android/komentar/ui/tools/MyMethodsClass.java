@@ -96,6 +96,11 @@ public class MyMethodsClass {
     }
 
     public static void checkBookmarks(ArrayList<News> newsList, ArrayList<News> bookmarks) {
+
+        for (News news : newsList) {
+            news.isInBookmarks = false;
+        }
+
         for (News bookmark : bookmarks) {
             for (News news : newsList) {
                 if (news.id == bookmark.id) {
@@ -103,6 +108,7 @@ public class MyMethodsClass {
                 }
             }
         }
+
     }
 
     public static void animationSwipe(View view, float from, float to) {

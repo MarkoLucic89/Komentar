@@ -42,9 +42,6 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-/*
-        TRENUTNO SE NE KORISTI!!!
- */
 
 public class DetailsFragment extends Fragment implements
         CommentsAdapter.CommentsListener,
@@ -61,8 +58,6 @@ public class DetailsFragment extends Fragment implements
     private int mNewsId;
     private String mNewsUrl;
 
-    private int[] newsIdList;
-
     private NewsDetailsAdapter adapter;
 
     private DetailsListener listener;
@@ -75,6 +70,8 @@ public class DetailsFragment extends Fragment implements
     private NewsBookmarksDao bookmarksDao;
 
     private ArrayList<News> bookmarks = new ArrayList<>();
+
+    private NewsDetails mDetails;
 
     private News mTempNews = null;
 
@@ -153,7 +150,6 @@ public class DetailsFragment extends Fragment implements
 
         binding.swipeRefreshLayout.setOnRefreshListener(() -> refreshNewsDetails());
 
-
     }
 
     @Override
@@ -164,22 +160,28 @@ public class DetailsFragment extends Fragment implements
             getNewsDetails();
         } else {
             if (mTempNews != null) {
+
                 listener.onDetailsResponseListener(mNewsId, mNewsUrl, mTempNews);
 
                 //Room
-                ExecutorService service = Executors.newSingleThreadExecutor();
-                Handler handler = new Handler(Looper.getMainLooper());
-                service.execute(() -> {
-
-                    //doInBackgroundThread
-                    News bookmark = bookmarksDao.getBookmarkForId(mTempNewsId);
-
-                    //onPostExecute
-                    handler.post(() -> adapter.updateBookmarks(mTempNewsId, bookmark));
-
-                });
-
-                service.shutdown();
+//                ExecutorService service = Executors.newSingleThreadExecutor();
+//                Handler handler = new Handler(Looper.getMainLooper());
+//                service.execute(() -> {
+//
+//                    //doInBackgroundThread
+//                    ArrayList<News> bookmarks = (ArrayList<News>) bookmarksDao.getBookmarkNews();
+//
+//                    //onPostExecute
+//                    handler.post(() -> {
+//
+//                        MyMethodsClass.checkBookmarks(mDetails.relatedNews, bookmarks);
+//                        adapter.updateRelatedNews(mDetails.relatedNews);
+//
+//                    });
+//
+//                });
+//
+//                service.shutdown();
             }
         }
 
@@ -194,6 +196,7 @@ public class DetailsFragment extends Fragment implements
                 mNewsId = newsDetails.id;
                 mNewsUrl = newsDetails.url;
                 mTempNews = initNewsObject(newsDetails);
+                mDetails = newsDetails;
 
                 listener.onDetailsResponseListener(mNewsId, mNewsUrl, mTempNews);
 
@@ -241,7 +244,7 @@ public class DetailsFragment extends Fragment implements
                 mNewsUrl = newsDetails.url;
                 mTempNews = initNewsObject(newsDetails);
 
-                newsIdList = MyMethodsClass.initNewsIdList(newsDetails.relatedNews);
+                mDetails = newsDetails;
 
                 //Room
                 ExecutorService service = Executors.newSingleThreadExecutor();
@@ -493,7 +496,7 @@ public class DetailsFragment extends Fragment implements
     }
 
     @Override
-    public void onNewsClicked(int newsId) {
+    public void onNewsClicked(int newsId, int[] newsIdList) {
 
         mTempNewsId = newsId;
 

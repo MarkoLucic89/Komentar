@@ -7,6 +7,7 @@ import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -48,6 +49,8 @@ public class HomePagerFragment extends Fragment implements NewsListener {
     private ArrayList<News> bookmarks = new ArrayList<>();
 
     private int mTempNewsId;
+
+    private HomePageData mData;
 
     public HomePagerFragment() {
         // Required empty public constructor
@@ -107,10 +110,10 @@ public class HomePagerFragment extends Fragment implements NewsListener {
             service.execute(() -> {
 
                 //doInBackgroundThread
-                News bookmark = bookmarksDao.getBookmarkForId(mTempNewsId);
+                ArrayList<News> bookmarks = (ArrayList<News>) bookmarksDao.getBookmarkNews();
 
                 //onPostExecute
-                handler.post(() -> adapter.updateBookmarks(mTempNewsId, bookmark));
+                handler.post(() -> adapter.updateList(mData, bookmarks));
 
             });
 
@@ -139,6 +142,8 @@ public class HomePagerFragment extends Fragment implements NewsListener {
                 binding.recyclerView.setVisibility(View.VISIBLE);
 
                 mNewsIdList = MyMethodsClass.initNewsIdListFromHomePage(data);
+
+                mData = data;
 
                 //Room
                 ExecutorService service = Executors.newSingleThreadExecutor();

@@ -15,11 +15,11 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.cubes.android.komentar.data.DataRepository;
+import com.cubes.android.komentar.data.model.domain.News;
 import com.cubes.android.komentar.data.source.local.database.dao.NewsBookmarksDao;
+import com.cubes.android.komentar.databinding.FragmentCategoryBinding;
 import com.cubes.android.komentar.di.AppContainer;
 import com.cubes.android.komentar.di.MyApplication;
-import com.cubes.android.komentar.data.model.domain.News;
-import com.cubes.android.komentar.databinding.FragmentCategoryBinding;
 import com.cubes.android.komentar.ui.comments.CommentsActivity;
 import com.cubes.android.komentar.ui.detail.DetailsActivity;
 import com.cubes.android.komentar.ui.main.latest.CategoryAdapter;
@@ -54,6 +54,8 @@ public class CategoryNewsFragment extends Fragment implements NewsListener {
 
     private ArrayList<News> bookmarks = new ArrayList<>();
 
+    private ArrayList<News> mNewsList = new ArrayList<>();
+
     private int mTempNewsId;
 
     public CategoryNewsFragment() {
@@ -69,6 +71,7 @@ public class CategoryNewsFragment extends Fragment implements NewsListener {
         fragment.mCategoryId = categoryId;
         return fragment;
     }
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -149,10 +152,13 @@ public class CategoryNewsFragment extends Fragment implements NewsListener {
             service.execute(() -> {
 
                 //doInBackgroundThread
-                News bookmark = bookmarksDao.getBookmarkForId(mTempNewsId);
+                ArrayList<News> bookmarks = (ArrayList<News>) bookmarksDao.getBookmarkNews();
 
                 //onPostExecute
-                handler.post(() -> categoryAdapter.updateBookmarks(mTempNewsId, bookmark));
+                handler.post(() -> {
+                    MyMethodsClass.checkBookmarks(mNewsList, bookmarks);
+                    categoryAdapter.initList(mNewsList, true);
+                });
 
             });
 
@@ -188,6 +194,7 @@ public class CategoryNewsFragment extends Fragment implements NewsListener {
                 binding.recyclerView.setVisibility(View.VISIBLE);
                 binding.imageViewRefresh.setVisibility(View.GONE);
 
+                mNewsList.addAll(newsList);
 
                 MyMethodsClass.checkBookmarks(newsList, bookmarks);
 
@@ -240,6 +247,8 @@ public class CategoryNewsFragment extends Fragment implements NewsListener {
 
                 binding.recyclerView.setVisibility(View.VISIBLE);
                 binding.imageViewRefresh.setVisibility(View.GONE);
+
+                mNewsList.addAll(newsList);
 
                 MyMethodsClass.checkBookmarks(newsList, bookmarks);
 

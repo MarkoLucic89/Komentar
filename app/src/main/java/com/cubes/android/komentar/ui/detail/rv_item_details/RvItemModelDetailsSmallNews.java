@@ -22,11 +22,14 @@ public class RvItemModelDetailsSmallNews implements ItemModelDetails {
 
     private RvItemCategorySmallBinding binding;
 
+    private int[] newsIdList;
 
-    public RvItemModelDetailsSmallNews(News news, boolean isOnHomePage, NewsListener listener) {
+
+    public RvItemModelDetailsSmallNews(News news, boolean isOnHomePage, NewsListener listener,int[] newsIdList) {
         this.news = news;
         this.isOnHomePage = isOnHomePage;
         this.listener = listener;
+        this.newsIdList = newsIdList;
     }
 
     @Override
@@ -37,6 +40,17 @@ public class RvItemModelDetailsSmallNews implements ItemModelDetails {
     @Override
     public News getNews() {
         return news;
+    }
+
+    @Override
+    public void updateBookmarkUi(boolean isSaved) {
+
+        if (isSaved) {
+            binding.imageViewFavorites.setImageResource(R.drawable.ic_bookmark);
+        } else {
+            binding.imageViewFavorites.setImageResource(R.drawable.ic_bookmark_border);
+        }
+
     }
 
     @Override
@@ -69,7 +83,8 @@ public class RvItemModelDetailsSmallNews implements ItemModelDetails {
 
             listener.closeOtherMenus();
 
-            listener.onNewsClicked(news.id);
+            listener.onNewsClicked(news.id, newsIdList);
+
         });
 
         binding.viewMenu.setOnClickListener(view -> {

@@ -45,6 +45,9 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+/*
+        TRENUTNO SE NE KORISTI!!!
+ */
 
 public class NewsDetailsFragment extends Fragment implements
         CommentsAdapter.CommentsListener,

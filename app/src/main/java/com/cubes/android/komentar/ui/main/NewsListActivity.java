@@ -53,7 +53,7 @@ public class NewsListActivity extends AppCompatActivity implements BookmarkDialo
                 isFirstTimeBackClicked = false;
                 Toast.makeText(this, "Pritisnite ponovo da biste izašli iz aplikacije", Toast.LENGTH_SHORT).show();
 
-                binding.getRoot().postDelayed(() -> isFirstTimeBackClicked = true, 3);
+                binding.getRoot().postDelayed(() -> isFirstTimeBackClicked = true, 3000);
 
             } else {
 

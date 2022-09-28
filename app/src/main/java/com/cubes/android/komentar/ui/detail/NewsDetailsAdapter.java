@@ -50,8 +50,8 @@ public class NewsDetailsAdapter extends RecyclerView.Adapter<NewsDetailsAdapter.
     private WebViewListener webViewListener;
 
 
-
     public interface WebViewListener {
+
         void onWebViewLoaded();
     }
 
@@ -117,8 +117,10 @@ public class NewsDetailsAdapter extends RecyclerView.Adapter<NewsDetailsAdapter.
 
         list.add(new RvItemModelDetailsHeaderRelatedNews());
 
+        int[] newsIdList = MyMethodsClass.initNewsIdList(newsDetails.relatedNews);
+
         for (News news : newsDetails.relatedNews) {
-            list.add(new RvItemModelDetailsSmallNews(news, false, newsListener));
+            list.add(new RvItemModelDetailsSmallNews(news, false, newsListener, newsIdList));
         }
 
         notifyDataSetChanged();
@@ -239,24 +241,26 @@ public class NewsDetailsAdapter extends RecyclerView.Adapter<NewsDetailsAdapter.
         }
     }
 
-    public void updateBookmarks(int mNewsId, News bookmark) {
+
+    public void updateRelatedNews(ArrayList<News> newsList) {
+
+        int counter = 0;
 
         for (ItemModelDetails model : list) {
 
-            if (model.getNews() != null && model.getNews().id == mNewsId) {
+            if (model.getType() == R.layout.rv_item_category_small) {
 
-                if (bookmark == null) {
-                    model.getNews().isInBookmarks = false;
-                } else {
-                    model.getNews().isInBookmarks = true;
+                Log.d("DETAIL", ": " + model.getNews().isInBookmarks);
+
+                if (newsList.get(counter).id == model.getNews().id) {
+                    model.updateBookmarkUi(model.getNews().isInBookmarks);
+
                 }
+
 
                 notifyItemChanged(list.indexOf(model));
 
-                Log.d("DETAIL", "updateBookmarks: " + model.getNews().isInBookmarks);
-
             }
-
         }
 
     }

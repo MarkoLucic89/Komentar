@@ -13,11 +13,11 @@ public interface ItemModelDetails {
         return -1;
     }
 
-    default void updateLikeUi(){
+    default void updateLikeUi() {
 
     }
 
-    default void updateDislikeUi(){
+    default void updateDislikeUi() {
 
     }
 
@@ -27,5 +27,9 @@ public interface ItemModelDetails {
 
     default News getNews() {
         return null;
+    }
+
+    default void updateBookmarkUi(boolean isSaved) {
+
     }
 }

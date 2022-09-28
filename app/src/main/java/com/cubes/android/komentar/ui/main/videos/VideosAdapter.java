@@ -236,7 +236,7 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.VideosView
 //            itemModels.add(new RvItemModelVideoLoading(listener));
 //        }
 
-        if (newsList.size() == 20) {
+        if (newsList.size() >= 20) {
             itemModels.add(new RvItemModelVideoLoading(listener));
         }
 

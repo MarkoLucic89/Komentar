@@ -44,7 +44,7 @@ public class RvItemModelCategorySmall implements ItemModelCategory {
     @Override
     public void bind(CategoryAdapter.CategoryViewHolder holder) {
 
-         binding = (RvItemCategorySmallBinding) holder.binding;
+        binding = (RvItemCategorySmallBinding) holder.binding;
 
         if (news.isInBookmarks) {
             binding.imageViewFavorites.setImageResource(R.drawable.ic_bookmark);
