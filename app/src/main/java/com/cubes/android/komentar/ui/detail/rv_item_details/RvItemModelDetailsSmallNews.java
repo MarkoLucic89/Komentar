@@ -45,10 +45,16 @@ public class RvItemModelDetailsSmallNews implements ItemModelDetails {
     @Override
     public void updateBookmarkUi(boolean isSaved) {
 
+        if (binding == null) {
+            return;
+        }
+
         if (isSaved) {
             binding.imageViewFavorites.setImageResource(R.drawable.ic_bookmark);
+            news.isInBookmarks = true;
         } else {
             binding.imageViewFavorites.setImageResource(R.drawable.ic_bookmark_border);
+            news.isInBookmarks = false;
         }
 
     }

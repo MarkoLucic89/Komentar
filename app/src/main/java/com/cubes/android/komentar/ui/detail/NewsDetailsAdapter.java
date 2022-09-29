@@ -257,7 +257,6 @@ public class NewsDetailsAdapter extends RecyclerView.Adapter<NewsDetailsAdapter.
 
                 }
 
-
                 notifyItemChanged(list.indexOf(model));
 
             }

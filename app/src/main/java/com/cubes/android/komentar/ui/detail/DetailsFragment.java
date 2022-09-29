@@ -134,7 +134,6 @@ public class DetailsFragment extends Fragment implements
         return binding.getRoot();
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -164,24 +163,24 @@ public class DetailsFragment extends Fragment implements
                 listener.onDetailsResponseListener(mNewsId, mNewsUrl, mTempNews);
 
                 //Room
-//                ExecutorService service = Executors.newSingleThreadExecutor();
-//                Handler handler = new Handler(Looper.getMainLooper());
-//                service.execute(() -> {
-//
-//                    //doInBackgroundThread
-//                    ArrayList<News> bookmarks = (ArrayList<News>) bookmarksDao.getBookmarkNews();
-//
-//                    //onPostExecute
-//                    handler.post(() -> {
-//
-//                        MyMethodsClass.checkBookmarks(mDetails.relatedNews, bookmarks);
-//                        adapter.updateRelatedNews(mDetails.relatedNews);
-//
-//                    });
-//
-//                });
-//
-//                service.shutdown();
+                ExecutorService service = Executors.newSingleThreadExecutor();
+                Handler handler = new Handler(Looper.getMainLooper());
+                service.execute(() -> {
+
+                    //doInBackgroundThread
+                    ArrayList<News> bookmarks = (ArrayList<News>) bookmarksDao.getBookmarkNews();
+
+                    //onPostExecute
+                    handler.post(() -> {
+
+                        MyMethodsClass.checkBookmarks(mDetails.relatedNews, bookmarks);
+                        adapter.updateRelatedNews(mDetails.relatedNews);
+
+                    });
+
+                });
+
+                service.shutdown();
             }
         }
 
